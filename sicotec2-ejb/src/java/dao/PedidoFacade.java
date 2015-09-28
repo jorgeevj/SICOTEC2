@@ -6,9 +6,12 @@
 package dao;
 
 import entidades.Pedido;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,5 +30,20 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
     public PedidoFacade() {
         super(Pedido.class);
     }
-    
+    public List<Pedido> getAllPedidos(){
+        List<Pedido> listaPedido = new ArrayList<Pedido>();
+        
+        try{
+            String jpa = "SELECT p "
+                       + "FROM Pedido p"
+                       + "JOIN FETCH p.idempresa";
+
+            Query query = em.createQuery(jpa,Pedido.class);
+            listaPedido = query.getResultList();
+            
+        }catch(Exception e){
+            listaPedido = new ArrayList<Pedido>();
+        }
+        return listaPedido;
+    }
 }

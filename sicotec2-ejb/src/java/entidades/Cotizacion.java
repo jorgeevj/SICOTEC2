@@ -45,15 +45,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cotizacion.findByCorrelativo", query = "SELECT c FROM Cotizacion c WHERE c.correlativo = :correlativo"),
     @NamedQuery(name = "Cotizacion.findByIdalmacen", query = "SELECT c FROM Cotizacion c WHERE c.idalmacen = :idalmacen")})
 public class Cotizacion implements Serializable {
+    @Column(name = "estado")
+    private Integer estado;
+    @Column(name = "idalmacen")
+    private Integer idalmacen;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idcotizacion")
     private Integer idcotizacion;
-    @Size(max = 45)
-    @Column(name = "estado")
-    private String estado;
     @Column(name = "fechaEnvio")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEnvio;
@@ -67,9 +68,6 @@ public class Cotizacion implements Serializable {
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
-    @Size(max = 45)
-    @Column(name = "idalmacen")
-    private String idalmacen;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cotizacion")
     private List<Cotipoitem> cotipoitemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
@@ -91,13 +89,6 @@ public class Cotizacion implements Serializable {
         this.idcotizacion = idcotizacion;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 
     public Date getFechaEnvio() {
         return fechaEnvio;
@@ -139,13 +130,6 @@ public class Cotizacion implements Serializable {
         this.correlativo = correlativo;
     }
 
-    public String getIdalmacen() {
-        return idalmacen;
-    }
-
-    public void setIdalmacen(String idalmacen) {
-        this.idalmacen = idalmacen;
-    }
 
     @XmlTransient
     public List<Cotipoitem> getCotipoitemList() {
@@ -187,6 +171,22 @@ public class Cotizacion implements Serializable {
     @Override
     public String toString() {
         return "entidades.Cotizacion[ idcotizacion=" + idcotizacion + " ]";
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
+    }
+
+    public Integer getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(Integer idalmacen) {
+        this.idalmacen = idalmacen;
     }
     
 }

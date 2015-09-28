@@ -5,10 +5,12 @@
  */
 package dao;
 
+import dto.UsuarioDTO;
 import entidades.Usuario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,5 +29,24 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
+   public Usuario validateLogin(UsuarioDTO usuario){
+        Usuario u = new Usuario();
+        try{
+            String jpa = "SELECT u "
+                       + "FROM Usuario u "
+                       + "WHERE u.nombre = :nombre "
+                       + "AND   u.clave  = :clave";
+
+            Query query = em.createQuery(jpa,Usuario.class);
+            query.setParameter("nombre",usuario.getNombre());
+            query.setParameter("clave",usuario.getClave());
+
+            u = (Usuario)query.getSingleResult();
+            
+        }catch(Exception e){
+            u = new Usuario();
+        }
+        
+        return u;
+    } 
 }

@@ -6,9 +6,12 @@
 package dao;
 
 import entidades.Permiso;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,5 +30,21 @@ public class PermisoFacade extends AbstractFacade<Permiso> {
     public PermisoFacade() {
         super(Permiso.class);
     }
-    
+    public List<Permiso> permisosByRol(int idRol){
+        List<Permiso> permisos = new ArrayList<Permiso>();
+        try{
+            String sql = "SELECT p.* "+
+                         "FROM permRol pr " +
+                         "INNER JOIN permiso p " +
+                         "ON p.idpermiso = pr.idpermiso "+
+                         "WHERE pr.idrol = "+idRol;
+            
+            Query query = em.createNativeQuery(sql, Permiso.class);  
+            permisos = query.getResultList();
+        }catch(Exception e){
+            permisos = new ArrayList<Permiso>();
+        }
+        
+        return permisos;
+    }
 }
