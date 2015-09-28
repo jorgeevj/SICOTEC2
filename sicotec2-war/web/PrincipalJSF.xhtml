@@ -23,7 +23,7 @@ jorgeevj 15.09.15 Creacion.
                 <p:layoutUnit position="north" size="142" resizable="true" closable="true" collapsible="true">
                     <img src="../imagenes/barralogotiposervacom.png" alt=""/>
                 </p:layoutUnit>
-              
+
                 <p:layoutUnit position="west" size="175" header="SICOTEC" collapsible="true" >
                     <p:menu style=" width: 152px"> 
                         <c:forEach var="permiso" items="#{indexMB.permisos}">
@@ -35,10 +35,38 @@ jorgeevj 15.09.15 Creacion.
                 <p:layoutUnit position="center">
                     <ui:insert name="body" >
                         Bienvenido a SICOTEC
+
                     </ui:insert> 
+
                 </p:layoutUnit>
 
             </p:layout>
+
+            <!-- DIALOG DE COTIZACIONES-->
+            <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" height="100" rendered="true">
+                <h:outputText value="This is a Modal Dialog." />
+            </p:dialog> 
+            <!-- FIN DIALOG DE COTIZACIONES-->
+
+
+            <!-- DIALOG DE MOVIMIENTOS-->
+
+            <!-- FIN DIALOG DE MOVIMIENTOS-->
+
+
+            <!-- DIALOG DE COMPRAS-->
+
+            <!-- FIN DIALOG DE COMPRAS-->
+
+
+            <!-- DIALOG DE PEDIDOS-->
+
+            <!-- FIN DIALOG DE PEDIDOS-->
+
+
+            <!-- DIALOG DE TIPOITEM-->
+
+            <!-- FIN DIALOG DE TIPOITEM-->
 
         </h:body>
 

@@ -17,7 +17,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 
 /**
  *
@@ -58,6 +57,8 @@ public class CotizacionMB {
         listaCotizacion=cotizacionBO.BuscarCotizacion(campos);
         return listaCotizacion;
     }
+    
+    public void crear(){}
 
     public CotizacionBO getCotizacionBO() {
         return cotizacionBO;
