@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+jorgeevj 15.09.15 Creacion.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>SICOTEC</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true" >
+
+                <p:layoutUnit position="north" size="142" resizable="true" closable="true" collapsible="true">
+                    <img src="../imagenes/barralogotiposervacom.png" alt=""/>
+                </p:layoutUnit>
+              
+                <p:layoutUnit position="west" size="175" header="SICOTEC" collapsible="true" >
+                    <p:menu style=" width: 152px"> 
+                        <c:forEach var="permiso" items="#{indexMB.permisos}">
+                            <p:menuitem value="#{permiso.nombre}" url="#{permiso.url}" style="background-color: background"/>
+                        </c:forEach>
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <ui:insert name="body" >
+                        Bienvenido a SICOTEC
+                    </ui:insert> 
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+

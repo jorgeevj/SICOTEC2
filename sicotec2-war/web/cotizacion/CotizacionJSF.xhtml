@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../PrincipalJSF.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="body">
+
+        <p:panel id="p1" header="Gestion de Cotizaciones Enviadas" footer="Cotizacion Details" style="margin-bottom:20px">
+
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Ruc:" for="it1" />
+                        <p:inputText id="it1"/>
+                        <p:outputLabel value="Empresa:" for="it2" />
+                        <p:inputText id="it2"/>
+
+                        <p:outputLabel for="almacenes" value="Almacen:" />
+                        <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{cotizacionMB.selectAlmacen}" style="width:100%" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
+
+                     
+                    </h:panelGrid>  
+                    <p:commandButton value="Consultar" actionListener="#{cotizacionMB.consultar}" id="btnConsultar"  title="Consultar" />
+                    <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear" />
+                    <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditar" title="Editar" />
+
+
+                    <h:panelGrid >
+                        <p:dataTable var="cot" value="#{cotizacionMB.listaCotizacion}">
+                            <p:column headerText="Almacen">
+                                <h:outputText value="#{cot.idalmacen}" />
+                            </p:column>
+                            <p:column headerText="Enpresa">
+                                <h:outputText value="#{cot.idempresa.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha de Enviado">
+                                <h:outputText value="#{cot.fechaEnvio}" />
+                            </p:column>
+                            <p:column headerText="Duracion">
+                                <h:outputText value="#{cot.duracion}" />
+                            </p:column>
+                            <p:column headerText="Entrega">
+                                <h:outputText value="#{cot.entrega}" />
+                            </p:column>
+                            <p:column headerText="N° Serie">
+                                <h:outputText value="#{cot.NSerie}" />
+                            </p:column>
+                            <p:column headerText="Correlativo">
+                                <h:outputText value="#{cot.correlativo}" />
+                            </p:column>
+                            <p:column headerText="Estado">
+                                <h:outputText value="#{cot.estado}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel> 
+
+
+    </ui:define>  
+</ui:composition>
+
