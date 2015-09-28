@@ -45,6 +45,11 @@ jorgeevj 15.09.15 Creacion.
             <!-- DIALOG DE COTIZACIONES-->
             <p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" height="100" rendered="true">
                 <h:outputText value="This is a Modal Dialog." />
+                <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{cotizacionMB.selectAlmacen}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                    <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
+                                   itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                </p:selectOneMenu>
             </p:dialog> 
             <!-- FIN DIALOG DE COTIZACIONES-->
 

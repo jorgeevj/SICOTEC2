@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controladora;
+package controladora.inicio;
 
 import entidades.Permiso;
 import java.util.ArrayList;

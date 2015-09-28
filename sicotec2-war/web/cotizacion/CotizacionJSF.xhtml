@@ -21,8 +21,7 @@
                         <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
                                        itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                     </p:selectOneMenu>
-                </h:panelGrid> 
-
+                </h:panelGrid>
                 <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
                                  actionListener="#{cotizacionMB.consultar}" update="tabCotizaciones"/>
                 <p:commandButton value="Crear" onclick="PF('dlg2').show();" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear" />

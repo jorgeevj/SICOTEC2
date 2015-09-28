@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controladora;
+package controladora.Cotizacion;
 
 import bo.AlmacenBO;
 import bo.CotizacionBO;
