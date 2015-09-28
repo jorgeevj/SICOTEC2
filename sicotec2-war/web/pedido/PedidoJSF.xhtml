@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../PrincipalJSF.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="body">
+
+        <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Cotizacion Details" style="margin-bottom:20px">
+            
+            <div class="row">
+              <div class="col s6">
+                  <div class="input-field">
+                    <p:focus for="empresa"/>
+                    <p:inputText id="empresa"></p:inputText>
+                    <label for="empresa-input">Empresa</label>
+                  </div>
+              </div>
+              <div class="col s6">
+                  <div class="input-field">
+                    <p:focus for="ruc"/>
+                    <p:inputText id="ruc"></p:inputText>
+                    <label for="ruc-input">RUC</label>
+                  </div>
+              </div>
+              <div class="col s6">
+                  <div class="input-field">
+                      <input class="datepicker" id="fec_inicio" type="date" value=""/>
+                      <label for="fec_inicio">Fecha Inicio</label>
+                  </div>
+              </div>
+              <div class="col s6">
+                  <div class="input-field">
+                      <input class="datepicker" id="fec_termino" type="date" value=""/>
+                      <label for="fec_termino">Fecha Termino</label>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col s12">
+                  <p:commandButton actionListener="#{movimientoMB.selectDataFromView()}" value="Buscar"/>
+                  <p:commandButton value="Registrar" />
+              </div>
+          </div>
+          <div class="row">
+                <p:spacer></p:spacer>
+                <p:dataTable tableStyleClass="table table-hover" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
+                    <p:column headerText="ID" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.idpedido}"/>
+                    </p:column>
+                    <p:column headerText="Empresa" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.nombreEmpresa}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.cantidad}"/>
+                    </p:column>
+                    <p:column headerText="Fecha" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.fecha}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+           </div> 
+        </p:panel> 
+
+
+    </ui:define>  
+</ui:composition>
+

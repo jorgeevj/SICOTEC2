@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../PrincipalJSF.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="body">
+
+        <p:panel id="p1" header="Mantenimiento de Tipo de Item" footer="Tipo Item Details" style="margin-bottom:20px">
+           <div class="row">
+                <div class="col s4 input-field">
+                    <p:inputText id="uno" value="#{tipoitem.codigoItem}"/>
+                    <label for="uno">Cod. Item</label>
+                </div>
+                <div class="col s4 input-field">
+                    <p:inputText id="dos" value="#{tipoitem.nombre}"/>
+                    <label for="dos">Nombre</label>
+                </div>
+                <div class="col s4 input-field">
+                    <p:inputText id="tres" value="#{tipoitem.caracteristicas}"/>
+                    <label for="tres">Características</label>
+                </div>
+                <div class="col s4 input-field">
+                    <p:inputText id="cuatro" value="#{tipoitem.categoria}"/>
+                    <label for="cuatro">Categoría</label>
+                </div>
+                <div class="col s4 input-field">
+                    <p:inputText id="cinco" value="#{tipoitem.almacen}"/>
+                    <label for="cinco">Almacén</label>
+                </div>
+                <div class="col s4 input-field">
+                    <p:inputText id="seis" value="#{tipoitem.fechaRegistro}"/>
+                    <label for="seis">Fecha de registro</label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <p:commandButton value="Buscar" actionListener="#{tipoitem.guardar()}"></p:commandButton>
+                <p:commandButton value="Registrar" ></p:commandButton>
+                <p:commandButton value="Modificar"></p:commandButton>
+            </div>
+            
+            <br/>
+            <br/>
+            
+            <div class="row">
+                <p:dataTable var="car" value="Items">
+                    <p:column headerText="Cod Item">
+                        <h:outputText value="a" />
+                     </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="b" />
+                    </p:column>
+
+                    <p:column headerText="Marca">
+                        <h:outputText value="c" />
+                    </p:column>
+
+                    <p:column headerText="Características">
+                        <h:outputText value="d" />
+                    </p:column>
+
+                    <p:column headerText="Categoría">
+                        <h:outputText value="e" />
+                    </p:column>
+
+                    <p:column headerText="Almacen">
+                        <h:outputText value="f" />
+                    </p:column>
+                    
+                    <p:column headerText="Fecha de Registro">
+                        <h:outputText value="g" />
+                    </p:column>
+                </p:dataTable>
+            </div>
+        
+        </p:panel> 
+
+
+    </ui:define>  
+</ui:composition>
+
