@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -58,8 +59,15 @@ public class CotizacionMB {
         return listaCotizacion;
     }
     
-    public void crear(){}
-
+    public void crear(ActionEvent actionEvent){}
+    public void editar(ActionEvent actionEvent){
+    RequestContext context = RequestContext.getCurrentInstance(); 
+    context.execute("PF('dlg2').show();");
+    }
+     public void cerrar(){
+    RequestContext context = RequestContext.getCurrentInstance(); 
+    context.execute("PF('dlg2').hide();");
+    }
     public CotizacionBO getCotizacionBO() {
         return cotizacionBO;
     }
