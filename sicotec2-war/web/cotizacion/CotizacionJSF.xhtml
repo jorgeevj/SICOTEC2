@@ -9,56 +9,54 @@
     <ui:define name="body">
 
         <p:panel id="p1" header="Gestion de Cotizaciones Enviadas" footer="Cotizacion Details" style="margin-bottom:20px">
+            <h:form id="formCotizacion">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Ruc:" for="it1" />
+                    <p:inputText id="it1"/>
+                    <p:outputLabel value="Empresa:" for="it2" />
+                    <p:inputText id="it2" value="#{cotizacionMB.campos.idempresa.nombre}"/>
+                    <p:outputLabel for="almacenes" value="Almacen:" />
+                    <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{cotizacionMB.selectAlmacen}" style="width:100%" >
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
+                                       itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid> 
 
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="Ruc:" for="it1" />
-                        <p:inputText id="it1"/>
-                        <p:outputLabel value="Empresa:" for="it2" />
-                        <p:inputText id="it2"/>
-
-                        <p:outputLabel for="almacenes" value="Almacen:" />
-                        <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{cotizacionMB.selectAlmacen}" style="width:100%" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                            <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
-                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
-                        </p:selectOneMenu>
-
-                     
-                    </h:panelGrid>  
-                    <p:commandButton value="Consultar" actionListener="#{cotizacionMB.consultar}" id="btnConsultar"  title="Consultar" />
-                    <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear" />
-                    <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditar" title="Editar" />
-
-
-                    <h:panelGrid >
-                        <p:dataTable var="cot" value="#{cotizacionMB.listaCotizacion}">
-                            <p:column headerText="Almacen">
-                                <h:outputText value="#{cot.idalmacen}" />
-                            </p:column>
-                            <p:column headerText="Enpresa">
-                                <h:outputText value="#{cot.idempresa.nombre}" />
-                            </p:column>
-                            <p:column headerText="Fecha de Enviado">
-                                <h:outputText value="#{cot.fechaEnvio}" />
-                            </p:column>
-                            <p:column headerText="Duracion">
-                                <h:outputText value="#{cot.duracion}" />
-                            </p:column>
-                            <p:column headerText="Entrega">
-                                <h:outputText value="#{cot.entrega}" />
-                            </p:column>
-                            <p:column headerText="N° Serie">
-                                <h:outputText value="#{cot.NSerie}" />
-                            </p:column>
-                            <p:column headerText="Correlativo">
-                                <h:outputText value="#{cot.correlativo}" />
-                            </p:column>
-                            <p:column headerText="Estado">
-                                <h:outputText value="#{cot.estado}" />
-                            </p:column>
-                        </p:dataTable>
-                    </h:panelGrid>
-                </p:panel> 
+                <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
+                                 actionListener="#{cotizacionMB.consultar}" update="tabCotizaciones"/>
+                <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear" />
+                <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditar" title="Editar" />
+            </h:form>
+            <h:panelGrid >
+                <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}">
+                    <p:column headerText="Almacen">
+                        <h:outputText value="#{cot.idalmacen}" />
+                    </p:column>
+                    <p:column headerText="Enpresa">
+                        <h:outputText value="#{cot.idempresa.nombre}" />
+                    </p:column>
+                    <p:column headerText="Fecha de Enviado">
+                        <h:outputText value="#{cot.fechaEnvio}" />
+                    </p:column>
+                    <p:column headerText="Duracion">
+                        <h:outputText value="#{cot.duracion}" />
+                    </p:column>
+                    <p:column headerText="Entrega">
+                        <h:outputText value="#{cot.entrega}" />
+                    </p:column>
+                    <p:column headerText="N° Serie">
+                        <h:outputText value="#{cot.NSerie}" />
+                    </p:column>
+                    <p:column headerText="Correlativo">
+                        <h:outputText value="#{cot.correlativo}" />
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{cot.estado}" />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </p:panel> 
 
 
     </ui:define>  

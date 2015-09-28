@@ -31,15 +31,15 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
     }
     public List<Cotizacion> buscarCotizacion(CotizacionDTO dto) {
    
-            String sql = "SELECT c.* FROM Cotizacion c where 1=1 ";
+            String sql = "SELECT c FROM Cotizacion c where 1=1 ";
             if(dto.getIdcotizacion()!=0){
             sql+="and c.idcotizacion = "+dto.getIdcotizacion()+" ";
             }      
-            if(dto.getIdempresa().getNombre()!=null && dto.getIdempresa().getNombre().equals("")){
-            sql+="and c.idempresa.nombre = "+dto.getIdempresa().getNombre()+" ";
+            if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
+            sql+="and c.idempresa.nombre = '"+dto.getIdempresa().getNombre()+"' ";
             }
-            if(dto.getIdempresa().getRuc()!=null && dto.getIdempresa().getRuc().equals("")){
-            sql+="and c.idempresa.ruc = "+dto.getIdempresa().getRuc()+" ";
+            if(dto.getIdempresa().getRuc()!=null && !dto.getIdempresa().getRuc().equals("")){
+            sql+="and c.idempresa.ruc = '"+dto.getIdempresa().getRuc()+"' ";
             }
             if(dto.getEstado()!=0){
             sql+="and c.estado = "+dto.getEstado()+" ";
@@ -50,8 +50,8 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
             if(dto.getIdalmacen()!=0){
             sql+="and c.idalmacen = "+dto.getIdalmacen()+" ";
             }
-           
-          return em.createNativeQuery(sql, Cotizacion.class).getResultList(); 
+           List<Cotizacion> l=em.createQuery(sql, Cotizacion.class).getResultList();
+          return l; 
         
     }
 }

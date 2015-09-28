@@ -16,21 +16,21 @@ import java.util.List;
  * @author Jorge
  */
 public class CotizacionDTO {
-   private Integer idcotizacion;
+   private int idcotizacion;
    
-    private Integer estado;
+    private int estado;
    
     private Date fechaEnvio;
    
-    private Integer duracion;
+    private int duracion;
    
-    private Integer entrega;
+    private int entrega;
     
     private String nSerie;
    
     private String correlativo;
    
-    private Integer idalmacen;
+    private int idalmacen;
    
     private List<Cotipoitem> cotipoitemList;
    
@@ -43,19 +43,19 @@ public class CotizacionDTO {
 
     
 
-    public Integer getIdcotizacion() {
+    public int getIdcotizacion() {
         return idcotizacion;
     }
 
-    public void setIdcotizacion(Integer idcotizacion) {
+    public void setIdcotizacion(int idcotizacion) {
         this.idcotizacion = idcotizacion;
     }
 
-    public Integer getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
@@ -67,19 +67,19 @@ public class CotizacionDTO {
         this.fechaEnvio = fechaEnvio;
     }
 
-    public Integer getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Integer duracion) {
+    public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 
-    public Integer getEntrega() {
+    public int getEntrega() {
         return entrega;
     }
 
-    public void setEntrega(Integer entrega) {
+    public void setEntrega(int entrega) {
         this.entrega = entrega;
     }
 
@@ -99,7 +99,7 @@ public class CotizacionDTO {
         this.correlativo = correlativo;
     }
 
-    public Integer getIdalmacen() {
+    public int getIdalmacen() {
         return idalmacen;
     }
 

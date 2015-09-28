@@ -8,7 +8,6 @@ package bo;
 import dao.CotizacionFacade;
 import dto.CotizacionDTO;
 import entidades.Cotizacion;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

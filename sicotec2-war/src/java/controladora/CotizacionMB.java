@@ -10,6 +10,7 @@ import bo.CotizacionBO;
 import dto.CotizacionDTO;
 import entidades.Almacen;
 import entidades.Cotizacion;
+import entidades.Empresa;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -33,6 +34,7 @@ public class CotizacionMB {
 
     private List<Cotizacion> listaCotizacion;
     private CotizacionDTO campos;
+    private Empresa emp;
     private List<Almacen> listaAlmacenes;
     private String selectAlmacen;
     /**
@@ -44,13 +46,17 @@ public class CotizacionMB {
     @PostConstruct
     public void init() {
         listaCotizacion = cotizacionBO.getAllCotizaciones();
+        emp=new Empresa();
         campos = new CotizacionDTO();
+        campos.setIdcotizacion(0);
+        campos.setIdempresa(emp);
         listaAlmacenes= almacenBO.findAll();
         selectAlmacen="0";
     }
 
     public List<Cotizacion> consultar(ActionEvent actionEvent) {
-        return cotizacionBO.BuscarCotizacion(campos);
+        listaCotizacion=cotizacionBO.BuscarCotizacion(campos);
+        return listaCotizacion;
     }
 
     public CotizacionBO getCotizacionBO() {
@@ -99,6 +105,14 @@ public class CotizacionMB {
 
     public void setSelectAlmacen(String selectAlmacen) {
         this.selectAlmacen = selectAlmacen;
+    }
+
+    public Empresa getEmp() {
+        return emp;
+    }
+
+    public void setEmp(Empresa emp) {
+        this.emp = emp;
     }
 
 }
