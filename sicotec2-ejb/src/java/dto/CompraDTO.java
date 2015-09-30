@@ -18,7 +18,7 @@ public class CompraDTO {
      private Date fecha;
      private Double total;
      private String iddocumento;
-     private String nSerie;
+     private String serie;
      private String correlativo;
      private String idalmacen;
      private Empresa idempresa;
@@ -79,19 +79,7 @@ public class CompraDTO {
         this.iddocumento = iddocumento;
     }
 
-    /**
-     * @return the nSerie
-     */
-    public String getnSerie() {
-        return nSerie;
-    }
-
-    /**
-     * @param nSerie the nSerie to set
-     */
-    public void setnSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
+   
 
     /**
      * @return the correlativo
@@ -133,6 +121,14 @@ public class CompraDTO {
      */
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
      
      

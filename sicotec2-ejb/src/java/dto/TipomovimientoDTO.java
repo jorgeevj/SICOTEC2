@@ -13,7 +13,7 @@ public class TipomovimientoDTO {
     private Integer idtipoMovimiento;
     private String iddocumento;
     private String nombre;
-    private String nSerie;
+    private String serie;
     private String correlativo;
 
     /**
@@ -58,19 +58,7 @@ public class TipomovimientoDTO {
         this.nombre = nombre;
     }
 
-    /**
-     * @return the nSerie
-     */
-    public String getnSerie() {
-        return nSerie;
-    }
-
-    /**
-     * @param nSerie the nSerie to set
-     */
-    public void setnSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
+   
 
     /**
      * @return the correlativo
@@ -84,6 +72,14 @@ public class TipomovimientoDTO {
      */
     public void setCorrelativo(String correlativo) {
         this.correlativo = correlativo;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
     
     

@@ -26,7 +26,7 @@ public class CotizacionDTO {
    
     private int entrega;
     
-    private String nSerie;
+    private String serie;
    
     private String correlativo;
    
@@ -116,12 +116,14 @@ public class CotizacionDTO {
         this.idempresa = idempresa;
     }
 
-    public String getnSerie() {
-        return nSerie;
+    public String getSerie() {
+        return serie;
     }
 
-    public void setnSerie(String nSerie) {
-        this.nSerie = nSerie;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
+
+    
      
 }

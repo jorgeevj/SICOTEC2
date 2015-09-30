@@ -22,7 +22,7 @@ public class MovimientoDTO {
     private String comentario;
     private Integer estado;
     private Integer iddocumento;
-    private String nSerie;
+    private String serie;
     private String correlativo;
     
     //AGREGADOS
@@ -171,19 +171,7 @@ public class MovimientoDTO {
         this.iddocumento = iddocumento;
     }
 
-    /**
-     * @return the nSerie
-     */
-    public String getnSerie() {
-        return nSerie;
-    }
-
-    /**
-     * @param nSerie the nSerie to set
-     */
-    public void setnSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
+    
 
     /**
      * @return the correlativo
@@ -253,6 +241,14 @@ public class MovimientoDTO {
      */
     public void setTipoMovimiento(String TipoMovimiento) {
         this.TipoMovimiento = TipoMovimiento;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
     
     
