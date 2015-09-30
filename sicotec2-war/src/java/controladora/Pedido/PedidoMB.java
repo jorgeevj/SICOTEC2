@@ -6,8 +6,13 @@
 package controladora.Pedido;
 
 import Util.Utils;
+import bo.AlmacenBO;
+import bo.EmpresaBO;
 import bo.PedidoBO;
+import dto.EmpresaDTO;
+import dto.PedidoDTO;
 import dto.TipomovimientoDTO;
+import entidades.Almacen;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +26,9 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class PedidoMB{
     @EJB
-    private PedidoBO pedidoBO = new PedidoBO();
+    private PedidoBO  pedidoBO  = new PedidoBO();
+    @EJB
+    private EmpresaBO empresaBO = new EmpresaBO();
     
     private SessionBeanPedido sessionBeanPedido = new SessionBeanPedido();
     Utils ut = new Utils();
@@ -29,14 +36,16 @@ public class PedidoMB{
     
     @PostConstruct
     public void init(){
-        
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+        getSessionBeanPedido().setListaEmpresa(empresaBO.getAllEmpresas());
     }
-    
-    
-    public void selectDataFromView(){
         
-    }
+    
+    
+    
+    
+    
+    
     
     
 
@@ -54,8 +63,6 @@ public class PedidoMB{
 
     public void setSessionBeanPedido(SessionBeanPedido sessionBeanPedido) {
         this.sessionBeanPedido = sessionBeanPedido;
-    }
-    
-    
+    }   
     
 }

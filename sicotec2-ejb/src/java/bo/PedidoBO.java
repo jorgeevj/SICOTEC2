@@ -28,15 +28,14 @@ public class PedidoBO {
     public List<PedidoDTO> getAllPedido(){
         List<Pedido> listEntidad = pedidoFacade.findAll();
         List<PedidoDTO> listDTO  = new ArrayList<PedidoDTO>();
-        listDTO = this.converListtEntityToDTO(listEntidad);
+        listDTO = this.convertEntityToDTOList(listEntidad);
         return listDTO;
     }
     
-    public List<PedidoDTO> converListtEntityToDTO(List<Pedido> listaPedido){
+    public List<PedidoDTO> convertEntityToDTOList(List<Pedido> listaPedido){
         List<PedidoDTO> listDTO = new ArrayList<PedidoDTO>();
         for(Pedido pedido : listaPedido){
             PedidoDTO DTO = new PedidoDTO();
-            
             DTO = converEntityToDTO(pedido);
             
             listDTO.add(DTO);

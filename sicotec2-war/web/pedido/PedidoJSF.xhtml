@@ -13,15 +13,18 @@
             <div class="row">
               <div class="col s6">
                   <div class="input-field">
-                    <p:focus for="empresa"/>
-                    <p:inputText id="empresa"></p:inputText>
+                      <p:selectOneMenu id="empresa" styleClass="browser-default" value="" style="width:100%" >
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{pedidoMB.sessionBeanPedido.listaEmpresa}" var="empresa" 
+                                       itemValue="#{empresa.idempresa}" itemLabel="#{empresa.nombre}"/>
+                    </p:selectOneMenu>
                     <label for="empresa-input">Empresa</label>
                   </div>
               </div>
               <div class="col s6">
-                  <div class="input-field">
+                  <div class="input-field"  >
                     <p:focus for="ruc"/>
-                    <p:inputText id="ruc"></p:inputText>
+                    <p:inputText id="ruc" value="#{sessionBeanPedido.rucBuscar}"></p:inputText>
                     <label for="ruc-input">RUC</label>
                   </div>
               </div>
@@ -40,7 +43,7 @@
           </div>
           <div class="row">
               <div class="col s12">
-                  <p:commandButton actionListener="#{movimientoMB.selectDataFromView()}" value="Buscar"/>
+                  <p:commandButton  value="Buscar"/>
                   <p:commandButton value="Registrar" />
               </div>
           </div>

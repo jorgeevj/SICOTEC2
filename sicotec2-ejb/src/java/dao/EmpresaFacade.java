@@ -5,10 +5,11 @@
  */
 package dao;
 
+import dto.EmpresaDTO;
 import entidades.Empresa;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.*;
+import javax.ejb.*;
+import javax.persistence.*;
 
 /**
  *
@@ -28,4 +29,25 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         super(Empresa.class);
     }
     
+    public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
+        List<Empresa> empresas = new ArrayList<Empresa>();
+        String ejbQuery = "SELECT u FROM Empresa u " +
+                          "WHERE u.tipo = 1 ";
+        if(empresaDTO.getNombre() != null && empresaDTO.getNombre() != ""){
+            ejbQuery +="AND u.nombre = " + empresaDTO.getNombre();
+        }
+        if(empresaDTO.getRuc()    != null && empresaDTO.getRuc()    != ""){
+            ejbQuery +="AND u.ruc = " + empresaDTO.getRuc();
+        }
+
+        try{
+            Query query = em.createQuery(ejbQuery,Empresa.class);
+            empresas = query.getResultList();
+        }catch(Exception e)
+        {
+            empresas = null;
+        }
+        
+        return empresas;
+    }
 }
