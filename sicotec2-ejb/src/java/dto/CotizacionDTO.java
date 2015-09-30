@@ -83,14 +83,7 @@ public class CotizacionDTO {
         this.entrega = entrega;
     }
 
-    public String getnSerie() {
-        return nSerie;
-    }
-
-    public void setnSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
-
+   
     public String getCorrelativo() {
         return correlativo;
     }
@@ -121,6 +114,14 @@ public class CotizacionDTO {
 
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
+    }
+
+    public String getnSerie() {
+        return nSerie;
+    }
+
+    public void setnSerie(String nSerie) {
+        this.nSerie = nSerie;
     }
      
 }

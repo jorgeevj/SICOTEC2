@@ -63,7 +63,7 @@ public class MovimientoBO {
         DTO.setMotivo(movimiento.getMotivo());
         DTO.setNombreDestino(movimiento.getNombreDestino());
         DTO.setNombreOrigen(movimiento.getNombreOrigen());
-        DTO.setnSerie(movimiento.getNSerie());
+        DTO.setnSerie(movimiento.getSerie());
         DTO.setIdTipoMovimiento(movimiento.getIdtipoMovimiento().getIdtipoMovimiento());
         DTO.setTipoMovimiento(movimiento.getIdtipoMovimiento().getNombre());
         

@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Venta.findByTotal", query = "SELECT v FROM Venta v WHERE v.total = :total"),
     @NamedQuery(name = "Venta.findByEstado", query = "SELECT v FROM Venta v WHERE v.estado = :estado"),
     @NamedQuery(name = "Venta.findByIddocumento", query = "SELECT v FROM Venta v WHERE v.iddocumento = :iddocumento"),
-    @NamedQuery(name = "Venta.findByNSerie", query = "SELECT v FROM Venta v WHERE v.nSerie = :nSerie"),
+    @NamedQuery(name = "Venta.findBySerie", query = "SELECT v FROM Venta v WHERE v.serie = :serie"),
     @NamedQuery(name = "Venta.findByCorrelativo", query = "SELECT v FROM Venta v WHERE v.correlativo = :correlativo")})
 public class Venta implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -67,8 +67,8 @@ public class Venta implements Serializable {
     @Column(name = "iddocumento")
     private String iddocumento;
     @Size(max = 45)
-    @Column(name = "nSerie")
-    private String nSerie;
+    @Column(name = "serie")
+    private String serie;
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
@@ -138,12 +138,12 @@ public class Venta implements Serializable {
         this.iddocumento = iddocumento;
     }
 
-    public String getNSerie() {
-        return nSerie;
+    public String getSerie() {
+        return serie;
     }
 
-    public void setNSerie(String nSerie) {
-        this.nSerie = nSerie;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
 
     public String getCorrelativo() {

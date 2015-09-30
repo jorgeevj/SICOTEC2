@@ -27,14 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Docalmacen.findAll", query = "SELECT d FROM Docalmacen d"),
     @NamedQuery(name = "Docalmacen.findByIddocumento", query = "SELECT d FROM Docalmacen d WHERE d.docalmacenPK.iddocumento = :iddocumento"),
     @NamedQuery(name = "Docalmacen.findByIdalmacen", query = "SELECT d FROM Docalmacen d WHERE d.docalmacenPK.idalmacen = :idalmacen"),
-    @NamedQuery(name = "Docalmacen.findByNunSerie", query = "SELECT d FROM Docalmacen d WHERE d.nunSerie = :nunSerie"),
+    @NamedQuery(name = "Docalmacen.findBySerie", query = "SELECT d FROM Docalmacen d WHERE d.serie = :serie"),
     @NamedQuery(name = "Docalmacen.findByCorrelativo", query = "SELECT d FROM Docalmacen d WHERE d.correlativo = :correlativo")})
 public class Docalmacen implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DocalmacenPK docalmacenPK;
-    @Column(name = "nunSerie")
-    private Integer nunSerie;
+    @Column(name = "serie")
+    private Integer serie;
     @Column(name = "correlativo")
     private Integer correlativo;
     @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)
@@ -63,12 +63,12 @@ public class Docalmacen implements Serializable {
         this.docalmacenPK = docalmacenPK;
     }
 
-    public Integer getNunSerie() {
-        return nunSerie;
+    public Integer getSerie() {
+        return serie;
     }
 
-    public void setNunSerie(Integer nunSerie) {
-        this.nunSerie = nunSerie;
+    public void setSerie(Integer serie) {
+        this.serie = serie;
     }
 
     public Integer getCorrelativo() {

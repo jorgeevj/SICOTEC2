@@ -31,10 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Tipomovimiento.findAll", query = "SELECT t FROM Tipomovimiento t"),
     @NamedQuery(name = "Tipomovimiento.findByIdtipoMovimiento", query = "SELECT t FROM Tipomovimiento t WHERE t.idtipoMovimiento = :idtipoMovimiento"),
-    @NamedQuery(name = "Tipomovimiento.findByIddocumento", query = "SELECT t FROM Tipomovimiento t WHERE t.iddocumento = :iddocumento"),
-    @NamedQuery(name = "Tipomovimiento.findByNombre", query = "SELECT t FROM Tipomovimiento t WHERE t.nombre = :nombre"),
-    @NamedQuery(name = "Tipomovimiento.findByNSerie", query = "SELECT t FROM Tipomovimiento t WHERE t.nSerie = :nSerie"),
-    @NamedQuery(name = "Tipomovimiento.findByCorrelativo", query = "SELECT t FROM Tipomovimiento t WHERE t.correlativo = :correlativo")})
+    @NamedQuery(name = "Tipomovimiento.findByNombre", query = "SELECT t FROM Tipomovimiento t WHERE t.nombre = :nombre")})
 public class Tipomovimiento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,17 +40,8 @@ public class Tipomovimiento implements Serializable {
     @Column(name = "idtipoMovimiento")
     private Integer idtipoMovimiento;
     @Size(max = 45)
-    @Column(name = "iddocumento")
-    private String iddocumento;
-    @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @Size(max = 45)
-    @Column(name = "nSerie")
-    private String nSerie;
-    @Size(max = 45)
-    @Column(name = "correlativo")
-    private String correlativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idtipoMovimiento")
     private List<Movimiento> movimientoList;
 
@@ -72,36 +60,12 @@ public class Tipomovimiento implements Serializable {
         this.idtipoMovimiento = idtipoMovimiento;
     }
 
-    public String getIddocumento() {
-        return iddocumento;
-    }
-
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
-    }
-
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getNSerie() {
-        return nSerie;
-    }
-
-    public void setNSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
-
-    public String getCorrelativo() {
-        return correlativo;
-    }
-
-    public void setCorrelativo(String correlativo) {
-        this.correlativo = correlativo;
     }
 
     @XmlTransient

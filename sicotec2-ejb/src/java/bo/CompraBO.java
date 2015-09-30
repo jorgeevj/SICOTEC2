@@ -56,7 +56,7 @@ public class CompraBO {
             DTO.setIddocumento(compra.getIddocumento());
             DTO.setIdempresa(compra.getIdempresa());
             DTO.setTotal(compra.getTotal());
-            DTO.setnSerie(compra.getNSerie());
+            DTO.setnSerie(compra.getSerie());
         
         return DTO;
     }

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Compra.findByFecha", query = "SELECT c FROM Compra c WHERE c.fecha = :fecha"),
     @NamedQuery(name = "Compra.findByTotal", query = "SELECT c FROM Compra c WHERE c.total = :total"),
     @NamedQuery(name = "Compra.findByIddocumento", query = "SELECT c FROM Compra c WHERE c.iddocumento = :iddocumento"),
-    @NamedQuery(name = "Compra.findByNSerie", query = "SELECT c FROM Compra c WHERE c.nSerie = :nSerie"),
+    @NamedQuery(name = "Compra.findBySerie", query = "SELECT c FROM Compra c WHERE c.serie = :serie"),
     @NamedQuery(name = "Compra.findByCorrelativo", query = "SELECT c FROM Compra c WHERE c.correlativo = :correlativo"),
     @NamedQuery(name = "Compra.findByIdalmacen", query = "SELECT c FROM Compra c WHERE c.idalmacen = :idalmacen")})
 public class Compra implements Serializable {
@@ -60,8 +60,8 @@ public class Compra implements Serializable {
     @Column(name = "iddocumento")
     private String iddocumento;
     @Size(max = 45)
-    @Column(name = "nSerie")
-    private String nSerie;
+    @Column(name = "serie")
+    private String serie;
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
@@ -115,12 +115,12 @@ public class Compra implements Serializable {
         this.iddocumento = iddocumento;
     }
 
-    public String getNSerie() {
-        return nSerie;
+    public String getSerie() {
+        return serie;
     }
 
-    public void setNSerie(String nSerie) {
-        this.nSerie = nSerie;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
 
     public String getCorrelativo() {

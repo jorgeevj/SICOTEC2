@@ -41,20 +41,18 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cotizacion.findByFechaEnvio", query = "SELECT c FROM Cotizacion c WHERE c.fechaEnvio = :fechaEnvio"),
     @NamedQuery(name = "Cotizacion.findByDuracion", query = "SELECT c FROM Cotizacion c WHERE c.duracion = :duracion"),
     @NamedQuery(name = "Cotizacion.findByEntrega", query = "SELECT c FROM Cotizacion c WHERE c.entrega = :entrega"),
-    @NamedQuery(name = "Cotizacion.findByNSerie", query = "SELECT c FROM Cotizacion c WHERE c.nSerie = :nSerie"),
+    @NamedQuery(name = "Cotizacion.findBySerie", query = "SELECT c FROM Cotizacion c WHERE c.serie = :serie"),
     @NamedQuery(name = "Cotizacion.findByCorrelativo", query = "SELECT c FROM Cotizacion c WHERE c.correlativo = :correlativo"),
     @NamedQuery(name = "Cotizacion.findByIdalmacen", query = "SELECT c FROM Cotizacion c WHERE c.idalmacen = :idalmacen")})
 public class Cotizacion implements Serializable {
-    @Column(name = "estado")
-    private Integer estado;
-    @Column(name = "idalmacen")
-    private Integer idalmacen;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idcotizacion")
     private Integer idcotizacion;
+    @Column(name = "estado")
+    private Integer estado;
     @Column(name = "fechaEnvio")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaEnvio;
@@ -63,11 +61,13 @@ public class Cotizacion implements Serializable {
     @Column(name = "entrega")
     private Integer entrega;
     @Size(max = 45)
-    @Column(name = "nSerie")
-    private String nSerie;
+    @Column(name = "serie")
+    private String serie;
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
+    @Column(name = "idalmacen")
+    private Integer idalmacen;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cotizacion")
     private List<Cotipoitem> cotipoitemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
@@ -89,6 +89,13 @@ public class Cotizacion implements Serializable {
         this.idcotizacion = idcotizacion;
     }
 
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
+    }
 
     public Date getFechaEnvio() {
         return fechaEnvio;
@@ -114,12 +121,12 @@ public class Cotizacion implements Serializable {
         this.entrega = entrega;
     }
 
-    public String getNSerie() {
-        return nSerie;
+    public String getSerie() {
+        return serie;
     }
 
-    public void setNSerie(String nSerie) {
-        this.nSerie = nSerie;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
 
     public String getCorrelativo() {
@@ -130,6 +137,13 @@ public class Cotizacion implements Serializable {
         this.correlativo = correlativo;
     }
 
+    public Integer getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(Integer idalmacen) {
+        this.idalmacen = idalmacen;
+    }
 
     @XmlTransient
     public List<Cotipoitem> getCotipoitemList() {
@@ -171,22 +185,6 @@ public class Cotizacion implements Serializable {
     @Override
     public String toString() {
         return "entidades.Cotizacion[ idcotizacion=" + idcotizacion + " ]";
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Integer getIdalmacen() {
-        return idalmacen;
-    }
-
-    public void setIdalmacen(Integer idalmacen) {
-        this.idalmacen = idalmacen;
     }
     
 }

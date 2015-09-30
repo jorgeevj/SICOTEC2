@@ -43,16 +43,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Movimiento.findByNombreDestino", query = "SELECT m FROM Movimiento m WHERE m.nombreDestino = :nombreDestino"),
     @NamedQuery(name = "Movimiento.findByMotivo", query = "SELECT m FROM Movimiento m WHERE m.motivo = :motivo"),
     @NamedQuery(name = "Movimiento.findByComentario", query = "SELECT m FROM Movimiento m WHERE m.comentario = :comentario"),
-    @NamedQuery(name = "Movimiento.findByEstado", query = "SELECT m FROM Movimiento m WHERE m.estado = :estado")})
+    @NamedQuery(name = "Movimiento.findByEstado", query = "SELECT m FROM Movimiento m WHERE m.estado = :estado"),
+    @NamedQuery(name = "Movimiento.findByIddocumento", query = "SELECT m FROM Movimiento m WHERE m.iddocumento = :iddocumento"),
+    @NamedQuery(name = "Movimiento.findBySerie", query = "SELECT m FROM Movimiento m WHERE m.serie = :serie"),
+    @NamedQuery(name = "Movimiento.findByCorrelativo", query = "SELECT m FROM Movimiento m WHERE m.correlativo = :correlativo")})
 public class Movimiento implements Serializable {
-    @Column(name = "iddocumento")
-    private Integer iddocumento;
-    @Size(max = 45)
-    @Column(name = "nSerie")
-    private String nSerie;
-    @Size(max = 45)
-    @Column(name = "correlativo")
-    private String correlativo;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -80,6 +75,14 @@ public class Movimiento implements Serializable {
     private String comentario;
     @Column(name = "estado")
     private Integer estado;
+    @Column(name = "iddocumento")
+    private Integer iddocumento;
+    @Size(max = 45)
+    @Column(name = "serie")
+    private String serie;
+    @Size(max = 45)
+    @Column(name = "correlativo")
+    private String correlativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movimiento")
     private List<Movimientoitem> movimientoitemList;
     @JoinColumn(name = "idtipoMovimiento", referencedColumnName = "idtipoMovimiento")
@@ -165,6 +168,30 @@ public class Movimiento implements Serializable {
         this.estado = estado;
     }
 
+    public Integer getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(Integer iddocumento) {
+        this.iddocumento = iddocumento;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
     @XmlTransient
     public List<Movimientoitem> getMovimientoitemList() {
         return movimientoitemList;
@@ -205,30 +232,6 @@ public class Movimiento implements Serializable {
     @Override
     public String toString() {
         return "entidades.Movimiento[ idmovimiento=" + idmovimiento + " ]";
-    }
-
-    public Integer getIddocumento() {
-        return iddocumento;
-    }
-
-    public void setIddocumento(Integer iddocumento) {
-        this.iddocumento = iddocumento;
-    }
-
-    public String getNSerie() {
-        return nSerie;
-    }
-
-    public void setNSerie(String nSerie) {
-        this.nSerie = nSerie;
-    }
-
-    public String getCorrelativo() {
-        return correlativo;
-    }
-
-    public void setCorrelativo(String correlativo) {
-        this.correlativo = correlativo;
     }
     
 }
