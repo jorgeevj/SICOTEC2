@@ -69,8 +69,366 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE PEDIDOS-->
 
 
-            <!-- DIALOG DE TIPOITEM-->
+            <!-- DIALOG DE TIPOITEM
+            <p:dialog header="Registrar Item" widgetVar="registrarItem" minHeight="40" height="500" width="1200">
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Cod. Item:" for="CodItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="CodItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Nombre:" for="nombreItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:selectOneMenu id="nombreItem" styleClass="browser-default" value="" style="width:60%" >
+                                <f:selectItem itemLabel="Seleccione nombre..." itemValue="0" />
+                                <f:selectItems value="" var="nom" 
+                                               itemValue="" itemLabel=""/>
+                            </p:selectOneMenu>
+                            <br></br>
+                            <br></br>
+                        </div>  
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Categoría:" for="categoriaItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="" style="width:60%" >
+                                <f:selectItem itemLabel="Seleccione categoría..." itemValue="0" />
+                                <f:selectItems value="" var="nom" 
+                                               itemValue="" itemLabel=""/>
+                            </p:selectOneMenu>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
 
+
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Características:" for="caracteristicasItem"/>
+                            <p:spacer width="5" height="20"/>
+                            <p:selectOneMenu id="caracteristicasItem" styleClass="browser-default" value="" style="width:60%" >
+                                <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
+                                <f:selectItems value="" var="nom" 
+                                               itemValue="" itemLabel=""/>
+                            </p:selectOneMenu>                           
+                            <br></br>
+                            <br></br>                                    
+                        </div>
+
+                        <div class="ui-grid-col-6">
+                            <p:spacer width="20" height="20" />
+                            <p:button value="Agregar"></p:button>
+                        </div>                  
+
+                    </div>                       
+
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:dataTable var="car" value="Items"> 
+                                <p:column headerText="Características">
+                                    <h:outputText value="aqui se muestra caracteristicas agregadas" />
+                                </p:column>                            
+                            </p:dataTable>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:spacer width="20" height="20" />
+                            <p:button value="Quitar"></p:button>  
+                        </div>
+
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:commandButton value="Crear una nueva característica" type="button" onclick="PF('crearCaraItem').show();" />
+                            <br></br>
+                            <br></br>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Marca:" for="marcaItem"/>
+                            <p:spacer width="85" height="20" />
+                            <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="" style="width:60%" >
+                                <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                                <f:selectItems value="" var="marc" 
+                                               itemValue="" itemLabel=""/>
+                            </p:selectOneMenu>                      
+                            <br></br>
+                            <br></br>
+
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:commandButton value="Crear nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />
+                            <br></br>
+                            <br></br>
+                        </div>
+
+
+                    </div>
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">                      
+                            <p:outputLabel value="Descripción:" for="descripcionItem"/>
+                            <p:spacer width="35" height="20" />
+                            <p:inputText id="descripcionItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Precio:" for="precioItem"/>
+                            <p:spacer width="125" height="20" />
+                            <p:inputText id="precioItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+
+                    </div>
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="dsctClienteItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="dsctDistribuidorItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="center">
+                        <div class="ui-grid-col-12">                        
+                            <p:button  value="Registrar nuevo Item"></p:button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </p:dialog>
+
+            <p:dialog header="Crear Característica" widgetVar="crearCaraItem" minHeight="40" height="100" width="700">
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <p:outputLabel value="Característica:" for="crearCaracItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="crearCaracItem" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="center">
+                        <div class="ui-grid-col-12">                        
+                            <p:button  value="Crear"></p:button>
+                        </div>                            
+                    </div>
+                </div>
+            </p:dialog>
+
+            <p:dialog header="Crear Marca" widgetVar="crearMarcaItem" minHeight="40" height="300" width="420">
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row" align="left">
+                        <div class="ui-grid-col-12">
+                            <p:outputLabel value="Nombre:" for="nomCrearMarcaItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="nomCrearMarcaItem" style="width: 70%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="left">
+                        <div class="ui-grid-col-12">
+                            <p:outputLabel value="Imagen:" for="imagenCrearMarcaItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:graphicImage id="imagenCrearMarcaItem" value="X" />                    
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="right">
+                        <div class="ui-grid-col-12">
+                            <p:inputText id="nombreImagenCrearMarcaItem" style="width: 40%"></p:inputText>
+                            <p:button  value="Examinar"></p:button>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="left">
+                        <div class="ui-grid-col-12">
+                            <p:outputLabel value="Formato:" for="formatoCrearMarcaItem"/>
+                            <p:spacer width="20" height="20" />
+                            <p:selectOneMenu id="formatoCrearMarcaItem" styleClass="browser-default" value="" style="width:60%" >
+                                <f:selectItem itemLabel="Seleccione formato..." itemValue="0" />
+                                <f:selectItems value="" var="formato" 
+                                               itemValue="" itemLabel=""/>
+                            </p:selectOneMenu>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="center">
+                        <div class="ui-grid-col-12">                        
+                            <p:button  value="Crear"></p:button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </p:dialog>
+
+            <p:dialog header="Editar Item" widgetVar="editarItem" minHeight="40" height="500" width="1200">
+                <div class="ui-grid ui-grid-responsive">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Cod. Item:" for="CodItemEdi"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="CodItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Nombre:" for="nombreItemEdi"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="nombreItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>  
+                        <div class="ui-grid-col-4">
+                            <p:outputLabel value="Categoría:" for="categoriaItemEdi"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="categoriaItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Características:" for="caracteristicasItemEdi"/>
+                            <p:spacer width="5" height="20" />
+                            <p:inputText id="caracteristicasItemEdi" style="width: 60%"></p:inputText> 
+                            <br></br>
+                            <br></br>
+
+
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:spacer width="20" height="20" />
+                            <p:button value="Agregar"></p:button>
+                        </div>                  
+
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:dataTable var="car" value="Items"> 
+                                <p:column headerText="Características">
+                                    <h:outputText value="aqui se muestra caracteristicas agregadas" />
+                                </p:column>                            
+                            </p:dataTable>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:spacer width="20" height="20" />
+                            <p:button value="Quitar"></p:button>  
+                        </div>
+
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:commandButton value="Crear una nueva característica" type="button" onclick="PF('crearCaraItem').show();" />
+                            <br></br>
+                            <br></br>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Marca:" for="marcaItemEdi"/>
+                            <p:spacer width="85" height="20" />
+                            <p:inputText id="marcaItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:commandButton value="Crear nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />
+                            <br></br>
+                            <br></br>
+                        </div>
+
+
+                    </div>
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">                      
+                            <p:outputLabel value="Descripción:" for="descripcionItemEdi"/>
+                            <p:spacer width="35" height="20" />
+                            <p:inputText id="descripcionItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Precio:" for="precioItemEdi"/>
+                            <p:spacer width="125" height="20" />
+                            <p:inputText id="precioItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+
+                    </div>
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItemEdi"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="dsctClienteItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItemEdi"/>
+                            <p:spacer width="20" height="20" />
+                            <p:inputText id="dsctDistribuidorItemEdi" style="width: 60%"></p:inputText>
+                            <br></br>
+                            <br></br>
+                        </div>
+                    </div>
+
+                    <div class="ui-grid-row" align="center">
+                        <div class="ui-grid-col-12">                        
+                            <p:button  value="Registrar nuevo Item"></p:button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </p:dialog>-->
             <!-- FIN DIALOG DE TIPOITEM-->
 
         </h:body>
