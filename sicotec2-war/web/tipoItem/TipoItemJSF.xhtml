@@ -9,74 +9,98 @@
     <ui:define name="body">
 
         <p:panel id="p1" header="Mantenimiento de Tipo de Item" footer="Tipo Item Details" style="margin-bottom:20px">
-           <div class="row">
-                <div class="col s4 input-field">
-                    <p:inputText id="uno" value="#{tipoitem.codigoItem}"/>
-                    <label for="uno">Cod. Item</label>
+            <h:form id="form1">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">
+                    <label for="uno">Cod. Item:</label>
+                    <p:spacer width="60" height="20" />
+                    <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" style="width:50%"/>
+                    <br/>
+                    <br/>
                 </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="dos" value="#{tipoitem.nombre}"/>
-                    <label for="dos">Nombre</label>
-                </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="tres" value="#{tipoitem.caracteristicas}"/>
-                    <label for="tres">Características</label>
-                </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="cuatro" value="#{tipoitem.categoria}"/>
-                    <label for="cuatro">Categoría</label>
-                </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="cinco" value="#{tipoitem.almacen}"/>
-                    <label for="cinco">Almacén</label>
-                </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="seis" value="#{tipoitem.fechaRegistro}"/>
-                    <label for="seis">Fecha de registro</label>
+                <div class="ui-grid-col-6">                    
+                    <label for="dos">Nombre:</label>
+                    <p:spacer width="105" height="20" />
+                    <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
+                    <br/>
+                    <br/>
                 </div>
             </div>
-            
-            <div class="row">
-                <p:commandButton value="Buscar" actionListener="#{tipoitem.guardar()}"></p:commandButton>
-                <p:commandButton value="Registrar" ></p:commandButton>
-                <p:commandButton value="Modificar"></p:commandButton>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">                   
+                    <label for="tres">Características:</label>
+                    <p:spacer width="20" height="20" />
+                    <p:inputText id="tres" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="ui-grid-col-6">                   
+                    <label for="cuatro">Categoría:</label>
+                    <p:spacer width="90" height="20" />
+                    <p:selectOneMenu id="cuatro" styleClass="browser-default" value="c" style="width:51%" >
+                        <f:selectItem itemLabel="Seleccione una categoría..." itemValue="0" />
+                        <f:selectItems value="c" var="catego" 
+                                       itemValue="c" itemLabel="r"/>
+                    </p:selectOneMenu>
+                    <br/>
+                    <br/>
+                </div>
             </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">                   
+                    <label for="cinco">Almacén:</label>
+                    <p:spacer width="75" height="20" />
+                    <p:selectOneMenu id="cinco" styleClass="browser-default" value="r" style="width:51%" >
+                        <f:selectItem itemLabel="Seleccione un almacén..." itemValue="0" />
+                        <f:selectItems value="r" var="almacen" 
+                                       itemValue="r" itemLabel="r"/>
+                    </p:selectOneMenu>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="ui-grid-col-6">                    
+                    <label for="seis">Fecha de registro:</label>
+                    <p:spacer width="20" height="20" />
+                    <input class="datepicker" id="seis" type="date" value="" style="width:50%"/>                    
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+
             
+                <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscar}" update="tabla" title="Consultar"/>                
+                <p:commandButton value="Registrar" onclick="PF('registrarItem').show();" />            
+                <p:commandButton value="Modificar" onclick="PF('editarItem').show();" />
+                <p:commandButton value="Eliminar" onclick="PF('mensajeEliminar').show();" />
+            
+
             <br/>
             <br/>
-            
-            <div class="row">
-                <p:dataTable var="car" value="Items">
-                    <p:column headerText="Cod Item">
-                        <h:outputText value="a" />
-                     </p:column>
+</h:form>
 
-                    <p:column headerText="Nombre">
-                        <h:outputText value="b" />
-                    </p:column>
+ 
+            <p:dataTable id="tabla" value="#{tipoitemMB.lista}" var="titem">
+                <p:column headerText="Cod Item">
+                    <h:outputText value="#{titem.tipo}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{titem.nombre}" />
+                </p:column>
+                <p:column headerText="Caracteristicas">
+                    <h:outputText value="#{titem.precioLista}" />
+                </p:column>
+                <p:column headerText="Categoria">
+                    <h:outputText value="#{titem.nombre}" />
+                </p:column>
+                <p:column headerText="Almacen">
+                    <h:outputText value="#{titem.nombre}" />
+                </p:column>
+                <p:column headerText="Fecha de registro">
+                    <h:outputText value="#{titem.desDistribuidor}" />
+                </p:column>
+            </p:dataTable>
+ 
 
-                    <p:column headerText="Marca">
-                        <h:outputText value="c" />
-                    </p:column>
-
-                    <p:column headerText="Características">
-                        <h:outputText value="d" />
-                    </p:column>
-
-                    <p:column headerText="Categoría">
-                        <h:outputText value="e" />
-                    </p:column>
-
-                    <p:column headerText="Almacen">
-                        <h:outputText value="f" />
-                    </p:column>
-                    
-                    <p:column headerText="Fecha de Registro">
-                        <h:outputText value="g" />
-                    </p:column>
-                </p:dataTable>
-            </div>
-        
         </p:panel> 
 
 
