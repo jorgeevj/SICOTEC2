@@ -1,10 +1,16 @@
 package bo;
 
 import dao.CaracteristicaFacade;
+import dao.CategoriaFacade;
+import dao.FamiliaFacade;
+import dao.MarcaFacade;
 import dao.TipoitemFacade;
 import dto.CaracteristicaDTO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
+import entidades.Categoria;
+import entidades.Familia;
+import entidades.Marca;
 import entidades.Tipoitem;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -25,7 +31,15 @@ public class TipoItemBO {
     // "Insert Code > Add Business Method")
     @EJB
     private TipoitemFacade tipoItemFacade;
+    @EJB
     private CaracteristicaFacade caracteristicaFacade;
+    @EJB
+    private MarcaFacade marcaFacade;
+    @EJB
+    private CategoriaFacade categoriaFacade;
+    @EJB
+    private FamiliaFacade familiaFacade;
+    
     
     public List<TipoItemDTO> getBusqueda(TipoItemDTO t){
        
@@ -38,6 +52,21 @@ public class TipoItemBO {
     
     public List<Caracteristica> getNombreCaracteristica(){
         List<Caracteristica> lista = caracteristicaFacade.findAll();
+        return lista;
+    }
+    
+    public List<Marca> getNombreMarca(){
+        List<Marca> lista=marcaFacade.findAll();
+        return lista;
+    }
+    
+    public List<Categoria> getNombreCategoria(){
+        List<Categoria> lista= categoriaFacade.findAll();
+        return lista;
+    }
+    
+    public List<Familia> getNombreFamilia(){
+        List<Familia> lista= familiaFacade.findAll();
         return lista;
     }
     
