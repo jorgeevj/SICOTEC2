@@ -47,7 +47,7 @@ public class Altipoitem implements Serializable {
     private Integer reservado;
     @Column(name = "comprados")
     private Integer comprados;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idalmacen")
     private List<Lote> loteList;
     @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -65,7 +65,7 @@ public class Altipoitem implements Serializable {
         this.altipoitemPK = altipoitemPK;
     }
 
-    public Altipoitem(int idalmacen, int idtipoItem) {
+    public Altipoitem(int idalmacen, String idtipoItem) {
         this.altipoitemPK = new AltipoitemPK(idalmacen, idtipoItem);
     }
 

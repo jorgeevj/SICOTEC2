@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,13 +24,14 @@ public class CatipoitemPK implements Serializable {
     private int idcaracteristica;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "idtipoItem")
-    private int idtipoItem;
+    private String idtipoItem;
 
     public CatipoitemPK() {
     }
 
-    public CatipoitemPK(int idcaracteristica, int idtipoItem) {
+    public CatipoitemPK(int idcaracteristica, String idtipoItem) {
         this.idcaracteristica = idcaracteristica;
         this.idtipoItem = idtipoItem;
     }
@@ -42,11 +44,11 @@ public class CatipoitemPK implements Serializable {
         this.idcaracteristica = idcaracteristica;
     }
 
-    public int getIdtipoItem() {
+    public String getIdtipoItem() {
         return idtipoItem;
     }
 
-    public void setIdtipoItem(int idtipoItem) {
+    public void setIdtipoItem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 
@@ -54,7 +56,7 @@ public class CatipoitemPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idcaracteristica;
-        hash += (int) idtipoItem;
+        hash += (idtipoItem != null ? idtipoItem.hashCode() : 0);
         return hash;
     }
 
@@ -68,7 +70,7 @@ public class CatipoitemPK implements Serializable {
         if (this.idcaracteristica != other.idcaracteristica) {
             return false;
         }
-        if (this.idtipoItem != other.idtipoItem) {
+        if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
             return false;
         }
         return true;

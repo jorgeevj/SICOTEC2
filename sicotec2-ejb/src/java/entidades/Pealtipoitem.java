@@ -44,8 +44,8 @@ public class Pealtipoitem implements Serializable {
     @Column(name = "estado")
     private Integer estado;
     @JoinColumns({
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false),
-        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)})
+        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false),
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Altipoitem altipoitem;
     @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")
@@ -62,7 +62,7 @@ public class Pealtipoitem implements Serializable {
         this.pealtipoitemPK = pealtipoitemPK;
     }
 
-    public Pealtipoitem(int idpedido, int idalmacen, int idtipoItem) {
+    public Pealtipoitem(int idpedido, int idalmacen, String idtipoItem) {
         this.pealtipoitemPK = new PealtipoitemPK(idpedido, idalmacen, idtipoItem);
     }
 

@@ -55,7 +55,7 @@ public class Cotipoitem implements Serializable {
         this.cotipoitemPK = cotipoitemPK;
     }
 
-    public Cotipoitem(int idcotizacion, int idtipoItem) {
+    public Cotipoitem(int idcotizacion, String idtipoItem) {
         this.cotipoitemPK = new CotipoitemPK(idcotizacion, idtipoItem);
     }
 

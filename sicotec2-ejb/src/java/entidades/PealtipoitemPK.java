@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -27,13 +28,14 @@ public class PealtipoitemPK implements Serializable {
     private int idalmacen;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "idtipoItem")
-    private int idtipoItem;
+    private String idtipoItem;
 
     public PealtipoitemPK() {
     }
 
-    public PealtipoitemPK(int idpedido, int idalmacen, int idtipoItem) {
+    public PealtipoitemPK(int idpedido, int idalmacen, String idtipoItem) {
         this.idpedido = idpedido;
         this.idalmacen = idalmacen;
         this.idtipoItem = idtipoItem;
@@ -55,11 +57,11 @@ public class PealtipoitemPK implements Serializable {
         this.idalmacen = idalmacen;
     }
 
-    public int getIdtipoItem() {
+    public String getIdtipoItem() {
         return idtipoItem;
     }
 
-    public void setIdtipoItem(int idtipoItem) {
+    public void setIdtipoItem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 
@@ -68,7 +70,7 @@ public class PealtipoitemPK implements Serializable {
         int hash = 0;
         hash += (int) idpedido;
         hash += (int) idalmacen;
-        hash += (int) idtipoItem;
+        hash += (idtipoItem != null ? idtipoItem.hashCode() : 0);
         return hash;
     }
 
@@ -85,7 +87,7 @@ public class PealtipoitemPK implements Serializable {
         if (this.idalmacen != other.idalmacen) {
             return false;
         }
-        if (this.idtipoItem != other.idtipoItem) {
+        if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
             return false;
         }
         return true;

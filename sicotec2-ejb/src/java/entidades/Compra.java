@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Compra.findByIdcompra", query = "SELECT c FROM Compra c WHERE c.idcompra = :idcompra"),
     @NamedQuery(name = "Compra.findByFecha", query = "SELECT c FROM Compra c WHERE c.fecha = :fecha"),
     @NamedQuery(name = "Compra.findByTotal", query = "SELECT c FROM Compra c WHERE c.total = :total"),
-    @NamedQuery(name = "Compra.findByIddocumento", query = "SELECT c FROM Compra c WHERE c.iddocumento = :iddocumento"),
     @NamedQuery(name = "Compra.findBySerie", query = "SELECT c FROM Compra c WHERE c.serie = :serie"),
     @NamedQuery(name = "Compra.findByCorrelativo", query = "SELECT c FROM Compra c WHERE c.correlativo = :correlativo"),
     @NamedQuery(name = "Compra.findByIdalmacen", query = "SELECT c FROM Compra c WHERE c.idalmacen = :idalmacen")})
@@ -56,9 +55,6 @@ public class Compra implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total")
     private Double total;
-    @Size(max = 45)
-    @Column(name = "iddocumento")
-    private String iddocumento;
     @Size(max = 45)
     @Column(name = "serie")
     private String serie;
@@ -105,14 +101,6 @@ public class Compra implements Serializable {
 
     public void setTotal(Double total) {
         this.total = total;
-    }
-
-    public String getIddocumento() {
-        return iddocumento;
-    }
-
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
     }
 
     public String getSerie() {

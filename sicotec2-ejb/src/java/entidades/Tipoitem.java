@@ -44,8 +44,9 @@ public class Tipoitem implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "idtipoItem")
-    private Integer idtipoItem;
+    private String idtipoItem;
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
@@ -76,15 +77,15 @@ public class Tipoitem implements Serializable {
     public Tipoitem() {
     }
 
-    public Tipoitem(Integer idtipoItem) {
+    public Tipoitem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 
-    public Integer getIdtipoItem() {
+    public String getIdtipoItem() {
         return idtipoItem;
     }
 
-    public void setIdtipoItem(Integer idtipoItem) {
+    public void setIdtipoItem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 

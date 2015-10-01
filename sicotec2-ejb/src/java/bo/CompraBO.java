@@ -53,7 +53,6 @@ public class CompraBO {
             DTO.setCorrelativo(compra.getCorrelativo());
             DTO.setFecha(compra.getFecha());
             DTO.setIdalmacen(compra.getIdalmacen());
-            DTO.setIddocumento(compra.getIddocumento());
             DTO.setIdempresa(compra.getIdempresa());
             DTO.setTotal(compra.getTotal());
             DTO.setSerie(compra.getSerie());

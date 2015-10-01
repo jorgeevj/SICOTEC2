@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p"),
     @NamedQuery(name = "Pedido.findByIdpedido", query = "SELECT p FROM Pedido p WHERE p.idpedido = :idpedido"),
     @NamedQuery(name = "Pedido.findByFecha", query = "SELECT p FROM Pedido p WHERE p.fecha = :fecha"),
-    @NamedQuery(name = "Pedido.findByCantidad", query = "SELECT p FROM Pedido p WHERE p.cantidad = :cantidad")})
+    @NamedQuery(name = "Pedido.findBySerie", query = "SELECT p FROM Pedido p WHERE p.serie = :serie"),
+    @NamedQuery(name = "Pedido.findByCorrelativo", query = "SELECT p FROM Pedido p WHERE p.correlativo = :correlativo"),
+    @NamedQuery(name = "Pedido.findByIdalmacen", query = "SELECT p FROM Pedido p WHERE p.idalmacen = :idalmacen")})
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,8 +51,14 @@ public class Pedido implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Column(name = "cantidad")
-    private Integer cantidad;
+    @Size(max = 45)
+    @Column(name = "serie")
+    private String serie;
+    @Size(max = 45)
+    @Column(name = "correlativo")
+    private String correlativo;
+    @Column(name = "idalmacen")
+    private Integer idalmacen;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
@@ -79,12 +88,28 @@ public class Pedido implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getCantidad() {
-        return cantidad;
+    public String getSerie() {
+        return serie;
     }
 
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
+    public Integer getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(Integer idalmacen) {
+        this.idalmacen = idalmacen;
     }
 
     public Empresa getIdempresa() {

@@ -47,7 +47,6 @@ public class PedidoBO {
     public PedidoDTO converEntityToDTO(Pedido pedido){
         PedidoDTO pedidoDTO = new PedidoDTO();
             pedidoDTO.setIdpedido(pedido.getIdpedido());
-            pedidoDTO.setCantidad(pedido.getCantidad());
             pedidoDTO.setEmpresa(pedido.getIdempresa());
                 pedidoDTO.setIdEmpresa(pedido.getIdempresa().getIdempresa());
                 pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());

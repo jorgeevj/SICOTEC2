@@ -50,7 +50,7 @@ public class Catipoitem implements Serializable {
         this.catipoitemPK = catipoitemPK;
     }
 
-    public Catipoitem(int idcaracteristica, int idtipoItem) {
+    public Catipoitem(int idcaracteristica, String idtipoItem) {
         this.catipoitemPK = new CatipoitemPK(idcaracteristica, idtipoItem);
     }
 
