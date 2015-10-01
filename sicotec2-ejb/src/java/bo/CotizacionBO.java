@@ -6,8 +6,12 @@
 package bo;
 
 import dao.CotizacionFacade;
+import dao.MovimientoFacade;
+import dao.TipomovimientoFacade;
 import dto.CotizacionDTO;
 import entidades.Cotizacion;
+import entidades.Movimiento;
+import entidades.Tipomovimiento;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -21,6 +25,11 @@ import javax.ejb.LocalBean;
 @Stateless
 @LocalBean
 public class CotizacionBO {
+    @EJB
+    private TipomovimientoFacade tipomovimientoFacade;
+    @EJB
+    private MovimientoFacade movimientoFacade;
+   
     @EJB
     private CotizacionFacade cotizacionFacade;
 
@@ -36,4 +45,10 @@ public class CotizacionBO {
 
 // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    public void prueba() {
+    List<Movimiento> t =movimientoFacade.findAll();
+    List<Tipomovimiento> g =tipomovimientoFacade.findAll();
+    System.out.print("hola");
+    }
 }
