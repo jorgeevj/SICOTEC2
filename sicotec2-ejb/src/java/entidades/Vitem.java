@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -45,7 +45,7 @@ public class Vitem implements Serializable {
     @Column(name = "descuento")
     private String descuento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vitem")
-    private List<Garantia> garantiaList;
+    private Collection<Garantia> garantiaCollection;
     @JoinColumn(name = "iditem", referencedColumnName = "iditem", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Item item;
@@ -89,12 +89,12 @@ public class Vitem implements Serializable {
     }
 
     @XmlTransient
-    public List<Garantia> getGarantiaList() {
-        return garantiaList;
+    public Collection<Garantia> getGarantiaCollection() {
+        return garantiaCollection;
     }
 
-    public void setGarantiaList(List<Garantia> garantiaList) {
-        this.garantiaList = garantiaList;
+    public void setGarantiaCollection(Collection<Garantia> garantiaCollection) {
+        this.garantiaCollection = garantiaCollection;
     }
 
     public Item getItem() {

@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,7 +43,7 @@ public class Tipomovimiento implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idtipoMovimiento")
-    private List<Movimiento> movimientoList;
+    private Collection<Movimiento> movimientoCollection;
 
     public Tipomovimiento() {
     }
@@ -69,12 +69,12 @@ public class Tipomovimiento implements Serializable {
     }
 
     @XmlTransient
-    public List<Movimiento> getMovimientoList() {
-        return movimientoList;
+    public Collection<Movimiento> getMovimientoCollection() {
+        return movimientoCollection;
     }
 
-    public void setMovimientoList(List<Movimiento> movimientoList) {
-        this.movimientoList = movimientoList;
+    public void setMovimientoCollection(Collection<Movimiento> movimientoCollection) {
+        this.movimientoCollection = movimientoCollection;
     }
 
     @Override

@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +44,7 @@ public class Caracteristica implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "caracteristica")
-    private List<Catipoitem> catipoitemList;
+    private Collection<Catipoitem> catipoitemCollection;
 
     public Caracteristica() {
     }
@@ -70,12 +70,12 @@ public class Caracteristica implements Serializable {
     }
 
     @XmlTransient
-    public List<Catipoitem> getCatipoitemList() {
-        return catipoitemList;
+    public Collection<Catipoitem> getCatipoitemCollection() {
+        return catipoitemCollection;
     }
 
-    public void setCatipoitemList(List<Catipoitem> catipoitemList) {
-        this.catipoitemList = catipoitemList;
+    public void setCatipoitemCollection(Collection<Catipoitem> catipoitemCollection) {
+        this.catipoitemCollection = catipoitemCollection;
     }
 
     @Override

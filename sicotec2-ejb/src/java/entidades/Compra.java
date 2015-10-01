@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,9 +68,9 @@ public class Compra implements Serializable {
     @ManyToOne(optional = false)
     private Empresa idempresa;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcompra")
-    private List<Lote> loteList;
+    private Collection<Lote> loteCollection;
     @OneToMany(mappedBy = "idcompra")
-    private List<Pealtipoitem> pealtipoitemList;
+    private Collection<Pealtipoitem> pealtipoitemCollection;
 
     public Compra() {
     }
@@ -136,21 +136,21 @@ public class Compra implements Serializable {
     }
 
     @XmlTransient
-    public List<Lote> getLoteList() {
-        return loteList;
+    public Collection<Lote> getLoteCollection() {
+        return loteCollection;
     }
 
-    public void setLoteList(List<Lote> loteList) {
-        this.loteList = loteList;
+    public void setLoteCollection(Collection<Lote> loteCollection) {
+        this.loteCollection = loteCollection;
     }
 
     @XmlTransient
-    public List<Pealtipoitem> getPealtipoitemList() {
-        return pealtipoitemList;
+    public Collection<Pealtipoitem> getPealtipoitemCollection() {
+        return pealtipoitemCollection;
     }
 
-    public void setPealtipoitemList(List<Pealtipoitem> pealtipoitemList) {
-        this.pealtipoitemList = pealtipoitemList;
+    public void setPealtipoitemCollection(Collection<Pealtipoitem> pealtipoitemCollection) {
+        this.pealtipoitemCollection = pealtipoitemCollection;
     }
 
     @Override

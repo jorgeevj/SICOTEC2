@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,17 +57,17 @@ public class Empresa implements Serializable {
         @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")}, inverseJoinColumns = {
         @JoinColumn(name = "idtipo", referencedColumnName = "idtipo")})
     @ManyToMany
-    private List<Tipo> tipoList;
+    private Collection<Tipo> tipoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idempresa")
-    private List<Compra> compraList;
+    private Collection<Compra> compraCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
-    private List<Emppersona> emppersonaList;
+    private Collection<Emppersona> emppersonaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idempresa")
-    private List<Pedido> pedidoList;
+    private Collection<Pedido> pedidoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idempresa")
-    private List<Venta> ventaList;
+    private Collection<Venta> ventaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idempresa")
-    private List<Cotizacion> cotizacionList;
+    private Collection<Cotizacion> cotizacionCollection;
 
     public Empresa() {
     }
@@ -109,57 +109,57 @@ public class Empresa implements Serializable {
     }
 
     @XmlTransient
-    public List<Tipo> getTipoList() {
-        return tipoList;
+    public Collection<Tipo> getTipoCollection() {
+        return tipoCollection;
     }
 
-    public void setTipoList(List<Tipo> tipoList) {
-        this.tipoList = tipoList;
-    }
-
-    @XmlTransient
-    public List<Compra> getCompraList() {
-        return compraList;
-    }
-
-    public void setCompraList(List<Compra> compraList) {
-        this.compraList = compraList;
+    public void setTipoCollection(Collection<Tipo> tipoCollection) {
+        this.tipoCollection = tipoCollection;
     }
 
     @XmlTransient
-    public List<Emppersona> getEmppersonaList() {
-        return emppersonaList;
+    public Collection<Compra> getCompraCollection() {
+        return compraCollection;
     }
 
-    public void setEmppersonaList(List<Emppersona> emppersonaList) {
-        this.emppersonaList = emppersonaList;
-    }
-
-    @XmlTransient
-    public List<Pedido> getPedidoList() {
-        return pedidoList;
-    }
-
-    public void setPedidoList(List<Pedido> pedidoList) {
-        this.pedidoList = pedidoList;
+    public void setCompraCollection(Collection<Compra> compraCollection) {
+        this.compraCollection = compraCollection;
     }
 
     @XmlTransient
-    public List<Venta> getVentaList() {
-        return ventaList;
+    public Collection<Emppersona> getEmppersonaCollection() {
+        return emppersonaCollection;
     }
 
-    public void setVentaList(List<Venta> ventaList) {
-        this.ventaList = ventaList;
+    public void setEmppersonaCollection(Collection<Emppersona> emppersonaCollection) {
+        this.emppersonaCollection = emppersonaCollection;
     }
 
     @XmlTransient
-    public List<Cotizacion> getCotizacionList() {
-        return cotizacionList;
+    public Collection<Pedido> getPedidoCollection() {
+        return pedidoCollection;
     }
 
-    public void setCotizacionList(List<Cotizacion> cotizacionList) {
-        this.cotizacionList = cotizacionList;
+    public void setPedidoCollection(Collection<Pedido> pedidoCollection) {
+        this.pedidoCollection = pedidoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Venta> getVentaCollection() {
+        return ventaCollection;
+    }
+
+    public void setVentaCollection(Collection<Venta> ventaCollection) {
+        this.ventaCollection = ventaCollection;
+    }
+
+    @XmlTransient
+    public Collection<Cotizacion> getCotizacionCollection() {
+        return cotizacionCollection;
+    }
+
+    public void setCotizacionCollection(Collection<Cotizacion> cotizacionCollection) {
+        this.cotizacionCollection = cotizacionCollection;
     }
 
     @Override

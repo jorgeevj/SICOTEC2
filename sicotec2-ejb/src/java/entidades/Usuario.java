@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,7 +50,7 @@ public class Usuario implements Serializable {
     @Column(name = "clave")
     private String clave;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuario")
-    private List<Evento> eventoList;
+    private Collection<Evento> eventoCollection;
     @JoinColumn(name = "idpersona", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
     private Persona idpersona;
@@ -90,12 +90,12 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Evento> getEventoList() {
-        return eventoList;
+    public Collection<Evento> getEventoCollection() {
+        return eventoCollection;
     }
 
-    public void setEventoList(List<Evento> eventoList) {
-        this.eventoList = eventoList;
+    public void setEventoCollection(Collection<Evento> eventoCollection) {
+        this.eventoCollection = eventoCollection;
     }
 
     public Persona getIdpersona() {

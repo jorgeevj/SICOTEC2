@@ -30,7 +30,7 @@ public class PermisoFacade extends AbstractFacade<Permiso> {
     public PermisoFacade() {
         super(Permiso.class);
     }
-    public List<Permiso> permisosByRol(int idRol){
+     public List<Permiso> permisosByRol(int idRol){
         List<Permiso> permisos = new ArrayList<Permiso>();
         try{
             String sql = "SELECT p.* "+

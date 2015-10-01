@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -69,7 +69,7 @@ public class Cotizacion implements Serializable {
     @Column(name = "idalmacen")
     private Integer idalmacen;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cotizacion")
-    private List<Cotipoitem> cotipoitemList;
+    private Collection<Cotipoitem> cotipoitemCollection;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
@@ -146,12 +146,12 @@ public class Cotizacion implements Serializable {
     }
 
     @XmlTransient
-    public List<Cotipoitem> getCotipoitemList() {
-        return cotipoitemList;
+    public Collection<Cotipoitem> getCotipoitemCollection() {
+        return cotipoitemCollection;
     }
 
-    public void setCotipoitemList(List<Cotipoitem> cotipoitemList) {
-        this.cotipoitemList = cotipoitemList;
+    public void setCotipoitemCollection(Collection<Cotipoitem> cotipoitemCollection) {
+        this.cotipoitemCollection = cotipoitemCollection;
     }
 
     public Empresa getIdempresa() {

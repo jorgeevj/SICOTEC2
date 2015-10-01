@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,7 +43,7 @@ public class Documento implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "documento")
-    private List<Docalmacen> docalmacenList;
+    private Collection<Docalmacen> docalmacenCollection;
 
     public Documento() {
     }
@@ -69,12 +69,12 @@ public class Documento implements Serializable {
     }
 
     @XmlTransient
-    public List<Docalmacen> getDocalmacenList() {
-        return docalmacenList;
+    public Collection<Docalmacen> getDocalmacenCollection() {
+        return docalmacenCollection;
     }
 
-    public void setDocalmacenList(List<Docalmacen> docalmacenList) {
-        this.docalmacenList = docalmacenList;
+    public void setDocalmacenCollection(Collection<Docalmacen> docalmacenCollection) {
+        this.docalmacenCollection = docalmacenCollection;
     }
 
     @Override

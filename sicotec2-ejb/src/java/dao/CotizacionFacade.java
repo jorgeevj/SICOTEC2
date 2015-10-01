@@ -53,5 +53,5 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
            List<Cotizacion> l=em.createQuery(sql, Cotizacion.class).getResultList();
           return l; 
         
-    }
+    } 
 }

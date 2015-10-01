@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +51,7 @@ public class Permiso implements Serializable {
         @JoinColumn(name = "idpermiso", referencedColumnName = "idpermiso")}, inverseJoinColumns = {
         @JoinColumn(name = "idrol", referencedColumnName = "idrol")})
     @ManyToMany
-    private List<Rol> rolList;
+    private Collection<Rol> rolCollection;
 
     public Permiso() {
     }
@@ -85,12 +85,12 @@ public class Permiso implements Serializable {
     }
 
     @XmlTransient
-    public List<Rol> getRolList() {
-        return rolList;
+    public Collection<Rol> getRolCollection() {
+        return rolCollection;
     }
 
-    public void setRolList(List<Rol> rolList) {
-        this.rolList = rolList;
+    public void setRolCollection(Collection<Rol> rolCollection) {
+        this.rolCollection = rolCollection;
     }
 
     @Override

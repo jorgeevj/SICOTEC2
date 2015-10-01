@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,7 +47,7 @@ public class Impuesto implements Serializable {
     @Column(name = "procentaje")
     private Double procentaje;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idimpuesto")
-    private List<Venta> ventaList;
+    private Collection<Venta> ventaCollection;
 
     public Impuesto() {
     }
@@ -81,12 +81,12 @@ public class Impuesto implements Serializable {
     }
 
     @XmlTransient
-    public List<Venta> getVentaList() {
-        return ventaList;
+    public Collection<Venta> getVentaCollection() {
+        return ventaCollection;
     }
 
-    public void setVentaList(List<Venta> ventaList) {
-        this.ventaList = ventaList;
+    public void setVentaCollection(Collection<Venta> ventaCollection) {
+        this.ventaCollection = ventaCollection;
     }
 
     @Override

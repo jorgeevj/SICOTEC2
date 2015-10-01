@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,8 +41,8 @@ public class Tipo implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @ManyToMany(mappedBy = "tipoList")
-    private List<Empresa> empresaList;
+    @ManyToMany(mappedBy = "tipoCollection")
+    private Collection<Empresa> empresaCollection;
 
     public Tipo() {
     }
@@ -68,12 +68,12 @@ public class Tipo implements Serializable {
     }
 
     @XmlTransient
-    public List<Empresa> getEmpresaList() {
-        return empresaList;
+    public Collection<Empresa> getEmpresaCollection() {
+        return empresaCollection;
     }
 
-    public void setEmpresaList(List<Empresa> empresaList) {
-        this.empresaList = empresaList;
+    public void setEmpresaCollection(Collection<Empresa> empresaCollection) {
+        this.empresaCollection = empresaCollection;
     }
 
     @Override

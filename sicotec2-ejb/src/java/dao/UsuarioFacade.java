@@ -29,7 +29,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
     public UsuarioFacade() {
         super(Usuario.class);
     }
-   public Usuario validateLogin(UsuarioDTO usuario){
+    public Usuario validateLogin(UsuarioDTO usuario){
         Usuario u = new Usuario();
         try{
             String jpa = "SELECT u "

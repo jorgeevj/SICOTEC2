@@ -5,18 +5,13 @@
  */
 package dto;
 
-import dao.EmpresaFacade;
 import entidades.Compra;
 import entidades.Cotizacion;
 import entidades.Emppersona;
-import entidades.Empresa;
-import entidades.Pealtipoitem;
 import entidades.Pedido;
 import entidades.Tipo;
 import entidades.Venta;
-import java.util.Date;
 import java.util.List;
-import javax.ejb.EJB;
 
 /**
  *

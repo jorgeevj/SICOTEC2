@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class Emppersona implements Serializable {
     @EmbeddedId
     protected EmppersonaPK emppersonaPK;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "emppersona")
-    private List<Ubicacion> ubicacionList;
+    private Collection<Ubicacion> ubicacionCollection;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
@@ -63,12 +63,12 @@ public class Emppersona implements Serializable {
     }
 
     @XmlTransient
-    public List<Ubicacion> getUbicacionList() {
-        return ubicacionList;
+    public Collection<Ubicacion> getUbicacionCollection() {
+        return ubicacionCollection;
     }
 
-    public void setUbicacionList(List<Ubicacion> ubicacionList) {
-        this.ubicacionList = ubicacionList;
+    public void setUbicacionCollection(Collection<Ubicacion> ubicacionCollection) {
+        this.ubicacionCollection = ubicacionCollection;
     }
 
     public Empresa getEmpresa() {

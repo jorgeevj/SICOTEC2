@@ -7,9 +7,12 @@ package dao;
 
 import dto.EmpresaDTO;
 import entidades.Empresa;
-import java.util.*;
-import javax.ejb.*;
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,8 +31,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
     public EmpresaFacade() {
         super(Empresa.class);
     }
-    
-    public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
+     public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
         List<Empresa> empresas = new ArrayList<Empresa>();
         String ejbQuery = "SELECT u FROM Empresa u " +
                           "WHERE u.tipo = 1 ";

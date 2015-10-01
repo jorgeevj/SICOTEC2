@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -72,8 +72,8 @@ public class Venta implements Serializable {
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
-    @ManyToMany(mappedBy = "ventaList")
-    private List<Mediopago> mediopagoList;
+    @ManyToMany(mappedBy = "ventaCollection")
+    private Collection<Mediopago> mediopagoCollection;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
@@ -81,7 +81,7 @@ public class Venta implements Serializable {
     @ManyToOne(optional = false)
     private Impuesto idimpuesto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
-    private List<Vitem> vitemList;
+    private Collection<Vitem> vitemCollection;
 
     public Venta() {
     }
@@ -155,12 +155,12 @@ public class Venta implements Serializable {
     }
 
     @XmlTransient
-    public List<Mediopago> getMediopagoList() {
-        return mediopagoList;
+    public Collection<Mediopago> getMediopagoCollection() {
+        return mediopagoCollection;
     }
 
-    public void setMediopagoList(List<Mediopago> mediopagoList) {
-        this.mediopagoList = mediopagoList;
+    public void setMediopagoCollection(Collection<Mediopago> mediopagoCollection) {
+        this.mediopagoCollection = mediopagoCollection;
     }
 
     public Empresa getIdempresa() {
@@ -180,12 +180,12 @@ public class Venta implements Serializable {
     }
 
     @XmlTransient
-    public List<Vitem> getVitemList() {
-        return vitemList;
+    public Collection<Vitem> getVitemCollection() {
+        return vitemCollection;
     }
 
-    public void setVitemList(List<Vitem> vitemList) {
-        this.vitemList = vitemList;
+    public void setVitemCollection(Collection<Vitem> vitemCollection) {
+        this.vitemCollection = vitemCollection;
     }
 
     @Override

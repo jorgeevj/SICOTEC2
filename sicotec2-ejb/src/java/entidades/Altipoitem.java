@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Altipoitem.findAll", query = "SELECT a FROM Altipoitem a"),
     @NamedQuery(name = "Altipoitem.findByIdalmacen", query = "SELECT a FROM Altipoitem a WHERE a.altipoitemPK.idalmacen = :idalmacen"),
-    @NamedQuery(name = "Altipoitem.findByIdtipoItem", query = "SELECT a FROM Altipoitem a WHERE a.altipoitemPK.idtipoItem = :idtipoItem"),
     @NamedQuery(name = "Altipoitem.findByCantidad", query = "SELECT a FROM Altipoitem a WHERE a.cantidad = :cantidad"),
     @NamedQuery(name = "Altipoitem.findByEstado", query = "SELECT a FROM Altipoitem a WHERE a.estado = :estado"),
     @NamedQuery(name = "Altipoitem.findByReservado", query = "SELECT a FROM Altipoitem a WHERE a.reservado = :reservado"),
-    @NamedQuery(name = "Altipoitem.findByComprados", query = "SELECT a FROM Altipoitem a WHERE a.comprados = :comprados")})
+    @NamedQuery(name = "Altipoitem.findByComprados", query = "SELECT a FROM Altipoitem a WHERE a.comprados = :comprados"),
+    @NamedQuery(name = "Altipoitem.findByIdtipoItem", query = "SELECT a FROM Altipoitem a WHERE a.altipoitemPK.idtipoItem = :idtipoItem")})
 public class Altipoitem implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -47,8 +47,8 @@ public class Altipoitem implements Serializable {
     private Integer reservado;
     @Column(name = "comprados")
     private Integer comprados;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idalmacen")
-    private List<Lote> loteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
+    private Collection<Lote> loteCollection;
     @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Almacen almacen;
@@ -56,7 +56,7 @@ public class Altipoitem implements Serializable {
     @ManyToOne(optional = false)
     private Tipoitem tipoitem;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
-    private List<Pealtipoitem> pealtipoitemList;
+    private Collection<Pealtipoitem> pealtipoitemCollection;
 
     public Altipoitem() {
     }
@@ -110,12 +110,12 @@ public class Altipoitem implements Serializable {
     }
 
     @XmlTransient
-    public List<Lote> getLoteList() {
-        return loteList;
+    public Collection<Lote> getLoteCollection() {
+        return loteCollection;
     }
 
-    public void setLoteList(List<Lote> loteList) {
-        this.loteList = loteList;
+    public void setLoteCollection(Collection<Lote> loteCollection) {
+        this.loteCollection = loteCollection;
     }
 
     public Almacen getAlmacen() {
@@ -135,12 +135,12 @@ public class Altipoitem implements Serializable {
     }
 
     @XmlTransient
-    public List<Pealtipoitem> getPealtipoitemList() {
-        return pealtipoitemList;
+    public Collection<Pealtipoitem> getPealtipoitemCollection() {
+        return pealtipoitemCollection;
     }
 
-    public void setPealtipoitemList(List<Pealtipoitem> pealtipoitemList) {
-        this.pealtipoitemList = pealtipoitemList;
+    public void setPealtipoitemCollection(Collection<Pealtipoitem> pealtipoitemCollection) {
+        this.pealtipoitemCollection = pealtipoitemCollection;
     }
 
     @Override

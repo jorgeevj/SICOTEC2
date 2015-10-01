@@ -30,7 +30,7 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
     public PedidoFacade() {
         super(Pedido.class);
     }
-    public List<Pedido> getAllPedidos(){
+     public List<Pedido> getAllPedidos(){
         List<Pedido> listaPedido = new ArrayList<Pedido>();
         
         try{
