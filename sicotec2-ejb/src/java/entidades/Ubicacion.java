@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -80,7 +80,7 @@ public class Ubicacion implements Serializable {
     @ManyToOne(optional = false)
     private Emppersona emppersona;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idubicacion")
-    private Collection<Telefono> telefonoCollection;
+    private List<Telefono> telefonoList;
 
     public Ubicacion() {
     }
@@ -170,12 +170,12 @@ public class Ubicacion implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Telefono> getTelefonoCollection() {
-        return telefonoCollection;
+    public List<Telefono> getTelefonoList() {
+        return telefonoList;
     }
 
-    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
-        this.telefonoCollection = telefonoCollection;
+    public void setTelefonoList(List<Telefono> telefonoList) {
+        this.telefonoList = telefonoList;
     }
 
     @Override

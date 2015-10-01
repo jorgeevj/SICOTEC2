@@ -31,7 +31,6 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
     public CaracteristicaFacade() {
         super(Caracteristica.class);
     }
-    
     public List<Tipoitem> getAllCaracte(Tipoitem e){
         List<Tipoitem> lista= new ArrayList<Tipoitem>();
         String sql="SELECT t.nombre FROM Caracteristica t ";
@@ -39,5 +38,4 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
         lista=q.getResultList();       
         return lista;
     }
-    
 }

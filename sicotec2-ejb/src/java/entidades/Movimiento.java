@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -84,7 +84,7 @@ public class Movimiento implements Serializable {
     @Column(name = "correlativo")
     private String correlativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movimiento")
-    private Collection<Movimientoitem> movimientoitemCollection;
+    private List<Movimientoitem> movimientoitemList;
     @JoinColumn(name = "idtipoMovimiento", referencedColumnName = "idtipoMovimiento")
     @ManyToOne(optional = false)
     private Tipomovimiento idtipoMovimiento;
@@ -193,12 +193,12 @@ public class Movimiento implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Movimientoitem> getMovimientoitemCollection() {
-        return movimientoitemCollection;
+    public List<Movimientoitem> getMovimientoitemList() {
+        return movimientoitemList;
     }
 
-    public void setMovimientoitemCollection(Collection<Movimientoitem> movimientoitemCollection) {
-        this.movimientoitemCollection = movimientoitemCollection;
+    public void setMovimientoitemList(List<Movimientoitem> movimientoitemList) {
+        this.movimientoitemList = movimientoitemList;
     }
 
     public Tipomovimiento getIdtipoMovimiento() {

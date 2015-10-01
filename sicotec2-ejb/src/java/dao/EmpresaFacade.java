@@ -31,7 +31,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
     public EmpresaFacade() {
         super(Empresa.class);
     }
-     public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
+   public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
         List<Empresa> empresas = new ArrayList<Empresa>();
         String ejbQuery = "SELECT u FROM Empresa u " +
                           "WHERE u.tipo = 1 ";
@@ -83,5 +83,5 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         }
         
         return empresas;
-     }
+     } 
 }

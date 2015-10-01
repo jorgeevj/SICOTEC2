@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,17 +62,17 @@ public class Tipoitem implements Serializable {
     @Size(max = 45)
     @Column(name = "desDistribuidor")
     private String desDistribuidor;
-    @ManyToMany(mappedBy = "tipoitemCollection")
-    private Collection<Marca> marcaCollection;
+    @ManyToMany(mappedBy = "tipoitemList")
+    private List<Marca> marcaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
-    private Collection<Cotipoitem> cotipoitemCollection;
+    private List<Cotipoitem> cotipoitemList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
-    private Collection<Catipoitem> catipoitemCollection;
+    private List<Catipoitem> catipoitemList;
     @JoinColumn(name = "idfamilia", referencedColumnName = "idfamilia")
     @ManyToOne(optional = false)
     private Familia idfamilia;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
-    private Collection<Altipoitem> altipoitemCollection;
+    private List<Altipoitem> altipoitemList;
 
     public Tipoitem() {
     }
@@ -130,30 +130,30 @@ public class Tipoitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Marca> getMarcaCollection() {
-        return marcaCollection;
+    public List<Marca> getMarcaList() {
+        return marcaList;
     }
 
-    public void setMarcaCollection(Collection<Marca> marcaCollection) {
-        this.marcaCollection = marcaCollection;
-    }
-
-    @XmlTransient
-    public Collection<Cotipoitem> getCotipoitemCollection() {
-        return cotipoitemCollection;
-    }
-
-    public void setCotipoitemCollection(Collection<Cotipoitem> cotipoitemCollection) {
-        this.cotipoitemCollection = cotipoitemCollection;
+    public void setMarcaList(List<Marca> marcaList) {
+        this.marcaList = marcaList;
     }
 
     @XmlTransient
-    public Collection<Catipoitem> getCatipoitemCollection() {
-        return catipoitemCollection;
+    public List<Cotipoitem> getCotipoitemList() {
+        return cotipoitemList;
     }
 
-    public void setCatipoitemCollection(Collection<Catipoitem> catipoitemCollection) {
-        this.catipoitemCollection = catipoitemCollection;
+    public void setCotipoitemList(List<Cotipoitem> cotipoitemList) {
+        this.cotipoitemList = cotipoitemList;
+    }
+
+    @XmlTransient
+    public List<Catipoitem> getCatipoitemList() {
+        return catipoitemList;
+    }
+
+    public void setCatipoitemList(List<Catipoitem> catipoitemList) {
+        this.catipoitemList = catipoitemList;
     }
 
     public Familia getIdfamilia() {
@@ -165,12 +165,12 @@ public class Tipoitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Altipoitem> getAltipoitemCollection() {
-        return altipoitemCollection;
+    public List<Altipoitem> getAltipoitemList() {
+        return altipoitemList;
     }
 
-    public void setAltipoitemCollection(Collection<Altipoitem> altipoitemCollection) {
-        this.altipoitemCollection = altipoitemCollection;
+    public void setAltipoitemList(List<Altipoitem> altipoitemList) {
+        this.altipoitemList = altipoitemList;
     }
 
     @Override

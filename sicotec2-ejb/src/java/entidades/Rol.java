@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,10 +48,10 @@ public class Rol implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
-    @ManyToMany(mappedBy = "rolCollection")
-    private Collection<Permiso> permisoCollection;
+    @ManyToMany(mappedBy = "rolList")
+    private List<Permiso> permisoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idrol")
-    private Collection<Usuario> usuarioCollection;
+    private List<Usuario> usuarioList;
 
     public Rol() {
     }
@@ -85,21 +85,21 @@ public class Rol implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Permiso> getPermisoCollection() {
-        return permisoCollection;
+    public List<Permiso> getPermisoList() {
+        return permisoList;
     }
 
-    public void setPermisoCollection(Collection<Permiso> permisoCollection) {
-        this.permisoCollection = permisoCollection;
+    public void setPermisoList(List<Permiso> permisoList) {
+        this.permisoList = permisoList;
     }
 
     @XmlTransient
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
     }
 
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
     @Override

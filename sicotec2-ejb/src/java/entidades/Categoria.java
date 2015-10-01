@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +44,7 @@ public class Categoria implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcategoria")
-    private Collection<Familia> familiaCollection;
+    private List<Familia> familiaList;
 
     public Categoria() {
     }
@@ -70,12 +70,12 @@ public class Categoria implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Familia> getFamiliaCollection() {
-        return familiaCollection;
+    public List<Familia> getFamiliaList() {
+        return familiaList;
     }
 
-    public void setFamiliaCollection(Collection<Familia> familiaCollection) {
-        this.familiaCollection = familiaCollection;
+    public void setFamiliaList(List<Familia> familiaList) {
+        this.familiaList = familiaList;
     }
 
     @Override

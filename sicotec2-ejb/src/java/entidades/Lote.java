@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,7 +57,7 @@ public class Lote implements Serializable {
     @ManyToOne(optional = false)
     private Compra idcompra;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlote")
-    private Collection<Item> itemCollection;
+    private List<Item> itemList;
 
     public Lote() {
     }
@@ -107,12 +107,12 @@ public class Lote implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Item> getItemCollection() {
-        return itemCollection;
+    public List<Item> getItemList() {
+        return itemList;
     }
 
-    public void setItemCollection(Collection<Item> itemCollection) {
-        this.itemCollection = itemCollection;
+    public void setItemList(List<Item> itemList) {
+        this.itemList = itemList;
     }
 
     @Override

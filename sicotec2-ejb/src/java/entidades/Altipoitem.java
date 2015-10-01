@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -48,7 +48,7 @@ public class Altipoitem implements Serializable {
     @Column(name = "comprados")
     private Integer comprados;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
-    private Collection<Lote> loteCollection;
+    private List<Lote> loteList;
     @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Almacen almacen;
@@ -56,7 +56,7 @@ public class Altipoitem implements Serializable {
     @ManyToOne(optional = false)
     private Tipoitem tipoitem;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
-    private Collection<Pealtipoitem> pealtipoitemCollection;
+    private List<Pealtipoitem> pealtipoitemList;
 
     public Altipoitem() {
     }
@@ -110,12 +110,12 @@ public class Altipoitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Lote> getLoteCollection() {
-        return loteCollection;
+    public List<Lote> getLoteList() {
+        return loteList;
     }
 
-    public void setLoteCollection(Collection<Lote> loteCollection) {
-        this.loteCollection = loteCollection;
+    public void setLoteList(List<Lote> loteList) {
+        this.loteList = loteList;
     }
 
     public Almacen getAlmacen() {
@@ -135,12 +135,12 @@ public class Altipoitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Pealtipoitem> getPealtipoitemCollection() {
-        return pealtipoitemCollection;
+    public List<Pealtipoitem> getPealtipoitemList() {
+        return pealtipoitemList;
     }
 
-    public void setPealtipoitemCollection(Collection<Pealtipoitem> pealtipoitemCollection) {
-        this.pealtipoitemCollection = pealtipoitemCollection;
+    public void setPealtipoitemList(List<Pealtipoitem> pealtipoitemList) {
+        this.pealtipoitemList = pealtipoitemList;
     }
 
     @Override

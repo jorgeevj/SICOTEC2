@@ -6,8 +6,6 @@
 package dao;
 
 import entidades.Almacen;
-import entidades.Cotizacion;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +27,7 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
     public AlmacenFacade() {
         super(Almacen.class);
     }
-    public Almacen getNombreAlmxID(int id){
+     public Almacen getNombreAlmxID(int id){
           return em.createQuery("select a from Almacen a where a.idalmacen="+id, Almacen.class).getSingleResult(); 
     }
 
@@ -46,6 +44,4 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         
         return entidad;
     }
-    
-
 }

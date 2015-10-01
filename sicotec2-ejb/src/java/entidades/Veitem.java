@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -26,26 +26,26 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jorge
  */
 @Entity
-@Table(name = "vitem")
+@Table(name = "veitem")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Vitem.findAll", query = "SELECT v FROM Vitem v"),
-    @NamedQuery(name = "Vitem.findByIdventa", query = "SELECT v FROM Vitem v WHERE v.vitemPK.idventa = :idventa"),
-    @NamedQuery(name = "Vitem.findByIditem", query = "SELECT v FROM Vitem v WHERE v.vitemPK.iditem = :iditem"),
-    @NamedQuery(name = "Vitem.findByPrecio", query = "SELECT v FROM Vitem v WHERE v.precio = :precio"),
-    @NamedQuery(name = "Vitem.findByDescuento", query = "SELECT v FROM Vitem v WHERE v.descuento = :descuento")})
-public class Vitem implements Serializable {
+    @NamedQuery(name = "Veitem.findAll", query = "SELECT v FROM Veitem v"),
+    @NamedQuery(name = "Veitem.findByIdventa", query = "SELECT v FROM Veitem v WHERE v.veitemPK.idventa = :idventa"),
+    @NamedQuery(name = "Veitem.findByIditem", query = "SELECT v FROM Veitem v WHERE v.veitemPK.iditem = :iditem"),
+    @NamedQuery(name = "Veitem.findByPrecio", query = "SELECT v FROM Veitem v WHERE v.precio = :precio"),
+    @NamedQuery(name = "Veitem.findByDescuento", query = "SELECT v FROM Veitem v WHERE v.descuento = :descuento")})
+public class Veitem implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected VitemPK vitemPK;
+    protected VeitemPK veitemPK;
     @Size(max = 45)
     @Column(name = "precio")
     private String precio;
     @Size(max = 45)
     @Column(name = "descuento")
     private String descuento;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vitem")
-    private Collection<Garantia> garantiaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "veitem")
+    private List<Garantia> garantiaList;
     @JoinColumn(name = "iditem", referencedColumnName = "iditem", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Item item;
@@ -53,23 +53,23 @@ public class Vitem implements Serializable {
     @ManyToOne(optional = false)
     private Venta venta;
 
-    public Vitem() {
+    public Veitem() {
     }
 
-    public Vitem(VitemPK vitemPK) {
-        this.vitemPK = vitemPK;
+    public Veitem(VeitemPK veitemPK) {
+        this.veitemPK = veitemPK;
     }
 
-    public Vitem(int idventa, int iditem) {
-        this.vitemPK = new VitemPK(idventa, iditem);
+    public Veitem(int idventa, int iditem) {
+        this.veitemPK = new VeitemPK(idventa, iditem);
     }
 
-    public VitemPK getVitemPK() {
-        return vitemPK;
+    public VeitemPK getVeitemPK() {
+        return veitemPK;
     }
 
-    public void setVitemPK(VitemPK vitemPK) {
-        this.vitemPK = vitemPK;
+    public void setVeitemPK(VeitemPK veitemPK) {
+        this.veitemPK = veitemPK;
     }
 
     public String getPrecio() {
@@ -89,12 +89,12 @@ public class Vitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Garantia> getGarantiaCollection() {
-        return garantiaCollection;
+    public List<Garantia> getGarantiaList() {
+        return garantiaList;
     }
 
-    public void setGarantiaCollection(Collection<Garantia> garantiaCollection) {
-        this.garantiaCollection = garantiaCollection;
+    public void setGarantiaList(List<Garantia> garantiaList) {
+        this.garantiaList = garantiaList;
     }
 
     public Item getItem() {
@@ -116,18 +116,18 @@ public class Vitem implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (vitemPK != null ? vitemPK.hashCode() : 0);
+        hash += (veitemPK != null ? veitemPK.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vitem)) {
+        if (!(object instanceof Veitem)) {
             return false;
         }
-        Vitem other = (Vitem) object;
-        if ((this.vitemPK == null && other.vitemPK != null) || (this.vitemPK != null && !this.vitemPK.equals(other.vitemPK))) {
+        Veitem other = (Veitem) object;
+        if ((this.veitemPK == null && other.veitemPK != null) || (this.veitemPK != null && !this.veitemPK.equals(other.veitemPK))) {
             return false;
         }
         return true;
@@ -135,7 +135,7 @@ public class Vitem implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Vitem[ vitemPK=" + vitemPK + " ]";
+        return "entidades.Veitem[ veitemPK=" + veitemPK + " ]";
     }
     
 }

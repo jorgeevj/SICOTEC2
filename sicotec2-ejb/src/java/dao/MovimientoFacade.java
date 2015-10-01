@@ -32,8 +32,7 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
     public MovimientoFacade() {
         super(Movimiento.class);
     }
-    
-    public List<Item> getItemsByMovimiento(MovimientoDTO mov){
+     public List<Item> getItemsByMovimiento(MovimientoDTO mov){
         List<Item> listaItems = new ArrayList<Item>();
         try{
             String jpa = "SELECT i.* "
@@ -90,5 +89,4 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
         
         return listaMov;
     }
-    
 }

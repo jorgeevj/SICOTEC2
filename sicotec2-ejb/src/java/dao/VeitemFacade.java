@@ -5,7 +5,7 @@
  */
 package dao;
 
-import entidades.Vitem;
+import entidades.Veitem;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * @author Jorge
  */
 @Stateless
-public class VitemFacade extends AbstractFacade<Vitem> {
+public class VeitemFacade extends AbstractFacade<Veitem> {
     @PersistenceContext(unitName = "sicotec2-ejbPU")
     private EntityManager em;
 
@@ -24,8 +24,8 @@ public class VitemFacade extends AbstractFacade<Vitem> {
         return em;
     }
 
-    public VitemFacade() {
-        super(Vitem.class);
+    public VeitemFacade() {
+        super(Veitem.class);
     }
     
 }

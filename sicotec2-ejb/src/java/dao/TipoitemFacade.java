@@ -30,8 +30,7 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
     public TipoitemFacade() {
         super(Tipoitem.class);
     }
-    
-    public List<Tipoitem> getAllTipoItem(){
+     public List<Tipoitem> getAllTipoItem(){
         List<Tipoitem> ti = new ArrayList<Tipoitem>();
         
         return ti;
@@ -43,6 +42,5 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         Query q=em.createQuery(sql,Tipoitem.class);
         lista=q.getResultList();       
         return lista;
-    }
-    
+    } 
 }

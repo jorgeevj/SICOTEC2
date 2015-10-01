@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,11 +57,11 @@ public class Garantia implements Serializable {
         @JoinColumn(name = "iditem", referencedColumnName = "iditem"),
         @JoinColumn(name = "idventa", referencedColumnName = "idventa")})
     @ManyToOne(optional = false)
-    private Vitem vitem;
+    private Veitem veitem;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idgarantia")
-    private Collection<Informe> informeCollection;
+    private List<Informe> informeList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idgarantia")
-    private Collection<Notacredito> notacreditoCollection;
+    private List<Notacredito> notacreditoList;
 
     public Garantia() {
     }
@@ -94,30 +94,30 @@ public class Garantia implements Serializable {
         this.estado = estado;
     }
 
-    public Vitem getVitem() {
-        return vitem;
+    public Veitem getVeitem() {
+        return veitem;
     }
 
-    public void setVitem(Vitem vitem) {
-        this.vitem = vitem;
-    }
-
-    @XmlTransient
-    public Collection<Informe> getInformeCollection() {
-        return informeCollection;
-    }
-
-    public void setInformeCollection(Collection<Informe> informeCollection) {
-        this.informeCollection = informeCollection;
+    public void setVeitem(Veitem veitem) {
+        this.veitem = veitem;
     }
 
     @XmlTransient
-    public Collection<Notacredito> getNotacreditoCollection() {
-        return notacreditoCollection;
+    public List<Informe> getInformeList() {
+        return informeList;
     }
 
-    public void setNotacreditoCollection(Collection<Notacredito> notacreditoCollection) {
-        this.notacreditoCollection = notacreditoCollection;
+    public void setInformeList(List<Informe> informeList) {
+        this.informeList = informeList;
+    }
+
+    @XmlTransient
+    public List<Notacredito> getNotacreditoList() {
+        return notacreditoList;
+    }
+
+    public void setNotacreditoList(List<Notacredito> notacreditoList) {
+        this.notacreditoList = notacreditoList;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TipomovimientoFacade extends AbstractFacade<Tipomovimiento> {
     public TipomovimientoFacade() {
         super(Tipomovimiento.class);
     }
-    public List<Tipomovimiento> getAllTMovimiento(){
+      public List<Tipomovimiento> getAllTMovimiento(){
         List<Tipomovimiento> tMovimiento = new ArrayList<Tipomovimiento>();
         
         

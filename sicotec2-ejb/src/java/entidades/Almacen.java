@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,9 +64,9 @@ public class Almacen implements Serializable {
     @Column(name = "cod_dist")
     private String codDist;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "almacen")
-    private Collection<Docalmacen> docalmacenCollection;
+    private List<Docalmacen> docalmacenList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "almacen")
-    private Collection<Altipoitem> altipoitemCollection;
+    private List<Altipoitem> altipoitemList;
 
     public Almacen() {
     }
@@ -132,21 +132,21 @@ public class Almacen implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Docalmacen> getDocalmacenCollection() {
-        return docalmacenCollection;
+    public List<Docalmacen> getDocalmacenList() {
+        return docalmacenList;
     }
 
-    public void setDocalmacenCollection(Collection<Docalmacen> docalmacenCollection) {
-        this.docalmacenCollection = docalmacenCollection;
+    public void setDocalmacenList(List<Docalmacen> docalmacenList) {
+        this.docalmacenList = docalmacenList;
     }
 
     @XmlTransient
-    public Collection<Altipoitem> getAltipoitemCollection() {
-        return altipoitemCollection;
+    public List<Altipoitem> getAltipoitemList() {
+        return altipoitemList;
     }
 
-    public void setAltipoitemCollection(Collection<Altipoitem> altipoitemCollection) {
-        this.altipoitemCollection = altipoitemCollection;
+    public void setAltipoitemList(List<Altipoitem> altipoitemList) {
+        this.altipoitemList = altipoitemList;
     }
 
     @Override

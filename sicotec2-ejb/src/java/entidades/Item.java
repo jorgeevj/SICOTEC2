@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,14 +49,14 @@ public class Item implements Serializable {
     @Column(name = "operatividad")
     private String operatividad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
-    private Collection<Movimientoitem> movimientoitemCollection;
+    private List<Veitem> veitemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
+    private List<Movimientoitem> movimientoitemList;
     @JoinColumn(name = "idlote", referencedColumnName = "idlote")
     @ManyToOne(optional = false)
     private Lote idlote;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "iditem")
-    private Collection<Ajuste> ajusteCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
-    private Collection<Vitem> vitemCollection;
+    private List<Ajuste> ajusteList;
 
     public Item() {
     }
@@ -90,12 +90,21 @@ public class Item implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Movimientoitem> getMovimientoitemCollection() {
-        return movimientoitemCollection;
+    public List<Veitem> getVeitemList() {
+        return veitemList;
     }
 
-    public void setMovimientoitemCollection(Collection<Movimientoitem> movimientoitemCollection) {
-        this.movimientoitemCollection = movimientoitemCollection;
+    public void setVeitemList(List<Veitem> veitemList) {
+        this.veitemList = veitemList;
+    }
+
+    @XmlTransient
+    public List<Movimientoitem> getMovimientoitemList() {
+        return movimientoitemList;
+    }
+
+    public void setMovimientoitemList(List<Movimientoitem> movimientoitemList) {
+        this.movimientoitemList = movimientoitemList;
     }
 
     public Lote getIdlote() {
@@ -107,21 +116,12 @@ public class Item implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Ajuste> getAjusteCollection() {
-        return ajusteCollection;
+    public List<Ajuste> getAjusteList() {
+        return ajusteList;
     }
 
-    public void setAjusteCollection(Collection<Ajuste> ajusteCollection) {
-        this.ajusteCollection = ajusteCollection;
-    }
-
-    @XmlTransient
-    public Collection<Vitem> getVitemCollection() {
-        return vitemCollection;
-    }
-
-    public void setVitemCollection(Collection<Vitem> vitemCollection) {
-        this.vitemCollection = vitemCollection;
+    public void setAjusteList(List<Ajuste> ajusteList) {
+        this.ajusteList = ajusteList;
     }
 
     @Override

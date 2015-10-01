@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @author Jorge
  */
 @Embeddable
-public class VitemPK implements Serializable {
+public class VeitemPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "idventa")
@@ -26,10 +26,10 @@ public class VitemPK implements Serializable {
     @Column(name = "iditem")
     private int iditem;
 
-    public VitemPK() {
+    public VeitemPK() {
     }
 
-    public VitemPK(int idventa, int iditem) {
+    public VeitemPK(int idventa, int iditem) {
         this.idventa = idventa;
         this.iditem = iditem;
     }
@@ -61,10 +61,10 @@ public class VitemPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VitemPK)) {
+        if (!(object instanceof VeitemPK)) {
             return false;
         }
-        VitemPK other = (VitemPK) object;
+        VeitemPK other = (VeitemPK) object;
         if (this.idventa != other.idventa) {
             return false;
         }
@@ -76,7 +76,7 @@ public class VitemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.VitemPK[ idventa=" + idventa + ", iditem=" + iditem + " ]";
+        return "entidades.VeitemPK[ idventa=" + idventa + ", iditem=" + iditem + " ]";
     }
     
 }

@@ -6,8 +6,8 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -72,16 +72,16 @@ public class Venta implements Serializable {
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
-    @ManyToMany(mappedBy = "ventaCollection")
-    private Collection<Mediopago> mediopagoCollection;
+    @ManyToMany(mappedBy = "ventaList")
+    private List<Mediopago> mediopagoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
+    private List<Veitem> veitemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
     @JoinColumn(name = "idimpuesto", referencedColumnName = "idimpuesto")
     @ManyToOne(optional = false)
     private Impuesto idimpuesto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
-    private Collection<Vitem> vitemCollection;
 
     public Venta() {
     }
@@ -155,12 +155,21 @@ public class Venta implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Mediopago> getMediopagoCollection() {
-        return mediopagoCollection;
+    public List<Mediopago> getMediopagoList() {
+        return mediopagoList;
     }
 
-    public void setMediopagoCollection(Collection<Mediopago> mediopagoCollection) {
-        this.mediopagoCollection = mediopagoCollection;
+    public void setMediopagoList(List<Mediopago> mediopagoList) {
+        this.mediopagoList = mediopagoList;
+    }
+
+    @XmlTransient
+    public List<Veitem> getVeitemList() {
+        return veitemList;
+    }
+
+    public void setVeitemList(List<Veitem> veitemList) {
+        this.veitemList = veitemList;
     }
 
     public Empresa getIdempresa() {
@@ -177,15 +186,6 @@ public class Venta implements Serializable {
 
     public void setIdimpuesto(Impuesto idimpuesto) {
         this.idimpuesto = idimpuesto;
-    }
-
-    @XmlTransient
-    public Collection<Vitem> getVitemCollection() {
-        return vitemCollection;
-    }
-
-    public void setVitemCollection(Collection<Vitem> vitemCollection) {
-        this.vitemCollection = vitemCollection;
     }
 
     @Override

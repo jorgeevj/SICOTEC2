@@ -6,7 +6,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,11 +43,11 @@ public class Mediopago implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @JoinTable(name = "vmediopago", joinColumns = {
+    @JoinTable(name = "vemediopago", joinColumns = {
         @JoinColumn(name = "idmedioPago", referencedColumnName = "idmedioPago")}, inverseJoinColumns = {
         @JoinColumn(name = "idventa", referencedColumnName = "idventa")})
     @ManyToMany
-    private Collection<Venta> ventaCollection;
+    private List<Venta> ventaList;
 
     public Mediopago() {
     }
@@ -73,12 +73,12 @@ public class Mediopago implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Venta> getVentaCollection() {
-        return ventaCollection;
+    public List<Venta> getVentaList() {
+        return ventaList;
     }
 
-    public void setVentaCollection(Collection<Venta> ventaCollection) {
-        this.ventaCollection = ventaCollection;
+    public void setVentaList(List<Venta> ventaList) {
+        this.ventaList = ventaList;
     }
 
     @Override

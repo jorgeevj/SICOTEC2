@@ -29,7 +29,7 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
     public CotizacionFacade() {
         super(Cotizacion.class);
     }
-    public List<Cotizacion> buscarCotizacion(CotizacionDTO dto) {
+     public List<Cotizacion> buscarCotizacion(CotizacionDTO dto) {
    
             String sql = "SELECT c FROM Cotizacion c where 1=1 ";
             if(dto.getIdcotizacion()!=0){
