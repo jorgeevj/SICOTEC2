@@ -38,6 +38,7 @@ public class PedidoMB{
         emp=new Empresa();
         campos = new PedidoDTO();
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+        getSessionBeanPedido().setListaEmpresaAdd(this.comboEmpresas());
         campos = new PedidoDTO();
         campos.setIdpedido(0);
         campos.setIdEmpresa(emp);
@@ -52,7 +53,6 @@ public class PedidoMB{
     
     public void crear(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
-        ArrayList empresas = this.comboEmpresas();
         context.execute("PF('addPedidosModal').show();");
     }
     public void editar(ActionEvent actionEvent){
@@ -62,17 +62,18 @@ public class PedidoMB{
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('dlg2').hide();");
     }
+     
+     public void abrirModalAddItems(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addItemsPedidosModal').show();");
+     }
     
     
      
      
-     public ArrayList comboEmpresas(){
+     public List<EmpresaDTO> comboEmpresas(){
          List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
-         ArrayList empresas = new ArrayList();
-         for(EmpresaDTO dto : listaDto){
-             empresas.add(dto.getIdempresa(), dto.getNombre());
-         }
-         return empresas;
+         return listaDto;
      }
     
 

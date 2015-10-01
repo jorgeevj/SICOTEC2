@@ -5,6 +5,7 @@
  */
 package bo;
 
+import dao.AlmacenFacade;
 import dao.PedidoFacade;
 import dto.PedidoDTO;
 import entidades.Pedido;
@@ -24,6 +25,8 @@ public class PedidoBO {
 
     @EJB
     private PedidoFacade pedidoFacade = new PedidoFacade();
+    @EJB
+    private AlmacenFacade almacenFacade = new AlmacenFacade();
 
     public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();
@@ -46,20 +49,28 @@ public class PedidoBO {
 
     public PedidoDTO converEntityToDTO(Pedido pedido) {
         PedidoDTO pedidoDTO = new PedidoDTO();
-
+        
         pedidoDTO.setIdpedido(pedido.getIdpedido());
+        pedidoDTO.setFecha(pedido.getFecha());
         pedidoDTO.setIdEmpresa(pedido.getIdempresa());
             pedidoDTO.setEmpresaId(pedido.getIdempresa().getIdempresa());
             pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
-        pedidoDTO.setFecha(pedido.getFecha());
+        pedidoDTO.setSerie(pedido.getSerie());
+        pedidoDTO.setCorrelativo(pedido.getSerie());
+        pedidoDTO.setIdalmacen(pedido.getIdalmacen());
+        String nombreAlmacen = almacenFacade.getAlmacenById(pedidoDTO.getIdalmacen()).getNombre() ;
+        pedidoDTO.setNombreAlmacen(nombreAlmacen);
         return pedidoDTO;
     }
     
     public Pedido convertDTOtoEntity(PedidoDTO dto){
         Pedido entidad = new Pedido();
-        entidad.setIdempresa(dto.getIdEmpresa());
-        entidad.setFecha(dto.getFecha());
         entidad.setIdpedido(dto.getIdpedido());
+        entidad.setFecha(dto.getFecha());
+        entidad.setIdempresa(dto.getIdEmpresa());
+        entidad.setSerie(dto.getSerie());
+        entidad.setCorrelativo(dto.getCorrelativo());
+        entidad.setIdalmacen(dto.getIdalmacen());
         return entidad;
     }
     

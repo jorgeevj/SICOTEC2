@@ -5,8 +5,10 @@
  */
 package controladora.Pedido;
 
+import dto.AlmacenDTO;
 import dto.EmpresaDTO;
 import dto.PedidoDTO;
+import dto.TipoItemDTO;
 import entidades.Almacen;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +25,9 @@ import javax.faces.bean.SessionScoped;
 public class SessionBeanPedido {
     //ARRAYS
     private List<PedidoDTO> listPedido = new ArrayList<PedidoDTO>();
-    private List<EmpresaDTO> ListaEmpresa = new ArrayList();
+    private List<EmpresaDTO> ListaEmpresaAdd = new ArrayList<EmpresaDTO>();
+    private List<TipoItemDTO> listaItems = new ArrayList<TipoItemDTO>();
+    private List<AlmacenDTO> listaAlmacenesAdd = new ArrayList<AlmacenDTO>();
     //BUSCAR
     private Date fechaInicioBuscar;
     private Date fechaTerminoBuscar;
@@ -55,20 +59,36 @@ public class SessionBeanPedido {
         this.fechaTerminoBuscar = fechaTerminoBuscar;
     }
 
-    public List<EmpresaDTO> getListaEmpresa() {
-        return ListaEmpresa;
-    }
-
-    public void setListaEmpresa(List<EmpresaDTO> ListaEmpresa) {
-        this.ListaEmpresa = ListaEmpresa;
-    }    
-
     public String getNombreEmpresa() {
         return nombreEmpresa;
     }
 
     public void setNombreEmpresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public List<EmpresaDTO> getListaEmpresaAdd() {
+        return ListaEmpresaAdd;
+    }
+
+    public void setListaEmpresaAdd(List<EmpresaDTO> ListaEmpresaAdd) {
+        this.ListaEmpresaAdd = ListaEmpresaAdd;
+    }
+
+    public List<TipoItemDTO> getListaItems() {
+        return listaItems;
+    }
+
+    public void setListaItems(List<TipoItemDTO> listaItems) {
+        this.listaItems = listaItems;
+    }
+
+    public List<AlmacenDTO> getListaAlmacenesAdd() {
+        return listaAlmacenesAdd;
+    }
+
+    public void setListaAlmacenesAdd(List<AlmacenDTO> listaAlmacenesAdd) {
+        this.listaAlmacenesAdd = listaAlmacenesAdd;
     }
     
 }

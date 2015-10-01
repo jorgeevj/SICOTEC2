@@ -20,7 +20,10 @@ import java.util.List;
 public class PedidoDTO {
     private Integer idpedido;
     private Date fecha;
-    private Integer cantidad;
+    private String serie;
+    private String correlativo;
+    private Integer idalmacen;
+    private String nombreAlmacen;
     private Empresa idEmpresa;
     private Integer empresaId;
     private String nombreEmpresa;
@@ -29,10 +32,13 @@ public class PedidoDTO {
     public PedidoDTO() {
         
     }
-    public PedidoDTO(Integer idpedido, Date fecha, Integer cantidad, Empresa empresa, List<Pealtipoitem> pealtipoitemList, Empresa idEmpresa,Integer empresaId ,  String nombreEmpresa){
+    public PedidoDTO(Integer idpedido, Date fecha,Integer idalmacen,String correlativo, String nombreAlmacen ,String serie, Empresa empresa, List<Pealtipoitem> pealtipoitemList, Empresa idEmpresa,Integer empresaId ,  String nombreEmpresa){
         this.idpedido = idpedido;
         this.fecha = fecha;
-        this.cantidad = cantidad;
+        this.serie = serie;
+        this.correlativo = correlativo;
+        this.idalmacen = idalmacen;
+        this.nombreAlmacen = nombreAlmacen;
         this.idEmpresa = idEmpresa;
         this.empresaId = empresaId;
         this.nombreEmpresa = nombreEmpresa;
@@ -53,14 +59,6 @@ public class PedidoDTO {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
     }
 
     public List<Pealtipoitem> getPealtipoitemList() {
@@ -94,6 +92,38 @@ public class PedidoDTO {
 
     public void setEmpresaId(Integer empresaId) {
         this.empresaId = empresaId;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
+    public Integer getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(Integer idalmacen) {
+        this.idalmacen = idalmacen;
+    }
+
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
     }
     
 

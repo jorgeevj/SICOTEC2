@@ -65,20 +65,66 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE PEDIDOS-->
-            <p:dialog header="Modal Dialog" widgetVar="addPedidosModal" modal="true" height="100" rendered="true">
+            <p:dialog header="Agregar Pedidos" widgetVar="addPedidosModal" modal="true" height="300" width="500">
                 <h:form id="formAddPedido">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.campos.idEmpresa.nombre}"/>empresas
-                        <p:outputLabel value="Empresa: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{pedidoMB.campos.idEmpresa}" >
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.campos.idEmpresa}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                            <f:selectItems  var="alm" 
-                                           />
+                            <f:selectItems value="#{pedidoMB.sessionBeanPedido.listaEmpresaAdd}" var="emp" 
+                                           itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
+                        <p:outputLabel value="N° de Serie "></p:outputLabel>
+                        <p:inputText   value="#{pedidoMB.campos.serie}"/>
+                        <p:outputLabel value="Correlativo: "></p:outputLabel>
+                        <p:inputText   value="#{pedidoMB.campos.correlativo}"/>
+                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.campos.idalmacen}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{pedidoMB.sessionBeanPedido.listaAlmacenesAdd}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
+                        <p:commandButton value="Agregar Items" onclick="PF('addItemsPedidosModal').show();"/>
                     </h:panelGrid>
+                    
                 </h:form>
             </p:dialog> 
+            
+            <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" height="500" width="700"> 
+                <h:form id="formAddItems">
+                    <h:panelGrid>
+                        <p:outputLabel value="Items Disponibles "></p:outputLabel>
+                        <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.sessionBeanPedido.listaItems}" var="tItems">
+                            <p:column headerText="Nombre" style="text-align: center">
+                                <p:outputLabel value="#{tItems.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" style="text-align: center">
+                                <p:outputLabel value="#{tItems.tipo}"/>
+                            </p:column>
+                            <p:column headerText="Precio Lista" style="text-align: center">
+                                <p:outputLabel value="#{tItems.precioLista}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Agregar" onclick="PF('ingresarCantidadItem').show();"/>
+                        <p:outputLabel value="Items Seleccionados "></p:outputLabel>
+                        <p:dataTable tableStyleClass="table table-hover"  id="tabItemsSelected" value="#{pedidoMB.sessionBeanPedido.listaItems}" var="tItems">
+                            <p:column headerText="Nombre" style="text-align: center">
+                                <p:outputLabel value="#{tItems.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" style="text-align: center">
+                                <p:outputLabel value="#{tItems.tipo}"/>
+                            </p:column>
+                            <p:column headerText="Precio Lista" style="text-align: center">
+                                <p:outputLabel value="#{tItems.precioLista}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad " style="text-align: center">
+                                <p:outputLabel value="#{tItems.precioLista}"/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Quitar" />
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog>
             <!-- FIN DIALOG DE PEDIDOS-->
 
 

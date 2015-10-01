@@ -34,6 +34,21 @@
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </p:outputLabel>
                     </p:column>
+                    <p:column headerText="N° Serie" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.serie}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Correlativo" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.correlativo}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Almacen" style="text-align: center">
+                        <p:outputLabel value="#{tPedido.nombreAlmacen}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
                 </p:dataTable>
             </h:panelGrid>
         </p:panel> 

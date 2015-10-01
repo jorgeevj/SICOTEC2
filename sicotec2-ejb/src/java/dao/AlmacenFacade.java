@@ -28,4 +28,18 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         super(Almacen.class);
     }
     
+    public Almacen getAlmacenById(Integer idAlmacen){
+        Almacen entidad = new Almacen();
+        try{
+            String sql = "SELECT a "
+                   + "FROM Almacen a "
+                   + "WHERE a.idalmacen = " + idAlmacen;
+            entidad=em.createQuery(sql, Almacen.class).getSingleResult();
+        }catch(Exception e){
+            entidad = new Almacen();
+        }
+        
+        return entidad;
+    }
+    
 }
