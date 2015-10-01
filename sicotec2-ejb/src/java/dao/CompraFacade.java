@@ -5,6 +5,7 @@
  */
 package dao;
 
+import dto.CompraDTO;
 import entidades.Compra;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,9 @@ public class CompraFacade extends AbstractFacade<Compra> {
         try{
             String jpa = "SELECT t "
                        + "FROM Compra t "
-                       + "JOIN FETCH t.idempresa";
+                       + "JOIN FETCH t.idempresa "
+                       + "JOIN FETCH t.idalmacen ";
+                    
                    
             Query query = em.createQuery(jpa,Compra.class);
             tCompra = query.getResultList();
@@ -49,5 +52,29 @@ public class CompraFacade extends AbstractFacade<Compra> {
         
         
         return tCompra;
+    }
+     public List<Compra> buscarCompra(CompraDTO dto) {
+            List<Compra> l = new ArrayList<Compra>();
+            String sql = "SELECT c FROM Compra c WHERE 1=1 ";
+     
+           try{
+               System.out.println("nombreEmpressaquery" + dto.getIdempresa().getNombre());
+               if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
+                   System.out.println("entra if");
+                sql+=" and c.idempresa.nombre like '%"+dto.getIdempresa().getNombre()+"%' ";
+               }
+                if(dto.getSerie()!=null && !dto.getSerie().equals("")){
+                sql+="and c.serie like '%"+dto.getSerie()+"%' ";
+            }
+                
+               l=em.createQuery(sql, Compra.class).getResultList();
+           } catch(Exception e){
+               l = new ArrayList<Compra>();
+           }
+            
+            
+           
+          return l; 
+        
     }
 }

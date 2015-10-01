@@ -5,6 +5,8 @@
  */
 package dto;
 
+import entidades.Almacen;
+import entidades.Documento;
 import entidades.Empresa;
 import java.util.Date;
 
@@ -22,7 +24,7 @@ public class CompraDTO {
      private String correlativo;
      private String idalmacen;
      private Empresa idempresa;
-
+     private String nombreAlmacen;
     /**
      * @return the idcompra
      */
@@ -68,19 +70,7 @@ public class CompraDTO {
     /**
      * @return the iddocumento
      */
-    public String getIddocumento() {
-        return iddocumento;
-    }
-
-    /**
-     * @param iddocumento the iddocumento to set
-     */
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
-    }
-
    
-
     /**
      * @return the correlativo
      */
@@ -98,16 +88,7 @@ public class CompraDTO {
     /**
      * @return the idalmacen
      */
-    public String getIdalmacen() {
-        return idalmacen;
-    }
-
-    /**
-     * @param idalmacen the idalmacen to set
-     */
-    public void setIdalmacen(String idalmacen) {
-        this.idalmacen = idalmacen;
-    }
+    
 
     /**
      * @return the idempresa
@@ -130,6 +111,34 @@ public class CompraDTO {
     public void setSerie(String serie) {
         this.serie = serie;
     }
+
+    public String getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(String iddocumento) {
+        this.iddocumento = iddocumento;
+    }
+
+    public String getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(String idalmacen) {
+        this.idalmacen = idalmacen;
+    }
+
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
+    }
+
+   
+
+   
      
      
      

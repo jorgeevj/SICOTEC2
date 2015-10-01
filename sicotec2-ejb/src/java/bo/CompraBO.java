@@ -23,7 +23,8 @@ import javax.ejb.Stateless;
 public class CompraBO {
   
     @EJB
-    private CompraFacade compraFacade = new CompraFacade();
+    private CompraFacade compraFacade ;
+    //= new CompraFacade();
     
     
     public List<CompraDTO> getAllCompras() {
@@ -58,5 +59,9 @@ public class CompraBO {
             DTO.setSerie(compra.getSerie());
         
         return DTO;
+    }
+    public List<CompraDTO> BuscarCompra(CompraDTO dto) {
+       List<CompraDTO> listaDto = this.convertListEntityToDTO(compraFacade.buscarCompra(dto));
+        return listaDto;
     }
 }

@@ -8,50 +8,55 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
 
-        <p:panel id="p1" header="Gestion de Ordenes de Compra" footer="Cotizacion Details" style="margin-bottom:20px">
-            <div class="row">
-                <div class="col s4 input-field">
-                    <p:inputText id="uno" value=""/>
-                    <label for="uno">Empresa</label>
-                </div>
-                <div class="col s4 input-field">
-                    <p:inputText id="seis" value="#{tipoitem.fechaRegistro}"/>
-                    <label for="seis">Fecha de registro</label>
-                </div>
-            </div>
-
-            <div class="row">
-                <p:commandButton value="Buscar" ></p:commandButton>
-                <p:commandButton value="Registrar" ></p:commandButton>
-                <p:commandButton value="Modificar"></p:commandButton>
-            </div>
+        <p:panel id="p1" header="Gestion de Cotizaciones Enviadas" style="margin-bottom:20px">
+            <h:form id="formCompra">
+                <h:panelGrid columns="1">
+                    <p:outputLabel value="Empresa:" for="it1" />
+                    <p:inputText id="it1" value="#{compraMB.campos.idempresa.nombre}"/>
+                    <p:outputLabel value="N Serie:" for="it2" />
+                    <p:inputText id="it2" value="#{compraMB.campos.serie}"/>
+                    
+                </h:panelGrid>
+                <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
+                                 actionListener="#{compraMB.consultar}" update="tabCompra"/>
+                <p:commandButton value="Crear"  id="btnCrear" title="Crear" />
+                <p:commandButton value="Editar"  id="btnEditar" title="Editar" />         
+            </h:form>
 
 
-            <p:spacer></p:spacer>
-            <p:dataTable tableStyleClass="table table-hover" value="#{compraMB.sessionBeanCompra.listaTCompra}" var="tComp">
+           <h:panelGrid >
+            <p:dataTable id="tabCompra"  value="#{compraMB.sessionBeanCompra.listaTCompra}" var="tComp">
+                
                 <p:column headerText="ID">
                     <p:outputLabel value="#{tComp.idcompra}"/>
                 </p:column>
                 <p:column headerText="Fecha">
                     <p:outputLabel value="#{tComp.fecha}">
-                        <f:convertDateTime pattern="dd-mm-yyyy"/>
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
                     </p:outputLabel>
                 </p:column>
                 <p:column headerText="Total">
-                    <p:outputLabel value="#{tComp.total}"/>
+                    S/.
+                    <h:outputText value="#{tComp.total}" />
                 </p:column>
+                <p:column headerText="N°Serie">
+                    <h:outputText value="#{tComp.serie}" />
+                </p:column>
+                <p:column headerText="Correlativo">
+                    <h:outputText value="#{tComp.correlativo}" />
+                    </p:column>
                 <p:column headerText="Empresa">
-                    <p:outputLabel value="#{tComp.idempresa.nombre}"/>
-                </p:column>
+                    <h:outputText value="#{tComp.idempresa.nombre}" />
+                    </p:column>
                 <p:column headerText="Ruc">
-                    <p:outputLabel value="#{tComp.idempresa.ruc}"/>
-                </p:column>
-            </p:dataTable>
+                    <h:outputText value="#{tComp.idempresa.ruc}" />
+                    </p:column>
+              
+                </p:dataTable>
+            </h:panelGrid>
 
             
         </p:panel> 
-
-
     </ui:define>  
 </ui:composition>
 

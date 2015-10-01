@@ -6,6 +6,7 @@
 package controladora.Compra;
 
 import dto.CompraDTO;
+import dto.EmpresaDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -20,7 +21,7 @@ import javax.faces.bean.SessionScoped;
 public class SessionBeanCompra {
     
      private List<CompraDTO> listaCompra = new ArrayList<CompraDTO>();
-
+     private List<EmpresaDTO>listaEmpresa=new ArrayList<EmpresaDTO>();
     /**
      * @return the listaTCompra
      */
@@ -33,6 +34,22 @@ public class SessionBeanCompra {
      */
     public void setListaTCompra(List<CompraDTO> listaTCompra) {
         this.listaCompra = listaTCompra;
+    }
+
+    public List<CompraDTO> getListaCompra() {
+        return listaCompra;
+    }
+
+    public void setListaCompra(List<CompraDTO> listaCompra) {
+        this.listaCompra = listaCompra;
+    }
+
+    public List<EmpresaDTO> getListaEmpresa() {
+        return listaEmpresa;
+    }
+
+    public void setListaEmpresa(List<EmpresaDTO> listaEmpresa) {
+        this.listaEmpresa = listaEmpresa;
     }
     
      
