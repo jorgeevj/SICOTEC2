@@ -34,7 +34,7 @@ public class CotizacionMB {
     @EJB
     private CotizacionBO cotizacionBO;
 
-    private List<Cotizacion> listaCotizacion;
+    private List<CotizacionDTO> listaCotizacion;
     private CotizacionDTO campos;
     private Empresa emp;
     private List<Almacen> listaAlmacenes;
@@ -47,7 +47,6 @@ public class CotizacionMB {
 
     @PostConstruct
     public void init() {
-        cotizacionBO.prueba();
         listaCotizacion = cotizacionBO.getAllCotizaciones();
         emp=new Empresa();
         campos = new CotizacionDTO();
@@ -57,7 +56,7 @@ public class CotizacionMB {
         selectAlmacen="0";
     }
 
-    public List<Cotizacion> consultar(ActionEvent actionEvent) {
+    public List<CotizacionDTO> consultar(ActionEvent actionEvent) {
         listaCotizacion=cotizacionBO.BuscarCotizacion(campos);
         return listaCotizacion;
     }
@@ -79,13 +78,7 @@ public class CotizacionMB {
         this.cotizacionBO = cotizacionBO;
     }
 
-    public List<Cotizacion> getListaCotizacion() {
-        return listaCotizacion;
-    }
-
-    public void setListaCotizacion(List<Cotizacion> listaCotizacion) {
-        this.listaCotizacion = listaCotizacion;
-    }
+    
 
     public CotizacionDTO getCampos() {
         return campos;
@@ -125,6 +118,14 @@ public class CotizacionMB {
 
     public void setEmp(Empresa emp) {
         this.emp = emp;
+    }
+
+    public List<CotizacionDTO> getListaCotizacion() {
+        return listaCotizacion;
+    }
+
+    public void setListaCotizacion(List<CotizacionDTO> listaCotizacion) {
+        this.listaCotizacion = listaCotizacion;
     }
 
 }

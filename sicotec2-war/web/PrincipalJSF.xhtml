@@ -50,6 +50,7 @@ jorgeevj 15.09.15 Creacion.
                     <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
                                    itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                 </p:selectOneMenu>
+                <p:commandButton id="btnCerrar" value="Cerrar" actionListener="#{cotizacionMB.cerrar}" />
             </p:dialog> 
             <!-- FIN DIALOG DE COTIZACIONES-->
 
