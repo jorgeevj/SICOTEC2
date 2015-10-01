@@ -46,11 +46,26 @@ public class PedidoBO {
 
     public PedidoDTO converEntityToDTO(Pedido pedido) {
         PedidoDTO pedidoDTO = new PedidoDTO();
+
         pedidoDTO.setIdpedido(pedido.getIdpedido());
-        pedidoDTO.setEmpresa(pedido.getIdempresa());
-        pedidoDTO.setIdEmpresa(pedido.getIdempresa().getIdempresa());
-        pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
+        pedidoDTO.setIdEmpresa(pedido.getIdempresa());
+            pedidoDTO.setEmpresaId(pedido.getIdempresa().getIdempresa());
+            pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
         pedidoDTO.setFecha(pedido.getFecha());
         return pedidoDTO;
+    }
+    
+    public Pedido convertDTOtoEntity(PedidoDTO dto){
+        Pedido entidad = new Pedido();
+        entidad.setIdempresa(dto.getIdEmpresa());
+        entidad.setFecha(dto.getFecha());
+        entidad.setIdpedido(dto.getIdpedido());
+        return entidad;
+    }
+    
+    public List<PedidoDTO> getPedidosByFiltro(PedidoDTO dto){
+        System.out.println(dto.getIdEmpresa().getNombre());
+        List<PedidoDTO> listaDTO = this.convertEntityToDTOList(pedidoFacade.getPedidoFiltro(dto));
+        return listaDTO;
     }
 }

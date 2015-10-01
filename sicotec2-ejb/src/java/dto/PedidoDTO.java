@@ -21,20 +21,20 @@ public class PedidoDTO {
     private Integer idpedido;
     private Date fecha;
     private Integer cantidad;
-    private Empresa empresa;
-    private Integer idEmpresa;
+    private Empresa idEmpresa;
+    private Integer empresaId;
     private String nombreEmpresa;
     private List<Pealtipoitem> pealtipoitemList;
     
     public PedidoDTO() {
         
     }
-    public PedidoDTO(Integer idpedido, Date fecha, Integer cantidad, Empresa empresa, List<Pealtipoitem> pealtipoitemList, Integer idEmpresa, String nombreEmpresa){
+    public PedidoDTO(Integer idpedido, Date fecha, Integer cantidad, Empresa empresa, List<Pealtipoitem> pealtipoitemList, Empresa idEmpresa,Integer empresaId ,  String nombreEmpresa){
         this.idpedido = idpedido;
         this.fecha = fecha;
         this.cantidad = cantidad;
-        this.empresa = empresa;
         this.idEmpresa = idEmpresa;
+        this.empresaId = empresaId;
         this.nombreEmpresa = nombreEmpresa;
         this.pealtipoitemList = pealtipoitemList;
     }
@@ -71,21 +71,14 @@ public class PedidoDTO {
         this.pealtipoitemList = pealtipoitemList;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
-    public Integer getIdEmpresa() {
+    public Empresa getIdEmpresa() {
         return idEmpresa;
     }
 
-    public void setIdEmpresa(Integer idEmpresa) {
+    public void setIdEmpresa(Empresa idEmpresa) {
         this.idEmpresa = idEmpresa;
     }
+
 
     public String getNombreEmpresa() {
         return nombreEmpresa;
@@ -93,6 +86,14 @@ public class PedidoDTO {
 
     public void setNombreEmpresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public Integer getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(Integer empresaId) {
+        this.empresaId = empresaId;
     }
     
 

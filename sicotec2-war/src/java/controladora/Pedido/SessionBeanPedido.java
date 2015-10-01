@@ -23,13 +23,13 @@ import javax.faces.bean.SessionScoped;
 public class SessionBeanPedido {
     //ARRAYS
     private List<PedidoDTO> listPedido = new ArrayList<PedidoDTO>();
+    private List<EmpresaDTO> ListaEmpresa = new ArrayList();
     //BUSCAR
-    private String rucBuscar;
-    private String idEmpresa;
     private Date fechaInicioBuscar;
     private Date fechaTerminoBuscar;
-    private List<Almacen> listaAlmacenes;
-    private List<EmpresaDTO> ListaEmpresa = new ArrayList();
+    private String nombreEmpresa;
+    
+    
 
     public List<PedidoDTO> getListPedido() {
         return listPedido;
@@ -37,14 +37,6 @@ public class SessionBeanPedido {
 
     public void setListPedido(List<PedidoDTO> listPedido) {
         this.listPedido = listPedido; 
-    }
-
-    public String getRucBuscar() {
-        return rucBuscar;
-    }
-
-    public void setRucBuscar(String rucBuscar) {
-        this.rucBuscar = rucBuscar;
     }
 
     public Date getFechaInicioBuscar() {
@@ -69,24 +61,14 @@ public class SessionBeanPedido {
 
     public void setListaEmpresa(List<EmpresaDTO> ListaEmpresa) {
         this.ListaEmpresa = ListaEmpresa;
+    }    
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
     }
 
-
-
-    public String getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(String idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
-
-    public List<Almacen> getListaAlmacenes() {
-        return listaAlmacenes;
-    }
-
-    public void setListaAlmacenes(List<Almacen> listaAlmacenes) {
-        this.listaAlmacenes = listaAlmacenes;
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
     }
     
 }

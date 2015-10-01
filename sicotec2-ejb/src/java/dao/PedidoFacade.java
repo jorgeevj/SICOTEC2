@@ -5,6 +5,7 @@
  */
 package dao;
 
+import dto.PedidoDTO;
 import entidades.Pedido;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,28 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
             Query query = em.createQuery(jpa,Pedido.class);
             listaPedido = query.getResultList();
             
+        }catch(Exception e){
+            listaPedido = new ArrayList<Pedido>();
+        }
+        return listaPedido;
+    }
+    
+    public List<Pedido> getPedidoFiltro(PedidoDTO pedidoDto){
+        List<Pedido> listaPedido = new ArrayList<Pedido>();
+        
+        try{
+            String jpa = "SELECT p "
+                       + "  FROM Pedido p"
+                       + "  WHERE 1=1 ";
+            
+            if(pedidoDto.getIdEmpresa().getNombre()!=null && !pedidoDto.getIdEmpresa().getNombre().equals("")){
+                jpa+= " AND p.idempresa.nombre like '%" + pedidoDto.getIdEmpresa().getNombre()+"%' ";
+            }
+            if(pedidoDto.getIdEmpresa().getRuc()!= null && !pedidoDto.getIdEmpresa().getRuc().equals("")){
+                jpa+= " AND p.idempresa.ruc like '%" + pedidoDto.getIdEmpresa().getRuc()+"%' ";
+            }
+            
+              listaPedido=em.createQuery(jpa, Pedido.class).getResultList();
         }catch(Exception e){
             listaPedido = new ArrayList<Pedido>();
         }

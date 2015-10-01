@@ -65,7 +65,20 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE PEDIDOS-->
-
+            <p:dialog header="Modal Dialog" widgetVar="addPedidosModal" modal="true" height="100" rendered="true">
+                <h:form id="formAddPedido">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:inputText   value="#{pedidoMB.campos.idEmpresa.nombre}"/>empresas
+                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:selectOneMenu id="almacenes" styleClass="browser-default" value="#{pedidoMB.campos.idEmpresa}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems  var="alm" 
+                                           />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog> 
             <!-- FIN DIALOG DE PEDIDOS-->
 
 

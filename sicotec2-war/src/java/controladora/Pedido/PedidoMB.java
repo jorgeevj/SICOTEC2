@@ -6,19 +6,17 @@
 package controladora.Pedido;
 
 import Util.Utils;
-import bo.AlmacenBO;
 import bo.EmpresaBO;
 import bo.PedidoBO;
+import static com.sun.javafx.logging.PulseLogger.addMessage;
 import dto.EmpresaDTO;
 import dto.PedidoDTO;
-import dto.TipomovimientoDTO;
-import entidades.Almacen;
-import java.util.ArrayList;
-import java.util.List;
+import entidades.Empresa;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.*;
+import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 
 
@@ -26,27 +24,56 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class PedidoMB{
     @EJB
-    private PedidoBO  pedidoBO  = new PedidoBO();
+    private PedidoBO  pedidoBO;
     @EJB
-    private EmpresaBO empresaBO = new EmpresaBO();
-    
+    private EmpresaBO empresaBO;
+    private PedidoDTO campos;
+    private Empresa emp;
     private SessionBeanPedido sessionBeanPedido = new SessionBeanPedido();
     Utils ut = new Utils();
     
     
     @PostConstruct
     public void init(){
+        emp=new Empresa();
+        campos = new PedidoDTO();
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
-        getSessionBeanPedido().setListaEmpresa(empresaBO.getAllEmpresas());
+        campos = new PedidoDTO();
+        campos.setIdpedido(0);
+        campos.setIdEmpresa(emp);
     }
         
     
     
+    public List<PedidoDTO> buscarPedido(ActionEvent actionEvent){     
+        getSessionBeanPedido().setListPedido(pedidoBO.getPedidosByFiltro(campos));
+        return getSessionBeanPedido().getListPedido();
+    }
+    
+    public void crear(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        ArrayList empresas = this.comboEmpresas();
+        context.execute("PF('addPedidosModal').show();");
+    }
+    public void editar(ActionEvent actionEvent){
+    
+    }
+     public void cerrar(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('dlg2').hide();");
+    }
     
     
-    
-    
-    
+     
+     
+     public ArrayList comboEmpresas(){
+         List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
+         ArrayList empresas = new ArrayList();
+         for(EmpresaDTO dto : listaDto){
+             empresas.add(dto.getIdempresa(), dto.getNombre());
+         }
+         return empresas;
+     }
     
 
     public PedidoBO getPedidoBO() {
@@ -64,5 +91,21 @@ public class PedidoMB{
     public void setSessionBeanPedido(SessionBeanPedido sessionBeanPedido) {
         this.sessionBeanPedido = sessionBeanPedido;
     }   
+
+    public PedidoDTO getCampos() {
+        return campos;
+    }
+
+    public void setCampos(PedidoDTO campos) {
+        this.campos = campos;
+    }
+
+    public Empresa getEmp() {
+        return emp;
+    }
+
+    public void setEmp(Empresa emp) {
+        this.emp = emp;
+    }
     
 }

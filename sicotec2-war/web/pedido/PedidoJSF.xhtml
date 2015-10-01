@@ -8,56 +8,26 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
 
-        <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Cotizacion Details" style="margin-bottom:20px">
-            
-            <div class="row">
-              <div class="col s6">
-                  <div class="input-field">
-                      <p:selectOneMenu id="empresa" styleClass="browser-default" value="" style="width:100%" >
-                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{pedidoMB.sessionBeanPedido.listaEmpresa}" var="empresa" 
-                                       itemValue="#{empresa.idempresa}" itemLabel="#{empresa.nombre}"/>
-                    </p:selectOneMenu>
-                    <label for="empresa-input">Empresa</label>
-                  </div>
-              </div>
-              <div class="col s6">
-                  <div class="input-field"  >
-                    <p:focus for="ruc"/>
-                    <p:inputText id="ruc" value="#{sessionBeanPedido.rucBuscar}"></p:inputText>
-                    <label for="ruc-input">RUC</label>
-                  </div>
-              </div>
-              <div class="col s6">
-                  <div class="input-field">
-                      <input class="datepicker" id="fec_inicio" type="date" value=""/>
-                      <label for="fec_inicio">Fecha Inicio</label>
-                  </div>
-              </div>
-              <div class="col s6">
-                  <div class="input-field">
-                      <input class="datepicker" id="fec_termino" type="date" value=""/>
-                      <label for="fec_termino">Fecha Termino</label>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col s12">
-                  <p:commandButton  value="Buscar"/>
-                  <p:commandButton value="Registrar" />
-              </div>
-          </div>
-          <div class="row">
+        <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Pedido Details" style="margin-bottom:20px">
+            <h:form id="formPedido">
+                <h:panelGrid columns="2">
+                    <p:outputLabel for="it1" value="Empresa: "></p:outputLabel>
+                    <p:inputText   id="it1" value="#{pedidoMB.campos.idEmpresa.nombre}"/>
+                    <p:outputLabel for="it2" value="Ruc: "></p:outputLabel>
+                    <p:inputText   id="it2" value="#{pedidoMB.campos.idEmpresa.ruc}"/>
+                </h:panelGrid>
+                <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update="tabPedidos"/>
+                <p:commandButton value="Agregar" actionListener="#{pedidoMB.crear}" id="btnAgregar" title="Agregar" />
+            </h:form>     
+                
+            <h:panelGrid > 
                 <p:spacer></p:spacer>
-                <p:dataTable tableStyleClass="table table-hover" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
+                <p:dataTable tableStyleClass="table table-hover"  id="tabPedidos" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
                     <p:column headerText="ID" style="text-align: center">
                         <p:outputLabel value="#{tPedido.idpedido}"/>
                     </p:column>
                     <p:column headerText="Empresa" style="text-align: center">
                         <p:outputLabel value="#{tPedido.nombreEmpresa}"/>
-                    </p:column>
-                    <p:column headerText="Cantidad" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.cantidad}"/>
                     </p:column>
                     <p:column headerText="Fecha" style="text-align: center">
                         <p:outputLabel value="#{tPedido.fecha}">
@@ -65,7 +35,7 @@
                         </p:outputLabel>
                     </p:column>
                 </p:dataTable>
-           </div> 
+            </h:panelGrid>
         </p:panel> 
 
 
