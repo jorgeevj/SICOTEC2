@@ -11,6 +11,8 @@
         <p:panel id="p1" header="Gestion de Cotizaciones Enviadas" footer="Cotizacion Details" style="margin-bottom:20px">
             <h:form id="formCotizacion">
                 <h:panelGrid columns="2">
+                    <p:outputLabel value="N° Cotizacion:" for="it0" />
+                    <p:inputText id="it0" value="#{cotizacionMB.campos.serie}"/>
                     <p:outputLabel value="Ruc:" for="it1" />
                     <p:inputText id="it1" value="#{cotizacionMB.campos.idempresa.ruc}"/>
                     <p:outputLabel value="Empresa:" for="it2" />
@@ -45,7 +47,7 @@
                         <h:outputText value="#{cot.entrega}" />
                     </p:column>
                     <p:column headerText="N° Serie">
-                        <h:outputText value="#{cot.NSerie}" />
+                        <h:outputText value="#{cot.serie}" />
                     </p:column>
                     <p:column headerText="Correlativo">
                         <h:outputText value="#{cot.correlativo}" />
