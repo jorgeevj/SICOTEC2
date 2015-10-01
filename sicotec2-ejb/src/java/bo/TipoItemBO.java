@@ -110,6 +110,5 @@ public class TipoItemBO {
         e.setPrecioLista(a.getPrecioLista());
         e.setTipo(a.getTipo());
         return e;
-        
     }
 }

@@ -26,8 +26,10 @@ public class SessionBeanPedido {
     //ARRAYS
     private List<PedidoDTO> listPedido = new ArrayList<PedidoDTO>();
     private List<EmpresaDTO> ListaEmpresaAdd = new ArrayList<EmpresaDTO>();
-    private List<TipoItemDTO> listaItems = new ArrayList<TipoItemDTO>();
+    private List<TipoItemDTO> ListaItemsDisponibles = new ArrayList<TipoItemDTO>();
+    private List<TipoItemDTO> ListaItemsSeleccionado = new ArrayList<TipoItemDTO>();    
     private List<AlmacenDTO> listaAlmacenesAdd = new ArrayList<AlmacenDTO>();
+    private List<TipoItemDTO> listaItemsContainer = new ArrayList<TipoItemDTO>();
     //BUSCAR
     private Date fechaInicioBuscar;
     private Date fechaTerminoBuscar;
@@ -75,14 +77,6 @@ public class SessionBeanPedido {
         this.ListaEmpresaAdd = ListaEmpresaAdd;
     }
 
-    public List<TipoItemDTO> getListaItems() {
-        return listaItems;
-    }
-
-    public void setListaItems(List<TipoItemDTO> listaItems) {
-        this.listaItems = listaItems;
-    }
-
     public List<AlmacenDTO> getListaAlmacenesAdd() {
         return listaAlmacenesAdd;
     }
@@ -90,5 +84,28 @@ public class SessionBeanPedido {
     public void setListaAlmacenesAdd(List<AlmacenDTO> listaAlmacenesAdd) {
         this.listaAlmacenesAdd = listaAlmacenesAdd;
     }
-    
+
+    public List<TipoItemDTO> getListaItemsDisponibles() {
+        return ListaItemsDisponibles;
+    }
+
+    public void setListaItemsDisponibles(List<TipoItemDTO> ListaItemsDisponibles) {
+        this.ListaItemsDisponibles = ListaItemsDisponibles;
+    }
+
+    public List<TipoItemDTO> getListaItemsSeleccionado() {
+        return ListaItemsSeleccionado;
+    }
+
+    public void setListaItemsSeleccionado(List<TipoItemDTO> ListaItemsSeleccionado) {
+        this.ListaItemsSeleccionado = ListaItemsSeleccionado;
+    }
+
+    public List<TipoItemDTO> getListaItemsContainer() {
+        return listaItemsContainer;
+    }
+
+    public void setListaItemsContainer(List<TipoItemDTO> listaItemsContainer) {
+        this.listaItemsContainer = listaItemsContainer;
+    }
 }
