@@ -7,6 +7,8 @@ package controladora.Cotizacion;
 
 import bo.AlmacenBO;
 import bo.CotizacionBO;
+import bo.MovimientoBO;
+import bo.TipoMovimientoBO;
 import dto.CotizacionDTO;
 import entidades.Almacen;
 import entidades.Cotizacion;
@@ -45,6 +47,7 @@ public class CotizacionMB {
 
     @PostConstruct
     public void init() {
+        cotizacionBO.prueba();
         listaCotizacion = cotizacionBO.getAllCotizaciones();
         emp=new Empresa();
         campos = new CotizacionDTO();
