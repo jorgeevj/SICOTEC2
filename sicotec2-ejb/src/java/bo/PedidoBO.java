@@ -18,39 +18,39 @@ import javax.ejb.LocalBean;
  *
  * @author Cesar
  */
-
 @Stateless
 @LocalBean
 public class PedidoBO {
+
     @EJB
     private PedidoFacade pedidoFacade = new PedidoFacade();
-    
-    public List<PedidoDTO> getAllPedido(){
+
+    public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();
-        List<PedidoDTO> listDTO  = new ArrayList<PedidoDTO>();
+        List<PedidoDTO> listDTO = new ArrayList<PedidoDTO>();
         listDTO = this.convertEntityToDTOList(listEntidad);
         return listDTO;
     }
-    
-    public List<PedidoDTO> convertEntityToDTOList(List<Pedido> listaPedido){
+
+    public List<PedidoDTO> convertEntityToDTOList(List<Pedido> listaPedido) {
         List<PedidoDTO> listDTO = new ArrayList<PedidoDTO>();
-        for(Pedido pedido : listaPedido){
+        for (Pedido pedido : listaPedido) {
             PedidoDTO DTO = new PedidoDTO();
             DTO = converEntityToDTO(pedido);
-            
+
             listDTO.add(DTO);
         }
-        
+
         return listDTO;
     }
-    
-    public PedidoDTO converEntityToDTO(Pedido pedido){
+
+    public PedidoDTO converEntityToDTO(Pedido pedido) {
         PedidoDTO pedidoDTO = new PedidoDTO();
-            pedidoDTO.setIdpedido(pedido.getIdpedido());
-            pedidoDTO.setEmpresa(pedido.getIdempresa());
-                pedidoDTO.setIdEmpresa(pedido.getIdempresa().getIdempresa());
-                pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
-            pedidoDTO.setFecha(pedido.getFecha());
+        pedidoDTO.setIdpedido(pedido.getIdpedido());
+        pedidoDTO.setEmpresa(pedido.getIdempresa());
+        pedidoDTO.setIdEmpresa(pedido.getIdempresa().getIdempresa());
+        pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
+        pedidoDTO.setFecha(pedido.getFecha());
         return pedidoDTO;
     }
 }
