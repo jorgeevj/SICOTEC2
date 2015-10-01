@@ -10,66 +10,56 @@
 
         <p:panel id="p1" header="Mantenimiento de Tipo de Item" footer="Tipo Item Details" style="margin-bottom:20px">
             <h:form id="form1">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-6">
-                    <label for="uno">Cod. Item:</label>
-                    <p:spacer width="60" height="20" />
+                <h:panelGrid columns="2">
+                
+                    <p:outputLabel for="uno" value="Cod. Item:"/>
+                    
                     <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" style="width:50%"/>
-                    <br/>
-                    <br/>
-                </div>
-                <div class="ui-grid-col-6">                    
-                    <label for="dos">Nombre:</label>
-                    <p:spacer width="105" height="20" />
+                    
+                
+                                 
+                    <p:outputLabel for="dos" value="Nombre:"/>
+                    
                     <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-6">                   
-                    <label for="tres">Características:</label>
-                    <p:spacer width="20" height="20" />
-                    <p:inputText id="tres" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
-                    <br/>
-                    <br/>
-                </div>
-                <div class="ui-grid-col-6">                   
-                    <label for="cuatro">Categoría:</label>
-                    <p:spacer width="90" height="20" />
-                    <p:selectOneMenu id="cuatro" styleClass="browser-default" value="c" style="width:51%" >
-                        <f:selectItem itemLabel="Seleccione una categoría..." itemValue="0" />
-                        <f:selectItems value="c" var="catego" 
-                                       itemValue="c" itemLabel="r"/>
-                    </p:selectOneMenu>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-6">                   
-                    <label for="cinco">Almacén:</label>
-                    <p:spacer width="75" height="20" />
-                    <p:selectOneMenu id="cinco" styleClass="browser-default" value="r" style="width:51%" >
-                        <f:selectItem itemLabel="Seleccione un almacén..." itemValue="0" />
-                        <f:selectItems value="r" var="almacen" 
-                                       itemValue="r" itemLabel="r"/>
-                    </p:selectOneMenu>
-                    <br/>
-                    <br/>
-                </div>
-                <div class="ui-grid-col-6">                    
-                    <label for="seis">Fecha de registro:</label>
-                    <p:spacer width="20" height="20" />
-                    <input class="datepicker" id="seis" type="date" value="" style="width:50%"/>                    
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-
+                    
+                
             
+            
+                                 
+                    <p:outputLabel for="tres" value="Características:"/>
+                    
+                    <p:inputText id="tres" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
+                    
+                <!--
+                               
+                    <p:outputLabel for="cuatro" value="Categoría:"/>
+                    
+                    <p:selectOneMenu id="cuatro" styleClass="browser-default" value="" style="width:51%" >
+                        <f:selectItem itemLabel="Seleccione una categoría..." itemValue="0" />
+                   
+                    </p:selectOneMenu>
+                    
+                
+            
+            
+                            
+                    <p:outputLabel for="cinco" value="Almacén:"/>
+                    
+                    <p:selectOneMenu id="cinco" styleClass="browser-default" value="" style="width:51%" >
+                        <f:selectItem itemLabel="Seleccione un almacén..." itemValue="0" />
+                       
+                    </p:selectOneMenu>
+                    
+                -->
+                         
+                                     
+                    
+                <p:outputLabel for="seis" value="Fecha de registro" />
+                <p:calendar id="seis" value="#{tipoitemMB.fechaRegistro}" showOn="button" />
+
+            </h:panelGrid>
                 <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscar}" update="tabla" title="Consultar"/>                
-                <p:commandButton value="Registrar" onclick="PF('registrarItem').show();" />            
+                <p:commandButton value="Registrar" actionListener="#{tipoitemMB.registrarItem}"/>            
                 <p:commandButton value="Modificar" onclick="PF('editarItem').show();" />
                 <p:commandButton value="Eliminar" onclick="PF('mensajeEliminar').show();" />
             
@@ -99,7 +89,7 @@
                     <h:outputText value="#{titem.desDistribuidor}" />
                 </p:column>
             </p:dataTable>
- 
+        
 
         </p:panel> 
 
