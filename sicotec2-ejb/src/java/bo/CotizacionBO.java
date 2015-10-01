@@ -5,13 +5,16 @@
  */
 package bo;
 
+import dao.AlmacenFacade;
 import dao.CotizacionFacade;
 import dao.MovimientoFacade;
 import dao.TipomovimientoFacade;
+import dto.AlmacenDTO;
 import dto.CotizacionDTO;
 import entidades.Cotizacion;
 import entidades.Movimiento;
 import entidades.Tipomovimiento;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -26,29 +29,49 @@ import javax.ejb.LocalBean;
 @LocalBean
 public class CotizacionBO {
     @EJB
-    private TipomovimientoFacade tipomovimientoFacade;
-    @EJB
-    private MovimientoFacade movimientoFacade;
+    private AlmacenFacade almacenFacade;
+  
    
     @EJB
     private CotizacionFacade cotizacionFacade;
 
-    public List<Cotizacion> getAllCotizaciones() {
+    public List<CotizacionDTO> getAllCotizaciones() {
         
-        List<Cotizacion> lista=cotizacionFacade.findAll();
+        List<CotizacionDTO> lista=convertListaEntxListaDTO(cotizacionFacade.findAll());
         return lista;
     }
     
-    public List<Cotizacion> BuscarCotizacion(CotizacionDTO dto) {
-    return cotizacionFacade.buscarCotizacion(dto);
+    public List<CotizacionDTO> BuscarCotizacion(CotizacionDTO dto) {
+       List<CotizacionDTO> listCot=new ArrayList<>();
+      listCot=convertListaEntxListaDTO(cotizacionFacade.buscarCotizacion(dto));
+        
+    return listCot;
     }
 
 // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void prueba() {
-    List<Movimiento> t =movimientoFacade.findAll();
-    List<Tipomovimiento> g =tipomovimientoFacade.findAll();
-    System.out.print("hola");
+    private List<CotizacionDTO> convertListaEntxListaDTO(List<Cotizacion> buscarCotizacion) {
+       List<CotizacionDTO> listaDTO=new ArrayList<>();
+       for(Cotizacion c :buscarCotizacion){
+       listaDTO.add(convetEntityxDTO(c));
+       }
+       return listaDTO;
+//To change body of generated methods, choose Tools | Templates.
+    }
+
+    private CotizacionDTO convetEntityxDTO(Cotizacion c) {
+       CotizacionDTO dto=new CotizacionDTO();
+       dto.setIdcotizacion(c.getIdcotizacion());
+       dto.setIdempresa(c.getIdempresa());
+       dto.setSerie(c.getSerie());
+       dto.setCorrelativo(c.getCorrelativo());
+       dto.setDuracion(c.getDuracion());
+       dto.setEntrega(c.getEntrega());
+       dto.setFechaEnvio(c.getFechaEnvio());
+       dto.setEstado(c.getEstado());
+       dto.setIdalmacen(c.getIdalmacen());
+       dto.setNombAlmacen(almacenFacade.getNombreAlmxID(c.getIdalmacen()).getNombre());
+    return dto;   
     }
 }

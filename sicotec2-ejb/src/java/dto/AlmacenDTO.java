@@ -5,101 +5,88 @@
  */
 package dto;
 
+import entidades.Altipoitem;
+import entidades.Docalmacen;
+import java.util.Collection;
+
 /**
  *
- * @author rikardo308
+ * @author Jorge
  */
 public class AlmacenDTO {
-    private Integer idalmacen;
+   private int idalmacen;
+  
     private String nombre;
+   
     private String telefono;
+   
     private String direccion;
+   
     private String codDept;
+   
     private String codProv;
+   
+    private String codDist;
 
-    /**
-     * @return the idalmacen
-     */
-    public Integer getIdalmacen() {
+    public AlmacenDTO() {
+    }
+
+    public int getIdalmacen() {
         return idalmacen;
     }
 
-    /**
-     * @param idalmacen the idalmacen to set
-     */
-    public void setIdalmacen(Integer idalmacen) {
+    public void setIdalmacen(int idalmacen) {
         this.idalmacen = idalmacen;
     }
 
-    /**
-     * @return the nombre
-     */
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * @param nombre the nombre to set
-     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    /**
-     * @return the telefono
-     */
     public String getTelefono() {
         return telefono;
     }
 
-    /**
-     * @param telefono the telefono to set
-     */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    /**
-     * @return the direccion
-     */
     public String getDireccion() {
         return direccion;
     }
 
-    /**
-     * @param direccion the direccion to set
-     */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
-    /**
-     * @return the codDept
-     */
     public String getCodDept() {
         return codDept;
     }
 
-    /**
-     * @param codDept the codDept to set
-     */
     public void setCodDept(String codDept) {
         this.codDept = codDept;
     }
 
-    /**
-     * @return the codProv
-     */
     public String getCodProv() {
         return codProv;
     }
 
-    /**
-     * @param codProv the codProv to set
-     */
     public void setCodProv(String codProv) {
         this.codProv = codProv;
     }
-    
-    
+
+    public String getCodDist() {
+        return codDist;
+    }
+
+    public void setCodDist(String codDist) {
+        this.codDist = codDist;
+    }
+   
+   
+  
 }

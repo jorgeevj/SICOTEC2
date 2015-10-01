@@ -36,7 +36,10 @@ public class CotizacionDTO {
    
     private Empresa idempresa;
     
+    private String nombAlmacen;
     
+    private String nombEntrega;
+    private String nombEstado;
     
     public CotizacionDTO() {
     }
@@ -76,6 +79,8 @@ public class CotizacionDTO {
     }
 
     public int getEntrega() {
+        
+        
         return entrega;
     }
 
@@ -124,6 +129,46 @@ public class CotizacionDTO {
         this.serie = serie;
     }
 
-    
-     
+    public String getNombAlmacen() {
+        return nombAlmacen;
+    }
+
+    public void setNombAlmacen(String nombAlmacen) {
+        this.nombAlmacen = nombAlmacen;
+    }
+
+    public String getNombEntrega() {
+        if(entrega==0){
+        nombEntrega="Almacen";
+        }else{
+        nombEntrega="Domicilio";
+        }
+        return nombEntrega;
+    }
+
+    public void setNombEntrega(String nombEntrega) {
+        this.nombEntrega = nombEntrega;
+    }
+
+    public String getNombEstado() {
+        if(estado==0){
+        nombEstado="CREADA";
+        }
+        if(estado==1){
+        nombEstado="ACEPTADA";
+        }
+        if(estado==2){
+        nombEstado="ENVIADA";
+        }
+        if(estado==3){
+        nombEstado="CADUCADA";
+        }
+        
+        return nombEstado;
+    }
+
+    public void setNombEstado(String nombEstado) {
+        this.nombEstado = nombEstado;
+    }
+   
 }
