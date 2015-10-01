@@ -28,6 +28,8 @@ public class MovimientoDTO {
     //AGREGADOS
     private String colorEstado;
     private String colorLetra;
+    private int idTipoDocumento;
+    private String TipoDocumento;
     private Integer idTipoMovimiento;
     private String TipoMovimiento;
 
@@ -249,6 +251,34 @@ public class MovimientoDTO {
 
     public void setSerie(String serie) {
         this.serie = serie;
+    }
+
+    /**
+     * @return the idTipoDocumento
+     */
+    public int getIdTipoDocumento() {
+        return idTipoDocumento;
+    }
+
+    /**
+     * @param idTipoDocumento the idTipoDocumento to set
+     */
+    public void setIdTipoDocumento(int idTipoDocumento) {
+        this.idTipoDocumento = idTipoDocumento;
+    }
+
+    /**
+     * @return the TipoDocumento
+     */
+    public String getTipoDocumento() {
+        return TipoDocumento;
+    }
+
+    /**
+     * @param TipoDocumento the TipoDocumento to set
+     */
+    public void setTipoDocumento(String TipoDocumento) {
+        this.TipoDocumento = TipoDocumento;
     }
     
     

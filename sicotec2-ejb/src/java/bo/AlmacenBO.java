@@ -6,6 +6,7 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dto.AlmacenDTO;
 import entidades.Almacen;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,33 @@ public class AlmacenBO {
         }
     return almacenFacade.findAll();
     }
+    
+    public List<AlmacenDTO> getAllAlmaces(){
+        List<AlmacenDTO> lista = new ArrayList<AlmacenDTO>();
+        List<Almacen> listaEntidad= almacenFacade.findAll();
+        lista = convertListEntityToDTO(listaEntidad);
+        return lista;
+    }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    public List<AlmacenDTO> convertListEntityToDTO(List<Almacen> listaMovimiento){
+        List<AlmacenDTO> listaDTO = new ArrayList<AlmacenDTO>();
+        for(Almacen almacen : listaMovimiento){
+            AlmacenDTO DTO = new AlmacenDTO();
+            
+            DTO = convertEntityToDTO(almacen);
+            
+            listaDTO.add(DTO);
+        }
+        
+        return listaDTO;
+    }
+
+    public AlmacenDTO convertEntityToDTO(Almacen almacen){
+        AlmacenDTO DTO = new AlmacenDTO();
+            
+        DTO.setIdalmacen(almacen.getIdalmacen());
+        DTO.setNombre(almacen.getNombre());
+        
+        return DTO;
+    }
 }

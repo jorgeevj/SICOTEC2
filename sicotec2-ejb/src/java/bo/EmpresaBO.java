@@ -29,6 +29,18 @@ public class EmpresaBO {
         return dtoList;
     }
     
+    public List<EmpresaDTO> getEmpresasProveedoras(){
+        List<Empresa> empresasList  = empresaFacade.getEmpresasProveedoras();
+        List<EmpresaDTO> dtoList = convertEntityToDTOList(empresasList);
+        return dtoList;
+    }
+    
+    public List<EmpresaDTO> getEmpresasClientes(){
+        List<Empresa> empresasList  = empresaFacade.getEmpresasClientes();
+        List<EmpresaDTO> dtoList = convertEntityToDTOList(empresasList);
+        return dtoList;
+    }
+    
     public List<EmpresaDTO> convertEntityToDTOList(List<Empresa> empresaList){
         List<EmpresaDTO> empresaDTOList = new ArrayList<EmpresaDTO>();
         for(Empresa empresa : empresaList){

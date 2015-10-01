@@ -52,4 +52,36 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         
         return empresas;
     }
+     
+     public List<Empresa> getEmpresasProveedoras(){
+         List<Empresa> empresas = new ArrayList<Empresa>();
+         try{
+            String ejbQuery = "SELECT e "
+                            + "FROM Empresa e "
+                            + "WHERE e.tipo = 1";
+            Query query = em.createQuery(ejbQuery,Empresa.class);
+            empresas = query.getResultList();
+        }catch(Exception e)
+        {
+            empresas = new ArrayList<Empresa>();;
+        }
+        
+        return empresas;
+     }
+     
+     public List<Empresa> getEmpresasClientes(){
+         List<Empresa> empresas = new ArrayList<Empresa>();
+         try{
+            String ejbQuery = "SELECT e "
+                            + "FROM Empresa e "
+                            + "WHERE e.tipo = 2";
+            Query query = em.createQuery(ejbQuery,Empresa.class);
+            empresas = query.getResultList();
+        }catch(Exception e)
+        {
+            empresas = new ArrayList<Empresa>();;
+        }
+        
+        return empresas;
+     }
 }
