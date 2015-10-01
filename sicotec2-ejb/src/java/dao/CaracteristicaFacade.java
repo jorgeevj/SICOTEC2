@@ -6,9 +6,13 @@
 package dao;
 
 import entidades.Caracteristica;
+import entidades.Tipoitem;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,6 +30,14 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
 
     public CaracteristicaFacade() {
         super(Caracteristica.class);
+    }
+    
+    public List<Tipoitem> getAllCaracte(Tipoitem e){
+        List<Tipoitem> lista= new ArrayList<Tipoitem>();
+        String sql="SELECT t.nombre FROM Caracteristica t ";
+        Query q=em.createQuery(sql,Tipoitem.class);
+        lista=q.getResultList();       
+        return lista;
     }
     
 }
