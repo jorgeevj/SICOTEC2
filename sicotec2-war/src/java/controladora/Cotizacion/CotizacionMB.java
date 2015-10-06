@@ -36,9 +36,11 @@ public class CotizacionMB {
 
     private List<CotizacionDTO> listaCotizacion;
     private CotizacionDTO campos;
+    private CotizacionDTO camposGuardar;
     private Empresa emp;
     private List<Almacen> listaAlmacenes;
     private String selectAlmacen;
+    private String selectEmpresa;
     /**
      * Creates a new instance of CotizacionMB
      */
@@ -52,6 +54,11 @@ public class CotizacionMB {
         campos = new CotizacionDTO();
         campos.setIdcotizacion(0);
         campos.setIdempresa(emp);
+        
+        camposGuardar = new CotizacionDTO();
+        camposGuardar.setIdcotizacion(0);
+        camposGuardar.setIdempresa(emp);
+        
         listaAlmacenes= almacenBO.findAll();
         selectAlmacen="0";
     }
@@ -126,6 +133,14 @@ public class CotizacionMB {
 
     public void setListaCotizacion(List<CotizacionDTO> listaCotizacion) {
         this.listaCotizacion = listaCotizacion;
+    }
+
+    public CotizacionDTO getCamposGuardar() {
+        return camposGuardar;
+    }
+
+    public void setCamposGuardar(CotizacionDTO camposGuardar) {
+        this.camposGuardar = camposGuardar;
     }
 
 }
