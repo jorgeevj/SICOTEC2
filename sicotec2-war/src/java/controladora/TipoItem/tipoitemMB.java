@@ -37,6 +37,12 @@ public class tipoitemMB {
     private String categoriaSelect;
     private String familiaSelect;
     private String marcaSelect;
+    private String descripcion;
+    private String precio;
+    private String dsctoCliente;
+    private String dsctoDistribuidor;
+    private String marca;
+    
     
     
     private List<TipoItemDTO> lista;
@@ -69,7 +75,7 @@ public class tipoitemMB {
     public void buscar(ActionEvent actionEvent){        
         
         TipoItemDTO lis=new TipoItemDTO();
-        lis.setIdtipoItem(Integer.parseInt(codigoItem));
+        lis.setIdtipoItem(codigoItem);
         lis.setNombre(nombre);
         lis.setDesCliente(categoria);
         lis.setDesDistribuidor(almacen);
@@ -87,6 +93,43 @@ public class tipoitemMB {
     
     context.execute("PF('registrarItem').show();");
     
+    }
+    
+    public void registrarNuevoTipoItem(ActionEvent e){
+        TipoItemDTO objTipoItem=new TipoItemDTO();
+        objTipoItem.setIdtipoItem(codigoItem);
+        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
+        objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
+        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
+        objTipoItem.setDescripcionCaracteristica(descripcion);
+        objTipoItem.setPrecioLista(Double.parseDouble(precio));
+        objTipoItem.setDesCliente(dsctoCliente);
+        objTipoItem.setDesDistribuidor(dsctoDistribuidor);
+        tipoItemBO.registrarTipoItem(objTipoItem);
+        
+        
+    }
+    public void registrarNuevaMarca(ActionEvent e){
+        TipoItemDTO objTipoItem=new TipoItemDTO();
+        //objTipoItem.setId
+        
+    }
+    
+    public void registrarNuevaCaracteristica(ActionEvent e){
+        
+    }
+    
+    public void modificarTipoItem(ActionEvent e){
+        TipoItemDTO objTipoItem=new TipoItemDTO();
+        objTipoItem.setIdtipoItem(codigoItem);
+        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
+        objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
+        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
+        objTipoItem.setDescripcionCaracteristica(descripcion);
+        objTipoItem.setPrecioLista(Double.parseDouble(precio));
+        objTipoItem.setDesCliente(dsctoCliente);
+        objTipoItem.setDesDistribuidor(dsctoDistribuidor);
+        tipoItemBO.actualizarTipoItem(objTipoItem);
     }
     
     public void listarMarca(){
@@ -278,6 +321,58 @@ public class tipoitemMB {
     public void setListaFamilia(List<Familia> listaFamilia) {
         this.listaFamilia = listaFamilia;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
+
+    public String getDsctoCliente() {
+        return dsctoCliente;
+    }
+
+    public void setDsctoCliente(String dsctoCliente) {
+        this.dsctoCliente = dsctoCliente;
+    }
+
+    public String getDsctoDistribuidor() {
+        return dsctoDistribuidor;
+    }
+
+    public void setDsctoDistribuidor(String dsctoDistribuidor) {
+        this.dsctoDistribuidor = dsctoDistribuidor;
+    }
+
+    public TipoItemBO getTipoItemBO() {
+        return tipoItemBO;
+    }
+
+    public void setTipoItemBO(TipoItemBO tipoItemBO) {
+        this.tipoItemBO = tipoItemBO;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+    
+    
+    
+    
 
     
     
