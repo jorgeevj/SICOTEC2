@@ -18,46 +18,19 @@
                     
                 
                                  
-                    <p:outputLabel for="dos" value="Nombre:"/>
+                    <p:outputLabel for="dos" value="Familia:"/>
                     
                     <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
                     
-                
-            
-            
+                    <p:outputLabel for="tres" value="Marca:"/>
+                    
+                    <p:inputText id="tres" value="#{tipoitemMB.marca}" style="width:50%"/>    
                                  
-                    <p:outputLabel for="tres" value="Características:"/>
+                    <p:outputLabel for="cuatro" value="Características:"/>
                     
-                    <p:inputText id="tres" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
+                    <p:inputText id="cuatro" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
                     
-                <!--
-                               
-                    <p:outputLabel for="cuatro" value="Categoría:"/>
-                    
-                    <p:selectOneMenu id="cuatro" styleClass="browser-default" value="" style="width:51%" >
-                        <f:selectItem itemLabel="Seleccione una categoría..." itemValue="0" />
-                   
-                    </p:selectOneMenu>
-                    
-                
-            
-            
-                            
-                    <p:outputLabel for="cinco" value="Almacén:"/>
-                    
-                    <p:selectOneMenu id="cinco" styleClass="browser-default" value="" style="width:51%" >
-                        <f:selectItem itemLabel="Seleccione un almacén..." itemValue="0" />
-                       
-                    </p:selectOneMenu>
-                    
-                -->
-                         
-                                     
-                    
-                <p:outputLabel for="seis" value="Fecha de registro" />
-                <p:calendar id="seis" value="#{tipoitemMB.fechaRegistro}" showOn="button" />
-
-            </h:panelGrid>
+                </h:panelGrid>
                 <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscar}" update="tabla" title="Consultar"/>                
                 <p:commandButton value="Registrar" actionListener="#{tipoitemMB.registrarItem}"/>            
                 <p:commandButton value="Modificar" onclick="PF('editarItem').show();" />
@@ -73,21 +46,22 @@
                 <p:column headerText="Cod Item">
                     <h:outputText value="#{titem.tipo}" />
                 </p:column>
+                <p:column headerText="Familia">
+                    <h:outputText value="#{titem.familia.nombre}" />
+                </p:column>                
+                <p:column headerText="Categoria">
+                    <h:outputText value="#{titem.categoria.nombre}" />
+                </p:column>     
                 <p:column headerText="Nombre">
                     <h:outputText value="#{titem.nombre}" />
                 </p:column>
-                <p:column headerText="Caracteristicas">
+                <p:column headerText="Precio">
                     <h:outputText value="#{titem.precioLista}" />
                 </p:column>
-                <p:column headerText="Categoria">
+                <p:column headerText="Marca">
                     <h:outputText value="#{titem.nombre}" />
                 </p:column>
-                <p:column headerText="Almacen">
-                    <h:outputText value="#{titem.nombre}" />
-                </p:column>
-                <p:column headerText="Fecha de registro">
-                    <h:outputText value="#{titem.desDistribuidor}" />
-                </p:column>
+                
             </p:dataTable>
         
 
