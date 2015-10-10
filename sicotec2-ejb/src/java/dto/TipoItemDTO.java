@@ -5,30 +5,63 @@
  */
 package dto;
 
+import entidades.Caracteristica;
+import entidades.Categoria;
+import entidades.Familia;
+import entidades.Tipoitem;
+
 /**
  *
  * @author Faviana
  */
 public class TipoItemDTO {
     
-    private Integer idtipoItem;
+    private String idtipoItem;
     private String nombre;
     private String tipo;
     private Double precioLista;
     private String desCliente;
     private String desDistribuidor;
+    private Integer idCaracteristica;
+    private Caracteristica caracteristica;
+    private String descripcionCaracteristica;
+    private Integer idFamilia;    
+    private Familia familia;
+    private Integer idMarca;
+    private Integer idCategoria;
+    private Categoria categoria;
+    
+    
+
+    public Caracteristica getCaracteristica() {
+        return caracteristica;
+    }
+
+    public void setCaracteristica(Caracteristica caracteristica) {
+        this.caracteristica = caracteristica;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+    
+    
     
     /**
      * @return the idtipoItem
      */
-    public Integer getIdtipoItem() {
+    public String getIdtipoItem() {
         return idtipoItem;
     }
 
     /**
      * @param idtipoItem the idtipoItem to set
      */
-    public void setIdtipoItem(Integer idtipoItem) {
+    public void setIdtipoItem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 
@@ -101,6 +134,56 @@ public class TipoItemDTO {
     public void setDesDistribuidor(String desDistribuidor) {
         this.desDistribuidor = desDistribuidor;
     }
+
+    public Integer getIdCaracteristica() {
+        return idCaracteristica;
+    }
+
+    public void setIdCaracteristica(Integer idCaracteristica) {
+        this.idCaracteristica = idCaracteristica;
+    }
+
+    public String getDescripcionCaracteristica() {
+        return descripcionCaracteristica;
+    }
+
+    public void setDescripcionCaracteristica(String descripcionCaracteristica) {
+        this.descripcionCaracteristica = descripcionCaracteristica;
+    }
+
+    public Integer getIdFamilia() {
+        return idFamilia;
+    }
+
+    public void setIdFamilia(Integer idFamilia) {
+        this.idFamilia = idFamilia;
+    }
+
+    public Integer getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(Integer idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public Integer getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(Integer idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public Familia getFamilia() {
+        return familia;
+    }
+
+    public void setFamilia(Familia familia) {
+        this.familia = familia;
+    }
+    
+    
     
     
     
