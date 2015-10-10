@@ -9,6 +9,7 @@ import dto.CaracteristicaDTO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
 import entidades.Categoria;
+import entidades.Catipoitem;
 import entidades.Familia;
 import entidades.Marca;
 import entidades.Tipoitem;
@@ -41,6 +42,19 @@ public class TipoItemBO {
     private FamiliaFacade familiaFacade;
     
     
+    
+    public void registrarTipoItem(TipoItemDTO t){
+        Tipoitem r=convertDTOtoEntidad(t);
+        
+        tipoItemFacade.create(r);
+        
+    }
+    
+    public void actualizarTipoItem(TipoItemDTO t){
+        Tipoitem r=convertDTOtoEntidad(t);
+        
+        tipoItemFacade.edit(r);
+    }
     public List<TipoItemDTO> getBusqueda(TipoItemDTO t){
        
         Tipoitem r=convertDTOtoEntidad(t);
@@ -50,6 +64,7 @@ public class TipoItemBO {
         
     }
     
+      
     public List<Caracteristica> getNombreCaracteristica(){
         List<Caracteristica> lista = caracteristicaFacade.findAll();
         return lista;
@@ -94,7 +109,11 @@ public class TipoItemBO {
     
     public TipoItemDTO convertEntidadToDTO(Tipoitem ite){
         TipoItemDTO T=new TipoItemDTO();
+            
             T.setNombre(ite.getNombre());
+            T.setFamilia(ite.getIdfamilia());
+            T.setCategoria(ite.getIdfamilia().getIdcategoria());
+            T.setIdCategoria(ite.getIdfamilia().getIdcategoria().getIdcategoria());
             T.setDesCliente(ite.getDesCliente());
             T.setDesDistribuidor(ite.getDesDistribuidor());
             T.setPrecioLista(ite.getPrecioLista());
@@ -104,6 +123,18 @@ public class TipoItemBO {
     
     public Tipoitem convertDTOtoEntidad(TipoItemDTO a){
         Tipoitem e=new Tipoitem();
+        e.setIdtipoItem(a.getIdtipoItem());
+        
+        e.setIdfamilia(new Familia());
+        e.getIdfamilia().setIdfamilia(a.getIdFamilia());
+        
+        e.setCatipoitemList(new ArrayList<>());
+        Catipoitem obj=new Catipoitem();
+        obj.setCaracteristica(new Caracteristica());
+        obj.getCaracteristica().setIdcaracteristica(a.getIdCaracteristica());
+        e.getCatipoitemList().add(obj);
+        
+        
         e.setNombre(a.getNombre());
         e.setDesCliente(a.getDesCliente());
         e.setDesDistribuidor(a.getDesDistribuidor());
