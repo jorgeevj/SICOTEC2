@@ -28,4 +28,6 @@ public class CatipoitemFacade extends AbstractFacade<Catipoitem> {
         super(Catipoitem.class);
     }
     
+    
+    
 }
