@@ -43,4 +43,8 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         lista=q.getResultList();       
         return lista;
     } 
+    public void insertarTipoItem(){
+        
+    }
+    
 }
