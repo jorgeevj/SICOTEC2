@@ -13,33 +13,33 @@
             <h:form>
                 <div>
                     Tipo de Movimiento
-                    <p:selectOneMenu id="tipoMovimientoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idTipoMovimientoSelectBusqueda}"
+                    <p:selectOneMenu id="tipoMovimientoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.idTipoMovimientoSelectBusqueda}"
                                     style="width:100%"> 
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaTipoMovimiento}" var="tMov" 
+                        <f:selectItems value="#{movimientoMB.listaTipoMovimiento}" var="tMov" 
                                        itemLabel="#{tMov.nombre}" itemValue="#{tMov.idtipoMovimiento}"/> 
                    </p:selectOneMenu>
                 </div>
                 <div>
                     Estado
-                    <p:selectOneMenu id="estadoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.selectEstadoBusqueda}"
+                    <p:selectOneMenu id="estadoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.selectEstadoBusqueda}"
                                     style="width:100%"> 
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaEstados}"/> 
+                        <f:selectItems value="#{movimientoMB.listaEstados}"/> 
                    </p:selectOneMenu>
                 </div>
                 <div>
                     Documento
-                    <p:selectOneMenu id="documentoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idDocumentoSelectBusqueda}"
+                    <p:selectOneMenu id="documentoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.idDocumentoSelectBusqueda}"
                                     style="width:100%"> 
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaDocumento}" var="doc" 
+                        <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
                                        itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/> 
                    </p:selectOneMenu>
                 </div>
                 <div>
                     N° Serie
-                    <p:inputText value="#{movimientoMB.sessionBeanMovimiento.serieBusqueda}"/>
+                    <p:inputText value="#{movimientoMB.serieBusqueda}"/>
                 </div>
 
                 <br/>
@@ -53,8 +53,8 @@
             
             <h:form id="formTabla">
                 <p:dataTable tableStyleClass="table table-hover" selectionMode="single" var="mov" id="tab_movimientos" 
-                             rowKey="#{mov.idmovimiento}" rowIndexVar="var" selection="#{movimientoMB.sessionBeanMovimiento.movimientoSeleccionado}"
-                             value="#{movimientoMB.sessionBeanMovimiento.listaMovimiento}" >
+                             rowKey="#{mov.idmovimiento}" rowIndexVar="var" selection="#{movimientoMB.movimientoSeleccionado}"
+                             value="#{movimientoMB.listaMovimiento}" >
                     <p:column headerText="#" style="text-align: center; background-color: #{mov.colorEstado};width: 50px">
                         <p:outputLabel value="#{var+1}" style="color: #{mov.colorLetra}"/>
                     </p:column>
@@ -80,50 +80,59 @@
         </p:panel> 
         
         <p:dialog header="Nuevo Movimiento" widgetVar="dialog_nuevo_mov" resizable="false">
-            <h:form id="formRegistro">
-                <div class="ui-grid-col-6">
-                    <p:selectOneMenu id="tipoMovimientoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idTipoMovimientoSelectNuevo}">
+            <h:form id="formRegistro">                
+                <p:panel widgetVar="tipoMovReg">
+                    <p:selectOneMenu id="tipoMovimientoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.idTipoMovimientoSelectNuevo}">
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaTipoMovimiento}" var="tMov" 
+                        <f:selectItems value="#{movimientoMB.listaTipoMovimiento}" var="tMov" 
                                    itemLabel="#{tMov.nombre}" itemValue="#{tMov.idtipoMovimiento}"/> 
-                        <p:ajax listener="#{movimientoMB.tipoMovElegidoNuevo()}"/> 
+                        <p:ajax listener="#{movimientoMB.tipoMovElegidoNuevo()}" update="formRegistro"/> 
                     </p:selectOneMenu>
-                </div>
-                <div class="ui-grid-col-6">
-                    <p:selectOneMenu id="documentoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idDocumentoSelectNuevo}">
+                    
+                    <p:selectOneMenu id="documentoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.idDocumentoSelectNuevo}">
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaDocumento}" var="doc" 
+                        <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
                                        itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
                     </p:selectOneMenu>
-                </div>
+                    
+                    <p:commandButton value="Items" onclick="PF('dialog_nuevo_items').show();" update="formTabItemsDisp"/>
+                </p:panel>
                 
-                <p:panel widgetVar="movimientoAlmacenes">
-                    <p:selectOneMenu id="AlmacenOrigenSelectNuevo" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idAlmacenOrigenNuevo}">
+                <p:panel widgetVar="movimientoAlmacenes" visible="#{movimientoMB.panelVisibleMovAlmacenes}">
+                    <p:selectOneMenu id="AlmacenOrigenSelectNuevo" styleClass="browser-default" value="#{movimientoMB.idAlmacenOrigenNuevo}">
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaAlmacenes}" var="al" 
+                        <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
                                        itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/>  
                     </p:selectOneMenu>
-                    <p:selectOneMenu id="AlmacenDestinoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idAlmacenDestinoNuevo}">
+                    <p:selectOneMenu id="AlmacenDestinoSelectNuevo" styleClass="browser-default" value="#{movimientoMB.idAlmacenDestinoNuevo}">
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaAlmacenes}" var="al" 
+                        <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
                                        itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/>  
                     </p:selectOneMenu>
                 </p:panel>
                 
-                <p:panel widgetVar="movimientoSimples">
-                    <div class="ui-grid-col-12">
-                        <p:inputText value="#{movimientoMB.sessionBeanMovimiento.nombreOrigenNuevo}"/>
-                    </div>
-                    <div class="ui-grid-col-12">
-                        <p:inputText value="#{movimientoMB.sessionBeanMovimiento.nombreDestinoNuevo}"/>
-                    </div>
+                <p:panel widgetVar="movimientoEntrada" visible="#{movimientoMB.panelVisibleMovEntrada}">
+                    <p:inputText value="#{movimientoMB.nombreOrigenNuevo}"/>
+                    <p:selectOneMenu id="AlmacenDestinoSelectNuevo1" styleClass="browser-default" value="#{movimientoMB.idAlmacenDestinoNuevo}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
+                                       itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/>  
+                    </p:selectOneMenu>
                 </p:panel>
-                <div class="ui-grid-col-12">
-                    <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.sessionBeanMovimiento.motivoNuevo}"/>
-                </div>
-                <div class="ui-grid-col-12">
-                    <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.sessionBeanMovimiento.comentarioNuevo}"/>
-                </div>        
+                
+                <p:panel widgetVar="movimientoSalida" visible="#{movimientoMB.panelVisibleMovSalida}">
+                    <p:selectOneMenu id="AlmacenOrigenSelectNuevo1" styleClass="browser-default" value="#{movimientoMB.idAlmacenOrigenNuevo}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
+                                       itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/>  
+                    </p:selectOneMenu>
+                    <p:inputText value="#{movimientoMB.nombreDestinoNuevo}"/>
+                </p:panel>
+                
+                <p:panel>
+                    <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoNuevo}"/>
+                    <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioNuevo}"/>
+                </p:panel>      
                              
                 <p:commandButton value="Registrar" actionListener="#{movimientoMB.registrarMovimiento()}"/>
             </h:form>
@@ -134,23 +143,54 @@
                 <div class="ui-grid ui-grid-responsive">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-6">
-                            <p:selectOneMenu id="documentoSelectEdit" styleClass="browser-default" value="#{movimientoMB.sessionBeanMovimiento.idDocumentoEdit}">
+                            <p:selectOneMenu id="documentoSelectEdit" styleClass="browser-default" value="#{movimientoMB.idDocumentoEdit}">
                                 <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                                <f:selectItems value="#{movimientoMB.sessionBeanMovimiento.listaDocumento}" var="doc" 
+                                <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
                                                itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
                             </p:selectOneMenu>
                         </div>
                         <div class="ui-grid-col-12">
-                            <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.sessionBeanMovimiento.motivoEdit}"/>
+                            <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
                         </div>
                         <div class="ui-grid-col-12">
-                            <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.sessionBeanMovimiento.comentarioEdit}"/>
+                            <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
                         </div>
                     </div>
                 </div>
                 <p:commandButton value="Guardar" actionListener="#{movimientoMB.editarMovimiento()}"/>
             </h:form>
         </p:dialog> 
+        
+        <p:dialog header="Items Seleccionador" widgetVar="dialog_nuevo_items" resizable="false"> 
+            <p:panel>
+                <h:form id="formTabItemsDisp">
+                    <p:dataTable value="#{movimientoMB.listaItem}" var="itemsDisp" selectionMode="single"
+                                 selection="#{movimientoMB.itemSeleccionado}" rowKey="#{itemsDisp.iditem}" rowIndexVar="var">
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsDisp.iditem}"/>
+                        </p:column>
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsDisp.operatividad}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Seleccionar" actionListener="#{movimientoMB.agregarItemToMovimiento()}"/>
+                </h:form>
+            </p:panel>
+            <p:panel>
+                <h:form id="formTabItemsSelecc">
+                    <p:dataTable value="#{movimientoMB.listaItemAux}" var="itemsSelec" selectionMode="single"
+                                 selection="#{movimientoMB.itemSeleccionadoAux}" rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsSelec.iditem}"/>
+                        </p:column>
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsSelec.operatividad}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Remover" actionListener="#{movimientoMB.eliminarItemToMovimiento()}"/>
+                </h:form>
+            </p:panel>
+        </p:dialog>
     </ui:define>  
 </ui:composition>
 
