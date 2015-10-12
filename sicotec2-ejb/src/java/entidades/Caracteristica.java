@@ -8,15 +8,16 @@ package entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,7 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Caracteristica.findAll", query = "SELECT c FROM Caracteristica c"),
     @NamedQuery(name = "Caracteristica.findByIdcaracteristica", query = "SELECT c FROM Caracteristica c WHERE c.idcaracteristica = :idcaracteristica"),
-    @NamedQuery(name = "Caracteristica.findByNombre", query = "SELECT c FROM Caracteristica c WHERE c.nombre = :nombre")})
+    @NamedQuery(name = "Caracteristica.findByNombre", query = "SELECT c FROM Caracteristica c WHERE c.nombre = :nombre"),
+    @NamedQuery(name = "Caracteristica.findByDescripcion", query = "SELECT c FROM Caracteristica c WHERE c.descripcion = :descripcion")})
 public class Caracteristica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,8 +45,14 @@ public class Caracteristica implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caracteristica")
-    private List<Catipoitem> catipoitemList;
+    @Size(max = 300)
+    @Column(name = "descripcion")
+    private String descripcion;
+    @JoinTable(name = "catipoitem", joinColumns = {
+        @JoinColumn(name = "idcaracteristica", referencedColumnName = "idcaracteristica")}, inverseJoinColumns = {
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
+    @ManyToMany
+    private List<Tipoitem> tipoitemList;
 
     public Caracteristica() {
     }
@@ -69,13 +77,21 @@ public class Caracteristica implements Serializable {
         this.nombre = nombre;
     }
 
-    @XmlTransient
-    public List<Catipoitem> getCatipoitemList() {
-        return catipoitemList;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setCatipoitemList(List<Catipoitem> catipoitemList) {
-        this.catipoitemList = catipoitemList;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    @XmlTransient
+    public List<Tipoitem> getTipoitemList() {
+        return tipoitemList;
+    }
+
+    public void setTipoitemList(List<Tipoitem> tipoitemList) {
+        this.tipoitemList = tipoitemList;
     }
 
     @Override

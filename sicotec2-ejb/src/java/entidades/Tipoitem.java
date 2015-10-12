@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Tipoitem.findAll", query = "SELECT t FROM Tipoitem t"),
     @NamedQuery(name = "Tipoitem.findByIdtipoItem", query = "SELECT t FROM Tipoitem t WHERE t.idtipoItem = :idtipoItem"),
+    @NamedQuery(name = "Tipoitem.findByNumParte", query = "SELECT t FROM Tipoitem t WHERE t.numParte = :numParte"),
     @NamedQuery(name = "Tipoitem.findByNombre", query = "SELECT t FROM Tipoitem t WHERE t.nombre = :nombre"),
+    @NamedQuery(name = "Tipoitem.findByDescripcion", query = "SELECT t FROM Tipoitem t WHERE t.descripcion = :descripcion"),
     @NamedQuery(name = "Tipoitem.findByTipo", query = "SELECT t FROM Tipoitem t WHERE t.tipo = :tipo"),
     @NamedQuery(name = "Tipoitem.findByPrecioLista", query = "SELECT t FROM Tipoitem t WHERE t.precioLista = :precioLista"),
     @NamedQuery(name = "Tipoitem.findByDesCliente", query = "SELECT t FROM Tipoitem t WHERE t.desCliente = :desCliente"),
@@ -47,9 +49,17 @@ public class Tipoitem implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "idtipoItem")
     private String idtipoItem;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "numParte")
+    private String numParte;
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
+    @Size(max = 300)
+    @Column(name = "descripcion")
+    private String descripcion;
     @Size(max = 45)
     @Column(name = "tipo")
     private String tipo;
@@ -63,14 +73,15 @@ public class Tipoitem implements Serializable {
     @Column(name = "desDistribuidor")
     private String desDistribuidor;
     @ManyToMany(mappedBy = "tipoitemList")
-    private List<Marca> marcaList;
+    private List<Caracteristica> caracteristicaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
     private List<Cotipoitem> cotipoitemList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
-    private List<Catipoitem> catipoitemList;
     @JoinColumn(name = "idfamilia", referencedColumnName = "idfamilia")
     @ManyToOne(optional = false)
     private Familia idfamilia;
+    @JoinColumn(name = "idmarca", referencedColumnName = "idmarca")
+    @ManyToOne(optional = false)
+    private Marca idmarca;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
     private List<Altipoitem> altipoitemList;
 
@@ -81,6 +92,11 @@ public class Tipoitem implements Serializable {
         this.idtipoItem = idtipoItem;
     }
 
+    public Tipoitem(String idtipoItem, String numParte) {
+        this.idtipoItem = idtipoItem;
+        this.numParte = numParte;
+    }
+
     public String getIdtipoItem() {
         return idtipoItem;
     }
@@ -89,12 +105,28 @@ public class Tipoitem implements Serializable {
         this.idtipoItem = idtipoItem;
     }
 
+    public String getNumParte() {
+        return numParte;
+    }
+
+    public void setNumParte(String numParte) {
+        this.numParte = numParte;
+    }
+
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getTipo() {
@@ -130,12 +162,12 @@ public class Tipoitem implements Serializable {
     }
 
     @XmlTransient
-    public List<Marca> getMarcaList() {
-        return marcaList;
+    public List<Caracteristica> getCaracteristicaList() {
+        return caracteristicaList;
     }
 
-    public void setMarcaList(List<Marca> marcaList) {
-        this.marcaList = marcaList;
+    public void setCaracteristicaList(List<Caracteristica> caracteristicaList) {
+        this.caracteristicaList = caracteristicaList;
     }
 
     @XmlTransient
@@ -147,21 +179,20 @@ public class Tipoitem implements Serializable {
         this.cotipoitemList = cotipoitemList;
     }
 
-    @XmlTransient
-    public List<Catipoitem> getCatipoitemList() {
-        return catipoitemList;
-    }
-
-    public void setCatipoitemList(List<Catipoitem> catipoitemList) {
-        this.catipoitemList = catipoitemList;
-    }
-
     public Familia getIdfamilia() {
         return idfamilia;
     }
 
     public void setIdfamilia(Familia idfamilia) {
         this.idfamilia = idfamilia;
+    }
+
+    public Marca getIdmarca() {
+        return idmarca;
+    }
+
+    public void setIdmarca(Marca idmarca) {
+        this.idmarca = idmarca;
     }
 
     @XmlTransient
