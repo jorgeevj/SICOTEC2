@@ -30,11 +30,14 @@ public class CotizacionDTO {
    
     private String correlativo;
    
-    private int idalmacen;
+    private int idalm;
+    private Integer idalmacen;
    
     private List<Cotipoitem> cotipoitemList;
    
     private Empresa idempresa;
+    
+    private EmpresaDTO empresaDTO;
     
     private String nombAlmacen;
     
@@ -169,6 +172,22 @@ public class CotizacionDTO {
 
     public void setNombEstado(String nombEstado) {
         this.nombEstado = nombEstado;
+    }
+
+    public EmpresaDTO getEmpresaDTO() {
+        return empresaDTO;
+    }
+
+    public void setEmpresaDTO(EmpresaDTO empresaDTO) {
+        this.empresaDTO = empresaDTO;
+    }
+
+    public int getIdalm() {
+        return idalm;
+    }
+
+    public void setIdalm(int idalm) {
+        this.idalm = idalm;
     }
    
 }

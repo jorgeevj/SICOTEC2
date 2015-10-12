@@ -7,18 +7,19 @@ package bo;
 
 import dao.AlmacenFacade;
 import dao.CotizacionFacade;
-import dao.MovimientoFacade;
-import dao.TipomovimientoFacade;
-import dto.AlmacenDTO;
+import dao.EmpresaFacade;
+import dao.TipoitemFacade;
 import dto.CotizacionDTO;
+import dto.EmpresaDTO;
 import entidades.Cotizacion;
-import entidades.Movimiento;
-import entidades.Tipomovimiento;
+import entidades.Empresa;
+import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -29,8 +30,12 @@ import javax.ejb.LocalBean;
 @LocalBean
 public class CotizacionBO {
     @EJB
+    private TipoitemFacade tipoitemFacade;
+    @EJB
+    private EmpresaFacade empresaFacade;
+    @EJB
     private AlmacenFacade almacenFacade;
-  
+    
    
     @EJB
     private CotizacionFacade cotizacionFacade;
@@ -47,7 +52,21 @@ public class CotizacionBO {
         
     return listCot;
     }
-
+    
+    public List<SelectItem> listItemEmpresasAll(){
+    List<SelectItem> l=new ArrayList<>();
+    for(Empresa e:empresasAll()){
+    l.add(new SelectItem(e.getIdempresa()+"", e.getNombre()));
+    }
+        return l;
+    }
+    
+    public List<Empresa> empresasAll(){
+        return empresaFacade.findAll();
+    }
+    public List<Tipoitem> tipoItemAll(){
+        return tipoitemFacade.findAll();
+    }
 // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
@@ -64,6 +83,7 @@ public class CotizacionBO {
        CotizacionDTO dto=new CotizacionDTO();
        dto.setIdcotizacion(c.getIdcotizacion());
        dto.setIdempresa(c.getIdempresa());
+       dto.setEmpresaDTO(new  EmpresaDTO(c.getIdempresa().getNombre(), c.getIdempresa().getRuc(), c.getIdempresa().getIdempresa(), c.getIdempresa().getTipo()));
        dto.setSerie(c.getSerie());
        dto.setCorrelativo(c.getCorrelativo());
        dto.setDuracion(c.getDuracion());
@@ -71,6 +91,7 @@ public class CotizacionBO {
        dto.setFechaEnvio(c.getFechaEnvio());
        dto.setEstado(c.getEstado());
        dto.setIdalmacen(c.getIdalmacen());
+       dto.setIdalm(c.getIdalmacen());
        dto.setNombAlmacen(almacenFacade.getNombreAlmxID(c.getIdalmacen()).getNombre());
     return dto;   
     }
