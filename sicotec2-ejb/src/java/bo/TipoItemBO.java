@@ -9,7 +9,6 @@ import dto.CaracteristicaDTO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
 import entidades.Categoria;
-import entidades.Catipoitem;
 import entidades.Familia;
 import entidades.Marca;
 import entidades.Tipoitem;
@@ -128,11 +127,6 @@ public class TipoItemBO {
         e.setIdfamilia(new Familia());
         e.getIdfamilia().setIdfamilia(a.getIdFamilia());
         
-        e.setCatipoitemList(new ArrayList<>());
-        Catipoitem obj=new Catipoitem();
-        obj.setCaracteristica(new Caracteristica());
-        obj.getCaracteristica().setIdcaracteristica(a.getIdCaracteristica());
-        e.getCatipoitemList().add(obj);
         
         
         e.setNombre(a.getNombre());
