@@ -57,7 +57,6 @@ public class EmpresaBO {
         empresaDTO.setIdempresa(empresa.getIdempresa());
         empresaDTO.setNombre(empresa.getNombre());
         empresaDTO.setRuc(empresa.getRuc());
-        empresaDTO.setTipo(empresa.getTipo());
         return empresaDTO;
     }
     

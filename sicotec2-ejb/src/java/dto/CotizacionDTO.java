@@ -7,7 +7,6 @@ package dto;
 
 import entidades.Cotipoitem;
 import entidades.Empresa;
-import entidades.Pedido;
 import java.util.Date;
 import java.util.List;
 

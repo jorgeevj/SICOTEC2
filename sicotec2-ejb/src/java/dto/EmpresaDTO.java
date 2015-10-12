@@ -29,16 +29,14 @@ public class EmpresaDTO {
     private List<Venta> ventaList;
     private List<Cotizacion> cotizacionList;
     private int idemp;
-    private int tip;
     public EmpresaDTO() {
         
     }
 
-    public EmpresaDTO(String nombre, String ruc, int idemp, int tip) {
+    public EmpresaDTO(String nombre, String ruc, int idemp) {
         this.nombre = nombre;
         this.ruc = ruc;
         this.idemp = idemp;
-        this.tip = tip;
     }
     public EmpresaDTO(Integer idempresa, String nombre, String ruc,  Integer tipo, List<Tipo> tipoList, List<Compra> compraList, List<Emppersona> emppersonaList, List<Pedido> pedidoList, List<Venta> ventaList, List<Cotizacion> cotizacionList){
         this.idempresa = idempresa;
@@ -141,13 +139,5 @@ public class EmpresaDTO {
         this.idemp = idemp;
     }
 
-    public int getTip() {
-        return tip;
-    }
-
-    public void setTip(int tip) {
-        this.tip = tip;
-    }
-    
-    
+   
 }

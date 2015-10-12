@@ -76,6 +76,9 @@ public class Tipoitem implements Serializable {
     private List<Caracteristica> caracteristicaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
     private List<Cotipoitem> cotipoitemList;
+    @JoinColumn(name = "idcolor", referencedColumnName = "idcolor")
+    @ManyToOne(optional = false)
+    private Color idcolor;
     @JoinColumn(name = "idfamilia", referencedColumnName = "idfamilia")
     @ManyToOne(optional = false)
     private Familia idfamilia;
@@ -177,6 +180,14 @@ public class Tipoitem implements Serializable {
 
     public void setCotipoitemList(List<Cotipoitem> cotipoitemList) {
         this.cotipoitemList = cotipoitemList;
+    }
+
+    public Color getIdcolor() {
+        return idcolor;
+    }
+
+    public void setIdcolor(Color idcolor) {
+        this.idcolor = idcolor;
     }
 
     public Familia getIdfamilia() {

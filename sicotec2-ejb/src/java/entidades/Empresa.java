@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresa.findAll", query = "SELECT e FROM Empresa e"),
     @NamedQuery(name = "Empresa.findByIdempresa", query = "SELECT e FROM Empresa e WHERE e.idempresa = :idempresa"),
     @NamedQuery(name = "Empresa.findByNombre", query = "SELECT e FROM Empresa e WHERE e.nombre = :nombre"),
-    @NamedQuery(name = "Empresa.findByRuc", query = "SELECT e FROM Empresa e WHERE e.ruc = :ruc"),
-    @NamedQuery(name = "Empresa.findByTipo", query = "SELECT e FROM Empresa e WHERE e.tipo = :tipo")})
+    @NamedQuery(name = "Empresa.findByRuc", query = "SELECT e FROM Empresa e WHERE e.ruc = :ruc")})
 public class Empresa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,8 +50,6 @@ public class Empresa implements Serializable {
     @Size(max = 45)
     @Column(name = "ruc")
     private String ruc;
-    @Column(name = "tipo")
-    private Integer tipo;
     @JoinTable(name = "tipoempresa", joinColumns = {
         @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")}, inverseJoinColumns = {
         @JoinColumn(name = "idtipo", referencedColumnName = "idtipo")})
@@ -98,14 +95,6 @@ public class Empresa implements Serializable {
 
     public void setRuc(String ruc) {
         this.ruc = ruc;
-    }
-
-    public Integer getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Integer tipo) {
-        this.tipo = tipo;
     }
 
     @XmlTransient
