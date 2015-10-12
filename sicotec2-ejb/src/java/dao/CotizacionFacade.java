@@ -33,19 +33,19 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
    
             String sql = "SELECT c FROM Cotizacion c where 1=1 ";
             if(dto.getSerie()!=null && !dto.getSerie().equals("")){
-            sql+="and c.serie = '"+dto.getSerie()+"' ";
+            sql+="and c.serie like '%"+dto.getSerie()+"%' ";
             } 
             if(dto.getCorrelativo()!=null && !dto.getCorrelativo().equals("")){
-            sql+="and c.correlativo = '"+dto.getCorrelativo()+"' ";
+            sql+="and c.correlativo like '%"+dto.getCorrelativo()+"%' ";
             }
             if(dto.getIdcotizacion()!=0){
             sql+="and c.idcotizacion = "+dto.getIdcotizacion()+" ";
             }      
             if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
-            sql+="and c.idempresa.nombre = '"+dto.getIdempresa().getNombre()+"' ";
+            sql+="and c.idempresa.nombre like '%"+dto.getIdempresa().getNombre()+"%' ";
             }
             if(dto.getIdempresa().getRuc()!=null && !dto.getIdempresa().getRuc().equals("")){
-            sql+="and c.idempresa.ruc = '"+dto.getIdempresa().getRuc()+"' ";
+            sql+="and c.idempresa.ruc like '%"+dto.getIdempresa().getRuc()+"%' ";
             }
             if(dto.getEstado()!=0){
             sql+="and c.estado = "+dto.getEstado()+" ";
