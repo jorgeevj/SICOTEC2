@@ -32,6 +32,12 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
      public List<Cotizacion> buscarCotizacion(CotizacionDTO dto) {
    
             String sql = "SELECT c FROM Cotizacion c where 1=1 ";
+            if(dto.getSerie()!=null && !dto.getSerie().equals("")){
+            sql+="and c.serie = '"+dto.getSerie()+"' ";
+            } 
+            if(dto.getCorrelativo()!=null && !dto.getCorrelativo().equals("")){
+            sql+="and c.correlativo = '"+dto.getCorrelativo()+"' ";
+            }
             if(dto.getIdcotizacion()!=0){
             sql+="and c.idcotizacion = "+dto.getIdcotizacion()+" ";
             }      
@@ -47,8 +53,8 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
             if(dto.getEntrega()!=0){
             sql+="and c.entrega = "+dto.getEntrega()+" ";
             }
-            if(dto.getIdalmacen()!=0){
-            sql+="and c.idalmacen = "+dto.getIdalmacen()+" ";
+            if(dto.getIdalm()!=0){
+            sql+="and c.idalmacen = "+dto.getIdalm()+" ";
             }
            List<Cotizacion> l=em.createQuery(sql, Cotizacion.class).getResultList();
           return l; 
