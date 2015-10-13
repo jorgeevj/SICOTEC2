@@ -136,7 +136,7 @@ jorgeevj 15.09.15 Creacion.
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
-                        <p:commandButton value="Agregar Items" onclick="PF('addItemsPedidosModal').show();"/>
+                    <p:commandButton value="Agregar Items" onclick="PF('addItemsPedidosModal').show();" update=":formAddItems:tabItemsSelected, :formAddItems:tabItemsAdd"/>
                         <br/><br/><br/>
                         <p:commandButton value="Agregar" />
                 </h:form>
@@ -145,7 +145,7 @@ jorgeevj 15.09.15 Creacion.
             <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" height="500" width="700"> 
                 <h:form id="formAddItems">
                     <p:outputLabel value="Items Disponibles "></p:outputLabel>
-                    <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.sessionBeanPedido.listaItemsDisponibles}" var="tItemsDisp" selectionMode="single" selection="#{pedidoMB.camposPealtipoItem}" rowKey="#{tItemsDisp.nombre}">
+                    <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.sessionBeanPedido.listaItemsDisponibles}" var="tItemsDisp" selectionMode="single" selection="#{pedidoMB.objTipoItem}" rowKey="#{tItemsDisp.nombre}">
                         <p:column headerText="Nombre" style="text-align: center">
                             <p:outputLabel value="#{tItemsDisp.nombre}"/>
                         </p:column>
@@ -157,7 +157,7 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Agregar Item"/>
+                    <p:commandButton value="Agregar Item" actionListener="#{pedidoMB.agregarTipoItem}" update="tabItemsSelected,tabItemsAdd"/>
                     <br/><br/><br/><br/>
                     <p:outputLabel value="Items Seleccionados "></p:outputLabel>
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsSelected" value="#{pedidoMB.sessionBeanPedido.listaItemsSeleccionado}" var="tItemsSelec" >
@@ -172,7 +172,7 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Quitar Item" />
+                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}" update="tabItemsSelected,tabItemsAdd"/>
                     <br/><br/><br/>
                     <p:commandButton value="Aceptar" onclick="PF('addItemsPedidosModal').hide();"/>
                 </h:form>

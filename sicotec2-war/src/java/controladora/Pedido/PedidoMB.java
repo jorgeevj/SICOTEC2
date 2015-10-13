@@ -15,6 +15,7 @@ import dto.AlmacenDTO;
 import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
 import dto.PedidoDTO;
+import dto.TipoItemDTO;
 import entidades.Empresa;
 import entidades.Tipoitem;
 import java.util.*;
@@ -39,6 +40,8 @@ public class PedidoMB{
     
     private PedidoDTO campos;
     private PealtipoitemDTO camposPealtipoItem;
+    private TipoItemDTO objTipoItem;
+    private TipoItemDTO objTipoItemQuitar;
     private Empresa emp;
     private Tipoitem tipItm;
     private SessionBeanPedido sessionBeanPedido = new SessionBeanPedido();
@@ -65,6 +68,23 @@ public class PedidoMB{
         return getSessionBeanPedido().getListPedido();
     }
     
+    public List<TipoItemDTO> agregarTipoItem(ActionEvent actionEvent){
+        getSessionBeanPedido().getListaItemsSeleccionado().add(objTipoItem);
+        getSessionBeanPedido().getListaItemsDisponibles().remove(objTipoItem);
+        return getSessionBeanPedido().getListaItemsSeleccionado();
+    }
+    
+    public List<TipoItemDTO> quitarTipoItem(ActionEvent actionEvent){
+        getSessionBeanPedido().getListaItemsDisponibles().add(objTipoItem);
+        getSessionBeanPedido().getListaItemsSeleccionado().remove(objTipoItem);
+        return getSessionBeanPedido().getListaItemsDisponibles();
+    }
+    public void abrirModalAddPedido(){
+        getSessionBeanPedido().setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
+        getSessionBeanPedido().setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
+        System.out.println(getSessionBeanPedido().getListaItemsSeleccionado());
+        this.crear(null);
+    }
     public void crear(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addPedidosModal').show();");
@@ -147,6 +167,22 @@ public class PedidoMB{
 
     public void setTipItm(Tipoitem tipItm) {
         this.tipItm = tipItm;
+    }
+
+    public TipoItemDTO getObjTipoItem() {
+        return objTipoItem;
+    }
+
+    public void setObjTipoItem(TipoItemDTO objTipoItem) {
+        this.objTipoItem = objTipoItem;
+    }
+
+    public TipoItemDTO getObjTipoItemQuitar() {
+        return objTipoItemQuitar;
+    }
+
+    public void setObjTipoItemQuitar(TipoItemDTO objTipoItemQuitar) {
+        this.objTipoItemQuitar = objTipoItemQuitar;
     }
     
 }

@@ -17,7 +17,7 @@
                     <p:inputText   id="it2" value="#{pedidoMB.campos.idEmpresa.ruc}"/>
                 </h:panelGrid>
                 <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update="tabPedidos"/>
-                <p:commandButton value="Agregar" actionListener="#{pedidoMB.crear}" id="btnAgregar" title="Agregar" />
+                <p:commandButton value="Agregar" actionListener="#{pedidoMB.abrirModalAddPedido}" id="btnAgregar" title="Agregar" />
             </h:form>     
                 
             <h:panelGrid > 
