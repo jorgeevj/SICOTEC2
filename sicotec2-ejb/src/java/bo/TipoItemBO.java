@@ -9,6 +9,7 @@ import dto.CaracteristicaDTO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
 import entidades.Categoria;
+import entidades.Color;
 import entidades.Familia;
 import entidades.Marca;
 import entidades.Tipoitem;
@@ -109,14 +110,19 @@ public class TipoItemBO {
     public TipoItemDTO convertEntidadToDTO(Tipoitem ite){
         TipoItemDTO T=new TipoItemDTO();
             
+            T.setIdtipoItem(ite.getIdtipoItem());
             T.setNombre(ite.getNombre());
+            T.setDescipcion(ite.getDescripcion());
             T.setFamilia(ite.getIdfamilia());
             T.setCategoria(ite.getIdfamilia().getIdcategoria());
             T.setIdCategoria(ite.getIdfamilia().getIdcategoria().getIdcategoria());
+            T.setMarca(ite.getIdmarca());
+            T.setNumParte(ite.getNumParte());
             T.setDesCliente(ite.getDesCliente());
             T.setDesDistribuidor(ite.getDesDistribuidor());
             T.setPrecioLista(ite.getPrecioLista());
             T.setTipo(ite.getTipo());
+            T.setColor(ite.getIdcolor());
             return T;
     }
     
@@ -127,8 +133,16 @@ public class TipoItemBO {
         e.setIdfamilia(new Familia());
         e.getIdfamilia().setIdfamilia(a.getIdFamilia());
         
+        e.setNumParte(a.getNumParte());
+        
+        e.setIdcolor(new Color());
+        e.getIdcolor().setIdcolor(a.getIdColor());
+        
+        e.setIdmarca(new Marca());
+        e.getIdmarca().setIdmarca(a.getIdMarca());
         
         
+        e.setDescripcion(a.getDescipcion());
         e.setNombre(a.getNombre());
         e.setDesCliente(a.getDesCliente());
         e.setDesDistribuidor(a.getDesDistribuidor());
