@@ -7,7 +7,9 @@ package dto;
 
 import entidades.Caracteristica;
 import entidades.Categoria;
+import entidades.Color;
 import entidades.Familia;
+import entidades.Marca;
 import entidades.Tipoitem;
 
 /**
@@ -28,8 +30,13 @@ public class TipoItemDTO {
     private Integer idFamilia;    
     private Familia familia;
     private Integer idMarca;
+    private Marca marca;
     private Integer idCategoria;
     private Categoria categoria;
+    private String descipcion;
+    private String numParte;
+    private Color color;
+    private Integer idColor;
     
     
 
@@ -182,6 +189,48 @@ public class TipoItemDTO {
     public void setFamilia(Familia familia) {
         this.familia = familia;
     }
+
+    public String getDescipcion() {
+        return descipcion;
+    }
+
+    public void setDescipcion(String descipcion) {
+        this.descipcion = descipcion;
+    }
+
+    public String getNumParte() {
+        return numParte;
+    }
+
+    public void setNumParte(String numParte) {
+        this.numParte = numParte;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Integer getIdColor() {
+        return idColor;
+    }
+
+    public void setIdColor(Integer idColor) {
+        this.idColor = idColor;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
+
+    
     
     
     
