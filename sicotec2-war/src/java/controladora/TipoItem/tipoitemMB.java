@@ -9,10 +9,10 @@ import bo.TipoItemBO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
 import entidades.Categoria;
+import entidades.Color;
 import entidades.Familia;
 import entidades.Marca;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,29 +27,32 @@ public class tipoitemMB {
    @EJB
     private TipoItemBO tipoItemBO;
     
-    private String nombre;
+    
     private String codigoItem;
+    private String numParte;
+    private String nombre;
+    private String descripcion;
+    private String tipo;
+    private String precio;
+    private String dsctoCliente;
+    private String dsctoDistribuidor;
+    
     private String caracteristicas;
     private String categoria;
-    private String almacen;
-    private Date fechaRegistro;
+    private String marca;
+    
     private String caracteristicaSelect;
     private String categoriaSelect;
     private String familiaSelect;
     private String marcaSelect;
-    private String descripcion;
-    private String precio;
-    private String dsctoCliente;
-    private String dsctoDistribuidor;
-    private String marca;
-    
-    
+    private String colorSelect; 
     
     private List<TipoItemDTO> lista;
     private List<Caracteristica> listaCaracteristicas;
     private List<Marca> listaMarca;
     private List<Categoria> listaCategoria;
     private List<Familia> listaFamilia;
+    private List<Color> listaColor;
 
     public tipoitemMB() {
     }
@@ -77,9 +80,8 @@ public class tipoitemMB {
         TipoItemDTO lis=new TipoItemDTO();
         lis.setIdtipoItem(codigoItem);
         lis.setNombre(nombre);
-        lis.setDesCliente(categoria);
-        lis.setDesDistribuidor(almacen);
-        //setLista(tipoItemBO.getBusqueda(lis));
+        
+        
         lista=tipoItemBO.getBusqueda(lis);
     }
     
@@ -101,7 +103,7 @@ public class tipoitemMB {
         objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
         objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
         objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        objTipoItem.setDescripcionCaracteristica(descripcion);
+        //objTipoItem.setDescripcionCaracteristica(descripcion);
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
@@ -125,7 +127,7 @@ public class tipoitemMB {
         objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
         objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
         objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        objTipoItem.setDescripcionCaracteristica(descripcion);
+        //objTipoItem.setDescripcionCaracteristica(descripcion);
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
@@ -144,132 +146,74 @@ public class tipoitemMB {
         listaCategoria=tipoItemBO.getNombreCategoria();
     }
 
-    /**
-     * @return the nombre
-     */
+    
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * @param nombre the nombre to set
-     */
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    /**
-     * @return the codigoItem
-     */
+    
     public String getCodigoItem() {
         return codigoItem;
     }
 
-    /**
-     * @param codigoItem the codigoItem to set
-     */
+    
     public void setCodigoItem(String codigoItem) {
         this.codigoItem = codigoItem;
     }
 
-    /**
-     * @return the caracteristicas
-     */
+    
     public String getCaracteristicas() {
         return caracteristicas;
     }
 
-    /**
-     * @param caracteristicas the caracteristicas to set
-     */
+    
     public void setCaracteristicas(String caracteristicas) {
         this.caracteristicas = caracteristicas;
     }
 
-    /**
-     * @return the categoria
-     */
+    
     public String getCategoria() {
         return categoria;
     }
 
-    /**
-     * @param categoria the categoria to set
-     */
+    
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
-    /**
-     * @return the almacen
-     */
-    public String getAlmacen() {
-        return almacen;
-    }
-
-    /**
-     * @param almacen the almacen to set
-     */
-    public void setAlmacen(String almacen) {
-        this.almacen = almacen;
-    }
-
-    /**
-     * @return the fechaRegistro
-     */
     
-    /**
-     * @return the lista
-     */
     public List<TipoItemDTO> getLista() {
         return lista;
     }
 
-    /**
-     * @param lista the lista to set
-     */
+    
     public void setLista(List<TipoItemDTO> lista) {
         this.lista = lista;
     }
 
-    /**
-     * @return the fechaRegistro
-     */
-    public Date getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    /**
-     * @param fechaRegistro the fechaRegistro to set
-     */
-    public void setFechaRegistro(Date fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    /**
-     * @return the listaCaracteristicas
-     */
+    
+    
+    
     public List<Caracteristica> getListaCaracteristicas() {
         return listaCaracteristicas;
     }
 
-    /**
-     * @param listaCaracteristicas the listaCaracteristicas to set
-     */
+    
     public void setListaCaracteristicas(List<Caracteristica> listaCaracteristicas) {
         this.listaCaracteristicas = listaCaracteristicas;
     }
 
-    /**
-     * @return the caracteristicaSelect
-     */
+    
     public String getCaracteristicaSelect() {
         return caracteristicaSelect;
     }
 
-    /**
-     * @param caracteristicaSelect the caracteristicaSelect to set
-     */
+    
     public void setCaracteristicaSelect(String caracteristicaSelect) {
         this.caracteristicaSelect = caracteristicaSelect;
     }
@@ -368,6 +312,38 @@ public class tipoitemMB {
 
     public void setMarca(String marca) {
         this.marca = marca;
+    }
+
+    public String getNumParte() {
+        return numParte;
+    }
+
+    public void setNumParte(String numParte) {
+        this.numParte = numParte;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getColorSelect() {
+        return colorSelect;
+    }
+
+    public void setColorSelect(String colorSelect) {
+        this.colorSelect = colorSelect;
+    }
+
+    public List<Color> getListaColor() {
+        return listaColor;
+    }
+
+    public void setListaColor(List<Color> listaColor) {
+        this.listaColor = listaColor;
     }
     
     
