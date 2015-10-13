@@ -18,7 +18,7 @@
                     
                 
                                  
-                    <p:outputLabel for="dos" value="Familia:"/>
+                    <p:outputLabel for="dos" value="Nombre:"/>
                     
                     <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
                     
@@ -44,23 +44,30 @@
  
             <p:dataTable id="tabla" value="#{tipoitemMB.lista}" var="titem">
                 <p:column headerText="Cod Item">
-                    <h:outputText value="#{titem.tipo}" />
+                    <h:outputText value="#{titem.idtipoItem}" />
                 </p:column>
-                <p:column headerText="Familia">
-                    <h:outputText value="#{titem.familia.nombre}" />
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{titem.nombre}" />
                 </p:column>                
                 <p:column headerText="Categoria">
                     <h:outputText value="#{titem.categoria.nombre}" />
                 </p:column>     
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{titem.nombre}" />
+                <p:column headerText="Familia">
+                    <h:outputText value="#{titem.familia.nombre}" />
+                </p:column>
+                <p:column headerText="Descripcion">
+                    <h:outputText value="#{titem.descipcion}" />
+                </p:column>
+                <p:column headerText="N° Parte">
+                    <h:outputText value="#{titem.numParte}" />
+                </p:column>
+                <p:column headerText="Marca">
+                    <h:outputText value="#{titem.marca.nombre}" />
                 </p:column>
                 <p:column headerText="Precio">
                     <h:outputText value="#{titem.precioLista}" />
                 </p:column>
-                <p:column headerText="Marca">
-                    <h:outputText value="#{titem.nombre}" />
-                </p:column>
+                
                 
             </p:dataTable>
         
