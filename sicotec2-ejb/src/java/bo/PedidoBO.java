@@ -62,9 +62,12 @@ public class PedidoBO {
         pedidoDTO.setNombreAlmacen(nombreAlmacen);
         return pedidoDTO;
     }
-    
-    public Pedido convertDTOtoEntity(PedidoDTO dto){
+    //0 UPDATE , 1 INSERT
+    public Pedido convertDTOtoEntity(PedidoDTO dto, int tipo){
         Pedido entidad = new Pedido();
+        if(tipo == 0){
+            entidad.setIdpedido(dto.getIdpedido());
+        }
         entidad.setIdpedido(dto.getIdpedido());
         entidad.setFecha(dto.getFecha());
         entidad.setIdempresa(dto.getIdEmpresa());
@@ -75,8 +78,12 @@ public class PedidoBO {
     }
     
     public List<PedidoDTO> getPedidosByFiltro(PedidoDTO dto){
-        System.out.println(dto.getIdEmpresa().getNombre());
         List<PedidoDTO> listaDTO = this.convertEntityToDTOList(pedidoFacade.getPedidoFiltro(dto));
         return listaDTO;
+    }
+    
+    public void insertarNuevoPedido(PedidoDTO dto){
+        Pedido entidad = convertDTOtoEntity(dto , 0);
+        pedidoFacade.create(entidad);
     }
 }

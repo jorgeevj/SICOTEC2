@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.*;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 
 @ManagedBean
@@ -41,6 +42,7 @@ public class PedidoMB{
     private PedidoDTO campos;
     private PealtipoitemDTO camposPealtipoItem;
     private TipoItemDTO objTipoItem;
+    private PedidoDTO objPedido;
     private TipoItemDTO objTipoItemQuitar;
     private Empresa emp;
     private Tipoitem tipItm;
@@ -84,6 +86,20 @@ public class PedidoMB{
         getSessionBeanPedido().setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
         System.out.println(getSessionBeanPedido().getListaItemsSeleccionado());
         this.crear(null);
+    }
+    
+    public void addNuevoPedido(){
+        PedidoDTO dto = new PedidoDTO();
+        dto.setIdalmacen(campos.getIdalmacen());
+        dto.setCorrelativo(campos.getCorrelativo());
+        dto.setSerie(campos.getSerie());
+        dto.setFecha(new Date());
+        dto.setEmpresaId(campos.getEmpresaId());
+        pedidoBO.insertarNuevoPedido(dto);
+    }
+    
+    public void selectPedido(SelectEvent selectEvent){
+                    PedidoDTO dto = (objPedido);
     }
     public void crear(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
