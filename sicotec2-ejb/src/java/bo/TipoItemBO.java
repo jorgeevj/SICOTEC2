@@ -2,6 +2,7 @@ package bo;
 
 import dao.CaracteristicaFacade;
 import dao.CategoriaFacade;
+import dao.ColorFacade;
 import dao.FamiliaFacade;
 import dao.MarcaFacade;
 import dao.TipoitemFacade;
@@ -40,31 +41,10 @@ public class TipoItemBO {
     private CategoriaFacade categoriaFacade;
     @EJB
     private FamiliaFacade familiaFacade;
+    @EJB
+    private ColorFacade colorFacade;
     
-    
-    
-    public void registrarTipoItem(TipoItemDTO t){
-        Tipoitem r=convertDTOtoEntidad(t);
-        
-        tipoItemFacade.create(r);
-        
-    }
-    
-    public void actualizarTipoItem(TipoItemDTO t){
-        Tipoitem r=convertDTOtoEntidad(t);
-        
-        tipoItemFacade.edit(r);
-    }
-    public List<TipoItemDTO> getBusqueda(TipoItemDTO t){
-       
-        Tipoitem r=convertDTOtoEntidad(t);
-        List<Tipoitem> lista =tipoItemFacade.getAllBusqueda(r);
-        List<TipoItemDTO> lista1=convertEntidadToDTO(lista);
-        return lista1;
-        
-    }
-    
-      
+    ////
     public List<Caracteristica> getNombreCaracteristica(){
         List<Caracteristica> lista = caracteristicaFacade.findAll();
         return lista;
@@ -75,15 +55,41 @@ public class TipoItemBO {
         return lista;
     }
     
+    public List<Color> getNombreColor(){
+        List<Color> lista=colorFacade.findAll();
+        return lista;
+    }
+    
+     public List<Familia> getNombreFamilia(){
+        List<Familia> lista= familiaFacade.findAll();
+        return lista;
+    }
+    
     public List<Categoria> getNombreCategoria(){
         List<Categoria> lista= categoriaFacade.findAll();
         return lista;
     }
     
-    public List<Familia> getNombreFamilia(){
-        List<Familia> lista= familiaFacade.findAll();
-        return lista;
-    }
+    //////
+    public List<TipoItemDTO> buscarTipoItem(TipoItemDTO t){       
+        Tipoitem r=convertDTOtoEntidad(t);
+        List<Tipoitem> lista =tipoItemFacade.getAllBusqueda(r);
+        List<TipoItemDTO> lista1=convertEntidadToDTO(lista);
+        return lista1;      
+    }    
+    public void registrarTipoItem(TipoItemDTO t){        
+        Tipoitem e=new Tipoitem();
+         e=convertDTOtoEntidad(t);        
+        tipoItemFacade.create(e);        
+    }    
+    public void modificarTipoItem(TipoItemDTO t){
+        Tipoitem r=convertDTOtoEntidad(t);        
+        tipoItemFacade.edit(r);
+    }    
+    /////
+    
+      
+    
     
     public List<TipoItemDTO> getAllTipoItem(){
         
@@ -106,48 +112,43 @@ public class TipoItemBO {
         }
          return lista3;
     }
-    
+    public Tipoitem convertDTOtoEntidad(TipoItemDTO a){
+        Tipoitem e=new Tipoitem();        
+            e.setIdtipoItem(a.getIdtipoItem());
+            e.setNumParte(a.getNumParte());
+            e.setNombre(a.getNombre());
+            e.setDescripcion(a.getDescipcion());
+            e.setTipo(a.getTipo());
+            e.setPrecioLista(a.getPrecioLista());
+            e.setDesCliente(a.getDesCliente());
+            e.setDesDistribuidor(a.getDesDistribuidor());
+
+            e.setIdfamilia(new Familia());
+            e.getIdfamilia().setIdfamilia(a.getIdFamilia());
+            e.setIdmarca(new Marca());
+            e.getIdmarca().setIdmarca(a.getIdMarca());
+            e.setIdcolor(new Color());
+            e.getIdcolor().setIdcolor(a.getIdColor());
+        return e;
+    }
     public TipoItemDTO convertEntidadToDTO(Tipoitem ite){
-        TipoItemDTO T=new TipoItemDTO();
-            
+        TipoItemDTO T=new TipoItemDTO();            
             T.setIdtipoItem(ite.getIdtipoItem());
+            T.setNumParte(ite.getNumParte());
             T.setNombre(ite.getNombre());
             T.setDescipcion(ite.getDescripcion());
+            T.setTipo(ite.getTipo());
+            T.setPrecioLista(ite.getPrecioLista());
+            T.setDesCliente(ite.getDesCliente());
+            T.setDesDistribuidor(ite.getDesDistribuidor());
+            
             T.setFamilia(ite.getIdfamilia());
             T.setCategoria(ite.getIdfamilia().getIdcategoria());
             T.setIdCategoria(ite.getIdfamilia().getIdcategoria().getIdcategoria());
             T.setMarca(ite.getIdmarca());
-            T.setNumParte(ite.getNumParte());
-            T.setDesCliente(ite.getDesCliente());
-            T.setDesDistribuidor(ite.getDesDistribuidor());
-            T.setPrecioLista(ite.getPrecioLista());
-            T.setTipo(ite.getTipo());
             T.setColor(ite.getIdcolor());
             return T;
     }
     
-    public Tipoitem convertDTOtoEntidad(TipoItemDTO a){
-        Tipoitem e=new Tipoitem();
-        e.setIdtipoItem(a.getIdtipoItem());
-        
-        e.setIdfamilia(new Familia());
-        e.getIdfamilia().setIdfamilia(a.getIdFamilia());
-        
-        e.setNumParte(a.getNumParte());
-        
-        e.setIdcolor(new Color());
-        e.getIdcolor().setIdcolor(a.getIdColor());
-        
-        e.setIdmarca(new Marca());
-        e.getIdmarca().setIdmarca(a.getIdMarca());
-        
-        
-        e.setDescripcion(a.getDescipcion());
-        e.setNombre(a.getNombre());
-        e.setDesCliente(a.getDesCliente());
-        e.setDesDistribuidor(a.getDesDistribuidor());
-        e.setPrecioLista(a.getPrecioLista());
-        e.setTipo(a.getTipo());
-        return e;
-    }
+    
 }
