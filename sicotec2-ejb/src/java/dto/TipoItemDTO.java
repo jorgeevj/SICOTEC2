@@ -19,27 +19,26 @@ import entidades.Tipoitem;
 public class TipoItemDTO {
     
     private String idtipoItem;
+    private String numParte;
     private String nombre;
+    private String descipcion;
     private String tipo;
     private Double precioLista;
     private String desCliente;
     private String desDistribuidor;
-    private Integer idCaracteristica;
-    private Caracteristica caracteristica;
-    private String descripcionCaracteristica;
-    private Integer idFamilia;    
-    private Familia familia;
+    
+    private Integer idFamilia; 
     private Integer idMarca;
-    private Marca marca;
+    private Integer idColor;    
+    private Integer idCaracteristica; 
     private Integer idCategoria;
-    private Categoria categoria;
-    private String descipcion;
-    private String numParte;
+    
+    private Caracteristica caracteristica;   
+    private Familia familia;
+    private Marca marca;
     private Color color;
-    private Integer idColor;
+    private Categoria categoria;
     
-    
-
     public Caracteristica getCaracteristica() {
         return caracteristica;
     }
@@ -58,86 +57,62 @@ public class TipoItemDTO {
     
     
     
-    /**
-     * @return the idtipoItem
-     */
+    
     public String getIdtipoItem() {
         return idtipoItem;
     }
 
-    /**
-     * @param idtipoItem the idtipoItem to set
-     */
+    
     public void setIdtipoItem(String idtipoItem) {
         this.idtipoItem = idtipoItem;
     }
 
-    /**
-     * @return the nombre
-     */
+    
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * @param nombre the nombre to set
-     */
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    /**
-     * @return the tipo
-     */
+    
     public String getTipo() {
         return tipo;
     }
 
-    /**
-     * @param tipo the tipo to set
-     */
+    
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
-    /**
-     * @return the precioLista
-     */
+    
     public Double getPrecioLista() {
         return precioLista;
     }
 
-    /**
-     * @param precioLista the precioLista to set
-     */
+    
     public void setPrecioLista(Double precioLista) {
         this.precioLista = precioLista;
     }
 
-    /**
-     * @return the desCliente
-     */
+    
     public String getDesCliente() {
         return desCliente;
     }
 
-    /**
-     * @param desCliente the desCliente to set
-     */
+    
     public void setDesCliente(String desCliente) {
         this.desCliente = desCliente;
     }
 
-    /**
-     * @return the desDistribuidor
-     */
+    
     public String getDesDistribuidor() {
         return desDistribuidor;
     }
 
-    /**
-     * @param desDistribuidor the desDistribuidor to set
-     */
+    
     public void setDesDistribuidor(String desDistribuidor) {
         this.desDistribuidor = desDistribuidor;
     }
@@ -149,15 +124,6 @@ public class TipoItemDTO {
     public void setIdCaracteristica(Integer idCaracteristica) {
         this.idCaracteristica = idCaracteristica;
     }
-
-    public String getDescripcionCaracteristica() {
-        return descripcionCaracteristica;
-    }
-
-    public void setDescripcionCaracteristica(String descripcionCaracteristica) {
-        this.descripcionCaracteristica = descripcionCaracteristica;
-    }
-
     public Integer getIdFamilia() {
         return idFamilia;
     }
