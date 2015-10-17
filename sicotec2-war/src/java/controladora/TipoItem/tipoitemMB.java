@@ -25,8 +25,7 @@ import org.primefaces.context.RequestContext;
 @SessionScoped
 public class tipoitemMB {
    @EJB
-    private TipoItemBO tipoItemBO;
-    
+    private TipoItemBO tipoItemBO;    
     
     private String codigoItem;
     private String numParte;
@@ -37,58 +36,72 @@ public class tipoitemMB {
     private String dsctoCliente;
     private String dsctoDistribuidor;
     
-    private String caracteristicas;
-    private String categoria;
-    private String marca;
-    
     private String caracteristicaSelect;
-    private String categoriaSelect;
-    private String familiaSelect;
     private String marcaSelect;
     private String colorSelect; 
+    private String familiaSelect;
+    private String categoriaSelect; //posible no uso
     
     private List<TipoItemDTO> lista;
     private List<Caracteristica> listaCaracteristicas;
     private List<Marca> listaMarca;
-    private List<Categoria> listaCategoria;
-    private List<Familia> listaFamilia;
     private List<Color> listaColor;
+    private List<Familia> listaFamilia;
+    private List<Categoria> listaCategoria;  
+    
+    private List<Caracteristica> lista2; //para listar en la tabla caracteristicas
 
     public tipoitemMB() {
     }
     
     @PostConstruct
-    public void init(){ 
-     lista=new ArrayList<>();
+    public void init() {
+        lista = new ArrayList<>();
+        lista2= new ArrayList<>();
         setLista((List<TipoItemDTO>) new ArrayList());
-
-     setLista(tipoItemBO.getAllTipoItem());
-     listarCaracteristicas();
-    listarCategoria();
-    listarFamilia();
-    listarMarca();
+        setLista(tipoItemBO.getAllTipoItem());
+        setLista2(listarTablaCaracteristicas());
+        listarCaracteristicas();
+        listarCategoria();
+        listarFamilia();
+        listarMarca();
     }
     
-    public void guardar(){
-        
-        System.out.println(getNombre()); 
-        //ut.mostrarNotificacion(RequestContext.getCurrentInstance(), "holi", 1000);
+    ///
+    public void listarCaracteristicas(){        
+        listaCaracteristicas=tipoItemBO.getNombreCaracteristica();
+    }    
+    public void listarMarca(){
+        listaMarca=tipoItemBO.getNombreMarca();
     }
-    
-    public void buscar(ActionEvent actionEvent){        
+    public void listarColor(){
+        listaColor=tipoItemBO.getNombreColor();
+    }    
+    public void listarFamilia(){
+       listaFamilia=tipoItemBO.getNombreFamilia();
+    }    
+    public void listarCategoria(){
+        listaCategoria=tipoItemBO.getNombreCategoria();
+    }
+    ///
+    public void buscarItem(ActionEvent actionEvent){        
         
         TipoItemDTO lis=new TipoItemDTO();
         lis.setIdtipoItem(codigoItem);
         lis.setNombre(nombre);
-        
-        
-        lista=tipoItemBO.getBusqueda(lis);
+        //lis.setMarca(marca);       
+        lista=tipoItemBO.buscarTipoItem(lis);
     }
     
-    public void listarCaracteristicas(){
+    public List<Caracteristica> listarTablaCaracteristicas(){
+        Caracteristica obj=new Caracteristica();
         
-        listaCaracteristicas=tipoItemBO.getNombreCaracteristica();
+        obj.setNombre(caracteristicaSelect);
+        lista2.add(obj);
+       return lista2;
     }
+    
+    
     public void registrarItem(){
     
     RequestContext context = RequestContext.getCurrentInstance(); 
@@ -100,17 +113,21 @@ public class tipoitemMB {
     public void registrarNuevoTipoItem(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setIdtipoItem(codigoItem);
-        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
-        objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
-        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        //objTipoItem.setDescripcionCaracteristica(descripcion);
+        objTipoItem.setNumParte(numParte);
+        objTipoItem.setNombre(nombre);
+        objTipoItem.setDescipcion(descripcion);
+        objTipoItem.setTipo(tipo);
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
+        
+        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));
+        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
+        objTipoItem.setIdColor(Integer.parseInt(colorSelect));
+        //objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
         tipoItemBO.registrarTipoItem(objTipoItem);
-        
-        
     }
+    
     public void registrarNuevaMarca(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
         //objTipoItem.setId
@@ -131,20 +148,10 @@ public class tipoitemMB {
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
-        tipoItemBO.actualizarTipoItem(objTipoItem);
+        tipoItemBO.modificarTipoItem(objTipoItem);
     }
     
-    public void listarMarca(){
-        listaMarca=tipoItemBO.getNombreMarca();
-    }
     
-    public void listarFamilia(){
-       listaFamilia=tipoItemBO.getNombreFamilia();
-    }
-    
-    public void listarCategoria(){
-        listaCategoria=tipoItemBO.getNombreCategoria();
-    }
 
     
     public String getNombre() {
@@ -167,24 +174,7 @@ public class tipoitemMB {
     }
 
     
-    public String getCaracteristicas() {
-        return caracteristicas;
-    }
-
     
-    public void setCaracteristicas(String caracteristicas) {
-        this.caracteristicas = caracteristicas;
-    }
-
-    
-    public String getCategoria() {
-        return categoria;
-    }
-
-    
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
 
     
     public List<TipoItemDTO> getLista() {
@@ -304,15 +294,7 @@ public class tipoitemMB {
 
     public void setTipoItemBO(TipoItemBO tipoItemBO) {
         this.tipoItemBO = tipoItemBO;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
+    }   
 
     public String getNumParte() {
         return numParte;
@@ -344,6 +326,14 @@ public class tipoitemMB {
 
     public void setListaColor(List<Color> listaColor) {
         this.listaColor = listaColor;
+    }
+
+    public List<Caracteristica> getLista2() {
+        return lista2;
+    }
+
+    public void setLista2(List<Caracteristica> lista2) {
+        this.lista2 = lista2;
     }
     
     
