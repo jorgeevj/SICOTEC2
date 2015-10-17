@@ -13,25 +13,22 @@
                 <h:panelGrid columns="2">
                 
                     <p:outputLabel for="uno" value="Cod. Item:"/>
-                    
-                    <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" style="width:50%"/>
-                    
-                
+                    <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" style="width:50%"/>                
                                  
                     <p:outputLabel for="dos" value="Nombre:"/>
-                    
                     <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
                     
-                    <p:outputLabel for="tres" value="Marca:"/>
-                    
-                    <p:inputText id="tres" value="#{tipoitemMB.marca}" style="width:50%"/>    
+                    <p:outputLabel value="Marca:" for="marcaItem"/>                            
+                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
+                        <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
+                                               itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
+                    </p:selectOneMenu>
                                  
-                    <p:outputLabel for="cuatro" value="Características:"/>
                     
-                    <p:inputText id="cuatro" value="#{tipoitemMB.caracteristicas}" style="width:50%"/>
                     
                 </h:panelGrid>
-                <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscar}" update="tabla" title="Consultar"/>                
+                <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscarItem}" update="tabla" title="Consultar"/>                
                 <p:commandButton value="Registrar" actionListener="#{tipoitemMB.registrarItem}"/>            
                 <p:commandButton value="Modificar" onclick="PF('editarItem').show();" />
                 <p:commandButton value="Eliminar" onclick="PF('mensajeEliminar').show();" />
