@@ -6,9 +6,11 @@
 package dao;
 
 import entidades.Docalmacen;
+import entidades.Movimiento;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -16,6 +18,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class DocalmacenFacade extends AbstractFacade<Docalmacen> {
+
     @PersistenceContext(unitName = "sicotec2-ejbPU")
     private EntityManager em;
 
@@ -27,5 +30,17 @@ public class DocalmacenFacade extends AbstractFacade<Docalmacen> {
     public DocalmacenFacade() {
         super(Docalmacen.class);
     }
-    
+
+    public Docalmacen findBy2key(int idalmacen, int iddocumento) {
+
+        String sql = "Select d from Docalmacen d "
+                + "where d.almacen.idalmacen= :idalm "
+                + "and d.documento.iddocumento= :iddoc";
+
+        Query query = em.createQuery(sql);
+        query.setParameter("idalm", idalmacen);
+        query.setParameter("iddoc", iddocumento);
+        return (Docalmacen) query.getSingleResult();
+    }
+
 }

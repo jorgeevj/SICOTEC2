@@ -60,4 +60,9 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
           return l; 
         
     } 
+      public Cotizacion guardaCot(Cotizacion cot) {
+        getEntityManager().persist(cot);
+        getEntityManager().flush();
+        return cot;
+    }
 }
