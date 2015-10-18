@@ -6,9 +6,12 @@
 package controladora.Compra;
 
 import Util.Utils;
+import bo.AlmacenBO;
 import bo.CompraBO;
 import bo.EmpresaBO;
+import dto.AlmacenDTO;
 import dto.CompraDTO;
+import dto.EmpresaDTO;
 import entidades.Almacen;
 import entidades.Compra;
 import entidades.Documento;
@@ -19,6 +22,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -27,10 +31,13 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @SessionScoped
 public class CompraMB {
-//    @EJB
-//    private CompraBO CompraBO;
+
     @EJB
     private CompraBO compraBO;
+    @EJB
+    private EmpresaBO empresaBO;
+    @EJB
+    private AlmacenBO almacenBO;
     
     
     private List<Compra> listaCompra;
@@ -48,6 +55,8 @@ public class CompraMB {
          getSessionBeanCompra().setListaTCompra(compraBO.getAllCompras());
         emp=new Empresa();
         campos = new CompraDTO();
+        getSessionBeanCompra().setListaEmpresaAdd(this.comboEmpresas());
+        getSessionBeanCompra().setListaAlmacenesAdd(this.comboAlmacen());
         campos.setIdcompra(0);
         campos.setIdempresa(emp);
        
@@ -56,31 +65,34 @@ public class CompraMB {
         System.out.println("nombre"+campos.getIdempresa().getNombre());
             getSessionBeanCompra().setListaCompra(compraBO.BuscarCompra(campos));
             return getSessionBeanCompra().getListaCompra();
-        }
-    /**
-     * @return the CompraBO
-     */
+    }
+    
+    public void crear(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addComprasModal').show();");
+    }
+    public List<EmpresaDTO> comboEmpresas(){
+         List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
+         return listaDto;
+     }
+     public List<AlmacenDTO> comboAlmacen(){
+         List<AlmacenDTO> listaDto = almacenBO.getAllAlmaces();
+         return listaDto;
+     }
+    
+    
     public CompraBO getCompraBO() {
         return compraBO;
     }
 
-    /**
-     * @param CompraBO the CompraBO to set
-     */
     public void setCompraBO(CompraBO CompraBO) {
         this.compraBO = CompraBO;
     }
 
-    /**
-     * @return the sessionBeanCompra
-     */
     public SessionBeanCompra getSessionBeanCompra() {
         return sessionBeanCompra;
     }
 
-    /**
-     * @param sessionBeanCompra the sessionBeanCompra to set
-     */
     public void setSessionBeanCompra(SessionBeanCompra sessionBeanCompra) {
         this.sessionBeanCompra = sessionBeanCompra;
     }

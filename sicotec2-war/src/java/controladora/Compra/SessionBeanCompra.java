@@ -5,6 +5,7 @@
  */
 package controladora.Compra;
 
+import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
 import java.util.ArrayList;
@@ -21,17 +22,14 @@ import javax.faces.bean.SessionScoped;
 public class SessionBeanCompra {
     
      private List<CompraDTO> listaCompra = new ArrayList<CompraDTO>();
-     private List<EmpresaDTO>listaEmpresa=new ArrayList<EmpresaDTO>();
-    /**
-     * @return the listaTCompra
-     */
+     private List<EmpresaDTO>listaEmpresaAdd=new ArrayList<EmpresaDTO>();
+     private List<AlmacenDTO> listaAlmacenesAdd = new ArrayList<AlmacenDTO>();
+   
     public List<CompraDTO> getListaTCompra() {
         return listaCompra;
     }
 
-    /**
-     * @param listaTCompra the listaTCompra to set
-     */
+  
     public void setListaTCompra(List<CompraDTO> listaTCompra) {
         this.listaCompra = listaTCompra;
     }
@@ -44,12 +42,22 @@ public class SessionBeanCompra {
         this.listaCompra = listaCompra;
     }
 
-    public List<EmpresaDTO> getListaEmpresa() {
-        return listaEmpresa;
+    
+
+    public List<AlmacenDTO> getListaAlmacenesAdd() {
+        return listaAlmacenesAdd;
     }
 
-    public void setListaEmpresa(List<EmpresaDTO> listaEmpresa) {
-        this.listaEmpresa = listaEmpresa;
+    public void setListaAlmacenesAdd(List<AlmacenDTO> listaAlmacenesAdd) {
+        this.listaAlmacenesAdd = listaAlmacenesAdd;
+    }
+
+    public List<EmpresaDTO> getListaEmpresaAdd() {
+        return listaEmpresaAdd;
+    }
+
+    public void setListaEmpresaAdd(List<EmpresaDTO> listaEmpresaAdd) {
+        this.listaEmpresaAdd = listaEmpresaAdd;
     }
     
      
