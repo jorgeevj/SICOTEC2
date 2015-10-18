@@ -111,7 +111,27 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE COMPRAS-->
-
+            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="300" width="500">
+                <h:form id="formAddCompra">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.campos.idempresa}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
+                                             itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:selectOneMenu id="almacenesCompra" styleClass="browser-default" value="#{compraMB.campos.idalmacen}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                        <p:commandButton value="Agregar Compras" onclick="PF('addComprasModal').show();"/>
+                        <br/><br/><br/>
+                        <p:commandButton value="Agregar" />
+                </h:form>
+            </p:dialog> 
             <!-- FIN DIALOG DE COMPRAS-->
 
 
