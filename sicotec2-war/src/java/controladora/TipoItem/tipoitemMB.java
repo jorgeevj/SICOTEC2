@@ -33,8 +33,8 @@ public class tipoitemMB {
     private String descripcion;
     private String tipo;
     private String precio;
-    private String dsctoCliente;
-    private String dsctoDistribuidor;
+    private double dsctoCliente;
+    private double dsctoDistribuidor;
     
     private String caracteristicaSelect;
     private String marcaSelect;
@@ -272,19 +272,19 @@ public class tipoitemMB {
         this.precio = precio;
     }
 
-    public String getDsctoCliente() {
+    public double getDsctoCliente() {
         return dsctoCliente;
     }
 
-    public void setDsctoCliente(String dsctoCliente) {
+    public void setDsctoCliente(double dsctoCliente) {
         this.dsctoCliente = dsctoCliente;
     }
 
-    public String getDsctoDistribuidor() {
+    public double getDsctoDistribuidor() {
         return dsctoDistribuidor;
     }
 
-    public void setDsctoDistribuidor(String dsctoDistribuidor) {
+    public void setDsctoDistribuidor(double dsctoDistribuidor) {
         this.dsctoDistribuidor = dsctoDistribuidor;
     }
 
