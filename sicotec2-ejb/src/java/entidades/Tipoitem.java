@@ -42,6 +42,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Tipoitem.findByDesCliente", query = "SELECT t FROM Tipoitem t WHERE t.desCliente = :desCliente"),
     @NamedQuery(name = "Tipoitem.findByDesDistribuidor", query = "SELECT t FROM Tipoitem t WHERE t.desDistribuidor = :desDistribuidor")})
 public class Tipoitem implements Serializable {
+    @Column(name = "desCliente")
+    private Double desCliente;
+    @Column(name = "desDistribuidor")
+    private Double desDistribuidor;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -66,12 +70,6 @@ public class Tipoitem implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precioLista")
     private Double precioLista;
-    @Size(max = 45)
-    @Column(name = "desCliente")
-    private String desCliente;
-    @Size(max = 45)
-    @Column(name = "desDistribuidor")
-    private String desDistribuidor;
     @ManyToMany(mappedBy = "tipoitemList")
     private List<Caracteristica> caracteristicaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
@@ -148,21 +146,6 @@ public class Tipoitem implements Serializable {
         this.precioLista = precioLista;
     }
 
-    public String getDesCliente() {
-        return desCliente;
-    }
-
-    public void setDesCliente(String desCliente) {
-        this.desCliente = desCliente;
-    }
-
-    public String getDesDistribuidor() {
-        return desDistribuidor;
-    }
-
-    public void setDesDistribuidor(String desDistribuidor) {
-        this.desDistribuidor = desDistribuidor;
-    }
 
     @XmlTransient
     public List<Caracteristica> getCaracteristicaList() {
@@ -238,6 +221,22 @@ public class Tipoitem implements Serializable {
     @Override
     public String toString() {
         return "entidades.Tipoitem[ idtipoItem=" + idtipoItem + " ]";
+    }
+
+    public Double getDesCliente() {
+        return desCliente;
+    }
+
+    public void setDesCliente(Double desCliente) {
+        this.desCliente = desCliente;
+    }
+
+    public Double getDesDistribuidor() {
+        return desDistribuidor;
+    }
+
+    public void setDesDistribuidor(Double desDistribuidor) {
+        this.desDistribuidor = desDistribuidor;
     }
     
 }

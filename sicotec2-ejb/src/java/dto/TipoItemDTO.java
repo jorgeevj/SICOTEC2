@@ -24,8 +24,8 @@ public class TipoItemDTO {
     private String descipcion;
     private String tipo;
     private Double precioLista;
-    private String desCliente;
-    private String desDistribuidor;
+    private Double desCliente;
+    private Double desDistribuidor;
     
     private Integer idFamilia; 
     private Integer idMarca;
@@ -98,22 +98,22 @@ public class TipoItemDTO {
     }
 
     
-    public String getDesCliente() {
+    public Double getDesCliente() {
         return desCliente;
     }
 
     
-    public void setDesCliente(String desCliente) {
+    public void setDesCliente(Double desCliente) {
         this.desCliente = desCliente;
     }
 
     
-    public String getDesDistribuidor() {
+    public Double getDesDistribuidor() {
         return desDistribuidor;
     }
 
     
-    public void setDesDistribuidor(String desDistribuidor) {
+    public void setDesDistribuidor(Double desDistribuidor) {
         this.desDistribuidor = desDistribuidor;
     }
 

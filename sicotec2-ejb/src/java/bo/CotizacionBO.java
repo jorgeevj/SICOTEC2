@@ -23,6 +23,7 @@ import entidades.Cotizacion;
 import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Empresa;
+import entidades.Tipo;
 import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +55,27 @@ public class CotizacionBO {
     private AlmacenFacade almacenFacade;
     @EJB
     private CotizacionFacade cotizacionFacade;
-
+    
+    public boolean isEmpDistribudora(Empresa e){
+        e=empresaFacade.find(e.getIdempresa());
+        for (Tipo t : e.getTipoList()) {
+        if(t.getIdtipo()==1){
+            return true;
+        }
+        }
+    return false;
+    }
+    
+    
     public Docalmacen updateDocAlm(Docalmacen dal) {
         Docalmacen d = docalmacenFacade.findBy2key(dal.getDocalmacenPK().getIdalmacen(), dal.getDocalmacenPK().getIddocumento());
-        dal.setCorrelativo(d.getCorrelativo() + 1);
-        dal.setSerie(d.getSerie());
+        if(d.getCorrelativo()<999999){
+            dal.setCorrelativo(d.getCorrelativo() + 1);
+            dal.setSerie(d.getSerie());
+        }else{
+            dal.setSerie(d.getSerie()+1);
+            dal.setCorrelativo(1);
+        }
         docalmacenFacade.edit(dal);
         return dal;
     }
@@ -66,11 +83,9 @@ public class CotizacionBO {
     public Cotizacion guardarCrear(Cotizacion c) {
         Docalmacen da = docalmacenFacade.findBy2key(c.getIdalmacen(), 1);
         da = updateDocAlm(da);
-        c.setSerie(da.getSerie() + "");
-        c.setCorrelativo(da.getCorrelativo() + "");
-//        c.setDuracion(Integer.SIZE);
+        c.setSerie(String.format("%03d", da.getSerie()));
+        c.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         return cotizacionFacade.guardaCot(c);
-//        return null;
     }
 
     public void guardarCrearItems(List<CotipoitemDTO> ct) {
@@ -150,6 +165,10 @@ public class CotizacionBO {
         cti.setDescuento(c.getDescuento());
         cti.setPrecio(c.getPrecio());
         return cti;
+    }
+
+    public void generaVentaCrea(List<CotipoitemDTO> ct) {
+        
     }
 
 }
