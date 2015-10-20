@@ -6,9 +6,12 @@
 package dao;
 
 import entidades.Categoria;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,5 +30,7 @@ public class CategoriaFacade extends AbstractFacade<Categoria> {
     public CategoriaFacade() {
         super(Categoria.class);
     }
+    
+    
     
 }
