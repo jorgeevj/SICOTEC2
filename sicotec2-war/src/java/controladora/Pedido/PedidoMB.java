@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.*;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 
 @ManagedBean
@@ -53,6 +54,7 @@ public class PedidoMB{
     
     //AGREGAR
     private PedidoDTO camposAdd;
+    private PealtipoitemDTO camposPeXItemAdd;
     
     //EDITAR
     private PedidoDTO camposEdit;
@@ -75,6 +77,7 @@ public class PedidoMB{
         camposAdd = new PedidoDTO();
         camposAdd.setIdpedido(0);
         camposAdd.setIdEmpresa(emp);
+        objTipoItemQuitar = new TipoItemDTO();
     }
         
     
@@ -85,13 +88,19 @@ public class PedidoMB{
     }
     
     public void agregarTipoItem(ActionEvent actionEvent){
-        ListaItemsSeleccionado.add(objTipoItem);
-        ListaItemsDisponibles.remove(objTipoItem);
+        getListaItemsDisponibles().remove(getObjTipoItem());
+        getListaItemsSeleccionado().add(getObjTipoItem());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formAddItems");
+        context.update("formTbSelec");
     }
     
     public void quitarTipoItem(ActionEvent actionEvent){
-        ListaItemsDisponibles.add(objTipoItem);
-        ListaItemsSeleccionado.remove(objTipoItem);
+        getListaItemsDisponibles().add(getObjTipoItemQuitar());
+        getListaItemsSeleccionado().remove(getObjTipoItemQuitar());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formAddItems");
+        context.update("formTbSelec");
     }
     
     public void abrirModalAddPedido(){
@@ -101,9 +110,18 @@ public class PedidoMB{
     }
     
     public void addNuevoPedido(ActionEvent actionEvent){
+        PealtipoitemDTO dtoPXI = new PealtipoitemDTO();
         PedidoDTO  dto = pedidoBO.insertarNuevoPedido(camposAdd); 
+        List<PealtipoitemDTO> listPXI = new ArrayList<PealtipoitemDTO>();
+        for(TipoItemDTO dtoTI : getListaItemsSeleccionado()){
+            dtoPXI.setCostoUni(dtoTI.getPrecioLista());
+            dtoPXI.setCantidad(24);
+            dtoPXI.setEstado(1);
+        }
         
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("tabPedidosFrom");
         this.cerrar();
         //pedidoBO.insertarNuevoPedido(dto);
     }
@@ -114,7 +132,13 @@ public class PedidoMB{
     }
     
     
+    public void selectTipoItemAdd(SelectEvent event) {
+        setObjTipoItem((TipoItemDTO)event.getObject());
+    }
     
+    public void selectTipoItemQuitar(SelectEvent event) {
+        setObjTipoItemQuitar((TipoItemDTO)event.getObject());
+    }
     
     
     public void crear(ActionEvent actionEvent){
@@ -260,6 +284,14 @@ public class PedidoMB{
 
     public void setCamposEdit(PedidoDTO camposEdit) {
         this.camposEdit = camposEdit;
+    }
+
+    public PealtipoitemDTO getCamposPeXItemAdd() {
+        return camposPeXItemAdd;
+    }
+
+    public void setCamposPeXItemAdd(PealtipoitemDTO camposPeXItemAdd) {
+        this.camposPeXItemAdd = camposPeXItemAdd;
     }
     
 }
