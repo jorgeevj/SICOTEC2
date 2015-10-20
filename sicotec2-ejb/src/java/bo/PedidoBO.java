@@ -6,8 +6,12 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.PealtipoitemFacade;
 import dao.PedidoFacade;
+import dto.PealtipoitemDTO;
 import dto.PedidoDTO;
+import entidades.Pealtipoitem;
+import entidades.PealtipoitemPK;
 import entidades.Pedido;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +32,8 @@ public class PedidoBO {
     private PedidoFacade pedidoFacade = new PedidoFacade();
     @EJB
     private AlmacenFacade almacenFacade = new AlmacenFacade();
+    @EJB
+    private PealtipoitemFacade pealtipoitemFacade = new PealtipoitemFacade();
 
     public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();
@@ -82,16 +88,36 @@ public class PedidoBO {
         return listaDTO;
     }
     
-    public PedidoDTO insertarNuevoPedido(PedidoDTO dto){
+    public Pedido insertarNuevoPedido(PedidoDTO dto ){
         Pedido entidad = convertDTOtoEntity(dto , 1);
-        PedidoDTO pedidoDTO = new PedidoDTO();
-        pedidoDTO = converEntityToDTO(pedidoFacade.agregarPedido(entidad));
-        //pedidoFacade.create(entidad);
-        return pedidoDTO;
+        entidad = pedidoFacade.agregarPedido(entidad);
+        return entidad;
+    }
+    
+    public void insertarPedidoTipoItem(List<PealtipoitemDTO> listDTO){
+        List<Pealtipoitem> listaEntidad = convertDTOtoEntityPealTipoItem(listDTO);
+        for(Pealtipoitem entidadPTI : listaEntidad){
+            pealtipoitemFacade.create(entidadPTI);
+        }
     }
     
     public void actualizarPedido(PedidoDTO dto){
         Pedido entidad = convertDTOtoEntity(dto, 0);
         pedidoFacade.edit(entidad);
+    }
+    
+    public List<Pealtipoitem> convertDTOtoEntityPealTipoItem(List<PealtipoitemDTO> listDTO){
+        List<Pealtipoitem> listaEntidad = new ArrayList<Pealtipoitem>();
+        for(PealtipoitemDTO dto : listDTO){
+            Pealtipoitem entidad = new Pealtipoitem();
+            entidad.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(), dto.getAltipoitem().getAlmacen().getIdalmacen(), dto.getAltipoitem().getTipoitem().getIdtipoItem()));
+            entidad.setPedido(dto.getPedido());
+            entidad.setCantidad(dto.getCantidad());
+            entidad.setCostoUni(dto.getCostoUni());
+            entidad.setEstado(dto.getEstado());
+            entidad.setAltipoitem(dto.getAltipoitem());
+            listaEntidad.add(entidad);
+        }
+        return listaEntidad;
     }
 }

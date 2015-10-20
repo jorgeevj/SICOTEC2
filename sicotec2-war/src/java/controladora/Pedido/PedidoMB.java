@@ -11,11 +11,17 @@ import bo.EmpresaBO;
 import bo.PedidoBO;
 import bo.TipoItemBO;
 import dto.AlmacenDTO;
+import dto.AltipoitemDTO;
 import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
 import dto.PedidoDTO;
 import dto.TipoItemDTO;
+import entidades.Almacen;
+import entidades.Altipoitem;
+import entidades.AltipoitemPK;
 import entidades.Empresa;
+import entidades.Pedido;
+import entidades.Tipo;
 import entidades.Tipoitem;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -110,14 +116,28 @@ public class PedidoMB{
     }
     
     public void addNuevoPedido(ActionEvent actionEvent){
+        Pedido entidad = pedidoBO.insertarNuevoPedido(camposAdd); 
         PealtipoitemDTO dtoPXI = new PealtipoitemDTO();
-        PedidoDTO  dto = pedidoBO.insertarNuevoPedido(camposAdd); 
         List<PealtipoitemDTO> listPXI = new ArrayList<PealtipoitemDTO>();
+        Altipoitem altipoitem = new Altipoitem();
+        Almacen   almacen = new Almacen();
+            almacen.setIdalmacen(camposAdd.getIdalmacen());
+            altipoitem.setAlmacen(almacen);
         for(TipoItemDTO dtoTI : getListaItemsSeleccionado()){
+            Tipoitem tipoItemEntidad = new Tipoitem();
+            dtoPXI.setPedido(entidad);
+                tipoItemEntidad.setIdtipoItem(dtoTI.getIdtipoItem());
+                altipoitem.setTipoitem(tipoItemEntidad);
+                altipoitem.setAltipoitemPK(new AltipoitemPK(altipoitem.getAlmacen().getIdalmacen(), altipoitem.getTipoitem().getIdtipoItem()));
+            dtoPXI.setAltipoitem(altipoitem);
             dtoPXI.setCostoUni(dtoTI.getPrecioLista());
-            dtoPXI.setCantidad(24);
+            dtoPXI.setCantidad(34);
             dtoPXI.setEstado(1);
+            listPXI.add(dtoPXI);
         }
+        
+        pedidoBO.insertarPedidoTipoItem(listPXI);
+
         
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
         RequestContext context = RequestContext.getCurrentInstance(); 
