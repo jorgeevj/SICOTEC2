@@ -7,7 +7,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
-        #{pedidoMB.init()}
+        <!--#{pedidoMB.init()}-->
         <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Pedido Details" style="margin-bottom:20px">
             <h:form id="formPedido">
                 <h:panelGrid columns="2">
@@ -16,41 +16,42 @@
                     <p:outputLabel for="it2" value="Ruc: "></p:outputLabel>
                     <p:inputText   id="it2" value="#{pedidoMB.campos.idEmpresa.ruc}"/>
                 </h:panelGrid>
-                <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update="tabPedidos"/>
+                <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update=":tabPedidosFrom:tabPedidos"/>
                 <p:commandButton value="Agregar" actionListener="#{pedidoMB.abrirModalAddPedido}" id="btnAgregar" title="Agregar" />
             </h:form>     
-                
-            <h:panelGrid > 
-                <p:spacer></p:spacer>
-                <p:dataTable tableStyleClass="table table-hover"  id="tabPedidos" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
-                    <p:column headerText="ID" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.idpedido}"/>
-                    </p:column>
-                    <p:column headerText="Empresa" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.nombreEmpresa}"/>
-                    </p:column>
-                    <p:column headerText="Fecha" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.fecha}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="N° Serie" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.serie}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="Correlativo" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.correlativo}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="Almacen" style="text-align: center">
-                        <p:outputLabel value="#{tPedido.nombreAlmacen}">
-                            <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </p:outputLabel>
-                    </p:column>
-                </p:dataTable>
-            </h:panelGrid>
+            <h:form id="tabPedidosFrom">
+                <h:panelGrid > 
+                    <p:spacer></p:spacer>
+                    <p:dataTable tableStyleClass="table table-hover"  id="tabPedidos" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
+                        <p:column headerText="ID" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.idpedido}"/>
+                        </p:column>
+                        <p:column headerText="Empresa" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.nombreEmpresa}"/>
+                        </p:column>
+                        <p:column headerText="Fecha" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="N° Serie" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.serie}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Correlativo" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.correlativo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Almacen" style="text-align: center">
+                            <p:outputLabel value="#{tPedido.nombreAlmacen}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:form>
         </p:panel> 
 
 
