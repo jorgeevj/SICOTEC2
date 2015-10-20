@@ -486,14 +486,7 @@ jorgeevj 15.09.15 Creacion.
                                 <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
                                 <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
                                                itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
-                            </p:selectOneMenu>
-                            
-                            <p:outputLabel value="Categoría:" for="categoriaItem"/>                            
-                            <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.categoriaSelect}"  >
-                               <f:selectItem itemLabel="Seleccione categoría..." itemValue="0" />
-                               <f:selectItems value="#{tipoitemMB.listaCategoria}" var="nomCategoria" 
-                                              itemValue="#{nomCategoria.idcategoria}" itemLabel="#{nomCategoria.nombre}"/>
-                            </p:selectOneMenu>
+                            </p:selectOneMenu>                        
                             
                             <p:outputLabel value="Marca:" for="marcaItem"/>                            
                             <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
@@ -577,8 +570,91 @@ jorgeevj 15.09.15 Creacion.
             </p:dialog>
 
             <!-- MODIFICAR TIPOITEM -->
+            
+            <p:dialog header="Modificar Item" widgetVar="modificarItem" minHeight="40" height="500" width="1200">
 
+                <h:form id="formModificarTipoItem">
+                    <h:panelGrid columns="2" id="panelModTipoItem">
+              
+                            <p:outputLabel value="Cod. Item:" for="codigoItem"/>                            
+                            <p:inputText id="codigoItem" value="#{tipoitemMB.tipoItemSelect.idtipoItem}"/>
+                            
+                            <p:outputLabel value="Nombre Item:" for="nombreItem"/>                            
+                            <p:inputText id="nombreItem" value="#{tipoitemMB.tipoItemSelect.nombre}"/>
+                            
+                            <p:outputLabel value="Num. Parte:" for="numParteItem"/>                            
+                            <p:inputText id="numParteItem" value="#{tipoitemMB.tipoItemSelect.numParte}"/>
+                            
+                            <p:outputLabel value="Descripcion:" for="descripcionItem"/>                            
+                            <p:inputText id="descripcionItem" value="#{tipoitemMB.tipoItemSelect.descipcion}"/>
+                            
+                            <p:outputLabel value="Tipo" for="tipoItem"/>                            
+                            <p:inputText id="tipoItem" value="#{tipoitemMB.tipoItemSelect.tipo}"/>
+                            
+                            <p:outputLabel value="Precio:" for="precioItem"/>                            
+                            <p:inputText id="precioItem" value="#{tipoitemMB.precio}"/>
+                            
+                            <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItem"/>                            
+                            <p:inputText id="dsctClienteItem" value="#{tipoitemMB.tipoItemSelect.dsctoCliente}"/>                      
+                        
+                            <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItem"/>                            
+                            <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.tipoItemSelect.dsctoDistribuidor}"/>
+                            
+                            
+                        
+                            <p:outputLabel value="Familia:" for="familiaItem"/>                            
+                            <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.familiaSelect}"  >
+                                <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
+                                <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
+                                               itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel value="Categoría:" for="categoriaItem"/>                           
+                            
+                            <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.categoriaSelect}"  >
+                               <f:selectItem itemLabel="Seleccione categoría..." itemValue="0" />
+                               <f:selectItems value="#{tipoitemMB.listaCategoria}" var="nomCategoria" 
+                                              itemValue="#{nomCategoria.idcategoria}" itemLabel="#{nomCategoria.nombre}"/>
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel value="Marca:" for="marcaItem"/>                            
+                            <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
+                                <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                                <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
+                                               itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Color:" for="colorItem"/>                            
+                            <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" >
+                                <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
+                                <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
+                                               itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel value="Características:" for="caracteristicasItem"/>                            
+                            <p:selectOneMenu id="caracteristicasItem" styleClass="browser-default" value="#{tipoitemMB.caracteristicaSelect}" >
+                                <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
+                                <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
+                                               itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
+                            </p:selectOneMenu>
+                            
+                            <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="tabla2"/> 
+                            
+                            <p:dataTable id="tabla2" value="#{tipoitemMB.lista2}" var="tite"> 
+                                <p:column headerText="Características">
+                                    <h:outputText value="#{tite.nombre}" />
+                                </p:column>                            
+                            </p:dataTable>
+                
+                            <p:commandButton value="Quitar" update="tabla2"/>
 
+                    <p:commandButton value="Crear una nueva característica" type="button" onclick="PF('crearCaraItem').show();"/>
+                            <p:commandButton value="Crear una nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />
+                            
+                            <p:commandButton  value="Modificar Item" actionListener="#{tipoitemMB.modificarTipoItem}"/>
+                            </h:panelGrid>
+                </h:form>
+
+            </p:dialog>
             
             <!-- FIN DIALOG DE TIPOITEM-->
 
