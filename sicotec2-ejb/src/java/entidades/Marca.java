@@ -36,9 +36,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Marca.findByNombre", query = "SELECT m FROM Marca m WHERE m.nombre = :nombre"),
     @NamedQuery(name = "Marca.findByFormato", query = "SELECT m FROM Marca m WHERE m.formato = :formato")})
 public class Marca implements Serializable {
-    @Lob
-    @Column(name = "imagen")
-    private byte[] imagen;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +45,9 @@ public class Marca implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
+    @Lob
+    @Column(name = "imagen")
+    private byte[] imagen;
     @Size(max = 10)
     @Column(name = "formato")
     private String formato;
@@ -77,6 +77,13 @@ public class Marca implements Serializable {
         this.nombre = nombre;
     }
 
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
 
     public String getFormato() {
         return formato;
@@ -118,14 +125,6 @@ public class Marca implements Serializable {
     @Override
     public String toString() {
         return "entidades.Marca[ idmarca=" + idmarca + " ]";
-    }
-
-    public byte[] getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(byte[] imagen) {
-        this.imagen = imagen;
     }
     
 }
