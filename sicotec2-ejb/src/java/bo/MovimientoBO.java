@@ -56,21 +56,21 @@ public class MovimientoBO {
     public void insertMovimiento(MovimientoDTO mov, List<MovimientoitemDTO> movItem){
         Movimiento movEnt = new Movimiento();
         movEnt = convertDTOToEntity(mov,1);
-        movimentoFacade.create(movEnt);
+        Movimiento mv = movimentoFacade.insertMovimiento(movEnt);
         
-        /*for(MovimientoitemDTO DTO : movItem){
+        for(MovimientoitemDTO DTO : movItem){
             Movimientoitem movI = new Movimientoitem();
             Movimiento m = new Movimiento();
             Item i = new Item();
             
             movI.setEstado(DTO.getEstado());
-            m.setIdmovimiento(DTO.getMovimiento().getIdmovimiento());
+            m.setIdmovimiento(mv.getIdmovimiento());
             movI.setMovimiento(m);
             i.setIditem(DTO.getItem().getIditem());
             movI.setItem(i);
             
             movimentoItemFacade.create(movI);
-        }*/
+        }
     }
     
     public void updateMovimiento(MovimientoDTO mov){
@@ -118,11 +118,11 @@ public class MovimientoBO {
         
         DTO.setEstado(movimiento.getEstado());
         if(movimiento.getEstado() == 0){
-            DTO.setColorEstado("#F44236");//rojo
-            DTO.setColorLetra("white");
+            //DTO.setColorEstado("#F44236");//rojo
+            //DTO.setColorLetra("white");
         }else{
-            DTO.setColorEstado("#2095F2");//azul
-            DTO.setColorLetra("white");
+            //DTO.setColorEstado("#2095F2");//azul
+            //DTO.setColorLetra("white");
         }
         return DTO;
     }

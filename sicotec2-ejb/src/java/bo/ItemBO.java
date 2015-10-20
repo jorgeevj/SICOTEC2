@@ -10,6 +10,7 @@ import dto.ItemDTO;
 import entidades.Item;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
@@ -20,7 +21,8 @@ import javax.ejb.LocalBean;
 @Stateless
 @LocalBean
 public class ItemBO {
-    ItemFacade itemFacada = new ItemFacade();
+    @EJB
+    ItemFacade itemFacada;
     
     public List<ItemDTO> getAlliTems(){
         List<ItemDTO> items =  new ArrayList<ItemDTO>();

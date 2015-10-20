@@ -8,6 +8,7 @@ package dao;
 import dto.MovimientoDTO;
 import entidades.Item;
 import entidades.Movimiento;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -36,13 +37,12 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
         List<Item> listaItems = new ArrayList<Item>();
         try{
             String jpa = "SELECT i.* "
-                       + "FROM movimiento m, "
-                       + "     item i, "
-                       + "     movimientoItem mi  "
-                       + "WHERE m.idmovimiento = m.idmovimientoand   "
+                       + "FROM item i, "
+                       + "     movimientoItem mi "
+                       + "WHERE mi.idmovimiento = "+mov.getIdmovimiento()+" "
                        + "AND   mi.iditem      = i.iditem;";
 
-            Query query = em.createQuery(jpa,Item.class);
+            Query query = em.createNativeQuery(jpa,Item.class);
             listaItems = query.getResultList();
             
         }catch(Exception e){
@@ -54,58 +54,56 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
     
     public List<Movimiento> getMovimientoByBusqueda(MovimientoDTO mov){
         List<Movimiento> listaMov = new ArrayList<Movimiento>();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         try{
             String jpa = "SELECT m "
                        + "FROM Movimiento m "
                        + "WHERE 1 = 1 ";
-            if(mov.getIdTipoMovimiento() != null){
-                jpa += "AND m.idtipoMovimiento = :tipoMov ";
+            
+            if(mov.getIdTipoMovimiento() != 0){
+                jpa += "AND m.idtipoMovimiento.idtipoMovimiento = :tipoMov ";
             }
-            if(mov.getIdTipoDocumento() != null){
+            if(mov.getIddocumento() !=  0){
                 jpa += "AND m.iddocumento = :documento ";
             }
-            if(mov.getEstado() != null){
+            if(mov.getEstado() != 100){
                 jpa += "AND m.estado = :estado ";
             }
-            if(mov.getSerie() != null){
+            if(mov.getSerie() != null && !mov.getSerie().equals("")){
+                
                 jpa += "AND m.serie = :serie ";
             }
             if(mov.getFechaInicio() != null){
-                jpa += "AND m.fecha > :fInicio ";
+                jpa += "AND m.fecha >= '"+sdf.format(mov.getFechaInicio())+"' ";
             }
             if(mov.getFechaFin()!= null){
-                jpa += "AND m.fecha < :fFin ";
+                jpa += "AND m.fecha <= '"+sdf.format(mov.getFechaFin())+"' ";
             }
-            if(mov.getCorrelativo()!= null){
+            if(mov.getCorrelativo()!= null && !mov.getCorrelativo().equals("")){
                 jpa += "AND m.correlativo = :correlativo ";
             }
 
-            Query query = em.createNativeQuery(jpa,Movimiento.class);
+            Query query = em.createQuery(jpa);
             
-            if(mov.getIdTipoMovimiento() != null){
-                query.setParameter("tipoMov", mov.getTipoMovimiento());
+            if(mov.getIdTipoMovimiento() != 0){
+                query.setParameter("tipoMov", mov.getIdTipoMovimiento());
             }
-            if(mov.getIdTipoDocumento() != null){
+            if(mov.getIddocumento() != 0){
                 query.setParameter("documento", mov.getIddocumento());
             }
-            if(mov.getEstado() != null){
+            if(mov.getEstado() != 100){
                 query.setParameter("estado", mov.getEstado());
             }
-            if(mov.getSerie() != null){
+            if(mov.getSerie() != null && !mov.getSerie().equals("")){
                 query.setParameter("serie", mov.getSerie());
             }
-            if(mov.getFechaInicio() != null){
-                query.setParameter("fInicio", mov.getFechaInicio());
-            }
-            if(mov.getFechaFin()!= null){
-                query.setParameter("fFin", mov.getFechaFin());
-            }
-            if(mov.getCorrelativo()!= null){
+            if(mov.getCorrelativo()!= null && !mov.getCorrelativo().equals("")){
                 query.setParameter("correlativo", mov.getCorrelativo());
             }
   
             listaMov = query.getResultList();
         }catch(Exception e){
+            System.out.println(e.getMessage());
             listaMov = new ArrayList<Movimiento>();
         }
         
@@ -125,5 +123,12 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
         }
         
         return listaMov;
+    }
+    
+    public Movimiento insertMovimiento(Movimiento mov){
+        getEntityManager().persist(mov);
+        getEntityManager().flush();
+        
+        return mov;
     }
 }
