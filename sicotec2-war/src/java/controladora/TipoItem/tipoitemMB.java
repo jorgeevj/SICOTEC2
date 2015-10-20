@@ -20,6 +20,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @SessionScoped
@@ -43,11 +44,14 @@ public class tipoitemMB {
     private String categoriaSelect; //posible no uso
     
     private List<TipoItemDTO> lista;
+    private TipoItemDTO tipoItemSelect;
     private List<Caracteristica> listaCaracteristicas;
     private List<Marca> listaMarca;
     private List<Color> listaColor;
     private List<Familia> listaFamilia;
-    private List<Categoria> listaCategoria;  
+    private List<Categoria> listaCategoria;
+    private List<Categoria> listaCate;
+    
     
     private List<Caracteristica> lista2; //para listar en la tabla caracteristicas
 
@@ -65,8 +69,14 @@ public class tipoitemMB {
         listarCategoria();
         listarFamilia();
         listarMarca();
+        listarColor();
+        
+        
     }
-    
+    public void onRowSelectTipoItem(SelectEvent event) {
+        //tipoItemSelect = (TipoItemDTO) event.getObject();
+        
+    }
     ///
     public void listarCaracteristicas(){        
         listaCaracteristicas=tipoItemBO.getNombreCaracteristica();
@@ -83,13 +93,14 @@ public class tipoitemMB {
     public void listarCategoria(){
         listaCategoria=tipoItemBO.getNombreCategoria();
     }
+    
     ///
     public void buscarItem(ActionEvent actionEvent){        
         
         TipoItemDTO lis=new TipoItemDTO();
         lis.setIdtipoItem(codigoItem);
-        lis.setNombre(nombre);
-        //lis.setMarca(marca);       
+        lis.setNombre(nombre);        
+        lis.setIdMarca(Integer.parseInt(marcaSelect));
         lista=tipoItemBO.buscarTipoItem(lis);
     }
     
@@ -107,6 +118,14 @@ public class tipoitemMB {
     RequestContext context = RequestContext.getCurrentInstance(); 
     
     context.execute("PF('registrarItem').show();");
+    
+    }
+    
+    public void modificarItem(){
+    
+    RequestContext context = RequestContext.getCurrentInstance(); 
+    
+    context.execute("PF('modificarItem').show();");
     
     }
     
@@ -334,6 +353,22 @@ public class tipoitemMB {
 
     public void setLista2(List<Caracteristica> lista2) {
         this.lista2 = lista2;
+    }
+
+    public List<Categoria> getListaCate() {
+        return listaCate;
+    }
+
+    public void setListaCate(List<Categoria> listaCate) {
+        this.listaCate = listaCate;
+    }
+
+    public TipoItemDTO getTipoItemSelect() {
+        return tipoItemSelect;
+    }
+
+    public void setTipoItemSelect(TipoItemDTO tipoItemSelect) {
+        this.tipoItemSelect = tipoItemSelect;
     }
     
     
