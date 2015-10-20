@@ -219,8 +219,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:messages id="messages2" showDetail="true" closable="true" />
                         <p:commandButton id="btnAceptaPrecio" value="Aceptar" 
                                          actionListener="#{cotizacionMB.aceptarPrecioCrea}" 
-                                         onclick="PF('editItemPrecio').hide();"
-                                         update=":formRegCot:TipoitemSelect"/>
+                                         update=":formRegCot:TipoitemSelect,messages2"/>
                         <p:commandButton id="btnCancelaPrecio" value="Cancelar" 
                                          actionListener="#{cotizacionMB.cerrarPrecioCrear}" 
                                          onclick="PF('editItemPrecio').hide();"/>
