@@ -39,6 +39,9 @@ public class TipoItemDTO {
     private Color color;
     private Categoria categoria;
     
+    //EXTRAS
+    private Integer cantidad;
+    
     public Caracteristica getCaracteristica() {
         return caracteristica;
     }
@@ -194,6 +197,14 @@ public class TipoItemDTO {
 
     public void setMarca(Marca marca) {
         this.marca = marca;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     
