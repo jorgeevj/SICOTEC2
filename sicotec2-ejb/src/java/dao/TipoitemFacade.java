@@ -36,6 +36,7 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         return ti;
     }
     
+     
     public List<Tipoitem> getAllBusqueda(Tipoitem e){
         List<Tipoitem> lista= new ArrayList<Tipoitem>();
         String sql="SELECT t FROM Tipoitem t where 1=1 ";
@@ -45,8 +46,8 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
             if(e.getNombre()!=null && !e.getNombre().equals("")){
             sql+="and t.nombre like '%"+e.getNombre()+"%' ";
             }            
-            if(e.getIdmarca().getNombre()!=null && !e.getIdmarca().getNombre().equals("")){
-            sql+="and t.idmarca.nombre like'%"+e.getIdmarca().getNombre()+"%' ";
+            if(e.getIdmarca().getIdmarca()!=0){
+            sql+="and t.idmarca.idmarca ="+e.getIdmarca().getIdmarca();
             }
             
             
