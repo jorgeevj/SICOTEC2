@@ -38,6 +38,14 @@
                    </p:selectOneMenu>
                 </div>
                 <div>
+                    <p:calendar value="#{movimientoMB.fechaInicioBusqueda}"/>
+                    <p:calendar value="#{movimientoMB.fechaFinBusqueda}"/>
+                </div>
+                <div>
+                    N° Correlativo
+                    <p:inputText value="#{movimientoMB.correlativoBusqueda}"/>
+                </div>
+                <div>
                     N° Serie
                     <p:inputText value="#{movimientoMB.serieBusqueda}"/>
                 </div>
@@ -53,8 +61,10 @@
             
             <h:form id="formTabla">
                 <p:dataTable tableStyleClass="table table-hover" selectionMode="single" var="mov" id="tab_movimientos" 
-                             rowKey="#{mov.idmovimiento}" rowIndexVar="var" selection="#{movimientoMB.movimientoSeleccionado}"
-                             value="#{movimientoMB.listaMovimiento}" >
+                             rowKey="#{mov.idmovimiento}" rowIndexVar="var"
+                             value="#{movimientoMB.listaMovimiento}">
+                    <p:ajax listener="#{movimientoMB.selectMovimiento}" event="rowSelect"/> 
+                    
                     <p:column headerText="#" style="text-align: center; background-color: #{mov.colorEstado};width: 50px">
                         <p:outputLabel value="#{var+1}" style="color: #{mov.colorLetra}"/>
                     </p:column>
@@ -140,32 +150,34 @@
         
         <p:dialog header="Editar Movimiento" widgetVar="dialog_edit_mov" resizable="false">
             <h:form id="formEdit">
-                <div class="ui-grid ui-grid-responsive">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-6">
-                            <p:selectOneMenu id="documentoSelectEdit" styleClass="browser-default" value="#{movimientoMB.idDocumentoEdit}">
-                                <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                                <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
-                                               itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="ui-grid-col-12">
-                            <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
-                        </div>
-                        <div class="ui-grid-col-12">
-                            <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
-                        </div>
-                    </div>
-                </div>
+                
+                <p:selectOneMenu id="documentoSelectEdit" value="#{movimientoMB.idDocumentoEdit}">
+                    <f:selectItem itemLabel="Seleccione Documento" itemValue="0" />
+                    <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
+                                   itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
+                
+                </p:selectOneMenu>
+                
+                <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
+
+                <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
+                
+                <p:selectOneMenu id="estadoSelectEdit" value="#{movimientoMB.estadoEdit}">
+                    <f:selectItem itemLabel="Seleccione Estado" itemValue="0" />
+                    <f:selectItems value="#{movimientoMB.listaEstados}"/>  
+                </p:selectOneMenu>
+                
                 <p:commandButton value="Guardar" actionListener="#{movimientoMB.editarMovimiento()}"/>
+            
             </h:form>
         </p:dialog> 
         
         <p:dialog header="Items Seleccionador" widgetVar="dialog_nuevo_items" resizable="false"> 
             <p:panel>
                 <h:form id="formTabItemsDisp">
-                    <p:dataTable value="#{movimientoMB.listaItem}" var="itemsDisp" selectionMode="single"
+                    <p:dataTable value="#{movimientoMB.listaItem}" var="itemsDisp" selectionMode="single" id="tb_items_disponibles"
                                  selection="#{movimientoMB.itemSeleccionado}" rowKey="#{itemsDisp.iditem}" rowIndexVar="var">
+                        <p:ajax listener="#{movimientoMB.selectItemToMovimientoDispo}" event="rowSelect"/> 
                         <p:column headerText="Codigo" style="text-align: center;">
                             <p:outputLabel value="#{itemsDisp.iditem}"/>
                         </p:column>
@@ -173,13 +185,14 @@
                             <p:outputLabel value="#{itemsDisp.operatividad}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Seleccionar" actionListener="#{movimientoMB.agregarItemToMovimiento()}"/>
+                    <p:commandButton value="Agregar" actionListener="#{movimientoMB.agregarItemToMovimiento()}"/>
                 </h:form>
             </p:panel>
             <p:panel>
                 <h:form id="formTabItemsSelecc">
-                    <p:dataTable value="#{movimientoMB.listaItemAux}" var="itemsSelec" selectionMode="single"
+                    <p:dataTable value="#{movimientoMB.listaItemAux}" var="itemsSelec" selectionMode="single" id="tb_items_seleccionados"
                                  selection="#{movimientoMB.itemSeleccionadoAux}" rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
+                        <p:ajax listener="#{movimientoMB.selectItemToMovimientoSelect}" event="rowSelect"/>
                         <p:column headerText="Codigo" style="text-align: center;">
                             <p:outputLabel value="#{itemsSelec.iditem}"/>
                         </p:column>
@@ -190,6 +203,20 @@
                     <p:commandButton value="Remover" actionListener="#{movimientoMB.eliminarItemToMovimiento()}"/>
                 </h:form>
             </p:panel>
+        </p:dialog>
+        
+        <p:dialog header="Items de Movimiento" widgetVar="dialog_ver_items" resizable="false"> 
+            <h:form id="formTabItemsMovimiento">
+                <p:dataTable value="#{movimientoMB.listaItemAux}" var="itemsSelec" selectionMode="single" id="tb_ver_items"
+                            selection="#{movimientoMB.itemSeleccionadoAux}" rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
+                   <p:column headerText="Codigo" style="text-align: center;">
+                       <p:outputLabel value="#{itemsSelec.iditem}"/>
+                   </p:column>
+                   <p:column headerText="Codigo" style="text-align: center;">
+                       <p:outputLabel value="#{itemsSelec.operatividad}"/>
+                   </p:column>
+               </p:dataTable>
+            </h:form>
         </p:dialog>
     </ui:define>  
 </ui:composition>
