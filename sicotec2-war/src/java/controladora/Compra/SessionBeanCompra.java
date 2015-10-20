@@ -8,6 +8,7 @@ package controladora.Compra;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
+import dto.PealtipoitemDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -24,6 +25,7 @@ public class SessionBeanCompra {
      private List<CompraDTO> listaCompra = new ArrayList<CompraDTO>();
      private List<EmpresaDTO>listaEmpresaAdd=new ArrayList<EmpresaDTO>();
      private List<AlmacenDTO> listaAlmacenesAdd = new ArrayList<AlmacenDTO>();
+     private List<PealtipoitemDTO> ListaPealtipoitemAdd = new ArrayList<PealtipoitemDTO>();
    
     public List<CompraDTO> getListaTCompra() {
         return listaCompra;
@@ -58,6 +60,14 @@ public class SessionBeanCompra {
 
     public void setListaEmpresaAdd(List<EmpresaDTO> listaEmpresaAdd) {
         this.listaEmpresaAdd = listaEmpresaAdd;
+    }
+
+    public List<PealtipoitemDTO> getListaPealtipoitemAdd() {
+        return ListaPealtipoitemAdd;
+    }
+
+    public void setListaPealtipoitemAdd(List<PealtipoitemDTO> ListaPealtipoitemAdd) {
+        this.ListaPealtipoitemAdd = ListaPealtipoitemAdd;
     }
     
      

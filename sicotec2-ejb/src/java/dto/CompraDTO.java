@@ -25,81 +25,44 @@ public class CompraDTO {
      private String idalmacen;
      private Empresa idempresa;
      private String nombreAlmacen;
-    /**
-     * @return the idcompra
-     */
+    
     public Integer getIdcompra() {
         return idcompra;
     }
 
-    /**
-     * @param idcompra the idcompra to set
-     */
     public void setIdcompra(Integer idcompra) {
         this.idcompra = idcompra;
     }
 
-    /**
-     * @return the fecha
-     */
     public Date getFecha() {
         return fecha;
     }
 
-    /**
-     * @param fecha the fecha to set
-     */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
-    /**
-     * @return the total
-     */
     public Double getTotal() {
         return total;
     }
 
-    /**
-     * @param total the total to set
-     */
     public void setTotal(Double total) {
         this.total = total;
     }
 
-    /**
-     * @return the iddocumento
-     */
-   
-    /**
-     * @return the correlativo
-     */
     public String getCorrelativo() {
         return correlativo;
     }
 
-    /**
-     * @param correlativo the correlativo to set
-     */
+   
     public void setCorrelativo(String correlativo) {
         this.correlativo = correlativo;
     }
 
-    /**
-     * @return the idalmacen
-     */
-    
-
-    /**
-     * @return the idempresa
-     */
     public Empresa getIdempresa() {
         return idempresa;
     }
 
-    /**
-     * @param idempresa the idempresa to set
-     */
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
     }
@@ -119,6 +82,14 @@ public class CompraDTO {
     public void setIddocumento(String iddocumento) {
         this.iddocumento = iddocumento;
     }
+    
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
+    }
 
     public String getIdalmacen() {
         return idalmacen;
@@ -128,22 +99,6 @@ public class CompraDTO {
         this.idalmacen = idalmacen;
     }
 
-    public String getNombreAlmacen() {
-        return nombreAlmacen;
-    }
-
-    public void setNombreAlmacen(String nombreAlmacen) {
-        this.nombreAlmacen = nombreAlmacen;
-    }
-
+ 
    
-
-   
-     
-     
-     
-     
-     
-
-    
 }

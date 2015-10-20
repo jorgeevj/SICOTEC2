@@ -5,7 +5,9 @@
  */
 package bo;
 
+import dao.AlmacenFacade;
 import dao.CompraFacade;
+import dao.TipoitemFacade;
 import dto.CompraDTO;
 import entidades.Compra;
 import java.util.ArrayList;
@@ -24,7 +26,11 @@ public class CompraBO {
   
     @EJB
     private CompraFacade compraFacade ;
-    //= new CompraFacade();
+     @EJB
+    private AlmacenFacade almacenFacade = new AlmacenFacade();
+     
+    
+
     
     
     public List<CompraDTO> getAllCompras() {
@@ -57,6 +63,8 @@ public class CompraBO {
             DTO.setIdempresa(compra.getIdempresa());
             DTO.setTotal(compra.getTotal());
             DTO.setSerie(compra.getSerie());
+//            String nombreAlmacen = almacenFacade.getAlmacenById(DTO.getIdalmacen()).getNombre() ;
+//            DTO.setNombreAlmacen(nombreAlmacen);
         
         return DTO;
     }

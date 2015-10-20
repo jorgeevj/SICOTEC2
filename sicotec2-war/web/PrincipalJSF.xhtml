@@ -328,11 +328,46 @@ jorgeevj 15.09.15 Creacion.
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
-                        <p:commandButton value="Agregar Compras" onclick="PF('addComprasModal').show();"/>
+                        <p:commandButton value="Agregar Pedidos" onclick="PF('addPedidosItemsModal').show();"/>
                         <br/><br/><br/>
                         <p:commandButton value="Agregar" />
                 </h:form>
             </p:dialog> 
+            <p:dialog header="Agregar Pedidos" widgetVar="addPedidosItemsModal" modal="true" height="500" width="700"> 
+                <h:form id="formAddPedidoss">
+                    <p:outputLabel value="Pedidos Disponibles "></p:outputLabel>
+                    <p:dataTable tableStyleClass="table table-hover" var="tPealtipoitem" value="#{compraMB.sessionBeanCompra.listaPealtipoitemAdd}" >
+                        <p:column headerText="Nombre" style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.cantidad}"/>
+                        </p:column>
+                        <p:column headerText="Costo Unitario" style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.costoUni}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Agregar Pedidos"  />
+                    <br/><br/><br/><br/>
+                    <p:outputLabel value="Pedidos Seleccionados "></p:outputLabel>
+                    <p:dataTable tableStyleClass="table table-hover"   >
+                        <p:column headerText="Nombre" style="text-align: center">
+                         
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                          
+                        </p:column>
+                        <p:column headerText="Costo Unitario" style="text-align: center">
+                          
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+                    <p:commandButton value="Quitar Pedido" />
+                    <br/><br/><br/>
+                    <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
+                </h:form>
+            </p:dialog>
             <!-- FIN DIALOG DE COMPRAS-->
 
 

@@ -9,6 +9,7 @@ import Util.Utils;
 import bo.AlmacenBO;
 import bo.CompraBO;
 import bo.EmpresaBO;
+import bo.PedidoaltipoitemBO;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
@@ -38,6 +39,8 @@ public class CompraMB {
     private EmpresaBO empresaBO;
     @EJB
     private AlmacenBO almacenBO;
+    @EJB
+    private PedidoaltipoitemBO pedidoaltipoitemBO;
     
     
     private List<Compra> listaCompra;
@@ -53,6 +56,7 @@ public class CompraMB {
      @PostConstruct
     public void init(){
          getSessionBeanCompra().setListaTCompra(compraBO.getAllCompras());
+         getSessionBeanCompra().setListaPealtipoitemAdd(pedidoaltipoitemBO.getAllPealtipoitems());
         emp=new Empresa();
         campos = new CompraDTO();
         getSessionBeanCompra().setListaEmpresaAdd(this.comboEmpresas());
@@ -71,8 +75,12 @@ public class CompraMB {
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').show();");
     }
+    public void abrirModalAddPedidos(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addItemsPedidosModal').show();");
+     }
     public List<EmpresaDTO> comboEmpresas(){
-         List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
+         List<EmpresaDTO> listaDto = empresaBO.getEmpresasProveedoras();
          return listaDto;
      }
      public List<AlmacenDTO> comboAlmacen(){

@@ -55,6 +55,20 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         return lista;     
            
     } 
+    public Tipoitem getTipoItemsNombre(String idtipoItem){
+        Tipoitem entidad = new Tipoitem();
+        try{
+            String sql = "SELECT a "
+                   + "FROM Tipoitem a "
+                   + "WHERE a.idtipoItem = " + idtipoItem;
+            entidad=em.createQuery(sql, Tipoitem.class).getSingleResult();
+        }catch(Exception e){
+            entidad = new Tipoitem();
+        }
+        
+        return entidad;
+    }
+    
     public void insertarTipoItem(){
         
     }
