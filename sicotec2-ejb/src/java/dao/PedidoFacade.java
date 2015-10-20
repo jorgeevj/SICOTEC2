@@ -69,4 +69,10 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
         }
         return listaPedido;
     }
+    
+    public Pedido agregarPedido(Pedido entidadPedido) {
+        getEntityManager().persist(entidadPedido);
+        getEntityManager().flush();
+        return entidadPedido;
+    }
 }

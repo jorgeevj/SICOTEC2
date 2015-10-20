@@ -10,7 +10,6 @@ import bo.AlmacenBO;
 import bo.EmpresaBO;
 import bo.PedidoBO;
 import bo.TipoItemBO;
-import static com.sun.javafx.logging.PulseLogger.addMessage;
 import dto.AlmacenDTO;
 import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
@@ -24,7 +23,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.*;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
 
 @ManagedBean
@@ -47,6 +45,17 @@ public class PedidoMB{
     private Empresa emp;
     private Tipoitem tipItm;
     private SessionBeanPedido sessionBeanPedido = new SessionBeanPedido();
+    //ARRAYS
+    private List<TipoItemDTO> ListaItemsDisponibles;
+    private List<TipoItemDTO> ListaItemsSeleccionado;
+    private List<EmpresaDTO> ListaEmpresaAdd;
+    private List<AlmacenDTO> listaAlmacenesAdd;
+    
+    //AGREGAR
+    private PedidoDTO camposAdd;
+    
+    //EDITAR
+    private PedidoDTO camposEdit;
     Utils ut = new Utils();
     
     
@@ -55,12 +64,17 @@ public class PedidoMB{
         emp=new Empresa();
         campos = new PedidoDTO();
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
-        getSessionBeanPedido().setListaEmpresaAdd(this.comboEmpresas());
-        getSessionBeanPedido().setListaAlmacenesAdd(this.comboAlmacen());
-        getSessionBeanPedido().setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
+        ListaItemsDisponibles = tipoItemBO.getAllTipoItem();
+        ListaItemsSeleccionado = new ArrayList<TipoItemDTO>(); 
+        ListaEmpresaAdd = this.comboEmpresas();
+        listaAlmacenesAdd = this.comboAlmacen();
         campos = new PedidoDTO();
         campos.setIdpedido(0);
         campos.setIdEmpresa(emp);
+        
+        camposAdd = new PedidoDTO();
+        camposAdd.setIdpedido(0);
+        camposAdd.setIdEmpresa(emp);
     }
         
     
@@ -70,37 +84,39 @@ public class PedidoMB{
         return getSessionBeanPedido().getListPedido();
     }
     
-    public List<TipoItemDTO> agregarTipoItem(ActionEvent actionEvent){
-        getSessionBeanPedido().getListaItemsSeleccionado().add(objTipoItem);
-        getSessionBeanPedido().getListaItemsDisponibles().remove(objTipoItem);
-        return getSessionBeanPedido().getListaItemsSeleccionado();
+    public void agregarTipoItem(ActionEvent actionEvent){
+        ListaItemsSeleccionado.add(objTipoItem);
+        ListaItemsDisponibles.remove(objTipoItem);
     }
     
-    public List<TipoItemDTO> quitarTipoItem(ActionEvent actionEvent){
-        getSessionBeanPedido().getListaItemsDisponibles().add(objTipoItem);
-        getSessionBeanPedido().getListaItemsSeleccionado().remove(objTipoItem);
-        return getSessionBeanPedido().getListaItemsDisponibles();
+    public void quitarTipoItem(ActionEvent actionEvent){
+        ListaItemsDisponibles.add(objTipoItem);
+        ListaItemsSeleccionado.remove(objTipoItem);
     }
+    
     public void abrirModalAddPedido(){
-        getSessionBeanPedido().setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
-        getSessionBeanPedido().setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
-        System.out.println(getSessionBeanPedido().getListaItemsSeleccionado());
+        ListaItemsDisponibles = tipoItemBO.getAllTipoItem();
+        ListaItemsSeleccionado = new ArrayList<TipoItemDTO>();
         this.crear(null);
     }
     
-    public void addNuevoPedido(){
-        PedidoDTO dto = new PedidoDTO();
-        dto.setIdalmacen(campos.getIdalmacen());
-        dto.setCorrelativo(campos.getCorrelativo());
-        dto.setSerie(campos.getSerie());
-        dto.setFecha(new Date());
-        dto.setEmpresaId(campos.getEmpresaId());
-        pedidoBO.insertarNuevoPedido(dto);
+    public void addNuevoPedido(ActionEvent actionEvent){
+        PedidoDTO  dto = pedidoBO.insertarNuevoPedido(camposAdd); 
+        
+        getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+        this.cerrar();
+        //pedidoBO.insertarNuevoPedido(dto);
     }
     
-    public void selectPedido(SelectEvent selectEvent){
-                    PedidoDTO dto = (objPedido);
+    public void editarPedido(ActionEvent actionEvent){
+        pedidoBO.actualizarPedido(camposEdit);
+        getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
     }
+    
+    
+    
+    
+    
     public void crear(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addPedidosModal').show();");
@@ -110,21 +126,18 @@ public class PedidoMB{
     }
      public void cerrar(){
         RequestContext context = RequestContext.getCurrentInstance(); 
-        context.execute("PF('dlg2').hide();");
+        context.execute("PF('addPedidosModal').hide();");
     }
      
      public void abrirModalAddItems(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addItemsPedidosModal').show();");
      }
+
      
-     /*public List<TipoItemBO> setListaTipoItemSelecciona(){
-        getSessionBeanPedido().setListaItemsSeleccionado(camposPealtipoItem);
-        return lista;
-     }*/
      
-    
-    
+     
+     
      
      
      public List<EmpresaDTO> comboEmpresas(){
@@ -199,6 +212,54 @@ public class PedidoMB{
 
     public void setObjTipoItemQuitar(TipoItemDTO objTipoItemQuitar) {
         this.objTipoItemQuitar = objTipoItemQuitar;
+    }
+
+    public List<TipoItemDTO> getListaItemsDisponibles() {
+        return ListaItemsDisponibles;
+    }
+
+    public void setListaItemsDisponibles(List<TipoItemDTO> ListaItemsDisponibles) {
+        this.ListaItemsDisponibles = ListaItemsDisponibles;
+    }
+
+    public List<TipoItemDTO> getListaItemsSeleccionado() {
+        return ListaItemsSeleccionado;
+    }
+
+    public void setListaItemsSeleccionado(List<TipoItemDTO> ListaItemsSeleccionado) {
+        this.ListaItemsSeleccionado = ListaItemsSeleccionado;
+    }
+
+    public List<EmpresaDTO> getListaEmpresaAdd() {
+        return ListaEmpresaAdd;
+    }
+
+    public void setListaEmpresaAdd(List<EmpresaDTO> ListaEmpresaAdd) {
+        this.ListaEmpresaAdd = ListaEmpresaAdd;
+    }
+
+    public List<AlmacenDTO> getListaAlmacenesAdd() {
+        return listaAlmacenesAdd;
+    }
+
+    public void setListaAlmacenesAdd(List<AlmacenDTO> listaAlmacenesAdd) {
+        this.listaAlmacenesAdd = listaAlmacenesAdd;
+    }
+
+    public PedidoDTO getCamposAdd() {
+        return camposAdd;
+    }
+
+    public void setCamposAdd(PedidoDTO camposAdd) {
+        this.camposAdd = camposAdd;
+    }
+
+    public PedidoDTO getCamposEdit() {
+        return camposEdit;
+    }
+
+    public void setCamposEdit(PedidoDTO camposEdit) {
+        this.camposEdit = camposEdit;
     }
     
 }

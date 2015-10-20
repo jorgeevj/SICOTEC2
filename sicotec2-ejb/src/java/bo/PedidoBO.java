@@ -10,6 +10,7 @@ import dao.PedidoFacade;
 import dto.PedidoDTO;
 import entidades.Pedido;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -58,8 +59,8 @@ public class PedidoBO {
         pedidoDTO.setSerie(pedido.getSerie());
         pedidoDTO.setCorrelativo(pedido.getSerie());
         pedidoDTO.setIdalmacen(pedido.getIdalmacen());
-        String nombreAlmacen = almacenFacade.getAlmacenById(pedidoDTO.getIdalmacen()).getNombre() ;
-        pedidoDTO.setNombreAlmacen(nombreAlmacen);
+            String nombreAlmacen = almacenFacade.getAlmacenById(pedidoDTO.getIdalmacen()).getNombre() ;
+            pedidoDTO.setNombreAlmacen(nombreAlmacen);
         return pedidoDTO;
     }
     //0 UPDATE , 1 INSERT
@@ -68,8 +69,7 @@ public class PedidoBO {
         if(tipo == 0){
             entidad.setIdpedido(dto.getIdpedido());
         }
-        entidad.setIdpedido(dto.getIdpedido());
-        entidad.setFecha(dto.getFecha());
+        entidad.setFecha(new Date());
         entidad.setIdempresa(dto.getIdEmpresa());
         entidad.setSerie(dto.getSerie());
         entidad.setCorrelativo(dto.getCorrelativo());
@@ -82,8 +82,15 @@ public class PedidoBO {
         return listaDTO;
     }
     
-    public void insertarNuevoPedido(PedidoDTO dto){
-        Pedido entidad = convertDTOtoEntity(dto , 0);
-        pedidoFacade.create(entidad);
+    public PedidoDTO insertarNuevoPedido(PedidoDTO dto){
+        Pedido entidad = convertDTOtoEntity(dto , 1);
+        PedidoDTO pedidoDTO = new PedidoDTO();
+        pedidoDTO = converEntityToDTO(pedidoFacade.agregarPedido(entidad));
+        return pedidoDTO;
+    }
+    
+    public void actualizarPedido(PedidoDTO dto){
+        Pedido entidad = convertDTOtoEntity(dto, 0);
+        pedidoFacade.edit(entidad);
     }
 }
