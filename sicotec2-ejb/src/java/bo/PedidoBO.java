@@ -86,6 +86,7 @@ public class PedidoBO {
         Pedido entidad = convertDTOtoEntity(dto , 1);
         PedidoDTO pedidoDTO = new PedidoDTO();
         pedidoDTO = converEntityToDTO(pedidoFacade.agregarPedido(entidad));
+        //pedidoFacade.create(entidad);
         return pedidoDTO;
     }
     
