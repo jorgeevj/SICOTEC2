@@ -124,9 +124,9 @@ public class CotizacionMB {
             return;
         }
 
-        Cotizacion c = cotizacionBO.guardarCrear(camposCrear);
+        camposCrear = cotizacionBO.guardarCrear(camposCrear);
         for (int i = 0; i < listaCotipoItem.size(); i++) {
-            listaCotipoItem.get(i).setCotizacion(c);
+            listaCotipoItem.get(i).setCotizacion(camposCrear);
             listaCotipoItem.get(i).setDescuento(listaCotipoItem.get(i).getTipoitem().getPrecioLista() - listaCotipoItem.get(i).getPrecio());
         }
         cotizacionBO.guardarCrearItems(listaCotipoItem);
@@ -246,7 +246,8 @@ public class CotizacionMB {
 
     public void acepAproCrear(ActionEvent actionEvent) {
         camposCrear.setEstado(1);
-        cotizacionBO.generaVentaCrea(listaCoItemSelect);
+        guardarCrear(actionEvent);
+        cotizacionBO.generaVentaCrea(listaCoItemSelect,camposCrear);
         cerrarAproCrear(actionEvent);
     }
 
