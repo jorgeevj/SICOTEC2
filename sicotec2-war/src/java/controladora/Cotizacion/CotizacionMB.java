@@ -225,7 +225,8 @@ public class CotizacionMB {
             return;
         }
         cotipoItemSelect.setPrecio(chamgePrecioCrea);
-
+         RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('editItemPrecio').hide();");
     }
 
     public void enviaCrear(ActionEvent actionEvent) {
