@@ -57,16 +57,53 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
         try{
             String jpa = "SELECT m "
                        + "FROM Movimiento m "
-                       + "WHERE m.idtipoMovimiento = :tipoMov "
-                       + "AND   m.iddocumento      = :documento "
-                       + "AND   m.estado           = :estado "
-                       + "AND   m.serie            = :serie";
+                       + "WHERE 1 = 1 ";
+            if(mov.getIdTipoMovimiento() != null){
+                jpa += "AND m.idtipoMovimiento = :tipoMov ";
+            }
+            if(mov.getIdTipoDocumento() != null){
+                jpa += "AND m.iddocumento = :documento ";
+            }
+            if(mov.getEstado() != null){
+                jpa += "AND m.estado = :estado ";
+            }
+            if(mov.getSerie() != null){
+                jpa += "AND m.serie = :serie ";
+            }
+            if(mov.getFechaInicio() != null){
+                jpa += "AND m.fecha > :fInicio ";
+            }
+            if(mov.getFechaFin()!= null){
+                jpa += "AND m.fecha < :fFin ";
+            }
+            if(mov.getCorrelativo()!= null){
+                jpa += "AND m.correlativo = :correlativo ";
+            }
 
             Query query = em.createNativeQuery(jpa,Movimiento.class);
-            query.setParameter("tipoMov", mov.getTipoMovimiento());
-            query.setParameter("documento", mov.getIddocumento());
-            query.setParameter("estado", mov.getEstado());
-            query.setParameter("serie", mov.getSerie());
+            
+            if(mov.getIdTipoMovimiento() != null){
+                query.setParameter("tipoMov", mov.getTipoMovimiento());
+            }
+            if(mov.getIdTipoDocumento() != null){
+                query.setParameter("documento", mov.getIddocumento());
+            }
+            if(mov.getEstado() != null){
+                query.setParameter("estado", mov.getEstado());
+            }
+            if(mov.getSerie() != null){
+                query.setParameter("serie", mov.getSerie());
+            }
+            if(mov.getFechaInicio() != null){
+                query.setParameter("fInicio", mov.getFechaInicio());
+            }
+            if(mov.getFechaFin()!= null){
+                query.setParameter("fFin", mov.getFechaFin());
+            }
+            if(mov.getCorrelativo()!= null){
+                query.setParameter("correlativo", mov.getCorrelativo());
+            }
+  
             listaMov = query.getResultList();
         }catch(Exception e){
             listaMov = new ArrayList<Movimiento>();
