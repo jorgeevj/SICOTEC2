@@ -55,10 +55,10 @@ public class MovimientoBO {
     
     public void insertMovimiento(MovimientoDTO mov, List<MovimientoitemDTO> movItem){
         Movimiento movEnt = new Movimiento();
-        movEnt = convertDTOToEntity(mov);
+        movEnt = convertDTOToEntity(mov,1);
         movimentoFacade.create(movEnt);
         
-        for(MovimientoitemDTO DTO : movItem){
+        /*for(MovimientoitemDTO DTO : movItem){
             Movimientoitem movI = new Movimientoitem();
             Movimiento m = new Movimiento();
             Item i = new Item();
@@ -70,12 +70,12 @@ public class MovimientoBO {
             movI.setItem(i);
             
             movimentoItemFacade.create(movI);
-        }
+        }*/
     }
     
     public void updateMovimiento(MovimientoDTO mov){
         Movimiento movEnt = new Movimiento();
-        movEnt = convertDTOToEntity(mov);
+        movEnt = convertDTOToEntity(mov,0);
         movimentoFacade.edit(movEnt);
     }
     
@@ -127,10 +127,18 @@ public class MovimientoBO {
         return DTO;
     }
     
-    public Movimiento convertDTOToEntity(MovimientoDTO movimiento){
+    //0 = UPDATE, 1 = INSERT
+    public Movimiento convertDTOToEntity(MovimientoDTO movimiento, int tipo){
         Movimiento Ent = new Movimiento();
-            
-        Ent.setIdmovimiento(movimiento.getIdmovimiento());
+        Tipomovimiento tm = new Tipomovimiento();
+        
+        tm.setIdtipoMovimiento(movimiento.getIdTipoMovimiento());
+        Ent.setIdtipoMovimiento(tm);
+        
+        if(tipo == 0){
+            Ent.setIdmovimiento(movimiento.getIdmovimiento());
+        }
+        
         Ent.setComentario(movimiento.getComentario());
         Ent.setCorrelativo(movimiento.getCorrelativo());
         Ent.setFecha(movimiento.getFecha());
@@ -140,6 +148,10 @@ public class MovimientoBO {
         Ent.setMotivo(movimiento.getMotivo());
         Ent.setNombreDestino(movimiento.getNombreDestino());
         Ent.setNombreOrigen(movimiento.getNombreOrigen());
+        Ent.setCorrelativo(movimiento.getCorrelativo());
+        Ent.setSerie(movimiento.getSerie());
+        Ent.setEstado(movimiento.getEstado());
+        
         
         return Ent;
     }
