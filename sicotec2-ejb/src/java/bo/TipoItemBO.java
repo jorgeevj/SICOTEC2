@@ -44,7 +44,10 @@ public class TipoItemBO {
     @EJB
     private ColorFacade colorFacade;
     
+    
     ////
+    
+    
     public List<Caracteristica> getNombreCaracteristica(){
         List<Caracteristica> lista = caracteristicaFacade.findAll();
         return lista;
@@ -77,14 +80,11 @@ public class TipoItemBO {
         List<TipoItemDTO> lista1=convertEntidadToDTO(lista);
         return lista1;      
     }    
-    public void registrarTipoItem(TipoItemDTO t){        
-        Tipoitem e=new Tipoitem();
-         e=convertDTOtoEntidad(t);        
-        tipoItemFacade.create(e);        
+    public void registrarTipoItem(TipoItemDTO t){              
+        tipoItemFacade.create(convertDTOtoEntidad(t));        
     }    
     public void modificarTipoItem(TipoItemDTO t){
-        Tipoitem r=convertDTOtoEntidad(t);        
-        tipoItemFacade.edit(r);
+        tipoItemFacade.edit(convertDTOtoEntidad(t));
     }    
     /////
     
