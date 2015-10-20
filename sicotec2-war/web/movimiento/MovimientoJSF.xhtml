@@ -11,7 +11,7 @@
         <p:panel id="p1" header="Gestion de Movimientos" footer="Cotizacion Details" style="margin-bottom:20px">
            
             <h:form>
-                <div>
+                <h:panelGrid>
                     Tipo de Movimiento
                     <p:selectOneMenu id="tipoMovimientoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.idTipoMovimientoSelectBusqueda}"
                                     style="width:100%"> 
@@ -19,16 +19,12 @@
                         <f:selectItems value="#{movimientoMB.listaTipoMovimiento}" var="tMov" 
                                        itemLabel="#{tMov.nombre}" itemValue="#{tMov.idtipoMovimiento}"/> 
                    </p:selectOneMenu>
-                </div>
-                <div>
                     Estado
                     <p:selectOneMenu id="estadoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.selectEstadoBusqueda}"
                                     style="width:100%"> 
-                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItem itemLabel="Seleccione" itemValue="100" />
                         <f:selectItems value="#{movimientoMB.listaEstados}"/> 
                    </p:selectOneMenu>
-                </div>
-                <div>
                     Documento
                     <p:selectOneMenu id="documentoSelectBusqueda" styleClass="browser-default" value="#{movimientoMB.idDocumentoSelectBusqueda}"
                                     style="width:100%"> 
@@ -36,27 +32,21 @@
                         <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
                                        itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/> 
                    </p:selectOneMenu>
-                </div>
-                <div>
                     <p:calendar value="#{movimientoMB.fechaInicioBusqueda}"/>
                     <p:calendar value="#{movimientoMB.fechaFinBusqueda}"/>
-                </div>
-                <div>
                     N° Correlativo
                     <p:inputText value="#{movimientoMB.correlativoBusqueda}"/>
-                </div>
-                <div>
                     N° Serie
                     <p:inputText value="#{movimientoMB.serieBusqueda}"/>
-                </div>
 
                 <br/>
-                    <p:commandButton value="Buscar" update="formTabla:tab_movimientos" actionListener="#{movimientoMB.buscarMovimiento()}"/>
-                    <p:commandButton value="Registrar" update="formRegistro" actionListener="#{movimientoMB.abrirModalNuevoMovimiento()}"/>
+                    <p:commandButton value="Buscar" actionListener="#{movimientoMB.buscarMovimiento}"/>
+                    <p:commandButton value="Registrar" update="formRegistro" actionListener="#{movimientoMB.abrirModalNuevoMovimiento}"/>
                     <p:commandButton value="Editar" update="formEdit" actionListener="#{movimientoMB.abrirModalEidt()}"/>
                     <p:commandButton value="Ver Items" actionListener="#{movimientoMB.verItems()}"/>
-                <br/>
-                <br/>
+               </h:panelGrid> 
+           <br/>
+            <br/>
             </h:form>
             
             <h:form id="formTabla">
@@ -150,25 +140,25 @@
         
         <p:dialog header="Editar Movimiento" widgetVar="dialog_edit_mov" resizable="false">
             <h:form id="formEdit">
-                
-                <p:selectOneMenu id="documentoSelectEdit" value="#{movimientoMB.idDocumentoEdit}">
-                    <f:selectItem itemLabel="Seleccione Documento" itemValue="0" />
-                    <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
-                                   itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
-                
-                </p:selectOneMenu>
-                
-                <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Documento"/>
+                    <p:selectOneMenu id="documentoSelectEdit" value="#{movimientoMB.idDocumentoEdit}">
+                        <f:selectItem itemLabel="Seleccione Documento" itemValue="0" />
+                        <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
+                                       itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
 
-                <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
-                
-                <p:selectOneMenu id="estadoSelectEdit" value="#{movimientoMB.estadoEdit}">
-                    <f:selectItem itemLabel="Seleccione Estado" itemValue="0" />
-                    <f:selectItems value="#{movimientoMB.listaEstados}"/>  
-                </p:selectOneMenu>
-                
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Movimiento"/>
+                    <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
+                    <p:outputLabel value="Comentario"/>
+                    <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
+                    <p:outputLabel value="Estado"/>
+                    <p:selectOneMenu id="estadoSelectEdit" value="#{movimientoMB.estadoEdit}">
+                        <f:selectItem itemLabel="Seleccione Estado" itemValue="0" />
+                        <f:selectItems value="#{movimientoMB.listaEstados}"/>  
+                    </p:selectOneMenu>
+                </h:panelGrid>
                 <p:commandButton value="Guardar" actionListener="#{movimientoMB.editarMovimiento()}"/>
-            
             </h:form>
         </p:dialog> 
         

@@ -93,10 +93,10 @@ public class MovimientoMB implements Serializable{
         //BUSQUEDA
         private int idTipoMovimientoSelectBusqueda;
         private int idDocumentoSelectBusqueda;
-        private int selectEstadoBusqueda;
+        private int selectEstadoBusqueda = 100;
         private String serieBusqueda;
-        private String fechaInicioBusqueda;
-        private String fechaFinBusqueda;
+        private Date fechaInicioBusqueda;
+        private Date fechaFinBusqueda;
         private String correlativoBusqueda;
         
         //EDICION
@@ -166,11 +166,12 @@ public class MovimientoMB implements Serializable{
         setIdAlmacenOrigenNuevo(0);
         
         setListaItem(itemBO.getAlliTems());
-        
-        
+        setListaItemAux(new ArrayList<ItemDTO>());
+
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_nuevo_mov').show();");
-        context.update("tabItemsDisp");
+        context.update("formTabItemsDisp");
+        context.update("formTabItemsSelecc");
     }
     
     public void registrarMovimiento(){
@@ -217,7 +218,6 @@ public class MovimientoMB implements Serializable{
 
             movItem.setEstado(getEstadoMovimientoCreado());
             movItem.setItem(DTO);
-            movItem.setMovimiento(mov);
 
             listaItemsAg.add(movItem);
         }
@@ -270,8 +270,8 @@ public class MovimientoMB implements Serializable{
         context.execute("PF('dialog_edit_mov').hide();");
         
         getMovimientoBO().updateMovimiento(mov);
-        
-        
+        setListaMovimiento(getMovimientoBO().getAllMovimiento());
+        context.update("formTabla");
     }
     
     public void buscarMovimiento(){
@@ -282,25 +282,21 @@ public class MovimientoMB implements Serializable{
         int estado      = getSelectEstadoBusqueda();
         String nSerie   = getSerieBusqueda();
         String correlativo = getCorrelativoBusqueda();
-        Date fechaInicio = null;
-        Date fechaFin = null;
-        
-        
-        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
-        try{
-            fechaInicio = formatter.parse(getFechaInicioBusqueda());
-            fechaFin = formatter.parse(getFechaFinBusqueda());
-        }catch(Exception e){}
-        
+        Date fechaInicio = getFechaInicioBusqueda();
+        Date fechaFin = getFechaFinBusqueda();
+
+        mov.setFechaFin(fechaFin);
+        mov.setFechaInicio(fechaInicio);
         mov.setIddocumento(idDocumento);
         mov.setEstado(estado);
         mov.setIdTipoMovimiento(idTipoMov);
         mov.setSerie(nSerie);
-        mov.setFechaFin(fechaFin);
-        mov.setFechaInicio(fechaInicio);
+        
         mov.setCorrelativo(correlativo);
         
         setListaMovimiento(getMovimientoBO().busquedaMovimiento(mov));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabla");
     }
     
     public void cambioEditMovimiento(ValueChangeEvent event) {
@@ -317,14 +313,18 @@ public class MovimientoMB implements Serializable{
     
     public void agregarItemToMovimiento(){
         getListaItemAux().add(getItemSeleccionado());
+        getListaItem().remove(getItemSeleccionado());
         RequestContext context = RequestContext.getCurrentInstance();
-        context.update("tb_items_seleccionados");
+        context.update("formTabItemsSelecc");
+        context.update("formTabItemsDisp");
     }
     
     public void eliminarItemToMovimiento(){
         getListaItemAux().remove(getItemSeleccionadoAux());
+        getListaItem().add(getItemSeleccionadoAux());
         RequestContext context = RequestContext.getCurrentInstance();
-        context.update("tb_items_disponibles");
+        context.update("formTabItemsSelecc");
+        context.update("formTabItemsDisp");
     }
     
     public void abrirEditMov(){
@@ -1060,28 +1060,28 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the fechaInicioBusqueda
      */
-    public String getFechaInicioBusqueda() {
+    public Date getFechaInicioBusqueda() {
         return fechaInicioBusqueda;
     }
 
     /**
      * @param fechaInicioBusqueda the fechaInicioBusqueda to set
      */
-    public void setFechaInicioBusqueda(String fechaInicioBusqueda) {
+    public void setFechaInicioBusqueda(Date fechaInicioBusqueda) {
         this.fechaInicioBusqueda = fechaInicioBusqueda;
     }
 
     /**
      * @return the fechaFinBusqueda
      */
-    public String getFechaFinBusqueda() {
+    public Date getFechaFinBusqueda() {
         return fechaFinBusqueda;
     }
 
     /**
      * @param fechaFinBusqueda the fechaFinBusqueda to set
      */
-    public void setFechaFinBusqueda(String fechaFinBusqueda) {
+    public void setFechaFinBusqueda(Date fechaFinBusqueda) {
         this.fechaFinBusqueda = fechaFinBusqueda;
     }
 
