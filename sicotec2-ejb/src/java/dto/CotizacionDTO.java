@@ -153,6 +153,14 @@ public class CotizacionDTO {
     }
 
     public String getNombEstado() {
+        long tiempo,actual;
+        if(fechaEnvio!=null){
+         tiempo=fechaEnvio.getTime()+(24*60*60*3);
+         actual=new Date().getTime();
+        if(fechaEnvio.getTime()+(24*60*60*1000*3)<new Date().getTime()){
+        estado=3;
+        }
+        }
         if(estado==0){
         nombEstado="CREADA";
         }

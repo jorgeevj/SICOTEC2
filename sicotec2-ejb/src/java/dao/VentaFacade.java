@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class VentaFacade extends AbstractFacade<Venta> {
+
     @PersistenceContext(unitName = "sicotec2-ejbPU")
     private EntityManager em;
 
@@ -27,5 +28,10 @@ public class VentaFacade extends AbstractFacade<Venta> {
     public VentaFacade() {
         super(Venta.class);
     }
-    
+
+    public Venta createVenta(Venta v) {
+        em.persist(v);
+        em.flush();
+        return v;
+    }
 }

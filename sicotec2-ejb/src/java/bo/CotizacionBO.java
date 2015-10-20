@@ -12,6 +12,8 @@ import dao.CotizacionFacade;
 import dao.DocalmacenFacade;
 import dao.EmpresaFacade;
 import dao.TipoitemFacade;
+import dao.VeitemFacade;
+import dao.VentaFacade;
 import dto.CotipoitemDTO;
 import dto.CotizacionDTO;
 import dto.EmpresaDTO;
@@ -25,7 +27,9 @@ import entidades.Documento;
 import entidades.Empresa;
 import entidades.Tipo;
 import entidades.Tipoitem;
+import entidades.Venta;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -39,6 +43,10 @@ import javax.faces.model.SelectItem;
 @Stateless
 @LocalBean
 public class CotizacionBO {
+    @EJB
+    private VeitemFacade veitemFacade;
+    @EJB
+    private VentaFacade ventaFacade;
 
     @EJB
     private CotipoitemFacade cotipoitemFacade;
@@ -167,8 +175,16 @@ public class CotizacionBO {
         return cti;
     }
 
-    public void generaVentaCrea(List<CotipoitemDTO> ct) {
+    public void generaVentaCrea(List<CotipoitemDTO> ct,Cotizacion c) {
         
+        Venta v=new Venta();
+        v.setEstado("Generada");
+        v.setFecha(new Date());
+        v.setIdempresa(c.getIdempresa());
+        v=ventaFacade.createVenta(v);
+        for (CotipoitemDTO dto : ct) {
+            
+        }  
     }
 
 }
