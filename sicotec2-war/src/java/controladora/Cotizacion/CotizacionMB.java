@@ -108,7 +108,7 @@ public class CotizacionMB {
     }
 
     public void onRowSelectCot(SelectEvent event) {
-        cotizacionSelec = (CotizacionDTO) event.getObject();
+//        cotizacionSelec = (CotizacionDTO) event.getObject();
         btnEditarEstado = false;
     }
 

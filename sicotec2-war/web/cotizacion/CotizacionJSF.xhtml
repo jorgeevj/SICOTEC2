@@ -36,7 +36,7 @@
             
             
                 <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}" 
-                             selectionMode="single" rowKey="#{cot.idcotizacion}">
+                             selectionMode="single" rowKey="#{cot.idcotizacion}" selection="#{cotizacionMB.cotizacionSelec}">
                     <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot" />
                     
                     <p:column headerText="N° Serie" width="40">
