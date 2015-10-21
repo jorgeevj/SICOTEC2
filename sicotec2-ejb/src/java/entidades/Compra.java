@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Compra.findByTotal", query = "SELECT c FROM Compra c WHERE c.total = :total"),
     @NamedQuery(name = "Compra.findBySerie", query = "SELECT c FROM Compra c WHERE c.serie = :serie"),
     @NamedQuery(name = "Compra.findByCorrelativo", query = "SELECT c FROM Compra c WHERE c.correlativo = :correlativo"),
-    @NamedQuery(name = "Compra.findByIdalmacen", query = "SELECT c FROM Compra c WHERE c.idalmacen = :idalmacen")})
+    @NamedQuery(name = "Compra.findByIdalmacen", query = "SELECT c FROM Compra c WHERE c.idalmacen = :idalmacen"),
+    @NamedQuery(name = "Compra.findByEstado", query = "SELECT c FROM Compra c WHERE c.estado = :estado")})
 public class Compra implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -64,6 +65,8 @@ public class Compra implements Serializable {
     @Size(max = 45)
     @Column(name = "idalmacen")
     private String idalmacen;
+    @Column(name = "estado")
+    private Integer estado;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
@@ -125,6 +128,14 @@ public class Compra implements Serializable {
 
     public void setIdalmacen(String idalmacen) {
         this.idalmacen = idalmacen;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
     public Empresa getIdempresa() {
