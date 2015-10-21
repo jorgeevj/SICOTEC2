@@ -37,6 +37,15 @@ public class tipoitemMB {
     private double dsctoCliente;
     private double dsctoDistribuidor;
     
+    private String codigoCaracteristica;
+    private String nombreCaracteristica;
+    private String descripcionCaracteristica;
+    
+    private String codigoMarca;
+    private String nombreMarca;
+    private String imagenMarca; //modificar para guardar tipo img
+    private String formatoMarca;
+    
     private String caracteristicaSelect;
     private String marcaSelect;
     private String colorSelect; 
@@ -129,6 +138,18 @@ public class tipoitemMB {
     
     }
     
+    public void registrarCaracteristica(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+    
+    context.execute("PF('crearCaraItem').show();");
+    }
+    
+    public void registrarMarca(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+    
+    context.execute("PF('crearMarcaItem').show();");
+    }
+    
     public void registrarNuevoTipoItem(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setIdtipoItem(codigoItem);
@@ -149,12 +170,22 @@ public class tipoitemMB {
     
     public void registrarNuevaMarca(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
-        //objTipoItem.setId
+        objTipoItem.setMarca(new Marca());
+        objTipoItem.getMarca().setIdmarca(Integer.parseInt(codigoMarca));
+        objTipoItem.getMarca().setNombre(nombreMarca);
+        //objTipoItem.getMarca().setImagen(imagenMarca);
+        objTipoItem.getMarca().setFormato(nombre);
+        tipoItemBO.registrarMarca(objTipoItem);
         
     }
     
     public void registrarNuevaCaracteristica(ActionEvent e){
-        
+        TipoItemDTO objTipoItem=new TipoItemDTO();
+        objTipoItem.setCaracteristica(new Caracteristica());
+        objTipoItem.getCaracteristica().setIdcaracteristica(Integer.parseInt(codigoCaracteristica));
+        objTipoItem.getCaracteristica().setNombre(nombreCaracteristica);
+        objTipoItem.getCaracteristica().setDescripcion(descripcionCaracteristica);
+        tipoItemBO.registrarCaracteristica(objTipoItem);
     }
     
     public void modificarTipoItem(ActionEvent e){
@@ -162,8 +193,7 @@ public class tipoitemMB {
         objTipoItem.setIdtipoItem(codigoItem);
         objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
         objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
-        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        //objTipoItem.setDescripcionCaracteristica(descripcion);
+        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));        
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
@@ -369,6 +399,62 @@ public class tipoitemMB {
 
     public void setTipoItemSelect(TipoItemDTO tipoItemSelect) {
         this.tipoItemSelect = tipoItemSelect;
+    }
+
+    public String getCodigoCaracteristica() {
+        return codigoCaracteristica;
+    }
+
+    public void setCodigoCaracteristica(String codigoCaracteristica) {
+        this.codigoCaracteristica = codigoCaracteristica;
+    }
+
+    public String getNombreCaracteristica() {
+        return nombreCaracteristica;
+    }
+
+    public void setNombreCaracteristica(String nombreCaracteristica) {
+        this.nombreCaracteristica = nombreCaracteristica;
+    }
+
+    public String getDescripcionCaracteristica() {
+        return descripcionCaracteristica;
+    }
+
+    public void setDescripcionCaracteristica(String descripcionCaracteristica) {
+        this.descripcionCaracteristica = descripcionCaracteristica;
+    }
+
+    public String getCodigoMarca() {
+        return codigoMarca;
+    }
+
+    public void setCodigoMarca(String codigoMarca) {
+        this.codigoMarca = codigoMarca;
+    }
+
+    public String getNombreMarca() {
+        return nombreMarca;
+    }
+
+    public void setNombreMarca(String nombreMarca) {
+        this.nombreMarca = nombreMarca;
+    }
+
+    public String getImagenMarca() {
+        return imagenMarca;
+    }
+
+    public void setImagenMarca(String imagenMarca) {
+        this.imagenMarca = imagenMarca;
+    }
+
+    public String getFormatoMarca() {
+        return formatoMarca;
+    }
+
+    public void setFormatoMarca(String formatoMarca) {
+        this.formatoMarca = formatoMarca;
     }
     
     
