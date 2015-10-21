@@ -85,11 +85,16 @@ public class TipoItemBO {
     }    
     public void modificarTipoItem(TipoItemDTO t){
         tipoItemFacade.edit(convertDTOtoEntidad(t));
-    }    
+    }
+    
+    public void registrarCaracteristica(TipoItemDTO t){
+        caracteristicaFacade.create(convertDTOtoEntidadCaracteristica(t));
+    }
+    
+    public void registrarMarca(TipoItemDTO t){
+        marcaFacade.create(convertDTOtoEntidadMarca(t));
+    }
     /////
-    
-      
-    
     
     public List<TipoItemDTO> getAllTipoItem(){
         
@@ -111,6 +116,22 @@ public class TipoItemBO {
             lista3.add(T);
         }
          return lista3;
+    }
+    
+    public Caracteristica convertDTOtoEntidadCaracteristica(TipoItemDTO b){
+        Caracteristica e=new Caracteristica();
+        e.setIdcaracteristica(b.getIdCaracteristica());
+        e.setNombre(b.getCaracteristica().getNombre());
+        e.setDescripcion(b.getCaracteristica().getDescripcion());
+        return e;
+    }
+    public Marca convertDTOtoEntidadMarca(TipoItemDTO c){
+        Marca e=new Marca();
+        e.setIdmarca(c.getIdMarca());
+        e.setNombre(c.getMarca().getNombre());
+        e.setImagen(c.getMarca().getImagen());
+        e.setFormato(c.getMarca().getFormato());
+        return e;
     }
     public Tipoitem convertDTOtoEntidad(TipoItemDTO a){
         Tipoitem e=new Tipoitem();        
