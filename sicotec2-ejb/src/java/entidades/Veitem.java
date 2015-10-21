@@ -35,15 +35,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Veitem.findByPrecio", query = "SELECT v FROM Veitem v WHERE v.precio = :precio"),
     @NamedQuery(name = "Veitem.findByDescuento", query = "SELECT v FROM Veitem v WHERE v.descuento = :descuento")})
 public class Veitem implements Serializable {
+    @Column(name = "descuento")
+    private Double descuento;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "precio")
+    private Double precio;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected VeitemPK veitemPK;
-    @Size(max = 45)
-    @Column(name = "precio")
-    private String precio;
-    @Size(max = 45)
-    @Column(name = "descuento")
-    private String descuento;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "veitem")
     private List<Garantia> garantiaList;
     @JoinColumn(name = "iditem", referencedColumnName = "iditem", insertable = false, updatable = false)
@@ -72,21 +71,7 @@ public class Veitem implements Serializable {
         this.veitemPK = veitemPK;
     }
 
-    public String getPrecio() {
-        return precio;
-    }
 
-    public void setPrecio(String precio) {
-        this.precio = precio;
-    }
-
-    public String getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(String descuento) {
-        this.descuento = descuento;
-    }
 
     @XmlTransient
     public List<Garantia> getGarantiaList() {
@@ -136,6 +121,22 @@ public class Veitem implements Serializable {
     @Override
     public String toString() {
         return "entidades.Veitem[ veitemPK=" + veitemPK + " ]";
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public Double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Double descuento) {
+        this.descuento = descuento;
     }
     
 }
