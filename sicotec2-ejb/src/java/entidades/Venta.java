@@ -47,6 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Venta.findByCorrelativo", query = "SELECT v FROM Venta v WHERE v.correlativo = :correlativo"),
     @NamedQuery(name = "Venta.findByIdalmacen", query = "SELECT v FROM Venta v WHERE v.idalmacen = :idalmacen")})
 public class Venta implements Serializable {
+    @Column(name = "iddocumento")
+    private Integer iddocumento;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,9 +66,6 @@ public class Venta implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
-    @Size(max = 45)
-    @Column(name = "iddocumento")
-    private String iddocumento;
     @Size(max = 45)
     @Column(name = "serie")
     private String serie;
@@ -133,13 +132,6 @@ public class Venta implements Serializable {
         this.estado = estado;
     }
 
-    public String getIddocumento() {
-        return iddocumento;
-    }
-
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
-    }
 
     public String getSerie() {
         return serie;
@@ -222,6 +214,14 @@ public class Venta implements Serializable {
     @Override
     public String toString() {
         return "entidades.Venta[ idventa=" + idventa + " ]";
+    }
+
+    public Integer getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(Integer iddocumento) {
+        this.iddocumento = iddocumento;
     }
     
 }
