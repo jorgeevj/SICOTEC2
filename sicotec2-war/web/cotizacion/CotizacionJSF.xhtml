@@ -10,68 +10,76 @@
         #{cotizacionMB.init()}
         <p:panel id="pCotizacion" header="Gestion de Cotizaciones Enviadas" footer="Cotizacion Details" style="margin-bottom:20px">
             <h:form id="formCotizacion">
-                
-                <h:panelGrid columns="2">
+
+                <p:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="N° Serie" for="it0" />
                     <p:inputText id="it0" value="#{cotizacionMB.campos.serie}"/>
                     <p:outputLabel value="N° Correlativo" for="it1" />
                     <p:inputText id="it1" value="#{cotizacionMB.campos.correlativo}"/>
                     <p:outputLabel value="Ruc:" for="it2" />
                     <p:inputText id="it2" value="#{cotizacionMB.campos.idempresa.ruc}"/>
-                    <p:outputLabel value="Empresa:" for="it3" />
-                    <p:inputText id="it3" value="#{cotizacionMB.campos.idempresa.nombre}"/>
+                    <p:outputLabel value="Empresa:" for="choiceEmpCot" />
+                    <p:selectOneMenu id="choiceEmpCot" value="#{cotizacionMB.campos.idempresa.idempresa}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{cotizacionMB.listaEmpresas}" var="emp" 
+                                       itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
+                    </p:selectOneMenu>
                     <p:outputLabel for="almacenes" value="Almacen:" />
                     <p:selectOneMenu id="almacenes" value="#{cotizacionMB.campos.idalm}" style="width:100%">
                         <f:selectItem itemLabel="Seleccione" itemValue="" />
                         <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
                                        itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                     </p:selectOneMenu>
-                </h:panelGrid>
-                <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
-                                 actionListener="#{cotizacionMB.consultar}" update="tabCotizaciones"/>
-                <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear" />
-                <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditarCot" title="Editar" 
-                                 disabled="#{cotizacionMB.btnEditarEstado}" update="formEditCot:pGridEditCot2"/>         
-              
-            
-            
-                <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}" 
-                             selectionMode="single" rowKey="#{cot.idcotizacion}" selection="#{cotizacionMB.cotizacionSelec}">
-                    <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot" />
-                    
-                    <p:column headerText="N° Serie" width="40">
-                        <h:outputText value="#{cot.serie}" />
-                    </p:column>
-                    <p:column headerText="Correlativo">
-                        <h:outputText value="#{cot.correlativo}" />
-                    </p:column>
-                    <p:column headerText="Almacen">
-                        <h:outputText value="#{cot.nombAlmacen}" />
-                    </p:column>
-                    <p:column headerText="RUC">
-                        <h:outputText value="#{cot.idempresa.ruc}" />
-                    </p:column>
-                    <p:column headerText="Enpresa">
-                        <h:outputText value="#{cot.idempresa.nombre}" />
-                    </p:column>
-                    <p:column headerText="Fecha de Enviado" width="110">
-                        <h:outputText value="#{cot.fechaEnvio}" >
-                            <f:convertDateTime pattern="MM-dd-yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="dias de Duracion">
-                        <h:outputText value="#{cot.duracion}" />
-                    </p:column>
-                    <p:column headerText="Entrega">
-                        <h:outputText value="#{cot.nombEntrega}" />
-                    </p:column>
-                    <p:column headerText="Estado">
-                        <h:outputText value="#{cot.nombEstado}" />
-                    </p:column>
-                </p:dataTable>
-                  </h:form>
-            
+                </p:panelGrid>
+                <p:panelGrid columns="4" styleClass="hideborder">
+                    <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
+                                     actionListener="#{cotizacionMB.limpiar}" update="formCotizacion"/>
+                    <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
+                                     actionListener="#{cotizacionMB.consultar}" update="tabCotizaciones"/>
+                    <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear"  update="formRegCot"/>
+                    <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditarCot" title="Editar" 
+                                     disabled="#{cotizacionMB.btnEditarEstado}" update="formEditCot:pGridEditCot2"/>         
+                </p:panelGrid>
+
+                
+                    <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}" 
+                                 selectionMode="single" rowKey="#{cot.idcotizacion}" selection="#{cotizacionMB.cotizacionSelec}">
+                        <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot" />
+
+                        <p:column headerText="N° Serie" width="40">
+                            <h:outputText value="#{cot.serie}" />
+                        </p:column>
+                        <p:column headerText="Correlativo">
+                            <h:outputText value="#{cot.correlativo}" />
+                        </p:column>
+                        <p:column headerText="Almacen">
+                            <h:outputText value="#{cot.nombAlmacen}" />
+                        </p:column>
+                        <p:column headerText="RUC">
+                            <h:outputText value="#{cot.idempresa.ruc}" />
+                        </p:column>
+                        <p:column headerText="Enpresa">
+                            <h:outputText value="#{cot.idempresa.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha de Enviado" width="110">
+                            <h:outputText value="#{cot.fechaEnvio}" >
+                                <f:convertDateTime pattern="MM-dd-yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="dias de Duracion">
+                            <h:outputText value="#{cot.duracion}" />
+                        </p:column>
+                        <p:column headerText="Entrega">
+                            <h:outputText value="#{cot.nombEntrega}" />
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText value="#{cot.nombEstado}" />
+                        </p:column>
+                    </p:dataTable>
+                
+            </h:form>
+
         </p:panel> 
     </ui:define>  
 </ui:composition>
- 
+

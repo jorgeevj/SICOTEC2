@@ -240,7 +240,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cod Item" >
                             <h:outputText value="#{coitem.tipoitem.idtipoItem}" />
                         </p:column>
-                        <p:column headerText="Nombre" >
+                        <p:column headerText="Nombre" > 
                             <h:outputText value="#{coitem.tipoitem.nombre}" />
                         </p:column>
                         <p:column headerText="Stock" >
@@ -283,8 +283,8 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Empresa:" for="itec3" />
                         <p:inputText id="itec3" value="#{cotizacionMB.cotizacionSelec.idempresa.nombre}" />
                         <h:outputLabel for="empEditCot" value="Empresa: "/>
-                        <p:selectOneMenu id="empEditCot" value="#{cotizacionMB.cotizacionSelec.empresaDTO.idemp}" style="width:100%" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <p:selectOneMenu id="empEditCot" value="#{cotizacionMB.cotizacionSelec.empresaDTO.idempresa}" style="width:100%" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="null" />
                             <f:selectItems value="#{cotizacionMB.listaEmpresas}" var="cot" 
                                            itemValue="#{cot.idempresa}" itemLabel="#{cot.nombre}"/>
                         </p:selectOneMenu>

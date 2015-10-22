@@ -44,7 +44,6 @@ public class CotizacionMB {
 
     private List<CotizacionDTO> listaCotizacion;
     private CotizacionDTO campos;
-    private CotizacionDTO camposGuardar;
     private CotizacionDTO cotizacionSelec;
     private List<Empresa> listaEmpresas;
 
@@ -74,50 +73,56 @@ public class CotizacionMB {
 
     @PostConstruct
     public void init() {
-
-        campos = new CotizacionDTO();
-        campos.setIdempresa(new Empresa());
-        btnEditarEstado = true;
-        listaCotizacion = cotizacionBO.getAllCotizaciones();
-        cotizacionSelec = new CotizacionDTO();
-        cotizacionSelec.setIdempresa(new Empresa());
-        cotizacionSelec.setEmpresaDTO(new EmpresaDTO());
-
+        
         listaEmpresas = cotizacionBO.empresasAll();
-
-        camposGuardar = new CotizacionDTO();
-        camposGuardar.setIdempresa(new Empresa());
 
         listaAlmacenes = almacenBO.findAll();
         listaTipoItem = cotizacionBO.tipoItemAll();
         listaCategoria = cotizacionBO.findCategoriaAll();
-        listaCotipoItem = new ArrayList<>();
-        listaCoItemSelect = new ArrayList<>();
-        cotipoItemSelect = new CotipoitemDTO();
-        camposCrear = new Cotizacion();
-        camposCrear.setEstado(0);
-        camposCrear.setIdempresa(new Empresa());
-        btnAgregarItem = true;
-        btnQuitarItem = true;
+        limpiarCotizaciones();
+        limpiarcamposCrear();
 
     }
 
     public List<CotizacionDTO> consultar(ActionEvent actionEvent) {
+        cotizacionSelec = new CotizacionDTO();
         listaCotizacion = cotizacionBO.BuscarCotizacion(campos);
         return listaCotizacion;
     }
+    public void limpiar(ActionEvent actionEvent){
+    limpiarCotizaciones();
+    }
+    public void limpiarCotizaciones(){
+    cotizacionSelec = new CotizacionDTO();
+    campos=new CotizacionDTO();
+    listaCotizacion = cotizacionBO.getAllCotizaciones();
+    btnEditarEstado = true;
+    }
 
     public void onRowSelectCot(SelectEvent event) {
-//        cotizacionSelec = (CotizacionDTO) event.getObject();
         btnEditarEstado = false;
     }
 
     public void crear(ActionEvent actionEvent) {
+        limpiarcamposCrear();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('regCot').show();");
     }
 
     // CREAR
+    private void limpiarcamposCrear() {
+        cotizacionSelec = new CotizacionDTO();
+        camposCrear = new Cotizacion();
+        camposCrear.setEstado(0);
+        camposCrear.setIdempresa(new Empresa());
+        tipoItemSelect = null;
+        listaCoItemSelect=new ArrayList<>();
+        listaCotipoItem=new ArrayList<>(); 
+        btnAgregarItem = true;
+        btnQuitarItem = true;
+        cotipoItemSelect = new CotipoitemDTO();
+    }
+
     public void guardarCrear(ActionEvent actionEvent) {
         if (listaCotipoItem.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay Items Agregados", ""));
@@ -191,9 +196,9 @@ public class CotizacionMB {
     public void openPrecioCrea(ActionEvent actionEvent) {
         chamgePrecioCrea = cotipoItemSelect.getPrecio();
         if (cotizacionBO.isEmpDistribudora(camposCrear.getIdempresa())) {
-            minPrecioCrea = cotipoItemSelect.getPrecio() - (cotipoItemSelect.getTipoitem().getDesDistribuidor() * cotipoItemSelect.getPrecio() / 100);
+            minPrecioCrea = cotipoItemSelect.getTipoitem().getPrecioLista() - (cotipoItemSelect.getTipoitem().getDesDistribuidor() * cotipoItemSelect.getTipoitem().getPrecioLista() / 100);
         } else {
-            minPrecioCrea = cotipoItemSelect.getPrecio() - cotipoItemSelect.getTipoitem().getDesCliente() * cotipoItemSelect.getPrecio();
+            minPrecioCrea = cotipoItemSelect.getTipoitem().getPrecioLista() - (cotipoItemSelect.getTipoitem().getDesCliente() * cotipoItemSelect.getTipoitem().getPrecioLista() / 100);
 
         }
     }
@@ -225,7 +230,7 @@ public class CotizacionMB {
             return;
         }
         cotipoItemSelect.setPrecio(chamgePrecioCrea);
-         RequestContext context = RequestContext.getCurrentInstance();
+        RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('editItemPrecio').hide();");
     }
 
@@ -247,13 +252,14 @@ public class CotizacionMB {
 
     public void acepAproCrear(ActionEvent actionEvent) {
         camposCrear.setEstado(1);
+        cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
         guardarCrear(actionEvent);
-        cotizacionBO.generaVentaCrea(listaCoItemSelect,camposCrear);
         cerrarAproCrear(actionEvent);
     }
 
     public void cerrarAproCrear(ActionEvent actionEvent) {
-
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('aproVentaCrea').hide();");
     }
 
     public void almacenSelect() {
@@ -328,14 +334,6 @@ public class CotizacionMB {
 
     public void setListaCotizacion(List<CotizacionDTO> listaCotizacion) {
         this.listaCotizacion = listaCotizacion;
-    }
-
-    public CotizacionDTO getCamposGuardar() {
-        return camposGuardar;
-    }
-
-    public void setCamposGuardar(CotizacionDTO camposGuardar) {
-        this.camposGuardar = camposGuardar;
     }
 
     public CotizacionDTO getCotizacionSelec() {
