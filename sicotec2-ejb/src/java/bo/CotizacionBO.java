@@ -11,7 +11,11 @@ import dao.CotipoitemFacade;
 import dao.CotizacionFacade;
 import dao.DocalmacenFacade;
 import dao.EmpresaFacade;
+import dao.ItemFacade;
+import dao.LoteFacade;
+import dao.MovimientoFacade;
 import dao.TipoitemFacade;
+import dao.TipomovimientoFacade;
 import dao.VeitemFacade;
 import dao.VentaFacade;
 import dto.CotipoitemDTO;
@@ -25,8 +29,14 @@ import entidades.Cotizacion;
 import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Empresa;
+import entidades.Impuesto;
+import entidades.Item;
+import entidades.Movimiento;
 import entidades.Tipo;
 import entidades.Tipoitem;
+import entidades.Tipomovimiento;
+import entidades.Veitem;
+import entidades.VeitemPK;
 import entidades.Venta;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +53,10 @@ import javax.faces.model.SelectItem;
 @Stateless
 @LocalBean
 public class CotizacionBO {
+
+    @EJB
+    private ItemFacade itemFacade;
+
     @EJB
     private VeitemFacade veitemFacade;
     @EJB
@@ -63,25 +77,24 @@ public class CotizacionBO {
     private AlmacenFacade almacenFacade;
     @EJB
     private CotizacionFacade cotizacionFacade;
-    
-    public boolean isEmpDistribudora(Empresa e){
-        e=empresaFacade.find(e.getIdempresa());
+
+    public boolean isEmpDistribudora(Empresa e) {
+        e = empresaFacade.find(e.getIdempresa());
         for (Tipo t : e.getTipoList()) {
-        if(t.getIdtipo()==1){
-            return true;
+            if (t.getIdtipo() == 1) {
+                return true;
+            }
         }
-        }
-    return false;
+        return false;
     }
-    
-    
+
     public Docalmacen updateDocAlm(Docalmacen dal) {
         Docalmacen d = docalmacenFacade.findBy2key(dal.getDocalmacenPK().getIdalmacen(), dal.getDocalmacenPK().getIddocumento());
-        if(d.getCorrelativo()<999999){
+        if (d.getCorrelativo() < 999999) {
             dal.setCorrelativo(d.getCorrelativo() + 1);
             dal.setSerie(d.getSerie());
-        }else{
-            dal.setSerie(d.getSerie()+1);
+        } else {
+            dal.setSerie(d.getSerie() + 1);
             dal.setCorrelativo(1);
         }
         docalmacenFacade.edit(dal);
@@ -162,8 +175,6 @@ public class CotizacionBO {
         return dto;
     }
 
-   
-
     private Cotipoitem cotipoitenDTOByEntidad(CotipoitemDTO c) {
         Cotipoitem cti = new Cotipoitem();
         cti.setCotipoitemPK(new CotipoitemPK(c.getCotizacion().getIdcotizacion(), c.getTipoitem().getIdtipoItem()));
@@ -175,16 +186,39 @@ public class CotizacionBO {
         return cti;
     }
 
-    public void generaVentaCrea(List<CotipoitemDTO> ct,Cotizacion c) {
-        
-        Venta v=new Venta();
+    public void generaVentaCrea(List<CotipoitemDTO> ct, Cotizacion c) {
+        Veitem vi;
+        List<Item> li;
+        double total=0,descuento=0;
+        Venta v = new Venta();
         v.setEstado("Generada");
         v.setFecha(new Date());
         v.setIdempresa(c.getIdempresa());
-        v=ventaFacade.createVenta(v);
+        v.setIdimpuesto(new Impuesto(1));
+         for (CotipoitemDTO dto : ct) {
+         total+=dto.getCantidad();
+         descuento+=dto.getDescuento();
+         }
+        v.setTotal(total);
+        v.setDescuento(descuento);
+        v.setIddocumento(2);
+        v = ventaFacade.createVenta(v);
         for (CotipoitemDTO dto : ct) {
-            
-        }  
+            vi = new Veitem();
+            li = itemFacade.getItemForVenta(c.getIdalmacen(), dto);
+
+            if (li.size() == dto.getCantidad()) {//verificacion opcional se supone que antes de generar la venta se valido el stock
+
+                for (Item item : li) {
+                    vi.setVeitemPK(new VeitemPK(v.getIdventa(), item.getIditem()));
+                    vi.setVenta(v);
+                    vi.setItem(item);
+                    vi.setPrecio(dto.getPrecio());
+                    vi.setDescuento(dto.getDescuento());
+                    veitemFacade.create(vi);
+                }
+            }
+        }
     }
 
 }

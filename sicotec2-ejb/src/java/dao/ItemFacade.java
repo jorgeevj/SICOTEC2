@@ -5,6 +5,7 @@
  */
 package dao;
 
+import dto.CotipoitemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTOVista;
 import entidades.Item;
@@ -32,7 +33,21 @@ public class ItemFacade extends AbstractFacade<Item> {
     public ItemFacade() {
         super(Item.class);
     }
-    
+
+    public List<Item> getItemForVenta(int idalmacen,CotipoitemDTO ct) {
+        String jpa = "SELECT i "
+                + "FROM Item i, Lote l, Compra c "
+                + "where c.idcompra=l.idcompra.idcompra "
+                + "and i.idlote.idlote=l.idlote "
+                + "and l.altipoitem.tipoitem.idtipoItem='"+ct.getTipoitem().getIdtipoItem()+"' "
+                + "and c.idalmacen=l.altipoitem.almacen.idalmacen "
+                + "and c.idalmacen= "+idalmacen+" "
+                + "and i.estado=0 "
+                + "and i.operatividad=0 "
+                + "order by c.fecha";
+
+        return em.createQuery(jpa, Item.class).setMaxResults(ct.getCantidad()).getResultList();
+    }
     public List<MovimientoitemDTOVista> getAllItems(){
         List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
         try{
