@@ -17,7 +17,9 @@ import dto.EmpresaDTO;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
+import dto.MovimientoitemDTOVista;
 import dto.TipomovimientoDTO;
+import entidades.Item;
 import entidades.Movimientoitem;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -26,8 +28,10 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
@@ -59,26 +63,29 @@ public class MovimientoMB implements Serializable{
     private int estadoEnTransito = 1;
     private int estadoConfirmado = 2;
     
+    private boolean disableEditar = true;
+    private boolean disableVerItems = true;
+    
     
     //VARIABLES
         //LISTAS
         private List<TipomovimientoDTO> listaTipoMovimiento = new ArrayList<TipomovimientoDTO>();
         private List<MovimientoDTO> listaMovimiento = new ArrayList<MovimientoDTO>();
         private List<DocumentoDTO> listaDocumento = new ArrayList<DocumentoDTO>();
-        private List<ItemDTO> listaItem = new ArrayList<ItemDTO>();
-        private List<ItemDTO> listaItemAux = new ArrayList<ItemDTO>();
+        private List<MovimientoitemDTOVista> listaItem = new ArrayList<MovimientoitemDTOVista>();
+        private List<MovimientoitemDTOVista> listaItemAux = new ArrayList<MovimientoitemDTOVista>();
         private List<EmpresaDTO> listaEmpresasProveedoras = new ArrayList<EmpresaDTO>();
         private List<EmpresaDTO> listaEmpresasClientes = new ArrayList<EmpresaDTO>();
         private List<AlmacenDTO> listaAlmacenes = new ArrayList<AlmacenDTO>();
         private ArrayList listaEstados = new ArrayList();
-        private List<ItemDTO> listaItemsMovimiento = new ArrayList<ItemDTO>();
+        private List<MovimientoitemDTOVista> listaItemsMovimiento = new ArrayList<MovimientoitemDTOVista>();
         
         //MOVIMIENTO SELECCIONADO
         private MovimientoDTO movimientoSeleccionado;
         
         //ITEM SELECCIONADO
-        private ItemDTO itemSeleccionado = new ItemDTO();
-        private ItemDTO itemSeleccionadoAux = new ItemDTO();
+        private MovimientoitemDTOVista itemSeleccionado = new MovimientoitemDTOVista();
+        private MovimientoitemDTOVista itemSeleccionadoAux = new MovimientoitemDTOVista();
         
         //REGISTRO
         private int idTipoMovimientoSelectNuevo;
@@ -133,9 +140,22 @@ public class MovimientoMB implements Serializable{
             setListaItemsMovimiento(getMovimientoBO().getItemsByMov(mov));
             
             RequestContext context = RequestContext.getCurrentInstance();
-            context.update("tb_ver_items");
+            context.update("formTabItemsMovimiento");
             context.execute("PF('dialog_ver_items').show();");
         }
+    }
+    
+    public void limpiar(){
+        setIdTipoMovimientoSelectBusqueda(0);
+        setIdDocumentoEdit(0);
+        setSelectEstadoBusqueda(100);
+        setSerieBusqueda(null);
+        setFechaFinBusqueda(null);
+        setFechaInicioBusqueda(null);
+        setCorrelativoBusqueda(null);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formBusqueda");
     }
     
     public void tipoMovElegidoNuevo(){
@@ -152,6 +172,10 @@ public class MovimientoMB implements Serializable{
             setPanelVisibleMovEntrada(false);
             setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(true);
+        }else{
+            setPanelVisibleMovEntrada(false);
+            setPanelVisibleMovSalida(false);
+            setPanelVisibleMovAlmacenes(false);
         }
     }
     
@@ -166,7 +190,7 @@ public class MovimientoMB implements Serializable{
         setIdAlmacenOrigenNuevo(0);
         
         setListaItem(itemBO.getAlliTems());
-        setListaItemAux(new ArrayList<ItemDTO>());
+        setListaItemAux(new ArrayList<MovimientoitemDTOVista>());
 
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_nuevo_mov').show();");
@@ -174,55 +198,119 @@ public class MovimientoMB implements Serializable{
         context.update("formTabItemsSelecc");
     }
     
+    public String validarCamposRegistro(int idTipoMov){
+        String sms = "";
+        if(idTipoMov == 0){
+            sms = "Seleccione un Tipo de Movimiento";
+        }
+        else if(getIdDocumentoSelectNuevo()== 0){
+            sms = "Seleccione un documento";
+        }      
+        else if(getListaItemAux().isEmpty()){
+            sms = "Ingrese items al movimiento";
+        }
+        else if(idTipoMov == getIdtipoMovimientoEntrada()){
+            if(getNombreOrigenNuevo().equals("") || getNombreOrigenNuevo().equals(null)){
+                sms = "Seleccione un proveedor origen";
+            }
+            else if(getIdAlmacenDestinoNuevo() == 0){
+                sms = "Seleccione un almacen destino";
+            }
+        }else if(idTipoMov == getIdtipoMovimientoSalida()){
+            if(getIdAlmacenOrigenNuevo() == 0){
+                sms = "Seleccione un almacen origen";
+            }
+            else if(getNombreDestinoNuevo().equals("") || getNombreDestinoNuevo().equals(null)){
+                sms = "Seleccione un almacen Cliente";
+            }
+        }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
+            if(getIdAlmacenOrigenNuevo()== 0){
+                sms = "Seleccione un almacen origen";
+            }
+            if(getIdAlmacenDestinoNuevo()== 0){
+                sms = "Seleccione un almacen destino";
+            }
+        }
+        
+        return sms;
+    }
+    
+    public String validarCamposEdicion(){
+        String sms = "";
+        if(getIdDocumentoEdit() == 0){
+            sms = "Seleccione un documento";
+        }else if(getEstadoEdit() == 0){
+            sms = "Seleccione un estado";
+        }
+        
+        return sms;
+    }
+    
     public void registrarMovimiento(){
         int idTipoMovimiento = getIdTipoMovimientoSelectNuevo();
+        
+        String sms = validarCamposRegistro(idTipoMovimiento);
+        if(!sms.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Faltan Algunos Campos", sms));
+        }else{
+            List<MovimientoitemDTO> listaItemsAg = new ArrayList<MovimientoitemDTO>();
+        
+            MovimientoDTO mov = new MovimientoDTO();
+            String motivo        = getMotivoNuevo();
+            String comentario    = getComentarioNuevo();
+            int idDocumento      = getIdDocumentoSelectNuevo();
+            int estado = getEstadoMovimientoCreado();
+            Date fecha = new Date();
 
-        List<MovimientoitemDTO> listaItemsAg = new ArrayList<MovimientoitemDTO>();
-        
-        MovimientoDTO mov = new MovimientoDTO();
-        String motivo        = getMotivoNuevo();
-        String comentario    = getComentarioNuevo();
-        int idDocumento      = getIdDocumentoSelectNuevo();
-        int estado = getEstadoMovimientoCreado();
-        Date fecha = new Date();
-        
-        if(idTipoMovimiento == getIdtipoMovimientoEntradaAlmacen()|| idTipoMovimiento == getIdtipoMovimientoSalidaAlmacen()){
-            int idAlmacenDestino = getIdAlmacenDestinoNuevo();
-            int idAlmacenOrigen  = getIdAlmacenOrigenNuevo();
-            
-            mov.setIdalmacenDestino(idAlmacenDestino);
-            mov.setIdalmacenOrigen(idAlmacenOrigen);
-        }else if(idTipoMovimiento == getIdtipoMovimientoEntrada()){
-            String nombreOrigen = getNombreOrigenNuevo();
-            int idAlmacenDestino = getIdAlmacenDestinoNuevo();
-            
-            mov.setNombreOrigen(nombreOrigen);
-            mov.setIdalmacenDestino(idAlmacenDestino);
-        }else if(idTipoMovimiento == getIdtipoMovimientoSalida()){
-            int idAlmacenOrigen  = getIdAlmacenOrigenNuevo();
-            String nombreDestino  = getNombreDestinoNuevo();
-            
-            mov.setIdalmacenOrigen(idAlmacenOrigen);
-            mov.setNombreDestino(nombreDestino);
-        }
-        
-        mov.setComentario(comentario);
-        mov.setFecha(fecha);
-        mov.setEstado(estado);
-        mov.setMotivo(motivo);
-        mov.setIddocumento(idDocumento); 
-        
-        List<ItemDTO> listaItemsSelec = getListaItemAux();
-        for(ItemDTO DTO : listaItemsSelec){
-            MovimientoitemDTO movItem = new MovimientoitemDTO();
+            if(idTipoMovimiento == getIdtipoMovimientoEntradaAlmacen()|| idTipoMovimiento == getIdtipoMovimientoSalidaAlmacen()){
+                int idAlmacenDestino = getIdAlmacenDestinoNuevo();
+                int idAlmacenOrigen  = getIdAlmacenOrigenNuevo();
 
-            movItem.setEstado(getEstadoMovimientoCreado());
-            movItem.setItem(DTO);
+                mov.setIdalmacenDestino(idAlmacenDestino);
+                mov.setIdalmacenOrigen(idAlmacenOrigen);
+            }else if(idTipoMovimiento == getIdtipoMovimientoEntrada()){
+                String nombreOrigen = getNombreOrigenNuevo();
+                int idAlmacenDestino = getIdAlmacenDestinoNuevo();
 
-            listaItemsAg.add(movItem);
-        }
-        
-        getMovimientoBO().insertMovimiento(mov,listaItemsAg);
+                mov.setNombreOrigen(nombreOrigen);
+                mov.setIdalmacenDestino(idAlmacenDestino);
+            }else if(idTipoMovimiento == getIdtipoMovimientoSalida()){
+                int idAlmacenOrigen  = getIdAlmacenOrigenNuevo();
+                String nombreDestino  = getNombreDestinoNuevo();
+
+                mov.setIdalmacenOrigen(idAlmacenOrigen);
+                mov.setNombreDestino(nombreDestino);
+            }
+
+            mov.setComentario(comentario);
+            mov.setFecha(fecha);
+            mov.setEstado(estado);
+            mov.setMotivo(motivo);
+            mov.setIddocumento(idDocumento); 
+            mov.setIdTipoMovimiento(idTipoMovimiento);
+
+            List<MovimientoitemDTOVista> listaItemsSelec = getListaItemAux();
+            for(MovimientoitemDTOVista DTO : listaItemsSelec){
+                MovimientoitemDTO movItem = new MovimientoitemDTO();
+                ItemDTO it = new ItemDTO();
+                
+                it.setIditem(DTO.getIditem());
+
+                movItem.setEstado(getEstadoMovimientoCreado());
+                movItem.setItem(it);
+
+                listaItemsAg.add(movItem);
+            }
+
+            getMovimientoBO().insertMovimiento(mov,listaItemsAg);
+            setListaMovimiento(getMovimientoBO().getAllMovimiento());
+            setDisableEditar(true);
+            setDisableVerItems(true);
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('dialog_nuevo_mov').hide();");
+            context.update("formTabla");
+            context.update("formBotones");
+        }   
     }
     
     public void abrirModalItems(){
@@ -231,6 +319,11 @@ public class MovimientoMB implements Serializable{
     
     public void selectMovimiento(SelectEvent event){
         setMovimientoSeleccionado((MovimientoDTO)event.getObject());
+        setDisableEditar(false);
+        setDisableVerItems(false);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formBotones");
     }
     
     public void abrirModalEidt(){
@@ -239,39 +332,43 @@ public class MovimientoMB implements Serializable{
         setComentarioEdit(movimientoSeleccionado.getComentario());
         setEstadoEdit(movimientoSeleccionado.getEstado());
         
-        System.out.println(getIdDocumentoEdit());
-        System.out.println(getComentarioEdit());
-        
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_edit_mov').show();");
         context.update("formEdit");
     }
     
     public void editarMovimiento(){
-        MovimientoDTO mov = getMovimientoSeleccionado();
-        int tipoMov = mov.getIdTipoMovimiento();
-
-        System.out.println(tipoMov);
-        
-        mov.setComentario(getComentarioEdit());
-        mov.setIddocumento(getIdDocumentoEdit());
-        mov.setMotivo(getMotivoEdit());
-        if(tipoMov == getIdtipoMovimientoEntrada() || tipoMov == getIdtipoMovimientoSalida()){
-            mov.setNombreOrigen(getNombreOrigenEdit());
-            mov.setNombreDestino(getNombreDestinoEdit());
+        String sms = validarCamposEdicion();
+        if(!sms.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Faltan Algunos Campos", sms));
         }else{
-            mov.setIdalmacenOrigen(getIdAlmacenOrigenEdit());
-            mov.setIdalmacenDestino(getIdAlmacenDestinoEdit());
+            MovimientoDTO mov = getMovimientoSeleccionado();
+            int tipoMov = mov.getIdTipoMovimiento();
+
+            mov.setComentario(getComentarioEdit());
+            mov.setIddocumento(getIdDocumentoEdit());
+            mov.setMotivo(getMotivoEdit());
+            if(tipoMov == getIdtipoMovimientoEntrada() || tipoMov == getIdtipoMovimientoSalida()){
+                mov.setNombreOrigen(getNombreOrigenEdit());
+                mov.setNombreDestino(getNombreDestinoEdit());
+            }else{
+                mov.setIdalmacenOrigen(getIdAlmacenOrigenEdit());
+                mov.setIdalmacenDestino(getIdAlmacenDestinoEdit());
+            }
+
+            mov.setEstado(getEstadoEdit());
+
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('dialog_edit_mov').hide();");
+
+            getMovimientoBO().updateMovimiento(mov);
+            setListaMovimiento(getMovimientoBO().getAllMovimiento());
+            context.update("formTabla");    
+            
+            setDisableEditar(true);
+            setDisableVerItems(true);
+            context.update("formBotones"); 
         }
-        
-        mov.setEstado(getEstadoEdit());
-        
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dialog_edit_mov').hide();");
-        
-        getMovimientoBO().updateMovimiento(mov);
-        setListaMovimiento(getMovimientoBO().getAllMovimiento());
-        context.update("formTabla");
     }
     
     public void buscarMovimiento(){
@@ -304,27 +401,34 @@ public class MovimientoMB implements Serializable{
     }
     
     public void selectItemToMovimientoDispo(SelectEvent event){
-        setItemSeleccionado((ItemDTO)event.getObject());
+        setItemSeleccionado((MovimientoitemDTOVista)event.getObject());
     }
     
     public void selectItemToMovimientoSelect(SelectEvent event){
-        setItemSeleccionadoAux((ItemDTO)event.getObject());
+        setItemSeleccionadoAux((MovimientoitemDTOVista)event.getObject());
     }
     
     public void agregarItemToMovimiento(){
-        getListaItemAux().add(getItemSeleccionado());
-        getListaItem().remove(getItemSeleccionado());
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.update("formTabItemsSelecc");
-        context.update("formTabItemsDisp");
+        if(getItemSeleccionado() != null){
+            getListaItemAux().add(getItemSeleccionado());
+            getListaItem().remove(getItemSeleccionado());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formTabItemsSelecc");
+            context.update("formTabItemsDisp");
+            setItemSeleccionado(new MovimientoitemDTOVista());
+        }
+        
     }
     
     public void eliminarItemToMovimiento(){
-        getListaItemAux().remove(getItemSeleccionadoAux());
-        getListaItem().add(getItemSeleccionadoAux());
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.update("formTabItemsSelecc");
-        context.update("formTabItemsDisp");
+        if(getItemSeleccionadoAux() != null){
+            getListaItemAux().remove(getItemSeleccionadoAux());
+            getListaItem().add(getItemSeleccionadoAux());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formTabItemsSelecc");
+            context.update("formTabItemsDisp");
+            setItemSeleccionadoAux(new MovimientoitemDTOVista());
+        }
     }
     
     public void abrirEditMov(){
@@ -584,28 +688,28 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaItem
      */
-    public List<ItemDTO> getListaItem() {
+    public List<MovimientoitemDTOVista> getListaItem() {
         return listaItem;
     }
 
     /**
      * @param listaItem the listaItem to set
      */
-    public void setListaItem(List<ItemDTO> listaItem) {
+    public void setListaItem(List<MovimientoitemDTOVista> listaItem) {
         this.listaItem = listaItem;
     }
 
     /**
      * @return the listaItemAux
      */
-    public List<ItemDTO> getListaItemAux() {
+    public List<MovimientoitemDTOVista> getListaItemAux() {
         return listaItemAux;
     }
 
     /**
      * @param listaItemAux the listaItemAux to set
      */
-    public void setListaItemAux(List<ItemDTO> listaItemAux) {
+    public void setListaItemAux(List<MovimientoitemDTOVista> listaItemAux) {
         this.listaItemAux = listaItemAux;
     }
 
@@ -682,14 +786,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the itemSeleccionado
      */
-    public ItemDTO getItemSeleccionado() {
+    public MovimientoitemDTOVista getItemSeleccionado() {
         return itemSeleccionado;
     }
 
     /**
      * @param itemSeleccionado the itemSeleccionado to set
      */
-    public void setItemSeleccionado(ItemDTO itemSeleccionado) {
+    public void setItemSeleccionado(MovimientoitemDTOVista itemSeleccionado) {
         this.itemSeleccionado = itemSeleccionado;
     }
 
@@ -1018,14 +1122,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the itemSeleccionadoAux
      */
-    public ItemDTO getItemSeleccionadoAux() {
+    public MovimientoitemDTOVista getItemSeleccionadoAux() {
         return itemSeleccionadoAux;
     }
 
     /**
      * @param itemSeleccionadoAux the itemSeleccionadoAux to set
      */
-    public void setItemSeleccionadoAux(ItemDTO itemSeleccionadoAux) {
+    public void setItemSeleccionadoAux(MovimientoitemDTOVista itemSeleccionadoAux) {
         this.itemSeleccionadoAux = itemSeleccionadoAux;
     }
 
@@ -1046,14 +1150,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaItemsMovimiento
      */
-    public List<ItemDTO> getListaItemsMovimiento() {
+    public List<MovimientoitemDTOVista> getListaItemsMovimiento() {
         return listaItemsMovimiento;
     }
 
     /**
      * @param listaItemsMovimiento the listaItemsMovimiento to set
      */
-    public void setListaItemsMovimiento(List<ItemDTO> listaItemsMovimiento) {
+    public void setListaItemsMovimiento(List<MovimientoitemDTOVista> listaItemsMovimiento) {
         this.listaItemsMovimiento = listaItemsMovimiento;
     }
 
@@ -1097,5 +1201,33 @@ public class MovimientoMB implements Serializable{
      */
     public void setCorrelativoBusqueda(String correlativoBusqueda) {
         this.correlativoBusqueda = correlativoBusqueda;
+    }
+
+    /**
+     * @return the disableEditar
+     */
+    public boolean isDisableEditar() {
+        return disableEditar;
+    }
+
+    /**
+     * @param disableEditar the disableEditar to set
+     */
+    public void setDisableEditar(boolean disableEditar) {
+        this.disableEditar = disableEditar;
+    }
+
+    /**
+     * @return the disableVerItems
+     */
+    public boolean isDisableVerItems() {
+        return disableVerItems;
+    }
+
+    /**
+     * @param disableVerItems the disableVerItems to set
+     */
+    public void setDisableVerItems(boolean disableVerItems) {
+        this.disableVerItems = disableVerItems;
     }
 }
