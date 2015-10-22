@@ -6,6 +6,7 @@
 package dao;
 
 import dto.MovimientoDTO;
+import dto.MovimientoitemDTOVista;
 import entidades.Item;
 import entidades.Movimiento;
 import java.text.SimpleDateFormat;
@@ -33,20 +34,17 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
     public MovimientoFacade() {
         super(Movimiento.class);
     }
-     public List<Item> getItemsByMovimiento(MovimientoDTO mov){
-        List<Item> listaItems = new ArrayList<Item>();
+     public List<MovimientoitemDTOVista> getItemsByMovimiento(MovimientoDTO mov){
+        List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
         try{
-            String jpa = "SELECT i.* "
-                       + "FROM item i, "
-                       + "     movimientoItem mi "
-                       + "WHERE mi.idmovimiento = "+mov.getIdmovimiento()+" "
-                       + "AND   mi.iditem      = i.iditem;";
-
-            Query query = em.createNativeQuery(jpa,Item.class);
-            listaItems = query.getResultList();
-            
+             String ejbQuery = "{CALL vistaItems_x_movimiento(?)}";
+             Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
+             query.setParameter(1, mov.getIdmovimiento());
+             
+            listaItems = query.getResultList();   
         }catch(Exception e){
-            listaItems = new ArrayList<Item>();
+            System.out.println(e.getMessage());
+            listaItems = new ArrayList<MovimientoitemDTOVista>();
         }
         
         return listaItems;
@@ -103,7 +101,6 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
   
             listaMov = query.getResultList();
         }catch(Exception e){
-            System.out.println(e.getMessage());
             listaMov = new ArrayList<Movimiento>();
         }
         

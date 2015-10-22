@@ -13,10 +13,12 @@ import dao.UsuarioFacade;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
+import dto.MovimientoitemDTOVista;
 import dto.TipomovimientoDTO;
 import entidades.Item;
 import entidades.Movimiento;
 import entidades.Movimientoitem;
+import entidades.MovimientoitemPK;
 import entidades.Tipomovimiento;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,8 @@ public class MovimientoBO {
     private MovimientoFacade movimentoFacade;
     @EJB
     private MovimientoitemFacade movimentoItemFacade;
-
+    @EJB
+    private ItemBO itemBO;
 
     public List<MovimientoDTO> getAllMovimiento(){
         List<MovimientoDTO> lista = new ArrayList<MovimientoDTO>();
@@ -46,11 +49,11 @@ public class MovimientoBO {
         return lista;
     }
     
-    public List<ItemDTO> getItemsByMov(MovimientoDTO mov){
+    public List<MovimientoitemDTOVista> getItemsByMov(MovimientoDTO mov){
         List<ItemDTO> listaItems = new ArrayList<ItemDTO>();
-        List<Item> lista = movimentoFacade.getItemsByMovimiento(mov);
+        List<MovimientoitemDTOVista> lista = movimentoFacade.getItemsByMovimiento(mov);
         
-        return listaItems;
+        return lista;
     }
     
     public void insertMovimiento(MovimientoDTO mov, List<MovimientoitemDTO> movItem){
@@ -58,16 +61,21 @@ public class MovimientoBO {
         movEnt = convertDTOToEntity(mov,1);
         Movimiento mv = movimentoFacade.insertMovimiento(movEnt);
         
+        int idMovimiento = mv.getIdmovimiento();
+        Movimiento m = new Movimiento();
+        m.setIdmovimiento(idMovimiento);
         for(MovimientoitemDTO DTO : movItem){
             Movimientoitem movI = new Movimientoitem();
-            Movimiento m = new Movimiento();
+            MovimientoitemPK movIPK = new MovimientoitemPK();
+            movIPK.setIditem(DTO.getItem().getIditem());
+            movIPK.setIdmovimiento(idMovimiento);
             Item i = new Item();
-            
-            movI.setEstado(DTO.getEstado());
-            m.setIdmovimiento(mv.getIdmovimiento());
-            movI.setMovimiento(m);
             i.setIditem(DTO.getItem().getIditem());
+            
             movI.setItem(i);
+            movI.setEstado(DTO.getEstado());
+            movI.setMovimiento(m);
+            movI.setMovimientoitemPK(movIPK);
             
             movimentoItemFacade.create(movI);
         }
