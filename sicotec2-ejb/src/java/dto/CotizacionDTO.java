@@ -44,6 +44,8 @@ public class CotizacionDTO {
     private String nombEstado;
     
     public CotizacionDTO() {
+        empresaDTO=new EmpresaDTO();
+        idempresa=new Empresa();
     }
 
     
