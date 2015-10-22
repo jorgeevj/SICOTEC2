@@ -22,7 +22,7 @@ public class CompraDTO {
      private String iddocumento;
      private String serie;
      private String correlativo;
-     private String idalmacen;
+     private int idalmacen;
      private Empresa idempresa;
      private String nombreAlmacen;
     
@@ -91,11 +91,11 @@ public class CompraDTO {
         this.nombreAlmacen = nombreAlmacen;
     }
 
-    public String getIdalmacen() {
+    public int getIdalmacen() {
         return idalmacen;
     }
 
-    public void setIdalmacen(String idalmacen) {
+    public void setIdalmacen(int idalmacen) {
         this.idalmacen = idalmacen;
     }
 
