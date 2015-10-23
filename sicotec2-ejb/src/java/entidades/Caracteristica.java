@@ -48,10 +48,7 @@ public class Caracteristica implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "catipoitem", joinColumns = {
-        @JoinColumn(name = "idcaracteristica", referencedColumnName = "idcaracteristica")}, inverseJoinColumns = {
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "caracteristicaList")
     private List<Tipoitem> tipoitemList;
 
     public Caracteristica() {
