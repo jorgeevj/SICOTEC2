@@ -6,12 +6,14 @@
 package controladora.TipoItem;
 
 import bo.TipoItemBO;
+import dto.CaracteristicaDTO;
 import dto.TipoItemDTO;
 import entidades.Caracteristica;
 import entidades.Categoria;
 import entidades.Color;
 import entidades.Familia;
 import entidades.Marca;
+import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -37,7 +39,7 @@ public class tipoitemMB {
     private double dsctoCliente;
     private double dsctoDistribuidor;
     
-    private String codigoCaracteristica;
+    
     private String nombreCaracteristica;
     private String descripcionCaracteristica;
     
@@ -52,8 +54,11 @@ public class tipoitemMB {
     private String familiaSelect;
     private String categoriaSelect; //posible no uso
     
+    private boolean btnEditarEstado;
+    
     private List<TipoItemDTO> lista;
     private TipoItemDTO tipoItemSelect;
+    private CaracteristicaDTO caracteristicasTablaSelect;
     private List<Caracteristica> listaCaracteristicas;
     private List<Marca> listaMarca;
     private List<Color> listaColor;
@@ -73,7 +78,7 @@ public class tipoitemMB {
         lista2= new ArrayList<>();
         setLista((List<TipoItemDTO>) new ArrayList());
         setLista(tipoItemBO.getAllTipoItem());
-        setLista2(listarTablaCaracteristicas());
+        //setLista2(listarTablaCaracteristicas());
         listarCaracteristicas();
         listarCategoria();
         listarFamilia();
@@ -82,13 +87,19 @@ public class tipoitemMB {
         
         
     }
-    public void onRowSelectTipoItem(SelectEvent event) {
-        //tipoItemSelect = (TipoItemDTO) event.getObject();
-        
-    }
+    
     ///
     public void listarCaracteristicas(){        
         listaCaracteristicas=tipoItemBO.getNombreCaracteristica();
+        for(Caracteristica obj:lista2){
+            for(Caracteristica ite: listaCaracteristicas){
+                if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+                {
+                    listaCaracteristicas.remove(ite);
+                    break;
+                }
+            }
+        }
     }    
     public void listarMarca(){
         listaMarca=tipoItemBO.getNombreMarca();
@@ -113,12 +124,42 @@ public class tipoitemMB {
         lista=tipoItemBO.buscarTipoItem(lis);
     }
     
-    public List<Caracteristica> listarTablaCaracteristicas(){
+    public List<Caracteristica> listarTablaCaracteristicas(ActionEvent actionEvent){
         Caracteristica obj=new Caracteristica();
         
-        obj.setNombre(caracteristicaSelect);
+        obj=tipoItemBO.getCaracteristiaXID(Integer.parseInt(caracteristicaSelect));
         lista2.add(obj);
+        for(Caracteristica ite: listaCaracteristicas){
+            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                listaCaracteristicas.remove(ite);
+                break;
+            }
+        }
+        
        return lista2;
+    }
+    
+    public List<Caracteristica> quitarElementosTablaCaracteristicas(ActionEvent actionEvent){
+        Caracteristica obj;
+        obj=tipoItemBO.getCaracteristiaXID(caracteristicasTablaSelect.getIdCaracteristica());
+        
+        for(Caracteristica ite1: lista2){
+            if(ite1.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                lista2.remove(ite1);
+                break;
+            }
+        }
+        for(Caracteristica ite: listaCaracteristicas){
+            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                listaCaracteristicas.add(ite);
+                break;
+            }
+        }    
+        return lista2;
+       
     }
     
     
@@ -127,6 +168,7 @@ public class tipoitemMB {
     RequestContext context = RequestContext.getCurrentInstance(); 
     
     context.execute("PF('registrarItem').show();");
+    init();
     
     }
     
@@ -150,6 +192,8 @@ public class tipoitemMB {
     context.execute("PF('crearMarcaItem').show();");
     }
     
+    
+    
     public void registrarNuevoTipoItem(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setIdtipoItem(codigoItem);
@@ -166,12 +210,12 @@ public class tipoitemMB {
         objTipoItem.setIdColor(Integer.parseInt(colorSelect));
         //objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
         tipoItemBO.registrarTipoItem(objTipoItem);
+        registrarTipoItemXCaracteristica();
     }
     
     public void registrarNuevaMarca(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
-        objTipoItem.setMarca(new Marca());
-        objTipoItem.getMarca().setIdmarca(Integer.parseInt(codigoMarca));
+        objTipoItem.setMarca(new Marca());        
         objTipoItem.getMarca().setNombre(nombreMarca);
         //objTipoItem.getMarca().setImagen(imagenMarca);
         objTipoItem.getMarca().setFormato(nombre);
@@ -181,11 +225,29 @@ public class tipoitemMB {
     
     public void registrarNuevaCaracteristica(ActionEvent e){
         TipoItemDTO objTipoItem=new TipoItemDTO();
-        objTipoItem.setCaracteristica(new Caracteristica());
-        objTipoItem.getCaracteristica().setIdcaracteristica(Integer.parseInt(codigoCaracteristica));
+        objTipoItem.setCaracteristica(new Caracteristica());       
         objTipoItem.getCaracteristica().setNombre(nombreCaracteristica);
         objTipoItem.getCaracteristica().setDescripcion(descripcionCaracteristica);
         tipoItemBO.registrarCaracteristica(objTipoItem);
+        listarCaracteristicas();
+    }
+    
+    public void registrarTipoItemXCaracteristica(){
+        TipoItemDTO objTipoItem=new TipoItemDTO();   
+        List<Tipoitem> lista4=new ArrayList<Tipoitem>();
+        
+            Tipoitem obj1=new Tipoitem();
+            obj1.setIdtipoItem(codigoItem);
+            
+            obj1.setCaracteristicaList(lista2);
+            
+            lista4.add(obj1);
+            objTipoItem.setCaracteristica(new Caracteristica());            
+            objTipoItem.getCaracteristica().setTipoitemList(lista4);
+            tipoItemBO.registrarTipoItemXCaracteristica(objTipoItem);
+        
+        
+        
     }
     
     public void modificarTipoItem(ActionEvent e){
@@ -401,13 +463,7 @@ public class tipoitemMB {
         this.tipoItemSelect = tipoItemSelect;
     }
 
-    public String getCodigoCaracteristica() {
-        return codigoCaracteristica;
-    }
-
-    public void setCodigoCaracteristica(String codigoCaracteristica) {
-        this.codigoCaracteristica = codigoCaracteristica;
-    }
+    
 
     public String getNombreCaracteristica() {
         return nombreCaracteristica;
@@ -455,6 +511,24 @@ public class tipoitemMB {
 
     public void setFormatoMarca(String formatoMarca) {
         this.formatoMarca = formatoMarca;
+    }
+
+    
+
+    public boolean isBtnEditarEstado() {
+        return btnEditarEstado;
+    }
+
+    public void setBtnEditarEstado(boolean btnEditarEstado) {
+        this.btnEditarEstado = btnEditarEstado;
+    }
+
+    public CaracteristicaDTO getCaracteristicasTablaSelect() {
+        return caracteristicasTablaSelect;
+    }
+
+    public void setCaracteristicasTablaSelect(CaracteristicaDTO caracteristicasTablaSelect) {
+        this.caracteristicasTablaSelect = caracteristicasTablaSelect;
     }
     
     
