@@ -87,8 +87,10 @@ public class TipoItemBO {
         List<TipoItemDTO> lista1=convertEntidadToDTO(lista);
         return lista1;      
     }    
-    public void registrarTipoItem(TipoItemDTO t){              
-        tipoItemFacade.create(convertDTOtoEntidad(t));        
+    public void registrarTipoItem(TipoItemDTO t,List<Caracteristica> c){ //hacemos que reciba la lista de caracteristicas
+        Tipoitem ti=convertDTOtoEntidad(t);
+        ti.setCaracteristicaList(c);//aqui seteamos la lista para que tambien persista junto a tipoitem
+        tipoItemFacade.create(ti); 
     }    
     public void modificarTipoItem(TipoItemDTO t){
         tipoItemFacade.edit(convertDTOtoEntidad(t));
@@ -163,7 +165,7 @@ public class TipoItemBO {
             e.setIdmarca(new Marca());
             e.getIdmarca().setIdmarca(a.getIdMarca());
             e.setIdcolor(new Color());
-            e.getIdcolor().setIdcolor(a.getIdColor());
+            e.getIdcolor().setIdcolor(a.getIdColor()); 
         return e;
     }
     public TipoItemDTO convertEntidadToDTO(Tipoitem ite){
