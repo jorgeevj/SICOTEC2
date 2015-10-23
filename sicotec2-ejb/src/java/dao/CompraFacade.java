@@ -77,4 +77,9 @@ public class CompraFacade extends AbstractFacade<Compra> {
           return l; 
         
     }
+     public Compra agregarCompra(Compra entidadCompra) {
+        getEntityManager().persist(entidadCompra);
+        getEntityManager().flush();
+        return entidadCompra;
+    }
 }

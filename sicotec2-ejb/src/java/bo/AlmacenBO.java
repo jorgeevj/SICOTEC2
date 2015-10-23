@@ -53,7 +53,19 @@ public class AlmacenBO {
         
         return listaDTO;
     }
-
+ public Almacen convertDTOtoEntidad(AlmacenDTO a){
+        Almacen e=new Almacen();  
+          e.setIdalmacen(a.getIdalmacen());
+          e.setDireccion(a.getDireccion());
+          e.setTelefono(a.getTelefono());
+          e.setNombre(a.getNombre());
+          e.setCodDist(a.getCodDist());
+          e.setCodDept(a.getCodDept());
+          e.setCodProv(a.getCodProv());  
+          
+            
+        return e;
+    }
     public AlmacenDTO convertEntityToDTO(Almacen almacen){
         AlmacenDTO DTO = new AlmacenDTO();
             
@@ -62,4 +74,11 @@ public class AlmacenBO {
         
         return DTO;
     }
+     public List<AlmacenDTO> AlmacenForPedidos(AlmacenDTO t){       
+        Almacen r=convertDTOtoEntidad(t);
+        List<Almacen> lista =almacenFacade.getAlmacenForPedido(r);
+        List<AlmacenDTO> lista1=convertListEntityToDTO(lista);
+        return lista1;      
+    }    
+     
 }

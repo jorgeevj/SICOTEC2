@@ -17,6 +17,7 @@ import entidades.Almacen;
 import entidades.Compra;
 import entidades.Documento;
 import entidades.Empresa;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -32,6 +33,11 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @SessionScoped
 public class CompraMB {
+    
+    private int codigoAlamacen;
+    private String nombreAlamacen;
+    
+    
 
     @EJB
     private CompraBO compraBO;
@@ -42,7 +48,23 @@ public class CompraMB {
     @EJB
     private PedidoaltipoitemBO pedidoaltipoitemBO;
     
+     private List<CompraDTO> lista;
+     private List<AlmacenDTO> listaAlmacenes;
+     
+     //AGREGAR
+    private CompraDTO camposAdd;
+    //Agregar Nueva Compra
+    private Integer idcompraNuevo;   
+     private Date fechaNuevo;
+     private Double totalNuevo;
+     private String iddocumento;
+     private String serieNuevo;
+     private String correlativoNuevo;
+     private int idalmacenNuevo;
+     private Empresa idempresaNuevo;
+     private Integer estadoNuevo;
     
+     
     private List<Compra> listaCompra;
     private CompraDTO campos;
     private Empresa emp=new Empresa();
@@ -63,6 +85,10 @@ public class CompraMB {
         getSessionBeanCompra().setListaAlmacenesAdd(this.comboAlmacen());
         campos.setIdcompra(0);
         campos.setIdempresa(emp);
+        
+        camposAdd = new CompraDTO();
+        camposAdd.setIdcompra(0);
+        camposAdd.setIdempresa(emp);
        
     }
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
@@ -75,20 +101,41 @@ public class CompraMB {
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').show();");
     }
-    public void abrirModalAddPedidos(ActionEvent actionEvent){
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.execute("PF('addItemsPedidosModal').show();");
-     }
+    
     public List<EmpresaDTO> comboEmpresas(){
-         List<EmpresaDTO> listaDto = empresaBO.getEmpresasProveedoras();
+         List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
          return listaDto;
      }
+    
      public List<AlmacenDTO> comboAlmacen(){
          List<AlmacenDTO> listaDto = almacenBO.getAllAlmaces();
          return listaDto;
      }
     
-    
+     public void AlmacenForPedido(ActionEvent actionEvent){        
+        
+        AlmacenDTO lis=new AlmacenDTO();
+        lis.setIdalmacen(codigoAlamacen);
+        lis.setNombre(nombreAlamacen);
+        
+        
+        listaAlmacenes=almacenBO.AlmacenForPedidos(lis);
+       
+    }
+      public void addNuevoCompra(ActionEvent actionEvent){
+          CompraDTO dto=new CompraDTO();
+           dto.setIdalmacen(getIdalmacenNuevo());
+           dto.setEstado(0);
+           dto.setCorrelativo(getCorrelativoNuevo());
+           dto.setFecha(new Date());
+           dto.setSerie(getSerieNuevo());
+           dto.setTotal(getTotalNuevo());
+           dto.setIdempresa(getIdempresaNuevo());
+           dto.setIddocumento(getIddocumento());
+           System.out.println("data: " + dto.getCorrelativo());
+           Compra entidad = compraBO.insertarNuevoCompra(dto);
+        
+    }
     public CompraBO getCompraBO() {
         return compraBO;
     }
@@ -151,6 +198,158 @@ public class CompraMB {
 
     public void setAlm(Almacen alm) {
         this.alm = alm;
+    }
+
+    public int getCodigoAlamcen() {
+        return codigoAlamacen;
+    }
+
+    public void setCodigoAlamcen(int codigoAlamcen) {
+        this.codigoAlamacen = codigoAlamcen;
+    }
+
+    public String getNombreAlamcen() {
+        return nombreAlamacen;
+    }
+
+    public void setNombreAlamcen(String nombreAlamcen) {
+        this.nombreAlamacen = nombreAlamcen;
+    }
+
+    public List<CompraDTO> getLista() {
+        return lista;
+    }
+
+    public void setLista(List<CompraDTO> lista) {
+        this.lista = lista;
+    }
+
+    public int getCodigoAlamacen() {
+        return codigoAlamacen;
+    }
+
+    public void setCodigoAlamacen(int codigoAlamacen) {
+        this.codigoAlamacen = codigoAlamacen;
+    }
+
+    public String getNombreAlamacen() {
+        return nombreAlamacen;
+    }
+
+    public void setNombreAlamacen(String nombreAlamacen) {
+        this.nombreAlamacen = nombreAlamacen;
+    }
+
+    public EmpresaBO getEmpresaBO() {
+        return empresaBO;
+    }
+
+    public void setEmpresaBO(EmpresaBO empresaBO) {
+        this.empresaBO = empresaBO;
+    }
+
+    public AlmacenBO getAlmacenBO() {
+        return almacenBO;
+    }
+
+    public void setAlmacenBO(AlmacenBO almacenBO) {
+        this.almacenBO = almacenBO;
+    }
+
+    public PedidoaltipoitemBO getPedidoaltipoitemBO() {
+        return pedidoaltipoitemBO;
+    }
+
+    public void setPedidoaltipoitemBO(PedidoaltipoitemBO pedidoaltipoitemBO) {
+        this.pedidoaltipoitemBO = pedidoaltipoitemBO;
+    }
+
+    public List<AlmacenDTO> getListaAlmacenes() {
+        return listaAlmacenes;
+    }
+
+    public void setListaAlmacenes(List<AlmacenDTO> listaAlmacenes) {
+        this.listaAlmacenes = listaAlmacenes;
+    }
+
+    public CompraDTO getCamposAdd() {
+        return camposAdd;
+    }
+
+    public void setCamposAdd(CompraDTO camposAdd) {
+        this.camposAdd = camposAdd;
+    }
+
+    public Integer getIdcompraNuevo() {
+        return idcompraNuevo;
+    }
+
+    public void setIdcompraNuevo(Integer idcompraNuevo) {
+        this.idcompraNuevo = idcompraNuevo;
+    }
+
+    public Date getFechaNuevo() {
+        return fechaNuevo;
+    }
+
+    public void setFechaNuevo(Date fechaNuevo) {
+        this.fechaNuevo = fechaNuevo;
+    }
+
+    public Double getTotalNuevo() {
+        return totalNuevo;
+    }
+
+    public void setTotalNuevo(Double totalNuevo) {
+        this.totalNuevo = totalNuevo;
+    }
+
+    public String getIddocumento() {
+        return iddocumento;
+    }
+
+    public void setIddocumento(String iddocumento) {
+        this.iddocumento = iddocumento;
+    }
+
+    public String getSerieNuevo() {
+        return serieNuevo;
+    }
+
+    public void setSerieNuevo(String serieNuevo) {
+        this.serieNuevo = serieNuevo;
+    }
+
+    public String getCorrelativoNuevo() {
+        return correlativoNuevo;
+    }
+
+    public void setCorrelativoNuevo(String correlativoNuevo) {
+        this.correlativoNuevo = correlativoNuevo;
+    }
+
+    public int getIdalmacenNuevo() {
+        return idalmacenNuevo;
+    }
+
+    public void setIdalmacenNuevo(int idalmacenNuevo) {
+        this.idalmacenNuevo = idalmacenNuevo;
+    }
+
+    public Empresa getIdempresaNuevo() {
+        return idempresaNuevo;
+    }
+
+    public void setIdempresaNuevo(Empresa idempresaNuevo) {
+        this.idempresaNuevo = idempresaNuevo;
+    }
+
+    public Integer getEstadoNuevo() {
+        return estadoNuevo;
+    }
+
+    public void setEstadoNuevo(Integer estadoNuevo) {
+        this.estadoNuevo = estadoNuevo;
     }
     
     

@@ -24,7 +24,8 @@ public class CompraDTO {
      private String correlativo;
      private int idalmacen;
      private Empresa idempresa;
-     private String nombreAlmacen;
+     private Integer estado;
+    
     
     public Integer getIdcompra() {
         return idcompra;
@@ -82,21 +83,21 @@ public class CompraDTO {
     public void setIddocumento(String iddocumento) {
         this.iddocumento = iddocumento;
     }
-    
-    public String getNombreAlmacen() {
-        return nombreAlmacen;
-    }
-
-    public void setNombreAlmacen(String nombreAlmacen) {
-        this.nombreAlmacen = nombreAlmacen;
-    }
-
+   
     public int getIdalmacen() {
         return idalmacen;
     }
 
     public void setIdalmacen(int idalmacen) {
         this.idalmacen = idalmacen;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
  

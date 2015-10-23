@@ -11,6 +11,7 @@ import dao.TipoitemFacade;
 import dto.CompraDTO;
 import entidades.Compra;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -63,13 +64,37 @@ public class CompraBO {
             DTO.setIdempresa(compra.getIdempresa());
             DTO.setTotal(compra.getTotal());
             DTO.setSerie(compra.getSerie());
+            DTO.setEstado(compra.getEstado());
+          
 //            String nombreAlmacen = almacenFacade.getAlmacenById(DTO.getIdalmacen()).getNombre() ;
 //            DTO.setNombreAlmacen(nombreAlmacen);
         
         return DTO;
     }
+    public Compra convertDTOtoEntity(CompraDTO dto, int tipo){
+        Compra entidad = new Compra();
+        if(tipo == 0){
+            entidad.setIdcompra(dto.getIdcompra());
+        }
+        entidad.setFecha(new Date());
+        entidad.setIdempresa(dto.getIdempresa());
+        entidad.setIdalmacen(dto.getIdalmacen());
+        entidad.setSerie(dto.getSerie());
+        entidad.setCorrelativo(dto.getCorrelativo());
+        entidad.setEstado(dto.getEstado());
+        entidad.setTotal(dto.getTotal());
+       
+        
+        return entidad;
+    }
     public List<CompraDTO> BuscarCompra(CompraDTO dto) {
        List<CompraDTO> listaDto = this.convertListEntityToDTO(compraFacade.buscarCompra(dto));
         return listaDto;
+    }
+    
+    public Compra insertarNuevoCompra(CompraDTO dto ){
+        Compra entidad = convertDTOtoEntity(dto , 1);
+        entidad = compraFacade.agregarCompra(entidad);
+        return entidad;
     }
 }
