@@ -270,6 +270,7 @@ public class CotizacionMB {
     // FIN CREAR
     // EDITAR
     public void editar(ActionEvent actionEvent) {
+        
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('editCot').show();");
     }
