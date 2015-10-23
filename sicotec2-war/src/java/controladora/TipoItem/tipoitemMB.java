@@ -58,7 +58,7 @@ public class tipoitemMB {
     
     private List<TipoItemDTO> lista;
     private TipoItemDTO tipoItemSelect;
-    private CaracteristicaDTO caracteristicasTablaSelect;
+    private Caracteristica caracteristicasTablaSelect;//aqui se hizo el cambio de objeto
     private List<Caracteristica> listaCaracteristicas;
     private List<Marca> listaMarca;
     private List<Color> listaColor;
@@ -141,8 +141,10 @@ public class tipoitemMB {
     }
     
     public List<Caracteristica> quitarElementosTablaCaracteristicas(ActionEvent actionEvent){
+        //el error no esta en el metodo sino en el de objeto que colocarte en la vista al seleccionar de la tabala
+        //solo cambiaremos el tipo de objeto de DTO a Entidad de caracteristicasTablaSelect
         Caracteristica obj;
-        obj=tipoItemBO.getCaracteristiaXID(caracteristicasTablaSelect.getIdCaracteristica());
+        obj=tipoItemBO.getCaracteristiaXID(caracteristicasTablaSelect.getIdcaracteristica());
         
         for(Caracteristica ite1: lista2){
             if(ite1.getIdcaracteristica()==obj.getIdcaracteristica())
@@ -152,7 +154,7 @@ public class tipoitemMB {
             }
         }
         for(Caracteristica ite: listaCaracteristicas){
-            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+            if(ite.getIdcaracteristica()==caracteristicasTablaSelect.getIdcaracteristica())
             {
                 listaCaracteristicas.add(ite);
                 break;
@@ -209,8 +211,15 @@ public class tipoitemMB {
         objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
         objTipoItem.setIdColor(Integer.parseInt(colorSelect));
         //objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
-        tipoItemBO.registrarTipoItem(objTipoItem);
-        registrarTipoItemXCaracteristica();
+        
+        //hasta aqui bien ahora debes meter tambien la lista de caracteristicas dentro de la entidad tipoiten
+        //el DTO al igual que una entidad debia de contener la lista de caracteristicas
+        //pero como tu DTO lo creaste sin esa lista 
+        //(ojo revisa bien la entidad que atributos tiene para que no te falte ninguno al crear el dto)
+        //lo que hare es meterle otro parametro a tu metodo
+        tipoItemBO.registrarTipoItem(objTipoItem,lista2);// este es el metodo que debes usar para todo el registro 
+        //comentamos este metodo---> registrarTipoItemXCaracteristica();
+        
     }
     
     public void registrarNuevaMarca(ActionEvent e){
@@ -232,9 +241,9 @@ public class tipoitemMB {
         listarCaracteristicas();
     }
     
-    public void registrarTipoItemXCaracteristica(){
+    public void registrarTipoItemXCaracteristica(){//este metodo esta mal no lo usare
         TipoItemDTO objTipoItem=new TipoItemDTO();   
-        List<Tipoitem> lista4=new ArrayList<Tipoitem>();        
+        List<Tipoitem> lista4=new ArrayList<Tipoitem>(); // la lista que necessitas llenar es de tipo "Caracteristica"   no tipoItem     
         
             Tipoitem obj1=new Tipoitem();
             obj1.setIdtipoItem(codigoItem);            
@@ -242,7 +251,7 @@ public class tipoitemMB {
             lista4.add(obj1);
             objTipoItem.setCaracteristica(new Caracteristica());            
             objTipoItem.getCaracteristica().setTipoitemList(lista4);
-            tipoItemBO.registrarTipoItemXCaracteristica(objTipoItem);
+            tipoItemBO.registrarTipoItemXCaracteristica(objTipoItem);//mal
         
         
         
@@ -521,11 +530,11 @@ public class tipoitemMB {
         this.btnEditarEstado = btnEditarEstado;
     }
 
-    public CaracteristicaDTO getCaracteristicasTablaSelect() {
+    public Caracteristica getCaracteristicasTablaSelect() {
         return caracteristicasTablaSelect;
     }
 
-    public void setCaracteristicasTablaSelect(CaracteristicaDTO caracteristicasTablaSelect) {
+    public void setCaracteristicasTablaSelect(Caracteristica caracteristicasTablaSelect) {
         this.caracteristicasTablaSelect = caracteristicasTablaSelect;
     }
     
