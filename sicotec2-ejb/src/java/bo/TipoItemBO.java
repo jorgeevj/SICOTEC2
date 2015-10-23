@@ -53,6 +53,7 @@ public class TipoItemBO {
         return lista;
     }
     
+    
     public List<Marca> getNombreMarca(){
         List<Marca> lista=marcaFacade.findAll();
         return lista;
@@ -73,6 +74,12 @@ public class TipoItemBO {
         return lista;
     }
     
+    public Caracteristica getCaracteristiaXID(Integer e){
+        Caracteristica obj;
+        obj=caracteristicaFacade.find(e);
+                return obj;
+    }
+    
     //////
     public List<TipoItemDTO> buscarTipoItem(TipoItemDTO t){       
         Tipoitem r=convertDTOtoEntidad(t);
@@ -89,6 +96,9 @@ public class TipoItemBO {
     
     public void registrarCaracteristica(TipoItemDTO t){
         caracteristicaFacade.create(convertDTOtoEntidadCaracteristica(t));
+    }
+    public void registrarTipoItemXCaracteristica(TipoItemDTO t){
+        caracteristicaFacade.create(covertDTOtoEntidadTipoItemXCaracteristica(t));
     }
     
     public void registrarMarca(TipoItemDTO t){
@@ -119,15 +129,19 @@ public class TipoItemBO {
     }
     
     public Caracteristica convertDTOtoEntidadCaracteristica(TipoItemDTO b){
-        Caracteristica e=new Caracteristica();
-        e.setIdcaracteristica(b.getIdCaracteristica());
+        Caracteristica e=new Caracteristica();        
         e.setNombre(b.getCaracteristica().getNombre());
         e.setDescripcion(b.getCaracteristica().getDescripcion());
         return e;
     }
+    public Caracteristica covertDTOtoEntidadTipoItemXCaracteristica(TipoItemDTO b){
+        Caracteristica e=new Caracteristica();        
+        e.setTipoitemList(b.getCaracteristica().getTipoitemList());
+        return e;
+        
+    }
     public Marca convertDTOtoEntidadMarca(TipoItemDTO c){
-        Marca e=new Marca();
-        e.setIdmarca(c.getIdMarca());
+        Marca e=new Marca();        
         e.setNombre(c.getMarca().getNombre());
         e.setImagen(c.getMarca().getImagen());
         e.setFormato(c.getMarca().getFormato());
