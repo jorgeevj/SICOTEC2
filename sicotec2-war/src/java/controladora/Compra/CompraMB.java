@@ -89,7 +89,7 @@ public class CompraMB {
         camposAdd = new CompraDTO();
         camposAdd.setIdcompra(0);
         camposAdd.setIdempresa(emp);
-       
+       idempresaNuevo=emp;
     }
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
         System.out.println("nombre"+campos.getIdempresa().getNombre());
