@@ -234,13 +234,11 @@ public class tipoitemMB {
     
     public void registrarTipoItemXCaracteristica(){
         TipoItemDTO objTipoItem=new TipoItemDTO();   
-        List<Tipoitem> lista4=new ArrayList<Tipoitem>();
+        List<Tipoitem> lista4=new ArrayList<Tipoitem>();        
         
             Tipoitem obj1=new Tipoitem();
-            obj1.setIdtipoItem(codigoItem);
-            
+            obj1.setIdtipoItem(codigoItem);            
             obj1.setCaracteristicaList(lista2);
-            
             lista4.add(obj1);
             objTipoItem.setCaracteristica(new Caracteristica());            
             objTipoItem.getCaracteristica().setTipoitemList(lista4);
