@@ -539,7 +539,7 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog> 
 
-            <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" height="500" width="700"> 
+            <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" resizable="false"> 
                 <p:outputLabel value="Items Disponibles "></p:outputLabel>
                 <h:form id="formAddItems">
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.listaItemsDisponibles}" var="tItemsDisp" 
@@ -579,12 +579,13 @@ jorgeevj 15.09.15 Creacion.
 
             </p:dialog>
 
-            <p:dialog>
+            <p:dialog header="Agregar Cantidad" widgetVar="addCantidad" modal="true" resizable="false">
                 <h:form id="formCantidadItem">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Cantidad"></p:outputLabel>
-                        <p:inputText value="#{pedidoMB.campos.serie}"/>
+                        <p:inputText value="#{pedidoMB.cantidadAdd}"/>
                     </h:panelGrid>
+                    <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
                 </h:form>
             </p:dialog>
             <!-- FIN DIALOG DE PEDIDOS-->
