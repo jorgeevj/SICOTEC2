@@ -7,7 +7,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
-        <!--#{pedidoMB.init()}-->
+        #{pedidoMB.init()}
         <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Pedido Details" style="margin-bottom:20px">
             <h:form id="formPedido">
                 <h:panelGrid columns="2">
@@ -35,19 +35,13 @@
                             </p:outputLabel>
                         </p:column>
                         <p:column headerText="N° Serie" style="text-align: center">
-                            <p:outputLabel value="#{tPedido.serie}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </p:outputLabel>
+                            <p:outputLabel value="#{tPedido.serie}"/>
                         </p:column>
                         <p:column headerText="Correlativo" style="text-align: center">
-                            <p:outputLabel value="#{tPedido.correlativo}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </p:outputLabel>
+                            <p:outputLabel value="#{tPedido.correlativo}"/>
                         </p:column>
                         <p:column headerText="Almacen" style="text-align: center">
-                            <p:outputLabel value="#{tPedido.nombreAlmacen}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </p:outputLabel>
+                            <p:outputLabel value="#{tPedido.nombreAlmacen}"/>
                         </p:column>
                     </p:dataTable>
                 </h:panelGrid>
