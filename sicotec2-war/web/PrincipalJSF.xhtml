@@ -513,21 +513,21 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE PEDIDOS-->
-            <p:dialog header="Agregar Pedidos" widgetVar="addPedidosModal" modal="true" height="300" width="500">
+            <p:dialog header="Agregar Pedidos" widgetVar="addPedidosModal" modal="true" resizable="true">
                 <h:form id="formAddPedido">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
-                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.camposAdd.idEmpresa.idempresa}" >
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaEmpresaAdd}" var="emp" 
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="N° de Serie "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.camposAdd.serie}"/>
+                        <p:inputText   value="#{pedidoMB.serieAdd}"/>
                         <p:outputLabel value="Correlativo: "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.camposAdd.correlativo}"/>
+                        <p:inputText   value="#{pedidoMB.correlativoAdd}"/>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.camposAdd.idalmacen}" >
+                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenAdd}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
@@ -571,6 +571,9 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Precio Lista" style="text-align: center">
                             <p:outputLabel value="#{tItemsSelec.precioLista}"/>
                         </p:column>
+                        <p:column headerText="Precio Lista" style="text-align: center">
+                            <p:outputLabel value="#{tItemsSelec.cantidad}"/>
+                        </p:column>
                     </p:dataTable>
                     <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}"/>
                 </h:form>
@@ -584,6 +587,30 @@ jorgeevj 15.09.15 Creacion.
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Cantidad"></p:outputLabel>
                         <p:inputText value="#{pedidoMB.cantidadAdd}"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Agregar Cantidad" widgetVar="editPedidoModal" modal="true" resizable="false">
+                <h:form id="formEditPedido">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresasEdit}" disabled="false" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{pedidoMB.listaEmpresaEdit}" var="emp" 
+                                           itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="N° de Serie "></p:outputLabel>
+                        <p:inputText   value="#{pedidoMB.serieEdit}"/>
+                        <p:outputLabel value="Correlativo: "></p:outputLabel>
+                        <p:inputText   value="#{pedidoMB.correlativEdit}"/>
+                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenEdit}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{pedidoMB.listaAlmacenesEdit}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
                 </h:form>

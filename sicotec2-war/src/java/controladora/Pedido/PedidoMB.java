@@ -56,6 +56,8 @@ public class PedidoMB{
     private List<TipoItemDTO> ListaItemsSeleccionado;
     private List<EmpresaDTO> ListaEmpresaAdd;
     private List<AlmacenDTO> listaAlmacenesAdd;
+    private List<EmpresaDTO> ListaEmpresaEdit;
+    private List<AlmacenDTO> listaAlmacenesEdit;
     
     //AGREGAR
     private PedidoDTO camposAdd;
@@ -66,7 +68,13 @@ public class PedidoMB{
     private String cantidadAdd;
     
     //EDITAR
-    private PedidoDTO camposEdit;
+    private PedidoDTO objPedidoEditar;
+    private Integer pedidoEdit;
+    private Integer empresasEdit;
+    private Integer almacenEdit;
+    private String correlativEdit;
+    private String serieEdit;
+    private String fechaEdit;
     Utils ut = new Utils();
     
     
@@ -113,7 +121,6 @@ public class PedidoMB{
     
     public void abrirModalAddPedido(ActionEvent ActionEvent){
         limpiarRefrescar();
-        
         this.crear(null);
     }
     
@@ -193,13 +200,7 @@ public class PedidoMB{
         context.update("formAddItems");
         context.update("formTbSelec");
         context.execute("PF('addCantidad').hide();");
-    }
-    
-    public void editarPedido(ActionEvent actionEvent){
-        pedidoBO.actualizarPedido(camposEdit);
-        getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
-    }
-    
+    }    
     
     public void selectTipoItemAdd(SelectEvent event) {
         setObjTipoItem((TipoItemDTO)event.getObject());
@@ -207,6 +208,10 @@ public class PedidoMB{
     
     public void selectTipoItemQuitar(SelectEvent event) {
         setObjTipoItemQuitar((TipoItemDTO)event.getObject());
+    }
+    
+    public void selectPedidoEditar(SelectEvent event) {
+        setObjPedidoEditar((PedidoDTO)event.getObject());
     }
     
     
@@ -231,7 +236,7 @@ public class PedidoMB{
         setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
         setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
         setSerieAdd("");
-         setCorrelativoAdd("");
+        setCorrelativoAdd("");
         setAlmacenAdd(0);
         setEmpresaAdd(0);
         
@@ -240,9 +245,7 @@ public class PedidoMB{
         context.update("formAddItems");
         context.update("formTbSelec");
      }
-     
-     
-     
+
      public List<EmpresaDTO> comboEmpresas(){
          List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
          return listaDto;
@@ -250,7 +253,21 @@ public class PedidoMB{
      public List<AlmacenDTO> comboAlmacen(){
          List<AlmacenDTO> listaDto = almacenBO.getAllAlmaces();
          return listaDto;
-     }
+    }
+     
+    public void abirModalEditPedido(ActionEvent actionEvent){
+        setListaEmpresaEdit(this.comboEmpresas());
+        setListaAlmacenesEdit(this.comboAlmacen());
+        setEmpresasEdit(getObjPedidoEditar().getEmpresaId());
+        setAlmacenEdit(getObjPedidoEditar().getIdalmacen());
+        setCorrelativEdit(getObjPedidoEditar().getCorrelativo());
+        setSerieEdit(getObjPedidoEditar().getSerie());
+        setFechaEdit(getObjPedidoEditar().getFecha().toString());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formEditPedido");
+        context.execute("PF('editPedidoModal').show();");
+    } 
+    
     
 
     public PedidoBO getPedidoBO() {
@@ -357,14 +374,6 @@ public class PedidoMB{
         this.camposAdd = camposAdd;
     }
 
-    public PedidoDTO getCamposEdit() {
-        return camposEdit;
-    }
-
-    public void setCamposEdit(PedidoDTO camposEdit) {
-        this.camposEdit = camposEdit;
-    }
-
     public String getSerieAdd() {
         return serieAdd;
     }
@@ -403,6 +412,78 @@ public class PedidoMB{
 
     public void setCantidadAdd(String cantidadAdd) {
         this.cantidadAdd = cantidadAdd;
+    }
+
+    public Integer getPedidoEdit() {
+        return pedidoEdit;
+    }
+
+    public void setPedidoEdit(Integer pedidoEdit) {
+        this.pedidoEdit = pedidoEdit;
+    }
+
+    public Integer getEmpresasEdit() {
+        return empresasEdit;
+    }
+
+    public void setEmpresasEdit(Integer empresasEdit) {
+        this.empresasEdit = empresasEdit;
+    }
+
+    public Integer getAlmacenEdit() {
+        return almacenEdit;
+    }
+
+    public void setAlmacenEdit(Integer almacenEdit) {
+        this.almacenEdit = almacenEdit;
+    }
+
+    public String getCorrelativEdit() {
+        return correlativEdit;
+    }
+
+    public void setCorrelativEdit(String correlativEdit) {
+        this.correlativEdit = correlativEdit;
+    }
+
+    public String getSerieEdit() {
+        return serieEdit;
+    }
+
+    public void setSerieEdit(String serieEdit) {
+        this.serieEdit = serieEdit;
+    }
+
+    public String getFechaEdit() {
+        return fechaEdit;
+    }
+
+    public void setFechaEdit(String fechaEdit) {
+        this.fechaEdit = fechaEdit;
+    }
+
+    public List<EmpresaDTO> getListaEmpresaEdit() {
+        return ListaEmpresaEdit;
+    }
+
+    public void setListaEmpresaEdit(List<EmpresaDTO> ListaEmpresaEdit) {
+        this.ListaEmpresaEdit = ListaEmpresaEdit;
+    }
+
+    public List<AlmacenDTO> getListaAlmacenesEdit() {
+        return listaAlmacenesEdit;
+    }
+
+    public void setListaAlmacenesEdit(List<AlmacenDTO> listaAlmacenesEdit) {
+        this.listaAlmacenesEdit = listaAlmacenesEdit;
+    }
+
+    public PedidoDTO getObjPedidoEditar() {
+        return objPedidoEditar;
+    }
+
+    public void setObjPedidoEditar(PedidoDTO objPedidoEditar) {
+        this.objPedidoEditar = objPedidoEditar;
     }
     
     

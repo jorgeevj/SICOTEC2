@@ -91,6 +91,7 @@ public class CompraMB {
         camposAdd.setIdempresa(emp);
        idempresaNuevo=emp;
     }
+    
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
         System.out.println("nombre"+campos.getIdempresa().getNombre());
             getSessionBeanCompra().setListaCompra(compraBO.BuscarCompra(campos));
@@ -117,6 +118,7 @@ public class CompraMB {
         AlmacenDTO lis=new AlmacenDTO();
         lis.setIdalmacen(codigoAlamacen);
         lis.setNombre(nombreAlamacen);
+       
         
         
         listaAlmacenes=almacenBO.AlmacenForPedidos(lis);
@@ -133,9 +135,20 @@ public class CompraMB {
            dto.setIdempresa(getIdempresaNuevo());
            dto.setIddocumento(getIddocumento());
            System.out.println("data: " + dto.getCorrelativo());
+           
            Compra entidad = compraBO.insertarNuevoCompra(dto);
+           
+        getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("tabCompraFrom");
+        this.cerrar();
         
     }
+      public void cerrar(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addComprasModal').hide();");
+    }
+      
     public CompraBO getCompraBO() {
         return compraBO;
     }

@@ -18,11 +18,14 @@
                 </h:panelGrid>
                 <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update=":tabPedidosFrom:tabPedidos"/>
                 <p:commandButton value="Agregar" actionListener="#{pedidoMB.abrirModalAddPedido}" id="btnAgregar" title="Agregar" />
+                <p:commandButton value="Editar" actionListener="#{pedidoMB.abirModalEditPedido}" id="btnEditar" title="Editar" />
             </h:form>     
             <h:form id="tabPedidosFrom">
                 <h:panelGrid > 
                     <p:spacer></p:spacer>
-                    <p:dataTable tableStyleClass="table table-hover"  id="tabPedidos" value="#{pedidoMB.sessionBeanPedido.listPedido}" var="tPedido">
+                    <p:dataTable tableStyleClass="table table-hover"  id="tabPedidos" value="#{pedidoMB.sessionBeanPedido.listPedido}"
+                                 selectionMode="single" rowKey="#{tPedido.idpedido}" var="tPedido">
+                        <p:ajax event="rowSelect" listener="#{pedidoMB.selectTipoItemAdd}" /> 
                         <p:column headerText="ID" style="text-align: center">
                             <p:outputLabel value="#{tPedido.idpedido}"/>
                         </p:column>

@@ -47,6 +47,7 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
     }
     
     public List<Almacen> getAlmacenForPedido(Almacen a) {
+        
         String jpa = "SELECT a.nombre,pti.idalmacen,pti.idtipoItem,pti.idpedido,ti.nombre "
                 + "FROM Almacen a, Tipoitem ti,Pealtipoitem pti,Altipoitem ati "
                 + "WHERE a.idalmacen = pti.idalmacen "

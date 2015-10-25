@@ -119,11 +119,13 @@ public class PedidoBO {
     
     public List<Altipoitem> convertDTOtoEntityAlTipoItem(List<AltipoitemDTO> listaDTO){
         List<Altipoitem> listaEntidad = new ArrayList<Altipoitem>();
+        
         for(AltipoitemDTO dto : listaDTO){
-            
+            System.out.println("dtoids: " + dto.getAlmacen().getIdalmacen() + "||" + dto.getTipoitem().getIdtipoItem());
             Altipoitem entidadATI = altipoitemFacace.getAllByTipoItemIdAlmacen(this.converDTOtoEntityAltipoitemAux(dto));
+            
             Altipoitem entidad = new Altipoitem();
-            if(entidadATI == null){
+            if(entidadATI.getAltipoitemPK() == null){
                 entidad.setAlmacen(dto.getAlmacen());
                 entidad.setCantidad(dto.getCantidad());
                 entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
@@ -151,12 +153,15 @@ public class PedidoBO {
     
     public Altipoitem converDTOtoEntityAltipoitemAux(AltipoitemDTO dto){
         Altipoitem entidad = new Altipoitem();
+        System.out.println("dtoids: " + dto.getAlmacen().getIdalmacen() + "||" + dto.getTipoitem().getIdtipoItem());
             Almacen entidadAlmacen = new Almacen();
             entidadAlmacen.setIdalmacen(dto.getAlmacen().getIdalmacen());
         entidad.setAlmacen(entidadAlmacen);
             Tipoitem entidadTipoItem = new Tipoitem();
             entidadTipoItem.setIdtipoItem(dto.getTipoitem().getIdtipoItem());
         entidad.setTipoitem(entidadTipoItem);
+        entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+        System.out.println("entidadids: " + entidad.getAlmacen().getIdalmacen()+"|" +entidad.getTipoitem().getIdtipoItem());
         return entidad;
     }
     

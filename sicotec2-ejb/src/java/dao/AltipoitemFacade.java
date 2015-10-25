@@ -5,8 +5,8 @@
  */
 package dao;
 
-import dto.AltipoitemDTO;
 import entidades.Altipoitem;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,23 +36,18 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
                 + "and a.altipoitemPK.idtipoItem='"+ at.getTipoitem().getIdtipoItem()+"'" ;
     return em.createQuery(sql, Altipoitem.class).getResultList();
     }
-    
+
     public Altipoitem getAllByTipoItemIdAlmacen(Altipoitem entidadAl){
         Altipoitem entidad = new Altipoitem();
         try{
             String jpa = "SELECT a "
-                       + "FROM altipoitem a "
+                       + "FROM Altipoitem a "
                        + "WHERE 1 = 1 "
-                       + "AND   a.idalmacen  = :almacen "
-                       + "AND   a.idtipoItem = :tipoItem " ;
-            Query query = em.createNativeQuery(jpa,Altipoitem.class);
-            
-            query.setParameter("almacen", entidadAl.getAlmacen().getIdalmacen());
-            query.setParameter("tipoItem", entidadAl.getTipoitem().getIdtipoItem());
-            
-            entidad = (Altipoitem)query.getSingleResult();
+                       + "AND   a.altipoitemPK.idalmacen  = "+ entidadAl.getAlmacen().getIdalmacen()+ " "
+                       + "AND   a.altipoitemPK.idtipoItem = '"+ entidadAl.getTipoitem().getIdtipoItem()+"'" ;
+            entidad = em.createQuery(jpa,Altipoitem.class).getSingleResult();
         } catch(Exception e){
-            entidad = new Altipoitem();
+            
         }
         return entidad;
     }
