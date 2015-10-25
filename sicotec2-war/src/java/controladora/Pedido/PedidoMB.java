@@ -47,7 +47,6 @@ public class PedidoMB{
     private PedidoDTO campos;
     private PealtipoitemDTO camposPealtipoItem;
     private TipoItemDTO objTipoItem;
-    private PedidoDTO objPedido;
     private TipoItemDTO objTipoItemQuitar;
     private Empresa emp;
     private Tipoitem tipItm;
@@ -60,7 +59,11 @@ public class PedidoMB{
     
     //AGREGAR
     private PedidoDTO camposAdd;
-    private PealtipoitemDTO camposPeXItemAdd;
+    private String serieAdd;
+    private String correlativoAdd;
+    private Integer empresaAdd;
+    private Integer almacenAdd;
+    private String cantidadAdd;
     
     //EDITAR
     private PedidoDTO camposEdit;
@@ -94,11 +97,10 @@ public class PedidoMB{
     }
     
     public void agregarTipoItem(ActionEvent actionEvent){
-        getListaItemsDisponibles().remove(getObjTipoItem());
-        getListaItemsSeleccionado().add(getObjTipoItem());
+        setCantidadAdd("");
         RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formAddItems");
-        context.update("formTbSelec");
+        context.update("formCantidadItem");
+        context.execute("PF('addCantidad').show();");
     }
     
     public void quitarTipoItem(ActionEvent actionEvent){
@@ -109,33 +111,27 @@ public class PedidoMB{
         context.update("formTbSelec");
     }
     
-    public void abrirModalAddPedido(){
-        ListaItemsDisponibles = tipoItemBO.getAllTipoItem();
-        ListaItemsSeleccionado = new ArrayList<TipoItemDTO>();
+    public void abrirModalAddPedido(ActionEvent ActionEvent){
+        limpiarRefrescar();
+        
         this.crear(null);
     }
     
     public void addNuevoPedido(ActionEvent actionEvent){
-        Pedido entidad = pedidoBO.insertarNuevoPedido(camposAdd); 
-        PealtipoitemDTO dtoPXI = new PealtipoitemDTO();
-        List<PealtipoitemDTO> listPXI = new ArrayList<PealtipoitemDTO>();
-        Altipoitem altipoitem = new Altipoitem();
-        Almacen   almacen = new Almacen();
-            almacen.setIdalmacen(camposAdd.getIdalmacen());
-            altipoitem.setAlmacen(almacen);
-        for(TipoItemDTO dtoTI : getListaItemsSeleccionado()){
-            Tipoitem tipoItemEntidad = new Tipoitem();
-            dtoPXI.setPedido(entidad);
-                tipoItemEntidad.setIdtipoItem(dtoTI.getIdtipoItem());
-                altipoitem.setTipoitem(tipoItemEntidad);
-                altipoitem.setAltipoitemPK(new AltipoitemPK(altipoitem.getAlmacen().getIdalmacen(), altipoitem.getTipoitem().getIdtipoItem()));
-            dtoPXI.setAltipoitem(altipoitem);
-            dtoPXI.setCostoUni(dtoTI.getPrecioLista());
-            dtoPXI.setCantidad(34);
-            dtoPXI.setEstado(1);
-            listPXI.add(dtoPXI);
-        }
+        PedidoDTO dto = new PedidoDTO();
+        Empresa entidadEmpresa = new Empresa();
+        entidadEmpresa.setIdempresa(getEmpresaAdd());
+        dto.setIdEmpresa(entidadEmpresa);
+        dto.setIdalmacen(getAlmacenAdd());
+        dto.setSerie(getSerieAdd());
+        dto.setCorrelativo(getCorrelativoAdd());
+        Pedido entidad = pedidoBO.insertarNuevoPedido(dto); 
+        //Insert Update Tipo Item
+        List<AltipoitemDTO> listATI = this.getListaAlTipoItem(getListaItemsSeleccionado());
+        pedidoBO.insertUpdateAlTipoItem(listATI);
         
+        //Insert Pedido Tipo Item
+        List<PealtipoitemDTO> listPXI = this.getListaPealtipoItem(getListaItemsSeleccionado() , entidad);
         pedidoBO.insertarPedidoTipoItem(listPXI);
 
         
@@ -144,6 +140,59 @@ public class PedidoMB{
         context.update("tabPedidosFrom");
         this.cerrar();
         //pedidoBO.insertarNuevoPedido(dto);
+    }
+    
+    public List<AltipoitemDTO> getListaAlTipoItem(List<TipoItemDTO> listaTipoItem){
+        List<AltipoitemDTO> listALTI= new ArrayList<AltipoitemDTO>();
+        for(TipoItemDTO dtoTipo : getListaItemsSeleccionado()){
+            AltipoitemDTO altioiitemDTO = new AltipoitemDTO();
+                Tipoitem tipoItemEntidad = new Tipoitem();
+                tipoItemEntidad.setIdtipoItem(dtoTipo.getIdtipoItem());
+            altioiitemDTO.setTipoitem(tipoItemEntidad);
+            Almacen almacen = new Almacen();
+                almacen.setIdalmacen(getAlmacenAdd());
+            altioiitemDTO.setAlmacen(almacen);
+            altioiitemDTO.setCantidad(0);
+            altioiitemDTO.setComprados(0);
+            altioiitemDTO.setEstado(0);
+            altioiitemDTO.setReservado(dtoTipo.getCantidad());
+            listALTI.add(altioiitemDTO);
+        }
+        return listALTI;
+    }
+    
+    public List<PealtipoitemDTO> getListaPealtipoItem(List<TipoItemDTO> listaTipoItem, Pedido entidad){
+        List<PealtipoitemDTO> listaPATI = new ArrayList<PealtipoitemDTO>();
+        for(TipoItemDTO dtoTI : getListaItemsSeleccionado()){
+            Altipoitem altipoitem = new Altipoitem();
+            Almacen almacen = new Almacen();
+                almacen.setIdalmacen(getAlmacenAdd());
+                altipoitem.setAlmacen(almacen);
+            PealtipoitemDTO dtoPXI = new PealtipoitemDTO();
+            Tipoitem tipoItemEntidad = new Tipoitem();
+            dtoPXI.setPedido(entidad);
+                tipoItemEntidad.setIdtipoItem(dtoTI.getIdtipoItem());
+                altipoitem.setTipoitem(tipoItemEntidad);
+                altipoitem.setAltipoitemPK(new AltipoitemPK(altipoitem.getAlmacen().getIdalmacen(), altipoitem.getTipoitem().getIdtipoItem()));
+            dtoPXI.setAltipoitem(altipoitem);
+            dtoPXI.setCostoUni(dtoTI.getPrecioLista());
+            dtoPXI.setCantidad(dtoTI.getCantidad());
+            dtoPXI.setEstado(1);
+            listaPATI.add(dtoPXI);
+        }
+        return listaPATI;
+    }
+    
+    public void agregarCantidad(ActionEvent actionEvent){
+        getListaItemsDisponibles().remove(getObjTipoItem());
+        getObjTipoItem().setCantidad(Integer.parseInt(getCantidadAdd()));
+        getListaItemsSeleccionado().add(getObjTipoItem()); 
+        
+        
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formAddItems");
+        context.update("formTbSelec");
+        context.execute("PF('addCantidad').hide();");
     }
     
     public void editarPedido(ActionEvent actionEvent){
@@ -178,9 +227,19 @@ public class PedidoMB{
         context.execute("PF('addItemsPedidosModal').show();");
      }
 
-     
-     
-     
+     public void limpiarRefrescar(){
+        setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
+        setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
+        setSerieAdd("");
+         setCorrelativoAdd("");
+        setAlmacenAdd(0);
+        setEmpresaAdd(0);
+        
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formAddPedido");
+        context.update("formAddItems");
+        context.update("formTbSelec");
+     }
      
      
      
@@ -306,12 +365,46 @@ public class PedidoMB{
         this.camposEdit = camposEdit;
     }
 
-    public PealtipoitemDTO getCamposPeXItemAdd() {
-        return camposPeXItemAdd;
+    public String getSerieAdd() {
+        return serieAdd;
     }
 
-    public void setCamposPeXItemAdd(PealtipoitemDTO camposPeXItemAdd) {
-        this.camposPeXItemAdd = camposPeXItemAdd;
+    public void setSerieAdd(String serieAdd) {
+        this.serieAdd = serieAdd;
     }
+
+    public String getCorrelativoAdd() {
+        return correlativoAdd;
+    }
+
+    public void setCorrelativoAdd(String correlativoAdd) {
+        this.correlativoAdd = correlativoAdd;
+    }
+
+    public Integer getEmpresaAdd() {
+        return empresaAdd;
+    }
+
+    public void setEmpresaAdd(Integer empresaAdd) {
+        this.empresaAdd = empresaAdd;
+    }
+
+    public Integer getAlmacenAdd() {
+        return almacenAdd;
+    }
+
+    public void setAlmacenAdd(Integer almacenAdd) {
+        this.almacenAdd = almacenAdd;
+    }
+
+    public String getCantidadAdd() {
+        return cantidadAdd;
+    }
+
+    public void setCantidadAdd(String cantidadAdd) {
+        this.cantidadAdd = cantidadAdd;
+    }
+    
+    
     
 }
