@@ -6,13 +6,19 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.AltipoitemFacade;
 import dao.PealtipoitemFacade;
 import dao.PedidoFacade;
+import dto.AltipoitemDTO;
 import dto.PealtipoitemDTO;
 import dto.PedidoDTO;
+import entidades.Almacen;
+import entidades.Altipoitem;
+import entidades.AltipoitemPK;
 import entidades.Pealtipoitem;
 import entidades.PealtipoitemPK;
 import entidades.Pedido;
+import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +40,8 @@ public class PedidoBO {
     private AlmacenFacade almacenFacade = new AlmacenFacade();
     @EJB
     private PealtipoitemFacade pealtipoitemFacade = new PealtipoitemFacade();
+    @EJB
+    private AltipoitemFacade altipoitemFacace = new AltipoitemFacade();
 
     public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();
@@ -63,7 +71,7 @@ public class PedidoBO {
             pedidoDTO.setEmpresaId(pedido.getIdempresa().getIdempresa());
             pedidoDTO.setNombreEmpresa(pedido.getIdempresa().getNombre());
         pedidoDTO.setSerie(pedido.getSerie());
-        pedidoDTO.setCorrelativo(pedido.getSerie());
+        pedidoDTO.setCorrelativo(pedido.getCorrelativo());
         pedidoDTO.setIdalmacen(pedido.getIdalmacen());
             String nombreAlmacen = almacenFacade.getAlmacenById(pedidoDTO.getIdalmacen()).getNombre() ;
             pedidoDTO.setNombreAlmacen(nombreAlmacen);
@@ -96,9 +104,60 @@ public class PedidoBO {
     
     public void insertarPedidoTipoItem(List<PealtipoitemDTO> listDTO){
         List<Pealtipoitem> listaEntidad = convertDTOtoEntityPealTipoItem(listDTO);
+        
         for(Pealtipoitem entidadPTI : listaEntidad){
             pealtipoitemFacade.create(entidadPTI);
         }
+    }
+    
+    public void insertUpdateAlTipoItem(List<AltipoitemDTO> listDTO){
+        List<Altipoitem> listaEntidad = convertDTOtoEntityAlTipoItem(listDTO);
+        for(Altipoitem entidadATI : listaEntidad){
+            altipoitemFacace.edit(entidadATI);
+        }
+    }
+    
+    public List<Altipoitem> convertDTOtoEntityAlTipoItem(List<AltipoitemDTO> listaDTO){
+        List<Altipoitem> listaEntidad = new ArrayList<Altipoitem>();
+        for(AltipoitemDTO dto : listaDTO){
+            
+            Altipoitem entidadATI = altipoitemFacace.getAllByTipoItemIdAlmacen(this.converDTOtoEntityAltipoitemAux(dto));
+            Altipoitem entidad = new Altipoitem();
+            if(entidadATI == null){
+                entidad.setAlmacen(dto.getAlmacen());
+                entidad.setCantidad(dto.getCantidad());
+                entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+                entidad.setComprados(dto.getComprados());
+                entidad.setEstado(dto.getEstado());
+                entidad.setReservado(dto.getReservado());
+                entidad.setTipoitem(dto.getTipoitem());
+                listaEntidad.add(entidad);
+            } else{
+                entidad.setAlmacen(dto.getAlmacen());
+                Integer lastCantidad = entidadATI.getCantidad();
+                entidad.setCantidad(lastCantidad);
+                entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+                entidad.setComprados(entidadATI.getComprados());
+                entidad.setEstado(entidadATI.getEstado());
+                Integer lastReserva = entidadATI.getReservado();
+                entidad.setReservado(dto.getReservado()+lastReserva);
+                entidad.setTipoitem(dto.getTipoitem());
+                listaEntidad.add(entidad);
+            }
+            
+        }
+        return listaEntidad;
+    }
+    
+    public Altipoitem converDTOtoEntityAltipoitemAux(AltipoitemDTO dto){
+        Altipoitem entidad = new Altipoitem();
+            Almacen entidadAlmacen = new Almacen();
+            entidadAlmacen.setIdalmacen(dto.getAlmacen().getIdalmacen());
+        entidad.setAlmacen(entidadAlmacen);
+            Tipoitem entidadTipoItem = new Tipoitem();
+            entidadTipoItem.setIdtipoItem(dto.getTipoitem().getIdtipoItem());
+        entidad.setTipoitem(entidadTipoItem);
+        return entidad;
     }
     
     public void actualizarPedido(PedidoDTO dto){
