@@ -51,9 +51,10 @@ public class ItemFacade extends AbstractFacade<Item> {
     public List<MovimientoitemDTOVista> getAllItems(){
         List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
         try{
-             String ejbQuery = "{CALL vistaItems_x_movimiento(?)}";
+             String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
              Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
              query.setParameter(1, 0);
+             query.setParameter(2, 0);
              
             listaItems = query.getResultList();   
         }catch(Exception e){
@@ -62,6 +63,30 @@ public class ItemFacade extends AbstractFacade<Item> {
         }
         
         return listaItems;
+    }
+    
+    public List<MovimientoitemDTOVista> getItemsByAlmacen(int idAlmacen){
+        List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
+        try{
+             String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
+             Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
+             query.setParameter(1, 0);
+             query.setParameter(2, idAlmacen);
+             
+            listaItems = query.getResultList();   
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            listaItems = new ArrayList<MovimientoitemDTOVista>();
+        }
+        
+        return listaItems;
+    }
+    
+    public Item insertItem(Item item){
+        getEntityManager().persist(item);
+        getEntityManager().flush();
+        
+        return item;
     }
     
 }
