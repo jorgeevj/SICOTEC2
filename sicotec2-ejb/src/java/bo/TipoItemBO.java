@@ -186,4 +186,7 @@ public class TipoItemBO {
             T.setColor(ite.getIdcolor());
             return T;
     }
+    
+    
+     
 }

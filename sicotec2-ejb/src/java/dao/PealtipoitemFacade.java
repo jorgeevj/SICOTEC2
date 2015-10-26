@@ -5,7 +5,10 @@
  */
 package dao;
 
+import dto.PealtipoitemDTO;
+import dto.TipoItemDTO;
 import entidades.Pealtipoitem;
+import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -52,6 +55,33 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         
         
         return tPealtipoitem;
+    }
+     
+      public List<Pealtipoitem> getAlmacenForPedido(Pealtipoitem a) {
+        
+        String jpa = "SELECT pti "
+                    + "FROM Pealtipoitem pti , Almacen a, Tipoitem ti, Altipoitem ati "
+                    + "WHERE a.idalmacen = pti.pealtipoitemPK.idalmacen "
+                    + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
+                    + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
+                    + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
+                    + "AND pti.pealtipoitemPK.idalmacen =  "+a.getAltipoitem().getAlmacen().getIdalmacen();
+
+        return em.createQuery(jpa,Pealtipoitem.class).getResultList();
+        
+    }
+      public Tipoitem getTipoItemById(TipoItemDTO dto){
+        Tipoitem entidad = new Tipoitem();
+        try{
+            String sql = "SELECT a "
+                   + "FROM Tipoitem a "
+                   + "WHERE a.idTipoitem = " +dto.getIdtipoItem();
+            entidad=em.createQuery(sql, Tipoitem.class).getSingleResult();
+        }catch(Exception e){
+            entidad = new Tipoitem();
+        }
+        
+        return entidad;
     }
     
 }

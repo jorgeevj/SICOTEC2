@@ -9,6 +9,7 @@ import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.PealtipoitemDTO;
 import entidades.Pealtipoitem;
+import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.*;
@@ -57,10 +58,41 @@ public class PedidoaltipoitemBO {
             DTO.setPedido(pealtipoitem.getPedido());
             String nombreItems=tipoitemFacade.getTipoItemsNombre(DTO.getNombreItems()).getIdtipoItem();
             DTO.setNombreItems(nombreItems);
-          
+            String aux = (pealtipoitem.getAltipoitem().getAlmacen().getIdalmacen()).toString();
+            Tipoitem entidad=tipoitemFacade.getTipoItemsNombre(aux);
+             DTO.setNombreItems(entidad.getNombre());
+             DTO.setPrecioItem(entidad.getPrecioLista());
         return DTO;
     }
-      
+      public Pealtipoitem convertDTOtoEntity(PealtipoitemDTO dto){
+        Pealtipoitem entidad = new Pealtipoitem();
+        
+        entidad.setAltipoitem(dto.getAltipoitem());
+        entidad.setCantidad(dto.getCantidad());
+        entidad.setCostoUni(dto.getCostoUni());
+        entidad.setEstado(dto.getEstado());
+        entidad.setPedido(dto.getPedido());
+        entidad.setIdcompra(dto.getIdcompra());
+        
+        
+        
+        return entidad;
+    }
+      public List<PealtipoitemDTO> AlmacenForPedidos(PealtipoitemDTO t){       
+        //Pealtipoitem r=convertDTOtoEntity(t);
+        List<Pealtipoitem> lista =pealtipoitemFacade.getAlmacenForPedido(new Pealtipoitem());
+        List<PealtipoitemDTO> lista1= new ArrayList<PealtipoitemDTO>();/*convertListEntityToDTO(lista);*/
+        return lista1;      
+    }  
+      public List<PealtipoitemDTO> getTipoItemByAlmacen(PealtipoitemDTO dto){
+          Pealtipoitem entidad = convertDTOtoEntity(dto);
+          List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAlmacenForPedido(entidad);
+        List<PealtipoitemDTO> listaDTO = convertListEntityToDTO(listaEntidad);
+        
+        return listaDTO;
+        
+        
+    }
 //    private PealtipoitemDTO convertEntityToDTO(PealtipoitemDTO pealtipoitem) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }

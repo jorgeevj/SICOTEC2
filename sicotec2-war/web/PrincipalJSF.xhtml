@@ -468,7 +468,7 @@ jorgeevj 15.09.15 Creacion.
 
 
                     </h:panelGrid>
-                        <p:commandButton value="Agregar Pedidos" onclick="PF('addPedidosItemsModal').show();"/>
+                    <p:commandButton value="Agregar Pedidos" actionListener="#{compraMB.OpenAddPedido}"/>
                     <br/><br/><br/>
                     <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
                 </h:form>
@@ -476,7 +476,7 @@ jorgeevj 15.09.15 Creacion.
             <p:dialog header="Agregar Pedidos" widgetVar="addPedidosItemsModal" modal="true" height="500" width="700"> 
                 <h:form id="formAddPedidoss">
                     <p:outputLabel value="Pedidos Disponibles "></p:outputLabel>
-                    <p:dataTable tableStyleClass="table table-hover" var="tPealtipoitem" value="#{compraMB.sessionBeanCompra.listaPealtipoitemAdd}" >
+                    <p:dataTable tableStyleClass="table table-hover" var="tPealtipoitem" value="#{compraMB.listPealItem}" >
                         <p:column headerText="Nombre" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
                         </p:column>

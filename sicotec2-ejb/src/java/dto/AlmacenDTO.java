@@ -7,6 +7,8 @@ package dto;
 
 import entidades.Altipoitem;
 import entidades.Docalmacen;
+import entidades.Pealtipoitem;
+import entidades.Tipoitem;
 import java.util.Collection;
 
 /**
@@ -27,6 +29,11 @@ public class AlmacenDTO {
     private String codProv;
    
     private String codDist;
+    
+    //EXTRAS
+    private Pealtipoitem pealtipoitem;
+    private Altipoitem altipoitem;
+    private Tipoitem tipoItem;
 
     public AlmacenDTO() {
     }
@@ -85,6 +92,30 @@ public class AlmacenDTO {
 
     public void setCodDist(String codDist) {
         this.codDist = codDist;
+    }
+
+    public Pealtipoitem getPealtipoitem() {
+        return pealtipoitem;
+    }
+
+    public void setPealtipoitem(Pealtipoitem pealtipoitem) {
+        this.pealtipoitem = pealtipoitem;
+    }
+
+    public Altipoitem getAltipoitem() {
+        return altipoitem;
+    }
+
+    public void setAltipoitem(Altipoitem altipoitem) {
+        this.altipoitem = altipoitem;
+    }
+
+    public Tipoitem getTipoItem() {
+        return tipoItem;
+    }
+
+    public void setTipoItem(Tipoitem tipoItem) {
+        this.tipoItem = tipoItem;
     }
    
    

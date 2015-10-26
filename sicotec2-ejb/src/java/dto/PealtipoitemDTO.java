@@ -22,8 +22,15 @@ public class PealtipoitemDTO {
     private Pedido pedido;
     private Integer idalmacen;
     
+    
     private String nombreItems;
 
+    //extras
+     private Integer cantidadItem;
+     private Double precioItem;
+     
+     
+     
     public Integer getCantidad() {
         return cantidad;
     }
@@ -86,6 +93,22 @@ public class PealtipoitemDTO {
 
     public void setIdalmacen(Integer idalmacen) {
         this.idalmacen = idalmacen;
+    }
+
+    public Integer getCantidadItem() {
+        return cantidadItem;
+    }
+
+    public void setCantidadItem(Integer cantidadItem) {
+        this.cantidadItem = cantidadItem;
+    }
+
+    public Double getPrecioItem() {
+        return precioItem;
+    }
+
+    public void setPrecioItem(Double precioItem) {
+        this.precioItem = precioItem;
     }
     
     

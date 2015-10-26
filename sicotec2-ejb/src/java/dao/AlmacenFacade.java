@@ -5,11 +5,14 @@
  */
 package dao;
 
+import dto.AlmacenDTO;
 import entidades.Almacen;
+import entidades.Pealtipoitem;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -46,18 +49,20 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         return entidad;
     }
     
-    public List<Almacen> getAlmacenForPedido(Almacen a) {
+    public List<AlmacenDTO> getAlmacenForPedido(Almacen a) {
         
-        String jpa = "SELECT a.nombre,pti.idalmacen,pti.idtipoItem,pti.idpedido,ti.nombre "
-                + "FROM Almacen a, Tipoitem ti,Pealtipoitem pti,Altipoitem ati "
-                + "WHERE a.idalmacen = pti.idalmacen "
-                + "AND pti.idtipoItem = ati.idtipoItem "
-                + "AND pti.idalmacen = ati.idalmacen "
-                + "AND ti.idtipoItem = ati.idtipoItem "
-                + "AND a.idalmacen ='"+a.getIdalmacen()+"'";
+        String jpa = "SELECT a.nombre, pti.idalmacen, pti.idtipoItem, pti.idpedido, ti.nombre"
+                    + "FROM Almacen a, Tipoitem ti, Pealtipoitem pti, Altipoitem ati "
+                    + "WHERE a.idalmacen = pti.pealtipoitemPK.idalmacen "
+                    + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
+                    + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
+                    + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
+                    + "AND a.idalmacen = 1";
                
-
-        return em.createQuery(jpa, Almacen.class).getResultList();
+        
+        
+        return em.createQuery(jpa,AlmacenDTO.class).getResultList();
+        
     }
 }
 

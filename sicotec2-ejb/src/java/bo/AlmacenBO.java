@@ -8,6 +8,7 @@ package bo;
 import dao.AlmacenFacade;
 import dto.AlmacenDTO;
 import entidades.Almacen;
+import entidades.Pealtipoitem;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -74,11 +75,6 @@ public class AlmacenBO {
         
         return DTO;
     }
-     public List<AlmacenDTO> AlmacenForPedidos(AlmacenDTO t){       
-        Almacen r=convertDTOtoEntidad(t);
-        List<Almacen> lista =almacenFacade.getAlmacenForPedido(r);
-        List<AlmacenDTO> lista1=convertListEntityToDTO(lista);
-        return lista1;      
-    }    
+       
      
 }
