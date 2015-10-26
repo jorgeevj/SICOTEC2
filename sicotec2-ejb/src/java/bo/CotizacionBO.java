@@ -171,8 +171,13 @@ public class CotizacionBO {
         dto.setEstado(c.getEstado());
         dto.setIdalmacen(c.getIdalmacen());
         dto.setIdalm(c.getIdalmacen());
+//        dto.setCotipoitemList(c.getCotipoitemList());
         dto.setNombAlmacen(almacenFacade.getNombreAlmxID(c.getIdalmacen()).getNombre());
         return dto;
+    }
+    
+    public List<CotipoitemDTO> getListCotipoitemByidCot(int idcotizacion){
+    return converListCotipoitemByDTO(cotipoitemFacade.findByCot(idcotizacion));
     }
 
     private Cotipoitem cotipoitenDTOByEntidad(CotipoitemDTO c) {
@@ -220,5 +225,26 @@ public class CotizacionBO {
             }
         }
     }
+
+    private List<CotipoitemDTO> converListCotipoitemByDTO(List<Cotipoitem> lct) {
+    List<CotipoitemDTO> ldto=new ArrayList<>();
+    for(Cotipoitem ct:lct){
+       ldto.add(convertCotipoitenByDTO(ct));
+        }
+    return ldto;
+    }
+
+    private CotipoitemDTO convertCotipoitenByDTO(Cotipoitem ct) {
+    CotipoitemDTO dto=new CotipoitemDTO();
+    dto.setAlmacen(ct.getCotizacion().getIdalmacen());
+    dto.setCantidad(ct.getCantidad());
+    dto.setCotizacion(ct.getCotizacion());
+    dto.setDescuento(ct.getDescuento());
+    dto.setPrecio(ct.getPrecio());
+    dto.setTipoitem(ct.getTipoitem());
+    return dto;
+    }
+    
+    
 
 }

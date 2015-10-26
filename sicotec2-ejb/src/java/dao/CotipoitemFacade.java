@@ -6,6 +6,7 @@
 package dao;
 
 import entidades.Cotipoitem;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,5 +28,9 @@ public class CotipoitemFacade extends AbstractFacade<Cotipoitem> {
     public CotipoitemFacade() {
         super(Cotipoitem.class);
     }
-    
+    public List<Cotipoitem> findByCot(int idCotizacion){
+        String jpa="select ct from Cotipoitem ct "
+                + "where ct.cotizacion.idcotizacion="+idCotizacion;
+    return em.createQuery(jpa, Cotipoitem.class).getResultList();
+    }
 }
