@@ -34,6 +34,8 @@ public class MovimientoDTO {
     private String TipoMovimiento;
     private Date fechaInicio;
     private Date fechaFin;
+    
+    private Integer idCompra;
 
     /**
      * @return the idmovimiento
@@ -309,6 +311,20 @@ public class MovimientoDTO {
      */
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    /**
+     * @return the idCompra
+     */
+    public Integer getIdCompra() {
+        return idCompra;
+    }
+
+    /**
+     * @param idCompra the idCompra to set
+     */
+    public void setIdCompra(Integer idCompra) {
+        this.idCompra = idCompra;
     }
     
     
