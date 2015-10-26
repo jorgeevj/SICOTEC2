@@ -9,6 +9,7 @@ import dao.AlmacenFacade;
 import dao.CompraFacade;
 import dao.TipoitemFacade;
 import dto.CompraDTO;
+import entidades.Almacen;
 import entidades.Compra;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class CompraBO {
   
     @EJB
     private CompraFacade compraFacade ;
-     @EJB
+    @EJB
     private AlmacenFacade almacenFacade = new AlmacenFacade();
      
     
@@ -36,6 +37,13 @@ public class CompraBO {
     
     public List<CompraDTO> getAllCompras() {
         List<Compra> listaCompras       = compraFacade.findAll();
+        List<CompraDTO> listaComprasDTO = convertListEntityToDTO(listaCompras);
+        
+        return listaComprasDTO;
+    }
+    
+    public List<CompraDTO> getComprasByEstado(int estado){
+        List<Compra> listaCompras       = compraFacade.getComprasxEstado(estado);
         List<CompraDTO> listaComprasDTO = convertListEntityToDTO(listaCompras);
         
         return listaComprasDTO;
@@ -56,7 +64,21 @@ public class CompraBO {
     
     public CompraDTO convertEntityToDTO(Compra compra){
         CompraDTO DTO = new CompraDTO();
-        
+       
+        DTO.setIdcompra(compra.getIdcompra());
+        DTO.setCorrelativo(compra.getCorrelativo());
+        DTO.setFecha(compra.getFecha());
+        DTO.setTotal(compra.getTotal());
+        DTO.setSerie(compra.getSerie());
+        DTO.setIdEmpresa(compra.getIdempresa().getIdempresa());
+        DTO.setNombreEmpresa(compra.getIdempresa().getNombre());
+
+        Almacen almacen = new Almacen();
+        almacen = almacenFacade.getAlmacenById(compra.getIdalmacen());
+
+        DTO.setIdAlmacen(almacen.getIdalmacen());
+        DTO.setNombreAlmacen(almacen.getNombre());
+
             DTO.setIdcompra(compra.getIdcompra());
             DTO.setCorrelativo(compra.getCorrelativo());
             DTO.setFecha(compra.getFecha());
@@ -68,6 +90,7 @@ public class CompraBO {
           
 //            String nombreAlmacen = almacenFacade.getAlmacenById(DTO.getIdalmacen()).getNombre() ;
 //            DTO.setNombreAlmacen(nombreAlmacen);
+
         
         return DTO;
     }
