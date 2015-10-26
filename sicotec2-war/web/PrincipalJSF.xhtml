@@ -448,7 +448,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
-                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.idempresaNuevo.idempresa}" >
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.idempresaNuevo}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
@@ -517,7 +517,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formAddPedido">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
-                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}" >
+                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}">
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaEmpresaAdd}" var="emp" 
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
@@ -527,7 +527,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Correlativo: "></p:outputLabel>
                         <p:inputText   value="#{pedidoMB.correlativoAdd}"/>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenAdd}" >
+                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenAdd}">
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
@@ -611,6 +611,7 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{pedidoMB.listaAlmacenesEdit}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
+                        <p:commandButton value="Agregar Items" actionListener="#{pedidoMB.agregarCantidad}"/>
                     </h:panelGrid>
                     <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
                 </h:form>
@@ -760,13 +761,13 @@ jorgeevj 15.09.15 Creacion.
                         <p:inputText id="tipoItem" value="#{tipoitemMB.tipoItemSelect.tipo}"/>
 
                         <p:outputLabel value="Precio:" for="precioItem"/>                            
-                        <p:inputText id="precioItem" value="#{tipoitemMB.tipoItemSelect.precio}"/>
+                        <p:inputText id="precioItem" value="#{tipoitemMB.tipoItemSelect.precioLista}"/>
 
                         <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItem"/>                            
-                        <p:inputText id="dsctClienteItem" value="#{tipoitemMB.tipoItemSelect.dsctoCliente}"/>                      
+                        <p:inputText id="dsctClienteItem" value="#{tipoitemMB.tipoItemSelect.desCliente}"/>                      
 
                         <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItem"/>                            
-                        <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.tipoItemSelect.dsctoDistribuidor}"/>
+                        <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.tipoItemSelect.desDistribuidor}"/>
 
 
 

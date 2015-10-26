@@ -28,7 +28,9 @@ public class CompraDTO {
      /*AGREGAR*/
      private String nombreEmpresa;
      private Integer estado;
-    
+     
+     private String nombreAlmacen;
+     
      private int idAlmacen;
      private int idEmpresa;
     
@@ -122,6 +124,14 @@ public class CompraDTO {
 
     public void setEstado(Integer estado) {
         this.estado = estado;
+    }
+
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
     }
 
  

@@ -302,7 +302,7 @@ public class MovimientoMB implements Serializable{
                 listaItemsAg.add(movItem);
             }
 
-            getMovimientoBO().insertMovimiento(mov,listaItemsAg);
+            //getMovimientoBO().insertMovimiento(mov,listaItemsAg);
             setListaMovimiento(getMovimientoBO().getAllMovimiento());
             setDisableEditar(true);
             setDisableVerItems(true);

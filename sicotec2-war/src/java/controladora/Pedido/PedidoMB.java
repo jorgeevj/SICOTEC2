@@ -26,7 +26,9 @@ import entidades.Tipoitem;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.*;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -78,6 +80,9 @@ public class PedidoMB{
     Utils ut = new Utils();
     
     
+    private boolean disableEditar = true;
+    private boolean disableVerItems = true;
+    
     @PostConstruct
     public void init(){
         emp=new Empresa();
@@ -121,31 +126,40 @@ public class PedidoMB{
     
     public void abrirModalAddPedido(ActionEvent ActionEvent){
         limpiarRefrescar();
+        setDisableEditar(true);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formBotones");
         this.crear(null);
     }
     
     public void addNuevoPedido(ActionEvent actionEvent){
-        PedidoDTO dto = new PedidoDTO();
-        Empresa entidadEmpresa = new Empresa();
-        entidadEmpresa.setIdempresa(getEmpresaAdd());
-        dto.setIdEmpresa(entidadEmpresa);
-        dto.setIdalmacen(getAlmacenAdd());
-        dto.setSerie(getSerieAdd());
-        dto.setCorrelativo(getCorrelativoAdd());
-        Pedido entidad = pedidoBO.insertarNuevoPedido(dto); 
-        //Insert Update Tipo Item
-        List<AltipoitemDTO> listATI = this.getListaAlTipoItem(getListaItemsSeleccionado());
-        pedidoBO.insertUpdateAlTipoItem(listATI);
-        
-        //Insert Pedido Tipo Item
-        List<PealtipoitemDTO> listPXI = this.getListaPealtipoItem(getListaItemsSeleccionado() , entidad);
-        pedidoBO.insertarPedidoTipoItem(listPXI);
+        String sms = this.validarCamposRegistro();
+        System.out.println("sms: " + sms);
+        if(!sms.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Faltan Algunos Campos", sms));
+        } else{
+            PedidoDTO dto = new PedidoDTO();
+            Empresa entidadEmpresa = new Empresa();
+            entidadEmpresa.setIdempresa(getEmpresaAdd());
+            dto.setIdEmpresa(entidadEmpresa);
+            dto.setIdalmacen(getAlmacenAdd());
+            dto.setSerie(getSerieAdd());
+            dto.setCorrelativo(getCorrelativoAdd());
+            Pedido entidad = pedidoBO.insertarNuevoPedido(dto); 
+            //Insert Update Tipo Item
+            List<AltipoitemDTO> listATI = this.getListaAlTipoItem(getListaItemsSeleccionado());
+            pedidoBO.insertUpdateAlTipoItem(listATI);
 
-        
-        getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("tabPedidosFrom");
-        this.cerrar();
+            //Insert Pedido Tipo Item
+            List<PealtipoitemDTO> listPXI = this.getListaPealtipoItem(getListaItemsSeleccionado() , entidad);
+            pedidoBO.insertarPedidoTipoItem(listPXI);
+
+
+            getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("tabPedidosFrom");
+            this.cerrar();
+        }
         //pedidoBO.insertarNuevoPedido(dto);
     }
     
@@ -202,6 +216,12 @@ public class PedidoMB{
         context.execute("PF('addCantidad').hide();");
     }    
     
+    public void abrirModalAgregarItemsEdit(ActionEvent actionEvent){
+        setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
+        //setListaItemsSeleccionado(tipoItemBO.getAllTipoItemByPedido());
+        RequestContext context = RequestContext.getCurrentInstance();
+    }
+    
     public void selectTipoItemAdd(SelectEvent event) {
         setObjTipoItem((TipoItemDTO)event.getObject());
     }
@@ -211,7 +231,10 @@ public class PedidoMB{
     }
     
     public void selectPedidoEditar(SelectEvent event) {
+        setDisableEditar(false);
         setObjPedidoEditar((PedidoDTO)event.getObject());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formBotones");
     }
     
     
@@ -245,6 +268,23 @@ public class PedidoMB{
         context.update("formAddItems");
         context.update("formTbSelec");
      }
+     
+     public String validarCamposRegistro(){
+        String sms = "";
+        if(getAlmacenAdd()== 0){
+            sms = "Seleccione un almacen";
+        }      
+        else if(getCorrelativoAdd().isEmpty()){
+            sms = "Ingrese el correlativo";
+        }
+        else if(getEmpresaAdd() == 0){
+            sms = "Seleccione una empresa";
+        }
+        else if(getSerieAdd().isEmpty()){
+            sms = "Ingrese la serie";
+        }
+        return sms;
+    }
 
      public List<EmpresaDTO> comboEmpresas(){
          List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
@@ -484,6 +524,22 @@ public class PedidoMB{
 
     public void setObjPedidoEditar(PedidoDTO objPedidoEditar) {
         this.objPedidoEditar = objPedidoEditar;
+    }
+
+    public boolean isDisableEditar() {
+        return disableEditar;
+    }
+
+    public void setDisableEditar(boolean disableEditar) {
+        this.disableEditar = disableEditar;
+    }
+
+    public boolean isDisableVerItems() {
+        return disableVerItems;
+    }
+
+    public void setDisableVerItems(boolean disableVerItems) {
+        this.disableVerItems = disableVerItems;
     }
     
     

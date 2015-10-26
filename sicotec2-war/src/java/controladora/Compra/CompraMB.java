@@ -13,6 +13,7 @@ import bo.PedidoaltipoitemBO;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
+import dto.PealtipoitemDTO;
 import entidades.Almacen;
 import entidades.Compra;
 import entidades.Documento;
@@ -61,10 +62,10 @@ public class CompraMB {
      private String serieNuevo;
      private String correlativoNuevo;
      private int idalmacenNuevo;
-     private Empresa idempresaNuevo;
+     private int idempresaNuevo;
      private Integer estadoNuevo;
     
-     
+     private List<PealtipoitemDTO> listPealItem;
     private List<Compra> listaCompra;
     private CompraDTO campos;
     private Empresa emp=new Empresa();
@@ -84,16 +85,15 @@ public class CompraMB {
         getSessionBeanCompra().setListaEmpresaAdd(this.comboEmpresas());
         getSessionBeanCompra().setListaAlmacenesAdd(this.comboAlmacen());
         campos.setIdcompra(0);
-        campos.setIdempresa(emp);
+        //campos.setIdEmpresa(emp);
         
         camposAdd = new CompraDTO();
         camposAdd.setIdcompra(0);
-        camposAdd.setIdempresa(emp);
-       idempresaNuevo=emp;
+        //camposAdd.setIdempresa(emp);
     }
     
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
-        System.out.println("nombre"+campos.getIdempresa().getNombre());
+        System.out.println("nombre"+campos.getNombreEmpresa());
             getSessionBeanCompra().setListaCompra(compraBO.BuscarCompra(campos));
             return getSessionBeanCompra().getListaCompra();
     }
@@ -121,19 +121,18 @@ public class CompraMB {
        
         
         
-        listaAlmacenes=almacenBO.AlmacenForPedidos(lis);
+        //listaAlmacenes=almacenBO.AlmacenForPedidos(lis);
        
     }
       public void addNuevoCompra(ActionEvent actionEvent){
           CompraDTO dto=new CompraDTO();
-           dto.setIdalmacen(getIdalmacenNuevo());
+           dto.setIdAlmacen(getIdalmacenNuevo());
            dto.setEstado(0);
            dto.setCorrelativo(getCorrelativoNuevo());
            dto.setFecha(new Date());
            dto.setSerie(getSerieNuevo());
            dto.setTotal(getTotalNuevo());
-           dto.setIdempresa(getIdempresaNuevo());
-           dto.setIddocumento(getIddocumento());
+           dto.setIdEmpresa(getIdempresaNuevo());
            System.out.println("data: " + dto.getCorrelativo());
            
            Compra entidad = compraBO.insertarNuevoCompra(dto);
@@ -349,11 +348,11 @@ public class CompraMB {
         this.idalmacenNuevo = idalmacenNuevo;
     }
 
-    public Empresa getIdempresaNuevo() {
+    public int getIdempresaNuevo() {
         return idempresaNuevo;
     }
 
-    public void setIdempresaNuevo(Empresa idempresaNuevo) {
+    public void setIdempresaNuevo(int idempresaNuevo) {
         this.idempresaNuevo = idempresaNuevo;
     }
 
@@ -363,6 +362,14 @@ public class CompraMB {
 
     public void setEstadoNuevo(Integer estadoNuevo) {
         this.estadoNuevo = estadoNuevo;
+    }
+
+    public List<PealtipoitemDTO> getListPealItem() {
+        return listPealItem;
+    }
+
+    public void setListPealItem(List<PealtipoitemDTO> listPealItem) {
+        this.listPealItem = listPealItem;
     }
     
     

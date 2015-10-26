@@ -12,7 +12,7 @@
             <h:form id="formCompra">
                 <h:panelGrid columns="1">
                     <p:outputLabel value="Empresa:" for="it1" />
-                    <p:inputText id="it1" value="#{compraMB.campos.idempresa.nombre}"/>
+                    <p:inputText id="it1" value="#{compraMB.campos.nombreEmpresa}"/>
                     <p:outputLabel value="N Serie:" for="it2" />
                     <p:inputText id="it2" value="#{compraMB.campos.serie}"/>
                     
@@ -37,11 +37,11 @@
                     <h:outputText value="#{tComp.correlativo}" />
                     </p:column>
                  <p:column headerText="Empresa">
-                    <h:outputText value="#{tComp.idempresa.nombre}" />
+                     <h:outputText value="#{tComp.nombreEmpresa}" />
                     </p:column>
                 <p:column headerText="Ruc">
-                    <h:outputText value="#{tComp.idempresa.ruc}" />
-                    </p:column>
+                    <h:outputText value="#{tComp.nombreEmpresa}" />
+                </p:column>
                 <p:column headerText="Fecha">
                     <p:outputLabel value="#{tComp.fecha}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />

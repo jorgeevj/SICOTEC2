@@ -20,7 +20,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Jorge
  */
-@Stateless
+    @Stateless
 @LocalBean
 public class AlmacenBO {
     @EJB

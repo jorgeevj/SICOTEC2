@@ -11,6 +11,7 @@ import dao.TipoitemFacade;
 import dto.CompraDTO;
 import entidades.Almacen;
 import entidades.Compra;
+import entidades.Empresa;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,15 +80,6 @@ public class CompraBO {
         DTO.setIdAlmacen(almacen.getIdalmacen());
         DTO.setNombreAlmacen(almacen.getNombre());
 
-            DTO.setIdcompra(compra.getIdcompra());
-            DTO.setCorrelativo(compra.getCorrelativo());
-            DTO.setFecha(compra.getFecha());
-            DTO.setIdalmacen(compra.getIdalmacen());
-            DTO.setIdempresa(compra.getIdempresa());
-            DTO.setTotal(compra.getTotal());
-            DTO.setSerie(compra.getSerie());
-            DTO.setEstado(compra.getEstado());
-          
 //            String nombreAlmacen = almacenFacade.getAlmacenById(DTO.getIdalmacen()).getNombre() ;
 //            DTO.setNombreAlmacen(nombreAlmacen);
 
@@ -100,8 +92,10 @@ public class CompraBO {
             entidad.setIdcompra(dto.getIdcompra());
         }
         entidad.setFecha(new Date());
-        entidad.setIdempresa(dto.getIdempresa());
-        entidad.setIdalmacen(dto.getIdalmacen());
+            Empresa entidadEmpresa = new Empresa();
+            entidadEmpresa.setIdempresa(dto.getIdEmpresa());
+        entidad.setIdempresa(entidadEmpresa);
+        entidad.setIdalmacen(dto.getIdAlmacen());
         entidad.setSerie(dto.getSerie());
         entidad.setCorrelativo(dto.getCorrelativo());
         entidad.setEstado(dto.getEstado());

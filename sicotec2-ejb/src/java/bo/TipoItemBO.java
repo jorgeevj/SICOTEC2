@@ -13,6 +13,7 @@ import entidades.Categoria;
 import entidades.Color;
 import entidades.Familia;
 import entidades.Marca;
+import entidades.Pealtipoitem;
 import entidades.Tipoitem;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -186,7 +187,11 @@ public class TipoItemBO {
             T.setColor(ite.getIdcolor());
             return T;
     }
-    
-    
-     
+
+    /*public List<TipoItemDTO> getAllTipoItemByPedido(){
+        List<Tipoitem> listaEntidad = tipoItemFacade.getTipoItemByPedido();
+        List<TipoItemDTO> listaDTO = new ArrayList<TipoItemDTO>();
+        
+        return listaDTO;
+    }*/
 }
