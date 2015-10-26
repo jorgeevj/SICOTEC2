@@ -57,7 +57,7 @@ public class CompraFacade extends AbstractFacade<Compra> {
             List<Compra> l = new ArrayList<Compra>();
             String sql = "SELECT c FROM Compra c WHERE 1=1 ";
      
-           try{
+           /*try{
                System.out.println("nombreEmpressaquery" + dto.getIdempresa().getNombre());
                if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
                    System.out.println("entra if");
@@ -70,13 +70,50 @@ public class CompraFacade extends AbstractFacade<Compra> {
                l=em.createQuery(sql, Compra.class).getResultList();
            } catch(Exception e){
                l = new ArrayList<Compra>();
-           }
+           }*/
             
             
            
           return l; 
         
     }
+     
+     public boolean cambiarEstadoCompra(int idEstado, int idCompra){
+         boolean tof = false;
+        try{
+            String sql = "UPDATE compra "
+                       + "SET estado = "+idEstado+" "
+                       + "WHERE idcompra = "+idCompra;
+                    
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+     }
+     
+     public List<Compra> getComprasxEstado(int idEstado){
+         List<Compra> compras = new ArrayList<Compra>();
+         try{
+             String sql = "SELECT c "
+                        + "FROM Compra c "
+                        + "WHERE c.estado = :estado";
+             Query query = em.createQuery(sql);
+             query.setParameter("estado", idEstado);
+             
+             compras = query.getResultList();
+         }catch(Exception e){
+             
+         }
+         
+         return compras;
+     }
      public Compra agregarCompra(Compra entidadCompra) {
         getEntityManager().persist(entidadCompra);
         getEntityManager().flush();
