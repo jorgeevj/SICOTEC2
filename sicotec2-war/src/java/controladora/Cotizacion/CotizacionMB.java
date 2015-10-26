@@ -64,6 +64,7 @@ public class CotizacionMB {
     private boolean btnQuitarItem;
     private double chamgePrecioCrea;
     private double minPrecioCrea;
+    private CotipoitemDTO cotipoItemSelectEdit;
 
     /**
      * Creates a new instance of CotizacionMB
@@ -81,6 +82,7 @@ public class CotizacionMB {
         listaCategoria = cotizacionBO.findCategoriaAll();
         limpiarCotizaciones();
         limpiarcamposCrear();
+//        cotipoItemSelectEdit=new CotipoitemDTO();
 
     }
 
@@ -201,6 +203,7 @@ public class CotizacionMB {
             minPrecioCrea = cotipoItemSelect.getTipoitem().getPrecioLista() - (cotipoItemSelect.getTipoitem().getDesCliente() * cotipoItemSelect.getTipoitem().getPrecioLista() / 100);
 
         }
+        
     }
 
     public double totalCotizacion() {
@@ -230,6 +233,7 @@ public class CotizacionMB {
             return;
         }
         cotipoItemSelect.setPrecio(chamgePrecioCrea);
+        cotipoItemSelectEdit.setPrecio(chamgePrecioCrea);
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('editItemPrecio').hide();");
     }
@@ -270,9 +274,22 @@ public class CotizacionMB {
     // FIN CREAR
     // EDITAR
     public void editar(ActionEvent actionEvent) {
-        
+        listaCoItemSelect=new ArrayList<>();
+        cotipoItemSelectEdit=new CotipoitemDTO();
+        listaCotipoItem=cotizacionBO.getListCotipoitemByidCot(cotizacionSelec.getIdcotizacion());
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('editCot').show();");
+//        context.update();
+    }
+    public void openPrecioedit(ActionEvent actionEvent) {
+        cotipoItemSelectEdit=(CotipoitemDTO) actionEvent.getComponent().getAttributes().get("myattribute");
+        chamgePrecioCrea = cotipoItemSelectEdit.getPrecio();
+        if (cotizacionBO.isEmpDistribudora(cotipoItemSelectEdit.getCotizacion().getIdempresa())) {
+            minPrecioCrea = cotipoItemSelectEdit.getTipoitem().getPrecioLista() - (cotipoItemSelectEdit.getTipoitem().getDesDistribuidor() * cotipoItemSelectEdit.getTipoitem().getPrecioLista() / 100);
+        } else {
+            minPrecioCrea = cotipoItemSelectEdit.getTipoitem().getPrecioLista() - (cotipoItemSelectEdit.getTipoitem().getDesCliente() * cotipoItemSelectEdit.getTipoitem().getPrecioLista() / 100);
+
+        }
     }
 
     public void cerrarEditar(ActionEvent actionEvent) {
@@ -455,6 +472,14 @@ public class CotizacionMB {
 
     public void setMinPrecioCrea(double minPrecioCrea) {
         this.minPrecioCrea = minPrecioCrea;
+    }
+
+    public CotipoitemDTO getCotipoItemSelectEdit() {
+        return cotipoItemSelectEdit;
+    }
+
+    public void setCotipoItemSelectEdit(CotipoitemDTO cotipoItemSelectEdit) {
+        this.cotipoItemSelectEdit = cotipoItemSelectEdit;
     }
 
 }
