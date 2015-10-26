@@ -36,6 +36,27 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
                 + "and a.altipoitemPK.idtipoItem='"+ at.getTipoitem().getIdtipoItem()+"'" ;
     return em.createQuery(sql, Altipoitem.class).getResultList();
     }
+    
+    public boolean updateCantidadAltipoItem(String idTipoItem, int idAlmacen, int cantidad){
+        boolean tof = false;
+        try{
+            String sql = "UPDATE altipoitem "
+                       + "SET cantidad = cantidad + "+cantidad+" "
+                       + "WHERE idtipoitem = '"+idTipoItem+"' "
+                       + "AND idalmacen = "+idAlmacen;
+                    
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+    }
 
     public Altipoitem getAllByTipoItemIdAlmacen(Altipoitem entidadAl){
         Altipoitem entidad = new Altipoitem();
