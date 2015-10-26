@@ -9,23 +9,28 @@ import entidades.Almacen;
 import entidades.Documento;
 import entidades.Empresa;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  *
  * @author jc7
  */
+
 public class CompraDTO {
-    
+
      private Integer idcompra;   
      private Date fecha;
      private Double total;
-     private String iddocumento;
      private String serie;
      private String correlativo;
-     private int idalmacen;
-     private Empresa idempresa;
+     
+     /*AGREGAR*/
+     private String nombreEmpresa;
      private Integer estado;
     
+     private int idAlmacen;
+     private int idEmpresa;
     
     public Integer getIdcompra() {
         return idcompra;
@@ -60,14 +65,6 @@ public class CompraDTO {
         this.correlativo = correlativo;
     }
 
-    public Empresa getIdempresa() {
-        return idempresa;
-    }
-
-    public void setIdempresa(Empresa idempresa) {
-        this.idempresa = idempresa;
-    }
-
     public String getSerie() {
         return serie;
     }
@@ -75,21 +72,48 @@ public class CompraDTO {
     public void setSerie(String serie) {
         this.serie = serie;
     }
-
-    public String getIddocumento() {
-        return iddocumento;
-    }
-
-    public void setIddocumento(String iddocumento) {
-        this.iddocumento = iddocumento;
-    }
    
-    public int getIdalmacen() {
-        return idalmacen;
+
+    /**
+     * @return the nombreEmpresa
+     */
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
     }
 
-    public void setIdalmacen(int idalmacen) {
-        this.idalmacen = idalmacen;
+    /**
+     * @param nombreEmpresa the nombreEmpresa to set
+     */
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+
+    /**
+     * @return the idEmpresa
+     */
+    public int getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    /**
+     * @param idEmpresa the idEmpresa to set
+     */
+    public void setIdEmpresa(int idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    /**
+     * @return the idAlmacen
+     */
+    public int getIdAlmacen() {
+        return idAlmacen;
+    }
+
+    /**
+     * @param idAlmacen the idAlmacen to set
+     */
+    public void setIdAlmacen(int idAlmacen) {
+        this.idAlmacen = idAlmacen;
     }
 
     public Integer getEstado() {
