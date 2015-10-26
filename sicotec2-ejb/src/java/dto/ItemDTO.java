@@ -13,6 +13,10 @@ public class ItemDTO {
     private Integer iditem;
     private String estado;
     private String operatividad;
+    
+    private Integer idLote;
+    private String idTipoItem;
+    private Integer cantidad;
 
     /**
      * @return the iditem
@@ -54,6 +58,48 @@ public class ItemDTO {
      */
     public void setOperatividad(String operatividad) {
         this.operatividad = operatividad;
+    }
+
+    /**
+     * @return the idLote
+     */
+    public Integer getIdLote() {
+        return idLote;
+    }
+
+    /**
+     * @param idLote the idLote to set
+     */
+    public void setIdLote(Integer idLote) {
+        this.idLote = idLote;
+    }
+
+    /**
+     * @return the idTipoItem
+     */
+    public String getIdTipoItem() {
+        return idTipoItem;
+    }
+
+    /**
+     * @param idTipoItem the idTipoItem to set
+     */
+    public void setIdTipoItem(String idTipoItem) {
+        this.idTipoItem = idTipoItem;
+    }
+
+    /**
+     * @return the cantidad
+     */
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
     
     
