@@ -159,7 +159,7 @@ public class CotizacionDTO {
         if(fechaEnvio!=null){
          tiempo=fechaEnvio.getTime()+(24*60*60*3);
          actual=new Date().getTime();
-        if(fechaEnvio.getTime()+(24*60*60*1000*3)<new Date().getTime()){
+        if(fechaEnvio.getTime()+(24*60*60*1000*duracion)<=new Date().getTime()){
         estado=3;
         }
         }
