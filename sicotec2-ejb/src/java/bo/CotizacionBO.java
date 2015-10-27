@@ -108,7 +108,31 @@ public class CotizacionBO {
         c.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         return cotizacionFacade.guardaCot(c);
     }
+    public void guardarEditar(CotizacionDTO c) {
+        cotizacionFacade.edit(convertDTObyEntidad(c));
+    }
+public Cotizacion convertDTObyEntidad(CotizacionDTO c){
+    Cotizacion entidad=new Cotizacion();
+    entidad.setIdcotizacion(c.getIdcotizacion());
+    entidad.setIdempresa(c.getIdempresa());
+    entidad.setIdalmacen(c.getIdalmacen());
+    entidad.setEntrega(c.getEntrega());
+    entidad.setDuracion(c.getDuracion());
+    entidad.setEstado(c.getEstado());
+    entidad.setFechaEnvio(c.getFechaEnvio());
+    entidad.setSerie(c.getSerie());
+    entidad.setCorrelativo(c.getCorrelativo());
+//    entidad.setCotipoitemList(c.getCotipoitemList());
+    
+    return entidad;
+}
 
+public void eliminarItemsByCOt(Integer idcotizacion){
+   List<Cotipoitem> ct=cotipoitemFacade.findByCot(idcotizacion);
+    for(Cotipoitem e:ct){
+    cotipoitemFacade.remove(e);
+    }
+}
     public void guardarCrearItems(List<CotipoitemDTO> ct) {
         for (CotipoitemDTO c : ct) {
             cotipoitemFacade.create(cotipoitenDTOByEntidad(c));
