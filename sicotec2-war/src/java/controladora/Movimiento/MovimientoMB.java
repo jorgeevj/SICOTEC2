@@ -7,11 +7,14 @@ package controladora.Movimiento;
 
 import Util.Utils;
 import bo.AlmacenBO;
+import bo.CompraBO;
 import bo.DocumentoBO;
 import bo.ItemBO;
+import bo.LoteBO;
 import bo.MovimientoBO;
 import bo.TipoMovimientoBO;
 import dto.AlmacenDTO;
+import dto.CompraDTO;
 import dto.DocumentoDTO;
 import dto.EmpresaDTO;
 import dto.ItemDTO;
@@ -19,10 +22,8 @@ import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
 import dto.MovimientoitemDTOVista;
 import dto.TipomovimientoDTO;
-import entidades.Item;
-import entidades.Movimientoitem;
+import dto.loteDTO;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,11 @@ public class MovimientoMB implements Serializable{
     private ItemBO itemBO = new ItemBO();
     @EJB
     private AlmacenBO almacenBO = new AlmacenBO();
+    @EJB
+    private CompraBO compraBO = new CompraBO();
+    @EJB
+    private LoteBO loteBO = new LoteBO();
+    
     
     private Utils ut = new Utils();
     
@@ -60,11 +66,15 @@ public class MovimientoMB implements Serializable{
     private int idtipoMovimientoSalidaAlmacen  = 4;
     
     private int estadoMovimientoCreado = 0;
-    private int estadoEnTransito = 1;
-    private int estadoConfirmado = 2;
+    private int estadoEnTransito       = 1;
+    private int estadoConfirmado       = 2;
     
-    private boolean disableEditar = true;
+    private boolean disableEditar   = true;
     private boolean disableVerItems = true;
+    
+    private String styleBTNItems    = "display:none";
+    private String styleBTNICompras = "display:none";
+    private String styleBTNItemsAlmacen = "display:none";
     
     
     //VARIABLES
@@ -79,6 +89,9 @@ public class MovimientoMB implements Serializable{
         private List<AlmacenDTO> listaAlmacenes = new ArrayList<AlmacenDTO>();
         private ArrayList listaEstados = new ArrayList();
         private List<MovimientoitemDTOVista> listaItemsMovimiento = new ArrayList<MovimientoitemDTOVista>();
+        private List<CompraDTO> listaCompras = new ArrayList<CompraDTO>();
+        private List<loteDTO> listaLotesCompra = new ArrayList<loteDTO>();
+        private List<loteDTO> listaLotesCompraAux = new ArrayList<loteDTO>();
         
         //MOVIMIENTO SELECCIONADO
         private MovimientoDTO movimientoSeleccionado;
@@ -86,6 +99,11 @@ public class MovimientoMB implements Serializable{
         //ITEM SELECCIONADO
         private MovimientoitemDTOVista itemSeleccionado = new MovimientoitemDTOVista();
         private MovimientoitemDTOVista itemSeleccionadoAux = new MovimientoitemDTOVista();
+        
+        //COMPRA SELECCIONADA
+        private CompraDTO compraSeleccionada = new CompraDTO();
+        private loteDTO loteSeleccionado = new loteDTO();
+        private loteDTO loteSeleccionadoAux = new loteDTO();
         
         //REGISTRO
         private int idTipoMovimientoSelectNuevo;
@@ -123,6 +141,11 @@ public class MovimientoMB implements Serializable{
         private boolean panelVisibleMovAlmacenes = false;
         private boolean panelVisibleMovEntrada = false;
         private boolean panelVisibleMovSalida = false;
+        
+        //ADD CANTIDAD TO LOTES
+        private String cantidadLote;
+        private boolean disableTablaCompras = false;
+        private boolean disableBTNCambioOCompra = true;
 
     @PostConstruct
     public void init(){
@@ -158,24 +181,65 @@ public class MovimientoMB implements Serializable{
         context.update("formBusqueda");
     }
     
+    public void itemsByAlmacen(){
+        int idAlmacen = getIdAlmacenOrigenNuevo();
+        System.out.println("IDALMACEN: "+idAlmacen);
+        setListaItem(movimientoBO.getItemsByAlmacen(idAlmacen));
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabItemsDisp");
+        context.execute("PF('dialog_nuevo_items').show();");
+    }
+    
     public void tipoMovElegidoNuevo(){
         int idTipoMov = getIdTipoMovimientoSelectNuevo();
         if(idTipoMov == getIdtipoMovimientoEntrada()){
             setPanelVisibleMovEntrada(true);
             setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(false);
+            setStyleBTNICompras("display:block");
+            setStyleBTNItems("display:none");
+            setStyleBTNItemsAlmacen("display:none");
+            
+            setIdAlmacenDestinoNuevo(0);
+            setIdAlmacenOrigenNuevo(0);
         }else if(idTipoMov == getIdtipoMovimientoSalida()){
             setPanelVisibleMovEntrada(false);
             setPanelVisibleMovSalida(true);
             setPanelVisibleMovAlmacenes(false);
+            setStyleBTNICompras("display:none");
+            setStyleBTNItems("display:block");
+            setStyleBTNItemsAlmacen("display:none");
+            
+            setIdAlmacenDestinoNuevo(0);
+            setIdAlmacenOrigenNuevo(0);
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
             setPanelVisibleMovEntrada(false);
             setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(true);
+            setStyleBTNICompras("display:none");
+            setStyleBTNItems("display:none");
+            
+            setIdAlmacenDestinoNuevo(0);
+            setIdAlmacenOrigenNuevo(0);
         }else{
             setPanelVisibleMovEntrada(false);
             setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(false);
+            setStyleBTNICompras("display:none");
+            setStyleBTNItems("display:none");
+            setStyleBTNItemsAlmacen("display:none");
+            
+            setIdAlmacenDestinoNuevo(0);
+            setIdAlmacenOrigenNuevo(0);
+        }
+    }
+    
+    public void selectAlmacen(){
+        if(getIdAlmacenDestinoNuevo() != 0 && getIdAlmacenOrigenNuevo()!= 0){
+            setStyleBTNItemsAlmacen("display:block");
+        }else{
+            setStyleBTNItemsAlmacen("display:none");
         }
     }
     
@@ -189,8 +253,20 @@ public class MovimientoMB implements Serializable{
         setIdAlmacenDestinoNuevo(0);
         setIdAlmacenOrigenNuevo(0);
         
+        setStyleBTNICompras("display:none");
+        setStyleBTNItems("display:none");
+        setPanelVisibleMovAlmacenes(false);
+        setPanelVisibleMovEntrada(false);
+        setPanelVisibleMovSalida(false);
+        
+        setDisableBTNCambioOCompra(true);
+        setDisableTablaCompras(false);
+        
         setListaItem(itemBO.getAlliTems());
         setListaItemAux(new ArrayList<MovimientoitemDTOVista>());
+        setListaCompras(compraBO.getComprasByEstado(1));
+        setListaLotesCompra(new ArrayList<loteDTO>());
+        setListaLotesCompraAux(new ArrayList<loteDTO>());
 
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_nuevo_mov').show();");
@@ -206,9 +282,6 @@ public class MovimientoMB implements Serializable{
         else if(getIdDocumentoSelectNuevo()== 0){
             sms = "Seleccione un documento";
         }      
-        else if(getListaItemAux().isEmpty()){
-            sms = "Ingrese items al movimiento";
-        }
         else if(idTipoMov == getIdtipoMovimientoEntrada()){
             if(getNombreOrigenNuevo().equals("") || getNombreOrigenNuevo().equals(null)){
                 sms = "Seleccione un proveedor origen";
@@ -216,12 +289,18 @@ public class MovimientoMB implements Serializable{
             else if(getIdAlmacenDestinoNuevo() == 0){
                 sms = "Seleccione un almacen destino";
             }
+            else if(getListaLotesCompraAux().isEmpty()){
+                sms = "Ingrese lotes al movimiento";
+            }
         }else if(idTipoMov == getIdtipoMovimientoSalida()){
             if(getIdAlmacenOrigenNuevo() == 0){
                 sms = "Seleccione un almacen origen";
             }
             else if(getNombreDestinoNuevo().equals("") || getNombreDestinoNuevo().equals(null)){
                 sms = "Seleccione un almacen Cliente";
+            }
+            else if(getListaItemAux().isEmpty()){
+                sms = "Ingrese items al movimiento";
             }
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
             if(getIdAlmacenOrigenNuevo()== 0){
@@ -254,7 +333,8 @@ public class MovimientoMB implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Faltan Algunos Campos", sms));
         }else{
             List<MovimientoitemDTO> listaItemsAg = new ArrayList<MovimientoitemDTO>();
-        
+            List<ItemDTO> listaItemsReg = new ArrayList<ItemDTO>();
+            
             MovimientoDTO mov = new MovimientoDTO();
             String motivo        = getMotivoNuevo();
             String comentario    = getComentarioNuevo();
@@ -274,12 +354,37 @@ public class MovimientoMB implements Serializable{
 
                 mov.setNombreOrigen(nombreOrigen);
                 mov.setIdalmacenDestino(idAlmacenDestino);
+                mov.setIdCompra(getCompraSeleccionada().getIdcompra());
+                
+                List<loteDTO> listaLoteSelecc = getListaLotesCompraAux();
+                for(loteDTO DTO : listaLoteSelecc){
+                    ItemDTO i = new ItemDTO();
+                    i.setEstado("1");
+                    i.setIdLote(DTO.getIdLote());
+                    i.setOperatividad("0");
+                    i.setIdTipoItem(DTO.getIdtipoitem());
+                    i.setCantidad(DTO.getCantidadIngresar());
+                    listaItemsReg.add(i);
+                }
             }else if(idTipoMovimiento == getIdtipoMovimientoSalida()){
                 int idAlmacenOrigen  = getIdAlmacenOrigenNuevo();
                 String nombreDestino  = getNombreDestinoNuevo();
 
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
                 mov.setNombreDestino(nombreDestino);
+                
+                List<MovimientoitemDTOVista> listaItemsSelec = getListaItemAux();
+                for(MovimientoitemDTOVista DTO : listaItemsSelec){
+                    MovimientoitemDTO movItem = new MovimientoitemDTO();
+                    ItemDTO it = new ItemDTO();
+
+                    it.setIditem(DTO.getIditem());
+
+                    movItem.setEstado(getEstadoMovimientoCreado());
+                    movItem.setItem(it);
+
+                    listaItemsAg.add(movItem);
+                }
             }
 
             mov.setComentario(comentario);
@@ -289,6 +394,7 @@ public class MovimientoMB implements Serializable{
             mov.setIddocumento(idDocumento); 
             mov.setIdTipoMovimiento(idTipoMovimiento);
 
+            
             List<MovimientoitemDTOVista> listaItemsSelec = getListaItemAux();
             for(MovimientoitemDTOVista DTO : listaItemsSelec){
                 MovimientoitemDTO movItem = new MovimientoitemDTO();
@@ -301,8 +407,8 @@ public class MovimientoMB implements Serializable{
 
                 listaItemsAg.add(movItem);
             }
-
-            //getMovimientoBO().insertMovimiento(mov,listaItemsAg);
+            
+            getMovimientoBO().insertMovimiento(mov,listaItemsAg, listaItemsReg, idTipoMovimiento);
             setListaMovimiento(getMovimientoBO().getAllMovimiento());
             setDisableEditar(true);
             setDisableVerItems(true);
@@ -429,6 +535,78 @@ public class MovimientoMB implements Serializable{
             context.update("formTabItemsDisp");
             setItemSeleccionadoAux(new MovimientoitemDTOVista());
         }
+    }
+    
+    public void selectLoteAdd(SelectEvent event){
+        setLoteSeleccionado((loteDTO)event.getObject());
+    }
+    
+    public void selectLoteRemove(SelectEvent event){
+        setLoteSeleccionadoAux((loteDTO)event.getObject());
+    }
+    
+    public void openModalAddCantidadLote(){
+        if(getLoteSeleccionado() != null){
+            setCantidadLote("");
+        
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formCantidadLote");
+            context.execute("PF('dialog_add_cantidad_lote').show();");
+        }
+    }
+    
+    public void addCantidadToLoteLista(){
+        loteDTO lote = getLoteSeleccionado();
+        getListaLotesCompra().remove(lote);
+        lote.setCantidadIngresar(Integer.parseInt(getCantidadLote()));
+        
+        getListaLotesCompraAux().add(lote);
+        
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabLotesCompraSelec");
+        context.update("formTabLotesCompra");
+        
+        context.execute("PF('dialog_add_cantidad_lote').hide();");
+    }
+    
+    public void removeLoteToLista(){
+        if(getLoteSeleccionadoAux() != null){
+            loteDTO lote = getLoteSeleccionadoAux();
+        
+            getListaLotesCompraAux().remove(lote);
+            getListaLotesCompra().add(lote);
+
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formTabLotesCompraSelec");
+            context.update("formTabLotesCompra");
+        }
+    }
+    
+    public void selectCompra(SelectEvent event){
+        setCompraSeleccionada((CompraDTO)event.getObject());
+        setListaLotesCompra(loteBO.getLotesByCompra(getCompraSeleccionada().getIdcompra()));
+        setDisableTablaCompras(true);
+        setDisableBTNCambioOCompra(false);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabLotesCompra");
+        context.update("formTabCompras");
+    }
+    
+    public void cambiarOCompra(){
+        setListaLotesCompra(new ArrayList<loteDTO>());
+        setListaLotesCompraAux(new ArrayList<loteDTO>());
+        setLoteSeleccionado(null);
+        setLoteSeleccionadoAux(null);
+        
+        setDisableTablaCompras(false);
+        setDisableBTNCambioOCompra(true);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabLotesCompra");
+        context.update("formTabLotesCompraSelec");
+        context.update("formTabCompras");
     }
     
     public void abrirEditMov(){
@@ -1230,4 +1408,176 @@ public class MovimientoMB implements Serializable{
     public void setDisableVerItems(boolean disableVerItems) {
         this.disableVerItems = disableVerItems;
     }
+
+    /**
+     * @return the styleBTNItems
+     */
+    public String getStyleBTNItems() {
+        return styleBTNItems;
+    }
+
+    /**
+     * @param styleBTNItems the styleBTNItems to set
+     */
+    public void setStyleBTNItems(String styleBTNItems) {
+        this.styleBTNItems = styleBTNItems;
+    }
+
+    /**
+     * @return the styleBTNICompras
+     */
+    public String getStyleBTNICompras() {
+        return styleBTNICompras;
+    }
+
+    /**
+     * @param styleBTNICompras the styleBTNICompras to set
+     */
+    public void setStyleBTNICompras(String styleBTNICompras) {
+        this.styleBTNICompras = styleBTNICompras;
+    }
+
+    /**
+     * @return the listaCompras
+     */
+    public List<CompraDTO> getListaCompras() {
+        return listaCompras;
+    }
+
+    /**
+     * @param listaCompras the listaCompras to set
+     */
+    public void setListaCompras(List<CompraDTO> listaCompras) {
+        this.listaCompras = listaCompras;
+    }
+
+    /**
+     * @return the compraSeleccionada
+     */
+    public CompraDTO getCompraSeleccionada() {
+        return compraSeleccionada;
+    }
+
+    /**
+     * @param compraSeleccionada the compraSeleccionada to set
+     */
+    public void setCompraSeleccionada(CompraDTO compraSeleccionada) {
+        this.compraSeleccionada = compraSeleccionada;
+    }
+
+    /**
+     * @return the listaLotesCompra
+     */
+    public List<loteDTO> getListaLotesCompra() {
+        return listaLotesCompra;
+    }
+
+    /**
+     * @param listaLotesCompra the listaLotesCompra to set
+     */
+    public void setListaLotesCompra(List<loteDTO> listaLotesCompra) {
+        this.listaLotesCompra = listaLotesCompra;
+    }
+
+    /**
+     * @return the listaLotesCompraAux
+     */
+    public List<loteDTO> getListaLotesCompraAux() {
+        return listaLotesCompraAux;
+    }
+
+    /**
+     * @param listaLotesCompraAux the listaLotesCompraAux to set
+     */
+    public void setListaLotesCompraAux(List<loteDTO> listaLotesCompraAux) {
+        this.listaLotesCompraAux = listaLotesCompraAux;
+    }
+
+    /**
+     * @return the loteSeleccionado
+     */
+    public loteDTO getLoteSeleccionado() {
+        return loteSeleccionado;
+    }
+
+    /**
+     * @param loteSeleccionado the loteSeleccionado to set
+     */
+    public void setLoteSeleccionado(loteDTO loteSeleccionado) {
+        this.loteSeleccionado = loteSeleccionado;
+    }
+
+    /**
+     * @return the loteSeleccionadoAux
+     */
+    public loteDTO getLoteSeleccionadoAux() {
+        return loteSeleccionadoAux;
+    }
+
+    /**
+     * @param loteSeleccionadoAux the loteSeleccionadoAux to set
+     */
+    public void setLoteSeleccionadoAux(loteDTO loteSeleccionadoAux) {
+        this.loteSeleccionadoAux = loteSeleccionadoAux;
+    }
+
+    /**
+     * @return the cantidadLote
+     */
+    public String getCantidadLote() {
+        return cantidadLote;
+    }
+
+    /**
+     * @param cantidadLote the cantidadLote to set
+     */
+    public void setCantidadLote(String cantidadLote) {
+        this.cantidadLote = cantidadLote;
+    }
+
+    /**
+     * @return the disableTablaCompras
+     */
+    public boolean isDisableTablaCompras() {
+        return disableTablaCompras;
+    }
+
+    /**
+     * @param disableTablaCompras the disableTablaCompras to set
+     */
+    public void setDisableTablaCompras(boolean disableTablaCompras) {
+        this.disableTablaCompras = disableTablaCompras;
+    }
+
+    /**
+     * @return the disableBTNCambioOCompra
+     */
+    public boolean isDisableBTNCambioOCompra() {
+        return disableBTNCambioOCompra;
+    }
+
+    /**
+     * @param disableBTNCambioOCompra the disableBTNCambioOCompra to set
+     */
+    public void setDisableBTNCambioOCompra(boolean disableBTNCambioOCompra) {
+        this.disableBTNCambioOCompra = disableBTNCambioOCompra;
+    }
+
+    /**
+     * @return the styleBTNItemsAlmacen
+     */
+    public String getStyleBTNItemsAlmacen() {
+        return styleBTNItemsAlmacen;
+    }
+
+    /**
+     * @param styleBTNItemsAlmacen the styleBTNItemsAlmacen to set
+     */
+    public void setStyleBTNItemsAlmacen(String styleBTNItemsAlmacen) {
+        this.styleBTNItemsAlmacen = styleBTNItemsAlmacen;
+    }
+
+    
+    
+    
 }
