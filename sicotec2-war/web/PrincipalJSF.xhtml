@@ -399,7 +399,8 @@ jorgeevj 15.09.15 Creacion.
                             <p:commandButton id="btnEditPrecioEdit" icon="ui-icon-pencil" update="formPrecioCrear"
                                              title="editar" actionListener="#{cotizacionMB.openPrecioedit}"
                                              oncomplete="PF('editItemPrecio').show()">
-                                <f:attribute name="myattribute" value="#{coitem}" />
+                                <!-- <f:setPropertyActionListener value="#{coitem}" target="#{cotizacionMB.cotipoItemSelectEdit}" /> -->
+                                <f:attribute name="myattribute" value="#{coitem}" /> 
                             </p:commandButton>
                         </p:column>
                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
@@ -423,7 +424,7 @@ jorgeevj 15.09.15 Creacion.
 
                     <p:panelGrid columns="4" styleClass="hideborder">
                         <p:commandButton id="btnGuardarEdit" value="Guardar" 
-                                         actionListener="#{cotizacionMB.guardarCrear}" 
+                                         actionListener="#{cotizacionMB.GuardarEditar}" 
                                          update="messagesEdit"/>
                         <p:commandButton id="btnEnviarEdit" value="Enviar Correo" 
                                          actionListener="#{cotizacionMB.enviaCrear}" />

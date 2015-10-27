@@ -82,7 +82,7 @@ public class CotizacionMB {
         listaCategoria = cotizacionBO.findCategoriaAll();
         limpiarCotizaciones();
         limpiarcamposCrear();
-//        cotipoItemSelectEdit=new CotipoitemDTO();
+        cotipoItemSelectEdit=new CotipoitemDTO();
 
     }
 
@@ -291,7 +291,24 @@ public class CotizacionMB {
 
         }
     }
-
+    public void GuardarEditar(ActionEvent actionEvent){
+      if (listaCotipoItem.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay Items Agregados", ""));
+            return;
+        }
+        
+        cotizacionBO.guardarEditar(cotizacionSelec);
+        cotizacionBO.eliminarItemsByCOt(cotizacionSelec.getIdcotizacion());
+        for (int i = 0; i < listaCotipoItem.size(); i++) {
+            camposCrear.setIdcotizacion(cotizacionSelec.getIdcotizacion());
+            listaCotipoItem.get(i).setCotizacion(camposCrear);
+            listaCotipoItem.get(i).setDescuento(listaCotipoItem.get(i).getTipoitem().getPrecioLista() - listaCotipoItem.get(i).getPrecio());
+        }
+        cotizacionBO.guardarCrearItems(listaCotipoItem);
+        cerrarEditar(actionEvent);  
+        
+        
+    }
     public void cerrarEditar(ActionEvent actionEvent) {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('editCot').hide();");
