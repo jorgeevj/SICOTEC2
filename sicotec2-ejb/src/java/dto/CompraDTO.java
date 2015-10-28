@@ -36,7 +36,11 @@ public class CompraDTO {
      
      private int idAlmacen;
      private int idEmpresa;
-    
+
+    public CompraDTO() {
+    idempresa=new Empresa();
+    }    
+     
     public Integer getIdcompra() {
         return idcompra;
     }

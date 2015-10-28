@@ -7,11 +7,13 @@ package bo;
 
 import dao.AlmacenFacade;
 import dao.CompraFacade;
+import dao.DocalmacenFacade;
 import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.CompraDTO;
 import entidades.Almacen;
 import entidades.Compra;
+import entidades.Docalmacen;
 import entidades.Empresa;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,10 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class CompraBO {
+    @EJB
+    private CotizacionBO cotizacionBO;
+    @EJB
+    private DocalmacenFacade docalmacenFacade;
   
     @EJB
     private CompraFacade compraFacade ;
@@ -99,11 +105,11 @@ public class CompraBO {
             entidadEmpresa.setIdempresa(dto.getIdEmpresa());
         entidad.setIdempresa(entidadEmpresa);
         entidad.setIdalmacen(dto.getIdAlmacen());
-        entidad.setSerie(dto.getSerie());
-        entidad.setCorrelativo(dto.getCorrelativo());
+//        entidad.setSerie(dto.getSerie());
+//        entidad.setCorrelativo(dto.getCorrelativo());
         entidad.setEstado(dto.getEstado());
         entidad.setTotal(dto.getTotal());
-        entidad.setIdempresa(dto.getIdempresa());
+//        entidad.setIdempresa(dto.getIdempresa());
        
         
         return entidad;
@@ -115,8 +121,15 @@ public class CompraBO {
     
     public Compra insertarNuevoCompra(CompraDTO dto ){
         Compra entidad = convertDTOtoEntity(dto , 1);
+        Docalmacen da=getNewSerieAndCorrelativo(entidad.getIdalmacen());
+        entidad.setSerie(String.format("%03d", da.getSerie()));
+        entidad.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         entidad = compraFacade.agregarCompra(entidad);
         return entidad;
     }
-   
+   public Docalmacen getNewSerieAndCorrelativo(Integer idalmacen){
+   Docalmacen da = docalmacenFacade.findBy2key(idalmacen, 4);
+        da = cotizacionBO.updateDocAlm(da);
+       return da;
+   }
 }
