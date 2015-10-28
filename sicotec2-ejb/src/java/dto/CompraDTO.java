@@ -129,13 +129,7 @@ public class CompraDTO {
         this.estado = estado;
     }
 
-    public String getNombreAlmacen() {
-        return nombreAlmacen;
-    }
-
-    public void setNombreAlmacen(String nombreAlmacen) {
-        this.nombreAlmacen = nombreAlmacen;
-    }
+    
 
     public int getIdalmacen() {
         return idalmacen;
@@ -151,6 +145,14 @@ public class CompraDTO {
 
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
+    }
+
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
     }
 
  

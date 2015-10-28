@@ -15,6 +15,8 @@
                     <p:inputText id="it1" value="#{compraMB.campos.idempresa.ruc}"/>
                     <p:outputLabel value="N Serie:" for="it2" />
                     <p:inputText id="it2" value="#{compraMB.campos.serie}"/>
+                    <p:outputLabel value="Correlativo" for="it4" />
+                    <p:inputText id="it4" value="#{compraMB.campos.correlativo}"/>
                     
                 </h:panelGrid>
                 <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
@@ -40,7 +42,7 @@
                      <h:outputText value="#{tComp.nombreEmpresa}" />
                     </p:column>
                 <p:column headerText="Ruc">
-                    <h:outputText value="#{tComp.nombreEmpresa}" />
+                    <h:outputText value="#{tComp.idempresa.ruc}" />
                 </p:column>
                 <p:column headerText="Fecha">
                     <p:outputLabel value="#{tComp.fecha}">
@@ -54,6 +56,9 @@
                  <p:column headerText="Estado">
                      <h:outputText value="#{tComp.estado}" />
                     </p:column>
+                <p:column headerText="Almacen">
+                    <h:outputText value="#{tComp.nombreAlmacen}" />
+                </p:column>
               
                 </p:dataTable>
             </h:panelGrid>

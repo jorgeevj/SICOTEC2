@@ -65,7 +65,10 @@ public class CompraFacade extends AbstractFacade<Compra> {
                }
                 if(dto.getSerie()!=null && !dto.getSerie().equals("")){
                 sql+="and c.serie like '%"+dto.getSerie()+"%' ";
-            }
+                }
+               if(dto.getCorrelativo()!=null && !dto.getCorrelativo().equals("")){
+               sql+="and c.correlativo like '%"+dto.getCorrelativo()+"%' ";
+              }
                 
                l=em.createQuery(sql, Compra.class).getResultList();
            } catch(Exception e){
