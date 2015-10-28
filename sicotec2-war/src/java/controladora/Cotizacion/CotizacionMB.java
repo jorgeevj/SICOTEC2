@@ -143,11 +143,11 @@ public class CotizacionMB {
     public void cerrarCrear(ActionEvent actionEvent) {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('regCot').hide();");
-        listaCotipoItem = new ArrayList<>();
-        listaCoItemSelect = new ArrayList<>();
-        cotipoItemSelect = new CotipoitemDTO();
-        camposCrear = new Cotizacion();
-        camposCrear.setIdempresa(new Empresa());
+//        listaCotipoItem = new ArrayList<>();
+//        listaCoItemSelect = new ArrayList<>();
+//        cotipoItemSelect = new CotipoitemDTO();
+//        camposCrear = new Cotizacion();
+//        camposCrear.setIdempresa(new Empresa());
         btnAgregarItem = true;
         btnQuitarItem = true;
 
@@ -256,8 +256,8 @@ public class CotizacionMB {
 
     public void acepAproCrear(ActionEvent actionEvent) {
         camposCrear.setEstado(1);
-        cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
         guardarCrear(actionEvent);
+        cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
         cerrarAproCrear(actionEvent);
     }
 

@@ -199,7 +199,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:commandButton id="btnGuardarReg" value="Guardar" 
                                      actionListener="#{cotizacionMB.guardarCrear}" 
                                      update="messages"/>
-                    <p:commandButton id="btnEnviarReg" value="Enviar Correo" actionListener="#{cotizacionMB.enviaCrear}" />
+                    <p:commandButton id="btnEnviarReg" value="Enviar" actionListener="#{cotizacionMB.enviaCrear}" />
                     <p:commandButton id="btnAprobadaReg" value="Aprobada" 
                                      actionListener="#{cotizacionMB.aprobarCrea}" 
                                      update="formAproCrea:AproCrea,messages"/> 
@@ -215,7 +215,7 @@ jorgeevj 15.09.15 Creacion.
                 <p:panelGrid columns="2" styleClass="hideborder">
                     <p:outputLabel value="Precio:" for="precioEditCrea" />
                     <p:inputText id="precioEditCrea" value="#{cotizacionMB.chamgePrecioCrea}" />
-                    <p:outputLabel value="Precio: Minimo #{cotizacionMB.minPrecioCrea}" />
+                    <p:outputLabel value="Precio Unitario: Minimo #{cotizacionMB.minPrecioCrea}" />
                     <p:messages id="messages2" showDetail="true" closable="true" />
                     <p:commandButton id="btnAceptaPrecio" value="Aceptar" 
                                      actionListener="#{cotizacionMB.aceptarPrecioCrea}" 
@@ -426,7 +426,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:commandButton id="btnGuardarEdit" value="Guardar" 
                                          actionListener="#{cotizacionMB.GuardarEditar}" 
                                          update="messagesEdit"/>
-                        <p:commandButton id="btnEnviarEdit" value="Enviar Correo" 
+                        <p:commandButton id="btnEnviarEdit" value="Enviar" 
                                          actionListener="#{cotizacionMB.enviaCrear}" />
                         <p:commandButton id="btnAprobadaEdit" value="Aprobada" 
                                          actionListener="#{cotizacionMB.aprobarCrea}" 
