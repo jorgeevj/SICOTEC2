@@ -543,6 +543,7 @@ jorgeevj 15.09.15 Creacion.
         <!-- DIALOG DE PEDIDOS-->
             <p:dialog header="Agregar Pedidos" widgetVar="addPedidosModal" modal="true" resizable="true">
                 <h:form id="formAddPedido">
+                    <p:growl id="msj1" showDetail="true"/>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}">
@@ -607,7 +608,6 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
                 <br/><br/><br/>
             <p:commandButton value="Aceptar" onclick="PF('addItemsPedidosModal').hide();"/>
-
         </p:dialog>
 
             <p:dialog header="Agregar Cantidad" widgetVar="addCantidad" modal="true" resizable="false">
@@ -620,7 +620,7 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Agregar Cantidad" widgetVar="editPedidoModal" modal="true" resizable="false">
+            <p:dialog header="Editar Pedido" widgetVar="editPedidoModal" modal="true" resizable="false">
                 <h:form id="formEditPedido">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
@@ -639,10 +639,40 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{pedidoMB.listaAlmacenesEdit}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
-                        <p:commandButton value="Agregar Items" actionListener="#{pedidoMB.agregarCantidad}"/>
+                        <p:commandButton value="Ver Items" actionListener="#{pedidoMB.abrirModalAgregarItemsEdit}"/>
                     </h:panelGrid>
                     <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
                 </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Ver Items" widgetVar="verItemsEdit" modal="true" resizable="false"> 
+                <p:outputLabel value="Items del pedido"></p:outputLabel>
+                <h:form id="formItemsPedido">
+                    <p:dataTable tableStyleClass="table table-hover"  id="tabItemsPedido" value="#{pedidoMB.listaItemsPedido}" var="tItemsPedido" 
+                                 editable="true" editMode="cell"
+                                 selectionMode="single" selection="#{pedidoMB.objPealTipoEdit}" rowKey="#{tItemsPedido.cantidad}">
+                        <p:ajax event="rowSelect" listener="#{pedidoMB.selectPealTipoItemEditar}"/> 
+                        <p:column headerText="Nombre" style="text-align: center">
+                            <p:outputLabel value="#{tItemsPedido.nombreItems}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputLabel value="#{tItemsPedido.cantidad}"/></f:facet>
+                                <f:facet name="input"><p:inputText  value="#{tItemsPedido.cantidad}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Costo Unitario" style="text-align: center">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{tItemsPedido.costoUni}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{tItemsPedido    .costoUni}" style="width:96%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}"/>
+                </h:form>
+                <br/><br/><br/>
+                <p:commandButton value="Aceptar" onclick="PF('verItemsEdit').hide();"/>
+
             </p:dialog>
             <!-- FIN DIALOG DE PEDIDOS-->
 

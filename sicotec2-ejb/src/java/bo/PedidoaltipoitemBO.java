@@ -9,6 +9,7 @@ import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.PealtipoitemDTO;
 import entidades.Pealtipoitem;
+import entidades.PealtipoitemPK;
 import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +57,16 @@ public class PedidoaltipoitemBO {
             DTO.setEstado(pealtipoitem.getEstado());
             DTO.setIdcompra(pealtipoitem.getIdcompra());
             DTO.setPedido(pealtipoitem.getPedido());
-            String nombreItems=tipoitemFacade.getTipoItemsNombre(DTO.getNombreItems()).getIdtipoItem();
+            String idTipoItem = DTO.getAltipoitem().getAltipoitemPK().getIdtipoItem();
+            System.out.println("dto.nombreItems: " + idTipoItem);
+            String nombreItems=tipoitemFacade.getTipoItemsNombre(idTipoItem).getNombre();
+            
+            System.out.println("nombre: " + nombreItems);
             DTO.setNombreItems(nombreItems);
-            String aux = (pealtipoitem.getAltipoitem().getAlmacen().getIdalmacen()).toString();
+            /*String aux = (pealtipoitem.getAltipoitem().getAlmacen().getIdalmacen()).toString();
             Tipoitem entidad=tipoitemFacade.getTipoItemsNombre(aux);
-             DTO.setNombreItems(entidad.getNombre());
-             DTO.setPrecioItem(entidad.getPrecioLista());
+             DTO.setNombreItems(entidad.getNombre());*/
+             DTO.setCostoUni(pealtipoitem.getCostoUni());
         return DTO;
     }
       public Pealtipoitem convertDTOtoEntity(PealtipoitemDTO dto){
@@ -78,7 +83,7 @@ public class PedidoaltipoitemBO {
         
         return entidad;
     }
-      public List<PealtipoitemDTO> AlmacenForPedidos(PealtipoitemDTO t){       
+     public List<PealtipoitemDTO> AlmacenForPedidos(PealtipoitemDTO t){       
         //Pealtipoitem r=convertDTOtoEntity(t);
         List<Pealtipoitem> lista =pealtipoitemFacade.getAlmacenForPedido(new Pealtipoitem());
         List<PealtipoitemDTO> lista1= new ArrayList<PealtipoitemDTO>();/*convertListEntityToDTO(lista);*/
@@ -94,6 +99,13 @@ public class PedidoaltipoitemBO {
         
         
     }
+      
+      public List<PealtipoitemDTO> getItemsForPedido(PealtipoitemDTO dto){
+          Pealtipoitem entidad = convertDTOtoEntity(dto);
+          List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAllItemsByPedido(entidad);
+          List<PealtipoitemDTO> listaDTO = convertListEntityToDTO(listaEntidad);
+          return listaDTO;
+      }
       
 //    private PealtipoitemDTO convertEntityToDTO(PealtipoitemDTO pealtipoitem) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -75,10 +75,10 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         Tipoitem entidad = new Tipoitem();
         try {
             String sql = "SELECT a "
-                    + "FROM Tipoitem a "
-                    + "WHERE a.idTipoitem = " + dto.getIdtipoItem();
-            entidad = em.createQuery(sql, Tipoitem.class).getSingleResult();
-        } catch (Exception e) {
+                   + "FROM Tipoitem a "
+                   + "WHERE a.idTipoitem = '" +dto.getIdtipoItem()+"'";
+            entidad=em.createQuery(sql, Tipoitem.class).getSingleResult();
+        }catch(Exception e){
             entidad = new Tipoitem();
         }
 
@@ -116,4 +116,15 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
 
     }
 
+    public List<Pealtipoitem> getAllItemsByPedido(Pealtipoitem entidad){
+        List<Pealtipoitem> entidadLista = new ArrayList<Pealtipoitem>();
+        String jpa = "SELECT pti " +
+                     "  FROM Pealtipoitem pti, " +
+                     "       Pedido p " +
+                     " WHERE pti.pealtipoitemPK.idpedido = p.idpedido " +
+                     "   AND pti.estado = 0 " +
+                     "   AND p.idpedido = " + entidad.getPedido().getIdpedido();
+        entidadLista = em.createQuery(jpa, Pealtipoitem.class).getResultList();
+        return entidadLista;
+    }
 }
