@@ -225,8 +225,8 @@ public void eliminarItemsByCOt(Integer idcotizacion){
         v.setIdempresa(c.getIdempresa());
         v.setIdimpuesto(new Impuesto(1));
          for (CotipoitemDTO dto : ct) {
-         total+=dto.getCantidad();
-         descuento+=dto.getDescuento();
+         total+=dto.getCantidad()*dto.getPrecio();
+         descuento+=dto.getCantidad()*dto.getDescuento();
          }
         v.setTotal(total);
         v.setDescuento(descuento);
