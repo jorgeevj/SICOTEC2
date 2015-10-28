@@ -8,6 +8,7 @@ package controladora.Compra;
 import Util.Utils;
 import bo.AlmacenBO;
 import bo.CompraBO;
+import bo.CotizacionBO;
 import bo.EmpresaBO;
 import bo.PedidoaltipoitemBO;
 import dto.AlmacenDTO;
@@ -16,6 +17,7 @@ import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
 import entidades.Almacen;
 import entidades.Compra;
+import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Empresa;
 import java.util.Date;
@@ -34,6 +36,8 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @SessionScoped
 public class CompraMB {
+    @EJB
+    private CotizacionBO cotizacionBO;
     
     private int codigoAlamacen;
     private String nombreAlamacen;
@@ -135,11 +139,11 @@ public class CompraMB {
     }
       public void addNuevoCompra(ActionEvent actionEvent){
           CompraDTO dto=new CompraDTO();
-           dto.setIdAlmacen(getIdalmacenNuevo());
+           dto.setIdAlmacen(idalmacenNuevo);
            dto.setEstado(0);
-           dto.setCorrelativo(getCorrelativoNuevo());
+//           dto.setCorrelativo(getCorrelativoNuevo());
            dto.setFecha(new Date());
-           dto.setSerie(getSerieNuevo());
+//           dto.setSerie(getSerieNuevo());
            dto.setTotal(getTotalNuevo());
            dto.setIdEmpresa(getIdempresaNuevo());
            System.out.println("data: " + dto.getCorrelativo());

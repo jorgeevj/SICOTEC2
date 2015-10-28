@@ -452,13 +452,13 @@ jorgeevj 15.09.15 Creacion.
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Empresa: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.idempresaNuevo}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
                         </p:selectOneMenu>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesCompra" styleClass="browser-default" value="#{compraMB.idalmacenNuevo}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
