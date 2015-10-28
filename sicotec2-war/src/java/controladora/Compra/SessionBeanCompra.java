@@ -27,14 +27,7 @@ public class SessionBeanCompra {
      private List<AlmacenDTO> listaAlmacenesAdd = new ArrayList<AlmacenDTO>();
      private List<PealtipoitemDTO> ListaPealtipoitemAdd = new ArrayList<PealtipoitemDTO>();
    
-    public List<CompraDTO> getListaTCompra() {
-        return listaCompra;
-    }
-
-  
-    public void setListaTCompra(List<CompraDTO> listaTCompra) {
-        this.listaCompra = listaTCompra;
-    }
+    
 
     public List<CompraDTO> getListaCompra() {
         return listaCompra;

@@ -30,16 +30,17 @@
                     
                 </h:panelGrid>
                 <p:commandButton value="Buscar" id="btnConsultar"  title="Consultar" 
-                                 actionListener="#{compraMB.consultar}" update=":tabCompraFrom:tabCompra"/>
+
+                                 actionListener="#{compraMB.consultar}" update="tabCompra"/>
+                                  
                 <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
                                  actionListener="#{compraMB.limpiar}" update="formCompra"/>
-                <p:commandButton value="Agregar" actionListener="#{compraMB.crear}" id="btnAgregar" title="Agregar" />
-                <p:commandButton value="Editar"  id="btnEditar" title="Editar" />         
-            </h:form>
-
-        <h:form id="tabCompraFrom">
+                 <p:commandButton value="Agregar" actionListener="#{compraMB.crear}" id="btnAgregarCom" title="Agregar" update="formAddCompra"/>
+                <p:commandButton value="Editar"  actionListener="#{compraMB.edit}" id="btnEditarCom" title="Editar"/>        
+          
            <h:panelGrid >
-            <p:dataTable id="tabCompra"  value="#{compraMB.sessionBeanCompra.listaTCompra}" var="tComp">
+            <p:dataTable id="tabCompra"  value="#{compraMB.sessionBeanCompra.listaCompra}" var="tComp"
+                         selectionMode="single" rowKey="#{tComp.idcompra}" selection="#{compraMB.co}" >
                 
                 <p:column headerText="N°Serie">
                     <h:outputText value="#{tComp.serie}" />

@@ -20,6 +20,7 @@ import entidades.Compra;
 import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Empresa;
+import entidades.Lote;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -87,14 +88,21 @@ public class CompraMB {
     private Empresa emp=new Empresa();
         private Documento doc=new Documento();
         private Almacen alm=new Almacen();
-        
+        //nuevos para edit
+    private CompraDTO co;    
+    private List<Lote> ll;
+    private List<PealtipoitemDTO> listPealItemTemp;
+    private List<Lote> llTemp;
+    private PealtipoitemDTO pealtiSelecDTO;
+    private Lote loteSelec;
+    //
     private SessionBeanCompra sessionBeanCompra = new SessionBeanCompra();
     Utils ut = new Utils();
     
     
      @PostConstruct
     public void init(){
-         getSessionBeanCompra().setListaTCompra(compraBO.getAllCompras());
+         getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
          getSessionBeanCompra().setListaPealtipoitemAdd(pedidoaltipoitemBO.getAllPealtipoitems());
            setListaEstados(this.llenarEstados());
            limpiarCompras();
@@ -109,6 +117,9 @@ public class CompraMB {
         camposAdd = new CompraDTO();
         camposAdd.setIdcompra(0);
         camposAdd.setIdempresa(emp);
+        
+        co=new CompraDTO();
+        ll=new ArrayList<>();
     }
     
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
@@ -128,14 +139,20 @@ public class CompraMB {
     
     public void OpenAddPedido(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formAddPedidoss");
         context.execute("PF('addPedidosItemsModal').show();");
     
     }
     public void crear(ActionEvent actionEvent){
+       limpiaCrearCompra();
+        
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').show();");
     }
-    
+    private void limpiaCrearCompra() {
+        idempresaNuevo=0;
+        idalmacenNuevo=0;
+        }
     public List<EmpresaDTO> comboEmpresas(){
          List<EmpresaDTO> listaDto = empresaBO.getAllEmpresas();
          return listaDto;
@@ -206,6 +223,51 @@ public class CompraMB {
         setFechaInicioBusqueda(null);
         setSelectEstadoBusqueda(100); 
            
+    }
+      
+      public void edit(ActionEvent actionEvent){
+        listPealItem=compraBO.getPedidosbyAlmacen(co);
+        ll= compraBO.getLoteByCompra(co);
+          
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formEditCompra");
+        context.execute("PF('EditComprasModal').show();");
+        
+      }
+      public void quitarPedido(ActionEvent actionEvent){
+      for(Lote l:ll){
+          if(l.getIdlote()==loteSelec.getIdlote()){
+             listPealItem.addAll(compraBO.getPedidosByCompraAndItem(co,loteSelec));
+              ll.remove(l);
+             break;
+          }
+      }
+      RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formAddPedidoss");
+      }
+      
+      public void editCompra(ActionEvent actionEvent){
+          CompraDTO dto=new CompraDTO();
+           dto.setIdAlmacen(idalmacenNuevo);
+           dto.setEstado(0);
+//           dto.setCorrelativo(getCorrelativoNuevo());
+           dto.setFecha(new Date());
+//           dto.setSerie(getSerieNuevo());
+           dto.setTotal(getTotalNuevo());
+           dto.setIdEmpresa(getIdempresaNuevo());
+           System.out.println("data: " + dto.getCorrelativo());
+           
+           Compra entidad = compraBO.insertarNuevoCompra(dto);
+           
+        getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("tabCompraFrom");
+        this.cerrar();
+        
+    }
+      public void cerrarEdit(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('EditComprasModal').hide();");
     }
       
     public CompraBO getCompraBO() {
@@ -432,6 +494,58 @@ public class CompraMB {
         this.listPealItem = listPealItem;
     }
 
+
+    public CompraDTO getCo() {
+        return co;
+    }
+
+    public void setCo(CompraDTO co) {
+        this.co = co;
+    }
+
+    public List<Lote> getLl() {
+        return ll;
+    }
+
+    public void setLl(List<Lote> ll) {
+        this.ll = ll;
+    }
+
+    public List<PealtipoitemDTO> getListPealItemTemp() {
+        return listPealItemTemp;
+    }
+
+    public void setListPealItemTemp(List<PealtipoitemDTO> listPealItemTemp) {
+        this.listPealItemTemp = listPealItemTemp;
+    }
+
+    public List<Lote> getLlTemp() {
+        return llTemp;
+    }
+
+    public void setLlTemp(List<Lote> llTemp) {
+        this.llTemp = llTemp;
+    }
+
+    public PealtipoitemDTO getPealtiSelecDTO() {
+        return pealtiSelecDTO;
+    }
+
+    public void setPealtiSelecDTO(PealtipoitemDTO pealtiSelecDTO) {
+        this.pealtiSelecDTO = pealtiSelecDTO;
+    }
+
+    public Lote getLoteSelec() {
+        return loteSelec;
+    }
+
+    public void setLoteSelec(Lote loteSelec) {
+        this.loteSelec = loteSelec;
+    }
+
+    
+
+
     public CotizacionBO getCotizacionBO() {
         return cotizacionBO;
     }
@@ -495,8 +609,8 @@ public class CompraMB {
     public void setNombreEmpresaBuqueda(String nombreEmpresaBuqueda) {
         this.nombreEmpresaBuqueda = nombreEmpresaBuqueda;
     }
+
     
     
-    
-    
+        
 }
