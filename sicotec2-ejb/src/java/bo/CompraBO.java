@@ -8,14 +8,19 @@ package bo;
 import dao.AlmacenFacade;
 import dao.CompraFacade;
 import dao.DocalmacenFacade;
+import dao.LoteFacade;
 import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.CompraDTO;
+import dto.PealtipoitemDTO;
 import entidades.Almacen;
 import entidades.Compra;
 import entidades.Docalmacen;
 import entidades.Empresa;
+import entidades.Lote;
+import entidades.Pealtipoitem;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -29,6 +34,8 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class CompraBO {
+    @EJB
+    private LoteFacade loteFacade;
     @EJB
     private CotizacionBO cotizacionBO;
     @EJB
@@ -133,4 +140,42 @@ public class CompraBO {
         da = cotizacionBO.updateDocAlm(da);
        return da;
    }
+   
+   public List<PealtipoitemDTO> getPedidosbyAlmacen(CompraDTO c){
+   return converListEntidadBytListPealtiDTO(pealtipoitemFacade.getPedidosByAlmacen(c)) ;
+   }
+
+    private List<PealtipoitemDTO> converListEntidadBytListPealtiDTO(List<Pealtipoitem> pedidos) {
+        List<PealtipoitemDTO> pat=new ArrayList<>();
+        for(Pealtipoitem e:pedidos){
+        pat.add(convertEntidadByPealtipoitemDTO(e));
+        }
+        
+        return pat;
+                }
+
+    private PealtipoitemDTO convertEntidadByPealtipoitemDTO(Pealtipoitem e) {
+       PealtipoitemDTO dto=new PealtipoitemDTO();
+       dto.setAltipoitem(e.getAltipoitem());
+       dto.setCantidad(e.getCantidad());
+       dto.setIdalmacen(e.getAltipoitem().getAlmacen().getIdalmacen());
+       dto.setEstado(e.getEstado());
+       dto.setIdcompra(e.getIdcompra());
+       dto.setNombreItems(e.getAltipoitem().getTipoitem().getNombre());
+       dto.setCostoUni(e.getCostoUni());
+       dto.setPedido(e.getPedido());
+       return dto;
+    
+    }
+
+    public List<Lote> getLoteByCompra(CompraDTO co) {
+       return loteFacade.getLotesByCompra(co.getIdcompra());
+    }
+
+    public List<PealtipoitemDTO> getPedidosByCompraAndItem(CompraDTO co, Lote loteSelec) {
+        List<PealtipoitemDTO> l=converListEntidadBytListPealtiDTO(pealtipoitemFacade.getPedidosByCompraAndItem(co,loteSelec));
+        return l;
+    }
+   
+   
 }

@@ -5,8 +5,10 @@
  */
 package dao;
 
+import dto.CompraDTO;
 import dto.PealtipoitemDTO;
 import dto.TipoItemDTO;
+import entidades.Lote;
 import entidades.Pealtipoitem;
 import entidades.Tipoitem;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
+
     @PersistenceContext(unitName = "sicotec2-ejbPU")
     private EntityManager em;
 
@@ -33,65 +36,84 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
     public PealtipoitemFacade() {
         super(Pealtipoitem.class);
     }
-    
-     public List<Pealtipoitem> getAllPealtipoitem(){
+
+    public List<Pealtipoitem> getAllPealtipoitem() {
         List<Pealtipoitem> tPealtipoitem = new ArrayList<Pealtipoitem>();
-        
-        
-        try{
+
+        try {
             String jpa = "SELECT t "
-                       + "FROM Pealtipoitem t "
-                       + "JOIN FETCH t.idtipoItem "
-                       + "JOIN FETCH t.idalmacen ";
-                   
-                   
-            Query query = em.createQuery(jpa,Pealtipoitem.class);
+                    + "FROM Pealtipoitem t "
+                    + "JOIN FETCH t.idtipoItem "
+                    + "JOIN FETCH t.idalmacen ";
+
+            Query query = em.createQuery(jpa, Pealtipoitem.class);
             tPealtipoitem = query.getResultList();
-            
-        }catch(Exception e){
-            
+
+        } catch (Exception e) {
+
             tPealtipoitem = new ArrayList<Pealtipoitem>();
         }
-        
-        
+
         return tPealtipoitem;
     }
-     
-     
-      public List<Pealtipoitem> getAlmacenForPedido(Pealtipoitem a) {
-        
-        String jpa = "SELECT pti "
-                    + "FROM Pealtipoitem pti , Almacen a, Tipoitem ti, Altipoitem ati "
-                    + "WHERE a.idalmacen = pti.pealtipoitemPK.idalmacen "
-                    + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
-                    + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
-                    + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
-                    + "AND pti.pealtipoitemPK.idalmacen =  "+a.getAltipoitem().getAlmacen().getIdalmacen();
 
-        return em.createQuery(jpa,Pealtipoitem.class).getResultList();
-        
+    public List<Pealtipoitem> getAlmacenForPedido(Pealtipoitem a) {
+
+        String jpa = "SELECT pti "
+                + "FROM Pealtipoitem pti , Almacen a, Tipoitem ti, Altipoitem ati "
+                + "WHERE a.idalmacen = pti.pealtipoitemPK.idalmacen "
+                + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
+                + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
+                + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
+                + "AND pti.pealtipoitemPK.idalmacen =  " + a.getAltipoitem().getAlmacen().getIdalmacen();
+
+        return em.createQuery(jpa, Pealtipoitem.class).getResultList();
+
     }
-      public Tipoitem getTipoItemById(TipoItemDTO dto){
+
+    public Tipoitem getTipoItemById(TipoItemDTO dto) {
         Tipoitem entidad = new Tipoitem();
-        try{
+        try {
             String sql = "SELECT a "
-                   + "FROM Tipoitem a "
-                   + "WHERE a.idTipoitem = " +dto.getIdtipoItem();
-            entidad=em.createQuery(sql, Tipoitem.class).getSingleResult();
-        }catch(Exception e){
+                    + "FROM Tipoitem a "
+                    + "WHERE a.idTipoitem = " + dto.getIdtipoItem();
+            entidad = em.createQuery(sql, Tipoitem.class).getSingleResult();
+        } catch (Exception e) {
             entidad = new Tipoitem();
         }
-        
+
         return entidad;
     }
-      public List<Pealtipoitem> getPRE(int idalmacen,PealtipoitemDTO ct) {
+
+    public List<Pealtipoitem> getPRE(int idalmacen, PealtipoitemDTO ct) {
         String jpa = "SELECT i "
                 + "FROM Pealtipoitem i, Altipoitem a "
                 + "where i.idalmacen=a.idalmacen "
-                + "and a.idalmacen= "+idalmacen+" "
+                + "and a.idalmacen= " + idalmacen + " "
                 + "and i.estado=0 ";
 
         return em.createQuery(jpa, Pealtipoitem.class).setMaxResults(ct.getCantidad()).getResultList();
     }
-    
+
+    public List<Pealtipoitem> getPedidosByAlmacen(CompraDTO c) {
+        String jpa = "SELECT i "
+                + "FROM Pealtipoitem i "
+                + "where i.altipoitem.almacen.idalmacen=" + c.getIdAlmacen() + " "
+                + "and i.estado=0 ";
+
+        return em.createQuery(jpa, Pealtipoitem.class).getResultList();
+    }
+
+    public List<Pealtipoitem> getPedidosByCompraAndItem(CompraDTO co, Lote loteSelec) {
+        String jpa = "SELECT i "
+                + "FROM Pealtipoitem i "
+                + "where i.altipoitem.almacen.idalmacen=" + co.getIdAlmacen() + " "
+                + "and i.altipoitem.tipoitem.idtipoItem= '"+ loteSelec.getAltipoitem().getTipoitem().getIdtipoItem()+"' "
+                + "and i.idcompra.idcompra= "+ co.getIdcompra()+" "
+                + "and i.estado=1";
+
+        return em.createQuery(jpa, Pealtipoitem.class).getResultList();
+
+    }
+
 }
