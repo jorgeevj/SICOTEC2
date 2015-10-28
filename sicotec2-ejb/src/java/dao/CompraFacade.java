@@ -7,6 +7,7 @@ package dao;
 
 import dto.CompraDTO;
 import entidades.Compra;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -55,6 +56,7 @@ public class CompraFacade extends AbstractFacade<Compra> {
     }
      public List<Compra> buscarCompra(CompraDTO dto) {
             List<Compra> l = new ArrayList<Compra>();
+             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sql = "SELECT c FROM Compra c WHERE 1=1 ";
      
            try{
@@ -69,6 +71,15 @@ public class CompraFacade extends AbstractFacade<Compra> {
                if(dto.getCorrelativo()!=null && !dto.getCorrelativo().equals("")){
                sql+="and c.correlativo like '%"+dto.getCorrelativo()+"%' ";
               }
+                if(dto.getFechaInicio() != null){
+                sql += "and c.fecha >= '"+sdf.format(dto.getFechaInicio())+"' ";
+            }
+            if(dto.getFechaFin()!= null){
+                sql += "and c.fecha <= '"+sdf.format(dto.getFechaFin())+"' ";
+            }
+            if(dto.getEstado()!=100){
+            sql+="and c.estado = "+dto.getEstado()+" ";
+            }
                 
                l=em.createQuery(sql, Compra.class).getResultList();
            } catch(Exception e){

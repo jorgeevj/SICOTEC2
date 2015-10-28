@@ -8,19 +8,31 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
 
-        <p:panel id="p1" header="Gestion de Ordenes de Compra" style="margin-bottom:20px">
+        <p:panel id="p1" header="Gestion de Ordenes de Compra" style="margin-bottom:30px">
             <h:form id="formCompra">
-                <h:panelGrid columns="1">
+                <h:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="Empresa:" for="it1" />
-                    <p:inputText id="it1" value="#{compraMB.campos.idempresa.ruc}"/>
+                    <p:inputText id="it1" value="#{compraMB.campos.idempresa.nombre}"/>
                     <p:outputLabel value="N Serie:" for="it2" />
                     <p:inputText id="it2" value="#{compraMB.campos.serie}"/>
+                    Fecha Inicio
+                    <p:calendar value="#{compraMB.fechaInicioBusqueda}"/>
                     <p:outputLabel value="Correlativo" for="it4" />
                     <p:inputText id="it4" value="#{compraMB.campos.correlativo}"/>
+                    Fecha Fin
+                    <p:calendar value="#{compraMB.fechaFinBusqueda}"/>
+                    Estado
+                    <p:selectOneMenu id="estadoSelectBusquedas" styleClass="browser-default" value="#{compraMB.selectEstadoBusqueda}"
+                                    style="width:100%"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="100" />
+                        <f:selectItems value="#{compraMB.listaEstados}"/> 
+                   </p:selectOneMenu>
                     
                 </h:panelGrid>
-                <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
+                <p:commandButton value="Buscar" id="btnConsultar"  title="Consultar" 
                                  actionListener="#{compraMB.consultar}" update=":tabCompraFrom:tabCompra"/>
+                <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
+                                 actionListener="#{compraMB.limpiar}" update="formCompra"/>
                 <p:commandButton value="Agregar" actionListener="#{compraMB.crear}" id="btnAgregar" title="Agregar" />
                 <p:commandButton value="Editar"  id="btnEditar" title="Editar" />         
             </h:form>
@@ -29,9 +41,6 @@
            <h:panelGrid >
             <p:dataTable id="tabCompra"  value="#{compraMB.sessionBeanCompra.listaTCompra}" var="tComp">
                 
-                <p:column headerText="ID">
-                    <p:outputLabel value="#{tComp.idcompra}"/>
-                </p:column>
                 <p:column headerText="N°Serie">
                     <h:outputText value="#{tComp.serie}" />
                 </p:column>
@@ -41,7 +50,7 @@
                  <p:column headerText="Empresa">
                      <h:outputText value="#{tComp.nombreEmpresa}" />
                     </p:column>
-                <p:column headerText="Ruc">
+                <p:column headerText="Ruc" width="150">
                     <h:outputText value="#{tComp.idempresa.ruc}" />
                 </p:column>
                 <p:column headerText="Fecha">
@@ -53,12 +62,12 @@
                     S/.
                     <h:outputText value="#{tComp.total}" />
                 </p:column>
-                 <p:column headerText="Estado">
-                     <h:outputText value="#{tComp.estado}" />
-                    </p:column>
                 <p:column headerText="Almacen">
                     <h:outputText value="#{tComp.nombreAlmacen}" />
                 </p:column>
+                <p:column headerText="Estado">
+                    <h:outputText value="#{tComp.nombEstado}" />
+                 </p:column>
               
                 </p:dataTable>
             </h:panelGrid>

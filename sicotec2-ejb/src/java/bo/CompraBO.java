@@ -43,7 +43,6 @@ public class CompraBO {
     
 
     
-    
     public List<CompraDTO> getAllCompras() {
         List<Compra> listaCompras       = compraFacade.findAll();
         List<CompraDTO> listaComprasDTO = convertListEntityToDTO(listaCompras);
@@ -82,6 +81,8 @@ public class CompraBO {
         DTO.setIdEmpresa(compra.getIdempresa().getIdempresa());
         DTO.setNombreEmpresa(compra.getIdempresa().getNombre());
         DTO.setIdempresa(compra.getIdempresa());
+        
+        DTO.setEstado(compra.getEstado());
 
         Almacen almacen = new Almacen();
         almacen = almacenFacade.getAlmacenById(compra.getIdalmacen());
@@ -111,7 +112,7 @@ public class CompraBO {
         entidad.setTotal(dto.getTotal());
 //        entidad.setIdempresa(dto.getIdempresa());
        
-        
+      
         return entidad;
     }
     public List<CompraDTO> BuscarCompra(CompraDTO dto) {

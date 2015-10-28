@@ -36,6 +36,14 @@ public class CompraDTO {
      
      private int idAlmacen;
      private int idEmpresa;
+     
+     private String nombEstado;
+     
+     
+     private Date fechaInicio;
+    private Date fechaFin;
+    
+    
 
     public CompraDTO() {
     idempresa=new Empresa();
@@ -126,6 +134,7 @@ public class CompraDTO {
     }
 
     public Integer getEstado() {
+        
         return estado;
     }
 
@@ -157,6 +166,38 @@ public class CompraDTO {
 
     public void setNombreAlmacen(String nombreAlmacen) {
         this.nombreAlmacen = nombreAlmacen;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getNombEstado() {
+        
+        if(estado==0){
+        nombEstado="CREADA";
+        }
+        if(estado==1){
+        nombEstado="ENVIADA";
+        }
+        
+        return nombEstado;
+    }
+
+    public void setNombEstado(String nombEstado) {
+        this.nombEstado = nombEstado;
     }
 
  

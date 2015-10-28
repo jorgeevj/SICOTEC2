@@ -20,6 +20,7 @@ import entidades.Compra;
 import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Empresa;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -27,6 +28,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -55,6 +57,7 @@ public class CompraMB {
     
      private List<CompraDTO> lista;
      private List<AlmacenDTO> listaAlmacenes;
+      private ArrayList listaEstados = new ArrayList();
      
      //AGREGAR
     private CompraDTO camposAdd;
@@ -68,7 +71,16 @@ public class CompraMB {
      private int idalmacenNuevo;
      private int idempresaNuevo;
      private Integer estadoNuevo;
-    
+     
+     //Busqueda
+     private Date fechaInicioBusqueda;
+     private Date fechaFinBusqueda;
+     private int selectEstadoBusqueda = 100;
+     private String serieBusqueda;
+     private String correlativoBusqueda;
+     private String nombreEmpresaBuqueda;
+     
+     
     private List<PealtipoitemDTO> listPealItem;
     private List<Compra> listaCompra;
     private CompraDTO campos;
@@ -84,10 +96,13 @@ public class CompraMB {
     public void init(){
          getSessionBeanCompra().setListaTCompra(compraBO.getAllCompras());
          getSessionBeanCompra().setListaPealtipoitemAdd(pedidoaltipoitemBO.getAllPealtipoitems());
+           setListaEstados(this.llenarEstados());
+           limpiarCompras();
         emp=new Empresa();
         campos = new CompraDTO();
         getSessionBeanCompra().setListaEmpresaAdd(this.comboEmpresas());
         getSessionBeanCompra().setListaAlmacenesAdd(this.comboAlmacen());
+      
         campos.setIdcompra(0);
         campos.setIdempresa(emp);
         
@@ -97,6 +112,15 @@ public class CompraMB {
     }
     
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
+         // CompraDTO com = new CompraDTO();
+        int estado      = getSelectEstadoBusqueda();
+        Date fechaInicio = getFechaInicioBusqueda();
+        Date fechaFin = getFechaFinBusqueda();
+       
+        campos.setEstado(estado);
+        campos.setFechaFin(fechaFin);
+        campos.setFechaInicio(fechaInicio);
+        
         System.out.println("nombre"+campos.getNombreEmpresa());
             getSessionBeanCompra().setListaCompra(compraBO.BuscarCompra(campos));
             return getSessionBeanCompra().getListaCompra();
@@ -160,6 +184,28 @@ public class CompraMB {
       public void cerrar(){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').hide();");
+    }
+      public ArrayList llenarEstados() {
+        ArrayList estados = new ArrayList();
+        estados.add(new SelectItem(0,"Creado"));
+        estados.add(new SelectItem(1,"Enviado"));
+    
+        return estados;
+    }
+      
+    public void limpiar(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formCompra");
+        limpiarCompras();           
+    }
+    public void limpiarCompras(){
+    
+        campos=new CompraDTO();
+        lista=compraBO.getAllCompras();
+        setFechaFinBusqueda(null);
+        setFechaInicioBusqueda(null);
+        setSelectEstadoBusqueda(100); 
+           
     }
       
     public CompraBO getCompraBO() {
@@ -385,6 +431,71 @@ public class CompraMB {
     public void setListPealItem(List<PealtipoitemDTO> listPealItem) {
         this.listPealItem = listPealItem;
     }
+
+    public CotizacionBO getCotizacionBO() {
+        return cotizacionBO;
+    }
+
+    public void setCotizacionBO(CotizacionBO cotizacionBO) {
+        this.cotizacionBO = cotizacionBO;
+    }
+
+    public Date getFechaInicioBusqueda() {
+        return fechaInicioBusqueda;
+    }
+
+    public void setFechaInicioBusqueda(Date fechaInicioBusqueda) {
+        this.fechaInicioBusqueda = fechaInicioBusqueda;
+    }
+
+    public Date getFechaFinBusqueda() {
+        return fechaFinBusqueda;
+    }
+
+    public void setFechaFinBusqueda(Date fechaFinBusqueda) {
+        this.fechaFinBusqueda = fechaFinBusqueda;
+    }
+
+    public int getSelectEstadoBusqueda() {
+        return selectEstadoBusqueda;
+    }
+
+    public void setSelectEstadoBusqueda(int selectEstadoBusqueda) {
+        this.selectEstadoBusqueda = selectEstadoBusqueda;
+    }
+
+    public ArrayList getListaEstados() {
+        return listaEstados;
+    }
+
+    public void setListaEstados(ArrayList listaEstados) {
+        this.listaEstados = listaEstados;
+    }
+
+    public String getSerieBusqueda() {
+        return serieBusqueda;
+    }
+
+    public void setSerieBusqueda(String serieBusqueda) {
+        this.serieBusqueda = serieBusqueda;
+    }
+
+    public String getCorrelativoBusqueda() {
+        return correlativoBusqueda;
+    }
+
+    public void setCorrelativoBusqueda(String correlativoBusqueda) {
+        this.correlativoBusqueda = correlativoBusqueda;
+    }
+
+    public String getNombreEmpresaBuqueda() {
+        return nombreEmpresaBuqueda;
+    }
+
+    public void setNombreEmpresaBuqueda(String nombreEmpresaBuqueda) {
+        this.nombreEmpresaBuqueda = nombreEmpresaBuqueda;
+    }
+    
     
     
     
