@@ -24,6 +24,9 @@ public class CompraDTO {
      private Double total;
      private String serie;
      private String correlativo;
+     private int idalmacen;
+     private Empresa idempresa;
+     
      
      /*AGREGAR*/
      private String nombreEmpresa;
@@ -132,6 +135,22 @@ public class CompraDTO {
 
     public void setNombreAlmacen(String nombreAlmacen) {
         this.nombreAlmacen = nombreAlmacen;
+    }
+
+    public int getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(int idalmacen) {
+        this.idalmacen = idalmacen;
+    }
+
+    public Empresa getIdempresa() {
+        return idempresa;
+    }
+
+    public void setIdempresa(Empresa idempresa) {
+        this.idempresa = idempresa;
     }
 
  

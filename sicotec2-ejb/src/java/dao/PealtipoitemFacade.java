@@ -57,6 +57,7 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         return tPealtipoitem;
     }
      
+     
       public List<Pealtipoitem> getAlmacenForPedido(Pealtipoitem a) {
         
         String jpa = "SELECT pti "
@@ -82,6 +83,15 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         }
         
         return entidad;
+    }
+      public List<Pealtipoitem> getPRE(int idalmacen,PealtipoitemDTO ct) {
+        String jpa = "SELECT i "
+                + "FROM Pealtipoitem i, Altipoitem a "
+                + "where i.idalmacen=a.idalmacen "
+                + "and a.idalmacen= "+idalmacen+" "
+                + "and i.estado=0 ";
+
+        return em.createQuery(jpa, Pealtipoitem.class).setMaxResults(ct.getCantidad()).getResultList();
     }
     
 }

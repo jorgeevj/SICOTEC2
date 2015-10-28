@@ -57,7 +57,7 @@ public class CompraFacade extends AbstractFacade<Compra> {
             List<Compra> l = new ArrayList<Compra>();
             String sql = "SELECT c FROM Compra c WHERE 1=1 ";
      
-           /*try{
+           try{
                System.out.println("nombreEmpressaquery" + dto.getIdempresa().getNombre());
                if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
                    System.out.println("entra if");
@@ -70,7 +70,7 @@ public class CompraFacade extends AbstractFacade<Compra> {
                l=em.createQuery(sql, Compra.class).getResultList();
            } catch(Exception e){
                l = new ArrayList<Compra>();
-           }*/
+           }
             
             
            

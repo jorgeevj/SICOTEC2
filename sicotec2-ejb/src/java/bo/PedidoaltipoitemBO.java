@@ -84,6 +84,7 @@ public class PedidoaltipoitemBO {
         List<PealtipoitemDTO> lista1= new ArrayList<PealtipoitemDTO>();/*convertListEntityToDTO(lista);*/
         return lista1;      
     }  
+      
       public List<PealtipoitemDTO> getTipoItemByAlmacen(PealtipoitemDTO dto){
           Pealtipoitem entidad = convertDTOtoEntity(dto);
           List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAlmacenForPedido(entidad);
@@ -93,6 +94,7 @@ public class PedidoaltipoitemBO {
         
         
     }
+      
 //    private PealtipoitemDTO convertEntityToDTO(PealtipoitemDTO pealtipoitem) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }

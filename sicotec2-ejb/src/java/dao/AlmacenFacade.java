@@ -48,8 +48,8 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         
         return entidad;
     }
-    
-    public List<AlmacenDTO> getAlmacenForPedido(Almacen a) {
+    //
+    public List<Almacen> getAlmacenForPedido(Almacen a) {
         
         String jpa = "SELECT a.nombre, pti.idalmacen, pti.idtipoItem, pti.idpedido, ti.nombre"
                     + "FROM Almacen a, Tipoitem ti, Pealtipoitem pti, Altipoitem ati "
@@ -57,11 +57,11 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
                     + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
                     + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
                     + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
-                    + "AND a.idalmacen = 1";
+                    + "AND a.idalmacen = '"+a.getIdalmacen()+"'";
                
         
         
-        return em.createQuery(jpa,AlmacenDTO.class).getResultList();
+        return em.createQuery(jpa,Almacen.class).getResultList();
         
     }
 }

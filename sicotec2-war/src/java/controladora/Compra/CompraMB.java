@@ -65,7 +65,7 @@ public class CompraMB {
      private int idempresaNuevo;
      private Integer estadoNuevo;
     
-     private List<PealtipoitemDTO> listPealItem;
+    private List<PealtipoitemDTO> listPealItem;
     private List<Compra> listaCompra;
     private CompraDTO campos;
     private Empresa emp=new Empresa();
@@ -85,11 +85,11 @@ public class CompraMB {
         getSessionBeanCompra().setListaEmpresaAdd(this.comboEmpresas());
         getSessionBeanCompra().setListaAlmacenesAdd(this.comboAlmacen());
         campos.setIdcompra(0);
-        //campos.setIdEmpresa(emp);
+        campos.setIdempresa(emp);
         
         camposAdd = new CompraDTO();
         camposAdd.setIdcompra(0);
-        //camposAdd.setIdempresa(emp);
+        camposAdd.setIdempresa(emp);
     }
     
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
@@ -98,6 +98,11 @@ public class CompraMB {
             return getSessionBeanCompra().getListaCompra();
     }
     
+    public void OpenAddPedido(ActionEvent actionEvent){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addPedidosItemsModal').show();");
+    
+    }
     public void crear(ActionEvent actionEvent){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').show();");
@@ -112,16 +117,20 @@ public class CompraMB {
          List<AlmacenDTO> listaDto = almacenBO.getAllAlmaces();
          return listaDto;
      }
+     
     
-     public void AlmacenForPedido(ActionEvent actionEvent){        
+     public void getAlmacenForPedidoForItems(ActionEvent actionEvent){        
         
-        AlmacenDTO lis=new AlmacenDTO();
-        lis.setIdalmacen(codigoAlamacen);
-        lis.setNombre(nombreAlamacen);
+        PealtipoitemDTO lis=new PealtipoitemDTO();
        
         
+//        AlmacenDTO lis=new AlmacenDTO();
+//        lis.setIdalmacen(codigoAlamacen);
+//        lis.setNombre(nombreAlamacen);
+////       
         
-        //listaAlmacenes=almacenBO.AlmacenForPedidos(lis);
+      
+       listPealItem=pedidoaltipoitemBO.AlmacenForPedidos(lis);
        
     }
       public void addNuevoCompra(ActionEvent actionEvent){
@@ -143,6 +152,7 @@ public class CompraMB {
         this.cerrar();
         
     }
+    
       public void cerrar(){
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('addComprasModal').hide();");

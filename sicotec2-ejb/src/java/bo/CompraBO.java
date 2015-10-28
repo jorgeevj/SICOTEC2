@@ -7,6 +7,7 @@ package bo;
 
 import dao.AlmacenFacade;
 import dao.CompraFacade;
+import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.CompraDTO;
 import entidades.Almacen;
@@ -31,7 +32,8 @@ public class CompraBO {
     private CompraFacade compraFacade ;
     @EJB
     private AlmacenFacade almacenFacade = new AlmacenFacade();
-     
+     @EJB
+    private PealtipoitemFacade pealtipoitemFacade=new PealtipoitemFacade(); 
     
 
     
@@ -73,6 +75,7 @@ public class CompraBO {
         DTO.setSerie(compra.getSerie());
         DTO.setIdEmpresa(compra.getIdempresa().getIdempresa());
         DTO.setNombreEmpresa(compra.getIdempresa().getNombre());
+        DTO.setIdempresa(compra.getIdempresa());
 
         Almacen almacen = new Almacen();
         almacen = almacenFacade.getAlmacenById(compra.getIdalmacen());
@@ -100,6 +103,7 @@ public class CompraBO {
         entidad.setCorrelativo(dto.getCorrelativo());
         entidad.setEstado(dto.getEstado());
         entidad.setTotal(dto.getTotal());
+        entidad.setIdempresa(dto.getIdempresa());
        
         
         return entidad;
@@ -114,4 +118,5 @@ public class CompraBO {
         entidad = compraFacade.agregarCompra(entidad);
         return entidad;
     }
+   
 }
