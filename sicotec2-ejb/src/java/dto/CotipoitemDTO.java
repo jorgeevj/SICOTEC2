@@ -94,8 +94,11 @@ public class CotipoitemDTO {
         a.setTipoitem(tipoitem);
         a=altipoitemFacade.buscaByIDs(a).isEmpty() ? null:altipoitemFacade.buscaByIDs(a).get(0);
         if(a!=null){
-        stock=a.getCantidad();
+        stock=a.getCantidad()-a.getReservado();
         }
+       }
+       if(stock<0){
+       stock=0;
        }
         return stock;
     }

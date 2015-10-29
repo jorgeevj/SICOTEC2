@@ -5,16 +5,23 @@
  */
 package dto;
 
+import bo.CotizacionBO;
 import entidades.Cotipoitem;
 import entidades.Empresa;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
  * @author Jorge
  */
 public class CotizacionDTO {
+    CotizacionBO cotizacionBO = lookupCotizacionBOBean();
    private int idcotizacion;
    
     private int estado;
@@ -157,22 +164,23 @@ public class CotizacionDTO {
     public String getNombEstado() {
         long tiempo,actual;
         if(fechaEnvio!=null){
-         tiempo=fechaEnvio.getTime()+(24*60*60*3);
+         tiempo=fechaEnvio.getTime()+(24*60*60*1000l*duracion);
          actual=new Date().getTime();
-        if(fechaEnvio.getTime()+(24*60*60*1000*duracion)<=new Date().getTime()){
-        estado=3;
+        if((fechaEnvio.getTime()+(24*60*60*1000l*duracion))<=new Date().getTime()){
+        estado=4;
+        cotizacionBO.guardarEditar(this);
         }
-        }
-        if(estado==0){
-        nombEstado="CREADA";
         }
         if(estado==1){
-        nombEstado="ACEPTADA";
+        nombEstado="CREADA";
         }
         if(estado==2){
-        nombEstado="ENVIADA";
+        nombEstado="APROBADA";
         }
         if(estado==3){
+        nombEstado="ENVIADA";
+        }
+        if(estado==4){
         nombEstado="CADUCADA";
         }
         
@@ -197,6 +205,16 @@ public class CotizacionDTO {
 
     public void setIdalm(int idalm) {
         this.idalm = idalm;
+    }
+
+    private CotizacionBO lookupCotizacionBOBean() {
+        try {
+            Context c = new InitialContext();
+            return (CotizacionBO) c.lookup("java:global/sicotec2/sicotec2-ejb/CotizacionBO!bo.CotizacionBO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
    
 }

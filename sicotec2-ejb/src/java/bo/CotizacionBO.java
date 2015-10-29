@@ -6,35 +6,31 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.AltipoitemFacade;
 import dao.CategoriaFacade;
 import dao.CotipoitemFacade;
 import dao.CotizacionFacade;
 import dao.DocalmacenFacade;
 import dao.EmpresaFacade;
 import dao.ItemFacade;
-import dao.LoteFacade;
-import dao.MovimientoFacade;
 import dao.TipoitemFacade;
-import dao.TipomovimientoFacade;
 import dao.VeitemFacade;
 import dao.VentaFacade;
 import dto.CotipoitemDTO;
 import dto.CotizacionDTO;
 import dto.EmpresaDTO;
-import entidades.Almacen;
+import entidades.Altipoitem;
+import entidades.AltipoitemPK;
 import entidades.Categoria;
 import entidades.Cotipoitem;
 import entidades.CotipoitemPK;
 import entidades.Cotizacion;
 import entidades.Docalmacen;
-import entidades.Documento;
 import entidades.Empresa;
 import entidades.Impuesto;
 import entidades.Item;
-import entidades.Movimiento;
 import entidades.Tipo;
 import entidades.Tipoitem;
-import entidades.Tipomovimiento;
 import entidades.Veitem;
 import entidades.VeitemPK;
 import entidades.Venta;
@@ -53,6 +49,8 @@ import javax.faces.model.SelectItem;
 @Stateless
 @LocalBean
 public class CotizacionBO {
+    @EJB
+    private AltipoitemFacade altipoitemFacade;
 
     @EJB
     private ItemFacade itemFacade;
@@ -104,6 +102,9 @@ public class CotizacionBO {
     public Cotizacion guardarCrear(Cotizacion c) {
         Docalmacen da = docalmacenFacade.findBy2key(c.getIdalmacen(), 1);
         da = updateDocAlm(da);
+        if(c.getDuracion()==null){
+            c.setDuracion(0);
+        }
         c.setSerie(String.format("%03d", da.getSerie()));
         c.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         return cotizacionFacade.guardaCot(c);
@@ -218,6 +219,7 @@ public void eliminarItemsByCOt(Integer idcotizacion){
     public void generaVentaCrea(List<CotipoitemDTO> ct, Cotizacion c) {
         Veitem vi;
         List<Item> li;
+        Altipoitem ati;
         double total=0,descuento=0;
         Venta v = new Venta();
         v.setEstado("Generada");
@@ -245,6 +247,9 @@ public void eliminarItemsByCOt(Integer idcotizacion){
                     vi.setPrecio(dto.getPrecio());
                     vi.setDescuento(dto.getDescuento());
                     veitemFacade.create(vi);
+                    ati=altipoitemFacade.find(new AltipoitemPK(c.getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+                    ati.setCantidad( ati.getCantidad()-1);
+                    altipoitemFacade.edit(ati);
                 }
             }
         }
@@ -267,6 +272,12 @@ public void eliminarItemsByCOt(Integer idcotizacion){
     dto.setPrecio(ct.getPrecio());
     dto.setTipoitem(ct.getTipoitem());
     return dto;
+    }
+
+    public void generaVentaEdit(List<CotipoitemDTO> listaCoItemSelect, CotizacionDTO cotizacionSelec) {
+        
+        generaVentaCrea(listaCoItemSelect, convertDTObyEntidad(cotizacionSelec));
+    
     }
     
     
