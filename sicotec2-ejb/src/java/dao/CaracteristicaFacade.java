@@ -38,4 +38,12 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
         lista=q.getResultList();       
         return lista;
     }
+    
+    public List<Tipoitem> getCaracteristicaXTipoItem(Tipoitem e){
+        List<Tipoitem> lista= new ArrayList<Tipoitem>();
+        String sql="SELECT t.nombre FROM CaTipoItem t ";
+        Query q=em.createQuery(sql,Tipoitem.class);
+        lista=q.getResultList();       
+        return lista;
+    }
 }
