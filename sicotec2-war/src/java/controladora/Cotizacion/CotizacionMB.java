@@ -12,6 +12,7 @@ import dto.CotizacionDTO;
 import dto.EmpresaDTO;
 import entidades.Almacen;
 import entidades.Categoria;
+import entidades.Cotipoitem;
 import entidades.Cotizacion;
 import entidades.Empresa;
 import entidades.Tipoitem;
@@ -26,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -56,6 +58,7 @@ public class CotizacionMB {
     private List<Tipoitem> filtroTipoItem;
     private Tipoitem tipoItemSelect;
     private CotipoitemDTO cotipoItemSelect;
+    private CotipoitemDTO catipoItemtemp;
     private List<Categoria> listaCategoria;
     private List<CotipoitemDTO> listaCotipoItem;
     private List<CotipoitemDTO> listaCoItemSelect;
@@ -83,7 +86,7 @@ public class CotizacionMB {
         limpiarCotizaciones();
         limpiarcamposCrear();
         cotipoItemSelectEdit=new CotipoitemDTO();
-
+        cotipoItemSelect = new CotipoitemDTO();
     }
 
     public List<CotizacionDTO> consultar(ActionEvent actionEvent) {
@@ -130,7 +133,8 @@ public class CotizacionMB {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay Items Agregados", ""));
             return;
         }
-
+        
+        camposCrear.setEstado(1);
         camposCrear = cotizacionBO.guardarCrear(camposCrear);
         for (int i = 0; i < listaCotipoItem.size(); i++) {
             listaCotipoItem.get(i).setCotizacion(camposCrear);
@@ -138,6 +142,9 @@ public class CotizacionMB {
         }
         cotizacionBO.guardarCrearItems(listaCotipoItem);
         cerrarCrear(actionEvent);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Guardo Correctamente la Cotizacion", ""));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion");
     }
 
     public void cerrarCrear(ActionEvent actionEvent) {
@@ -164,13 +171,15 @@ public class CotizacionMB {
                 return;
             }
         }
-
-        cotipoItemSelect = new CotipoitemDTO();
-        cotipoItemSelect.setCotizacion(camposCrear);
-        cotipoItemSelect.setTipoitem(tipoItemSelect);
-        cotipoItemSelect.setPrecio(tipoItemSelect.getPrecioLista());
-        cotipoItemSelect.setCantidad(1);
-        listaCotipoItem.add(cotipoItemSelect);
+        
+        camposCrear.setIdempresa(cotizacionSelec.getIdempresa());
+        
+        catipoItemtemp = new CotipoitemDTO();
+        catipoItemtemp.setCotizacion(camposCrear);
+        catipoItemtemp.setTipoitem(tipoItemSelect);
+        catipoItemtemp.setPrecio(tipoItemSelect.getPrecioLista());
+        catipoItemtemp.setCantidad(1);
+        listaCotipoItem.add(catipoItemtemp);
     }
 
     public void quitarCrear(ActionEvent actionEvent) {
@@ -196,6 +205,7 @@ public class CotizacionMB {
     }
 
     public void openPrecioCrea(ActionEvent actionEvent) {
+        cotipoItemSelect=(CotipoitemDTO) actionEvent.getComponent().getAttributes().get("myattribute");
         chamgePrecioCrea = cotipoItemSelect.getPrecio();
         if (cotizacionBO.isEmpDistribudora(camposCrear.getIdempresa())) {
             minPrecioCrea = cotipoItemSelect.getTipoitem().getPrecioLista() - (cotipoItemSelect.getTipoitem().getDesDistribuidor() * cotipoItemSelect.getTipoitem().getPrecioLista() / 100);
@@ -203,7 +213,8 @@ public class CotizacionMB {
             minPrecioCrea = cotipoItemSelect.getTipoitem().getPrecioLista() - (cotipoItemSelect.getTipoitem().getDesCliente() * cotipoItemSelect.getTipoitem().getPrecioLista() / 100);
 
         }
-        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('editItemPrecio').show();");
     }
 
     public double totalCotizacion() {
@@ -239,10 +250,18 @@ public class CotizacionMB {
     }
 
     public void enviaCrear(ActionEvent actionEvent) {
+       if (camposCrear.getDuracion()==null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Duracion minima de Envio es 1 dia", ""));
+
+            return;
+        }
         camposCrear.setFechaEnvio(new Date());
-        camposCrear.setEstado(2);
+        camposCrear.setEstado(3);
         guardarCrear(actionEvent);
         cerrarCrear(actionEvent);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha Enviado la cotizacion", ""));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion");
     }
 
     public void aprobarCrea(ActionEvent actionEvent) {
@@ -250,16 +269,28 @@ public class CotizacionMB {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha Seleccionado ningun Item", ""));
             return;
         }
+        for(CotipoitemDTO cti:listaCoItemSelect){
+        if(cti.getStock()<cti.getCantidad()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficiente Stock de un Iten Seleccionado", ""));
+            return;
+        }
+        }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('aproVentaCrea').show();");
     }
 
     public void acepAproCrear(ActionEvent actionEvent) {
-        camposCrear.setEstado(1);
+        camposCrear.setEstado(2);
         guardarCrear(actionEvent);
         cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
         cerrarAproCrear(actionEvent);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha generado la Venta Correctamente", ""));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion");    
     }
+    
+    
+    
 
     public void cerrarAproCrear(ActionEvent actionEvent) {
         RequestContext context = RequestContext.getCurrentInstance();
@@ -272,8 +303,22 @@ public class CotizacionMB {
     }
 
     // FIN CREAR
+    
+   
     // EDITAR
     public void editar(ActionEvent actionEvent) {
+        if(cotizacionSelec.getEstado()!=1){
+        switch(cotizacionSelec.getEstado()){
+            case 2: FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Aprobada", ""));
+                break;
+            case 3: FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Enviada", ""));
+                break;
+            case 4: FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Caducada", ""));
+                break;
+        }
+        return;
+        }
+        
         listaCoItemSelect=new ArrayList<>();
         cotipoItemSelectEdit=new CotipoitemDTO();
         listaCotipoItem=cotizacionBO.getListCotipoitemByidCot(cotizacionSelec.getIdcotizacion());
@@ -283,6 +328,7 @@ public class CotizacionMB {
     }
     public void openPrecioedit(ActionEvent actionEvent) {
         cotipoItemSelectEdit=(CotipoitemDTO) actionEvent.getComponent().getAttributes().get("myattribute");
+        
         chamgePrecioCrea = cotipoItemSelectEdit.getPrecio();
         if (cotizacionBO.isEmpDistribudora(cotipoItemSelectEdit.getCotizacion().getIdempresa())) {
             minPrecioCrea = cotipoItemSelectEdit.getTipoitem().getPrecioLista() - (cotipoItemSelectEdit.getTipoitem().getDesDistribuidor() * cotipoItemSelectEdit.getTipoitem().getPrecioLista() / 100);
@@ -290,6 +336,28 @@ public class CotizacionMB {
             minPrecioCrea = cotipoItemSelectEdit.getTipoitem().getPrecioLista() - (cotipoItemSelectEdit.getTipoitem().getDesCliente() * cotipoItemSelectEdit.getTipoitem().getPrecioLista() / 100);
 
         }
+    }
+    public void acepAproEditar(ActionEvent actionEvent) {
+        cotizacionSelec.setEstado(2);
+        GuardarEditar(actionEvent);
+        cotizacionBO.generaVentaEdit(listaCoItemSelect, cotizacionSelec);
+        cerrarAproEdit(actionEvent);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha generado la Venta Correctamente", ""));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion"); 
+    }
+    public void aprobarEdit(ActionEvent actionEvent) {
+        if (listaCoItemSelect.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha Seleccionado ningun Item", ""));
+            return;
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('aproVentaEdit').show();");
+    }
+    
+    public void cerrarAproEdit(ActionEvent actionEvent) {
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('aproVentaEdit').hide();");
     }
     public void GuardarEditar(ActionEvent actionEvent){
       if (listaCotipoItem.isEmpty()) {
@@ -306,8 +374,19 @@ public class CotizacionMB {
         }
         cotizacionBO.guardarCrearItems(listaCotipoItem);
         cerrarEditar(actionEvent);  
-        
-        
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Edito Correctamente la Cotizacion", ""));
+            
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion");
+    }
+    public void enviaEditar(ActionEvent actionEvent) {
+        cotizacionSelec.setFechaEnvio(new Date());
+        cotizacionSelec.setEstado(3);
+        GuardarEditar(actionEvent);
+        cerrarEditar(actionEvent);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha Enviado la cotizacion", ""));
+    RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCotizacion");
     }
     public void cerrarEditar(ActionEvent actionEvent) {
         RequestContext context = RequestContext.getCurrentInstance();
@@ -497,6 +576,14 @@ public class CotizacionMB {
 
     public void setCotipoItemSelectEdit(CotipoitemDTO cotipoItemSelectEdit) {
         this.cotipoItemSelectEdit = cotipoItemSelectEdit;
+    }
+
+    public CotipoitemDTO getCatipoItemtemp() {
+        return catipoItemtemp;
+    }
+
+    public void setCatipoItemtemp(CotipoitemDTO catipoItemtemp) {
+        this.catipoItemtemp = catipoItemtemp;
     }
 
 }

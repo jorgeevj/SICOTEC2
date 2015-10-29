@@ -55,7 +55,10 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formRegCot" >
                     <p:panelGrid id="pGridRegCot" columns="4" styleClass="hideborder">
                         <p:outputLabel value="Duracion/Dias:" for="itrc2" />
-                        <p:inputText id="itrc2" value="#{cotizacionMB.camposCrear.duracion}" required="true"/>
+                        <p:inputText id="itrc2" value="#{cotizacionMB.camposCrear.duracion}" maxlength="2"
+                                     onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;">
+                        <f:validateDoubleRange minimum="0" maximum="15" />
+                        </p:inputText>
 
                         <p:outputLabel value="Entregar:" for="itrc3" />
                         <p:selectOneMenu id="itrc3" value="#{cotizacionMB.camposCrear.entrega}" required="true">
@@ -160,7 +163,10 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad" >
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{coitem.cantidad}" /></f:facet>
-                                <f:facet name="input"><p:inputText id="modelInput" value="#{coitem.cantidad}" style="width:96%" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{coitem.cantidad}" style="width:96%" >
+                                    <f:validateDoubleRange minimum="1" maximum="1000" />
+                                    </p:inputText>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column headerText="Precio U." >
@@ -171,9 +177,9 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>
                         <p:column style="width:32px;text-align: center">
                             <p:commandButton  id="btnEditPrecioCrea" icon="ui-icon-pencil" update="formPrecioCrear"
-                                              title="editar" actionListener="#{cotizacionMB.openPrecioCrea}"
-                                              oncomplete="PF('editItemPrecio').show()">
-                                <f:setPropertyActionListener value="#{coitem}" target="#{cotizacionMB.cotipoItemSelect}" /> 
+                                              title="editar" actionListener="#{cotizacionMB.openPrecioCrea}">
+                               <!-- <f:setPropertyActionListener value="#{coitem}" target="#{cotizacionMB.cotipoItemSelect}" /> -->
+                                <f:attribute name="myattribute" value="#{coitem}" /> 
                         </p:commandButton>
                     </p:column>
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
@@ -199,13 +205,12 @@ jorgeevj 15.09.15 Creacion.
                     <p:commandButton id="btnGuardarReg" value="Guardar" 
                                      actionListener="#{cotizacionMB.guardarCrear}" 
                                      update="messages"/>
-                    <p:commandButton id="btnEnviarReg" value="Enviar" actionListener="#{cotizacionMB.enviaCrear}" />
+                    <p:commandButton id="btnEnviarReg" value="Enviar" actionListener="#{cotizacionMB.enviaCrear}"
+                                     update="messages"/>
                     <p:commandButton id="btnAprobadaReg" value="Aprobada" 
                                      actionListener="#{cotizacionMB.aprobarCrea}" 
                                      update="formAproCrea:AproCrea,messages"/> 
-                    <p:commandButton id="btnCancelReg" value="Cancelar" 
-                                     actionListener="#{cotizacionMB.cerrarCrear}" 
-                                     update="formRegCot"/>
+                    
                 </p:panelGrid>
             </h:form>
         </p:dialog> 
@@ -233,7 +238,6 @@ jorgeevj 15.09.15 Creacion.
                              value="#{cotizacionMB.listaCoItemSelect}" var="coitem"
                              rowKey="#{coitem.tipoitem.idtipoItem}"
                              emptyMessage="No se encontraron Items" style="margin-bottom:0">
-
                     <f:facet name="header">
                         Lista de Items Aprobados
                     </f:facet>
@@ -269,7 +273,7 @@ jorgeevj 15.09.15 Creacion.
                         </p:panelGrid>
                     </f:facet>
                 </p:dataTable>
-                <p:commandButton id="btnAcepApro" value="Aceptar" actionListener="#{cotizacionMB.acepAproCrear}" />
+                <p:commandButton id="btnAcepApro" value="Aceptar" actionListener="#{cotizacionMB.acepAproCrear}"  />
                 <p:commandButton id="btnCancelApro" value="Cancelar" actionListener="#{cotizacionMB.cerrarAproCrear}" />
             </h:form>
         </p:dialog>
@@ -279,7 +283,8 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formEditCot" >
                     <p:panelGrid id="pGridEditCot2" columns="4" styleClass="hideborder">
                         <p:outputLabel value="Duracion/Dias:" for="itec2" />
-                        <p:inputText id="itec2" value="#{cotizacionMB.cotizacionSelec.duracion}" required="true"/>
+                        <p:inputText id="itec2" value="#{cotizacionMB.cotizacionSelec.duracion}" required="true"
+                                     onkeypress="if((event.which &gt; 57)^(event.which &lt; 49))return false;"/>
 
                         <p:outputLabel value="Entrega:" for="itec3" />
                         <p:selectOneMenu id="itec3" value="#{cotizacionMB.cotizacionSelec.entrega}" required="true">
@@ -386,7 +391,12 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad" >
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{coitem.cantidad}" /></f:facet>
-                                <f:facet name="input"><p:inputText id="modelInput" value="#{coitem.cantidad}" style="width:96%" /></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="modelInput" value="#{coitem.cantidad}" style="width:96%" >
+                                    <f:validateDoubleRange minimum="1" maximum="1000" />
+                                    </p:inputText>
+                                                                        
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column headerText="Precio U." >
@@ -427,10 +437,11 @@ jorgeevj 15.09.15 Creacion.
                                          actionListener="#{cotizacionMB.GuardarEditar}" 
                                          update="messagesEdit"/>
                         <p:commandButton id="btnEnviarEdit" value="Enviar" 
-                                         actionListener="#{cotizacionMB.enviaCrear}" />
+                                         actionListener="#{cotizacionMB.enviaEditar}" 
+                                         update="messagesEdit"/>
                         <p:commandButton id="btnAprobadaEdit" value="Aprobada" 
-                                         actionListener="#{cotizacionMB.aprobarCrea}" 
-                                         update="formAproCrea:AproCrea,messagesEdit"/> 
+                                         actionListener="#{cotizacionMB.aprobarEdit}" 
+                                         update="formAproEdit:AproEdit,messagesEdit"/> 
                         <p:commandButton id="btnCancelEdit" value="Cancelar" 
                                          actionListener="#{cotizacionMB.cerrarEditar}" 
                                          update="formEditCot"/>
@@ -438,6 +449,51 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
 
             </p:dialog>
+            <p:dialog header="Aprobar Venta" widgetVar="aproVentaEdit" modal="true" rendered="true" >
+            <h:form id="formAproEdit">
+                <p:dataTable id="AproEdit" widgetVar="aproEdit"
+                             value="#{cotizacionMB.listaCoItemSelect}" var="coitem"
+                             rowKey="#{coitem.tipoitem.idtipoItem}"
+                             emptyMessage="No se encontraron Items" style="margin-bottom:0">
+                    <f:facet name="header">
+                        Lista de Items Aprobados
+                    </f:facet>
+                    <p:column headerText="Cod Item" >
+                        <h:outputText value="#{coitem.tipoitem.idtipoItem}" />
+                    </p:column>
+                    <p:column headerText="Nombre" > 
+                        <h:outputText value="#{coitem.tipoitem.nombre}" />
+                    </p:column>
+                    <p:column headerText="Stock" >
+                        <h:outputText value="#{coitem.stock}" />
+                    </p:column>
+                    <p:column headerText="Cantidad" >
+                        <h:outputText value="#{coitem.cantidad}" />  
+                    </p:column>
+                    <p:column headerText="Precio U." >
+                        <h:outputText value="#{coitem.precio}" />
+                    </p:column>
+                    <p:column headerText="Sub. Total" >
+                        <h:outputText value="#{coitem.cantidad*coitem.precio}" />
+                    </p:column>
+                    <f:facet name="footer" >
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column style="text-align: right" >
+                                    Total $ 
+                                </p:column>
+                                <p:column style="width:161px;text-align: center">
+                                    #{cotizacionMB.totalAprovado()}
+                                </p:column>   
+                            </p:row>
+
+                        </p:panelGrid>
+                    </f:facet>
+                </p:dataTable>
+                <p:commandButton id="btnAcepAproEdit" value="Aceptar" actionListener="#{cotizacionMB.acepAproEditar}"  />
+                <p:commandButton id="btnCancelAproedit" value="Cancelar" actionListener="#{cotizacionMB.cerrarAproCrear}" />
+            </h:form>
+        </p:dialog>
         <!--  FIN DIALOG DE COTIZACIONES-->
 
 
