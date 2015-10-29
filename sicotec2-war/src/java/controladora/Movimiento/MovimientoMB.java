@@ -165,6 +165,8 @@ public class MovimientoMB implements Serializable{
         
         //ADD CANTIDAD TO ITEM
         private String cantidadItem;
+        
+        private String cantidadItemAlmacen;
  
 
     @PostConstruct
@@ -239,6 +241,7 @@ public class MovimientoMB implements Serializable{
             setPanelVisibleMovAlmacenes(true);
             setStyleBTNICompras("display:none");
             setStyleBTNItems("display:none");
+            setStyleBTNItemsAlmacen("display:none");
             
             setIdAlmacenDestinoNuevo(0);
             setIdAlmacenOrigenNuevo(0);
@@ -335,12 +338,7 @@ public class MovimientoMB implements Serializable{
                 sms = "Ingrese items al movimiento";
             }
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
-            if(getIdAlmacenOrigenNuevo()== 0){
-                sms = "Seleccione un almacen origen";
-            }
-            if(getIdAlmacenDestinoNuevo()== 0){
-                sms = "Seleccione un almacen destino";
-            }
+            
         }
         
         return sms;
@@ -380,6 +378,18 @@ public class MovimientoMB implements Serializable{
 
                 mov.setIdalmacenDestino(idAlmacenDestino);
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
+                
+                 List<MovimientoitemDTOVista> listaItemSelecc = getListaItemAux();
+                 for(MovimientoitemDTOVista DTO : listaItemSelecc){
+                     ItemDTO i = new ItemDTO();
+                     i.setEstado("1");
+                     i.setIditem(DTO.getIditem());
+                     i.setOperatividad("0");
+                     i.setIdTipoItem(DTO.getIdtipoitem());
+                     i.setCantidad(DTO.getIdmovimiento());//USADO PARA LA CANTIDAD
+                     listaItemsReg.add(i);
+                 }
+                 
             }else if(idTipoMovimiento == getIdtipoMovimientoEntrada()){
                 String nombreOrigen = getNombreOrigenNuevo();
                 int idAlmacenDestino = getIdAlmacenDestinoNuevo();
@@ -525,15 +535,12 @@ public class MovimientoMB implements Serializable{
     }
     
     public void agregarItemToMovimiento(){
-        if(getItemSeleccionado() != null){
             getListaItemAux().add(getItemSeleccionado());
             getListaItem().remove(getItemSeleccionado());
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsSelecc");
             context.update("formTabItemsDisp");
             setItemSeleccionado(new MovimientoitemDTOVista());
-        }
-        
     }
     
     public void eliminarItemToMovimiento(){
@@ -576,6 +583,16 @@ public class MovimientoMB implements Serializable{
         } 
     }
     
+    public void openModalAddCantidadItemAlmacen(){
+        if(getItemSeleccionado() != null){
+            setCantidadItemAlmacen("");
+
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formCantidadItemAlmacen");
+            context.execute("PF('dialog_add_cantidad_item_almacen').show();");  
+        } 
+    }
+    
     public void addCantidadToLoteLista(){
         loteDTO lote = getLoteSeleccionado();
         getListaLotesCompra().remove(lote);
@@ -604,6 +621,20 @@ public class MovimientoMB implements Serializable{
         context.update("formTabItemsVenta");
         
         context.execute("PF('dialog_add_cantidad_item').hide();");
+    }
+    
+    public void addCantidadToItemAlmacenLista(){
+        MovimientoitemDTOVista item = getItemSeleccionado();
+        getListaItem().remove(item);
+        item.setIdmovimiento(Integer.parseInt(getCantidadItemAlmacen()));//PARA LA CANTIDAD
+        
+        getListaItemAux().add(item);
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabItemsDisp");
+        context.update("formTabItemsSelecc");
+        
+        context.execute("PF('dialog_add_cantidad_item_almacen').hide();");
     }
     
     public void removeItemToLista(){
@@ -1799,6 +1830,20 @@ public class MovimientoMB implements Serializable{
      */
     public void setCodItemCompra(String codItemCompra) {
         this.codItemCompra = codItemCompra;
+    }
+
+    /**
+     * @return the cantidadItemAlmacen
+     */
+    public String getCantidadItemAlmacen() {
+        return cantidadItemAlmacen;
+    }
+
+    /**
+     * @param cantidadItemAlmacen the cantidadItemAlmacen to set
+     */
+    public void setCantidadItemAlmacen(String cantidadItemAlmacen) {
+        this.cantidadItemAlmacen = cantidadItemAlmacen;
     }
 
 }

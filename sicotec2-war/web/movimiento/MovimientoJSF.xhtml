@@ -40,11 +40,13 @@
                     Serie
                     <p:inputText value="#{movimientoMB.serieBusqueda}"/>
                 </h:panelGrid> 
+                
+                <p:commandButton value="Buscar" actionListener="#{movimientoMB.buscarMovimiento()}"/>
                 </h:form>
                 <br/>
                 <h:form id="formBotones">
                     <h:panelGrid columns="5">
-                        <p:commandButton value="Buscar" actionListener="#{movimientoMB.buscarMovimiento}"/>
+                        
                         <p:commandButton value="Limpiar" actionListener="#{movimientoMB.limpiar}"/>
                         <p:commandButton value="Registrar" update="formRegistro" actionListener="#{movimientoMB.abrirModalNuevoMovimiento}"/>
                         <p:commandButton value="Editar" disabled="#{movimientoMB.disableEditar}" update="formEdit" actionListener="#{movimientoMB.abrirModalEidt()}"/>
@@ -194,9 +196,12 @@
         <p:dialog header="Agregar Items" widgetVar="dialog_nuevo_items" resizable="false" width="1000"> 
             <p:panel>
                 <h:form id="formTabItemsDisp">
-                    <p:dataTable value="#{movimientoMB.listaItem}" var="itemsDisp" selectionMode="single" id="tb_items_disponibles"
+                    <p:dataTable value="#{movimientoMB.listaItem}" scrollHeight="1000" rows="2" paginator="true" var="itemsDisp" selectionMode="single" id="tb_items_disponibles"
                                  selection="#{movimientoMB.itemSeleccionado}" rowKey="#{itemsDisp.iditem}" rowIndexVar="var">
                         <p:ajax listener="#{movimientoMB.selectItemToMovimientoDispo}" event="rowSelect"/> 
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsDisp.iditem}"/>
+                        </p:column>
                         <p:column headerText="Nombre" style="text-align: center;">
                             <p:outputLabel value="#{itemsDisp.nombre_tItem}"/>
                         </p:column>
@@ -211,14 +216,17 @@
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Agregar" actionListener="#{movimientoMB.agregarItemToMovimiento()}"/>
+                    <p:commandButton value="Agregar" actionListener="#{movimientoMB.openModalAddCantidadItemAlmacen()}"/>
                 </h:form>
             </p:panel>
             <p:panel>
                 <h:form id="formTabItemsSelecc">
-                    <p:dataTable value="#{movimientoMB.listaItemAux}" var="itemsSelec" selectionMode="single" id="tb_items_seleccionados"
+                    <p:dataTable value="#{movimientoMB.listaItemAux}" scrollHeight="1000" rows="2" paginator="true" var="itemsSelec" selectionMode="single" id="tb_items_seleccionados"
                                  selection="#{movimientoMB.itemSeleccionadoAux}" rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
                         <p:ajax listener="#{movimientoMB.selectItemToMovimientoSelect}" event="rowSelect"/>
+                        <p:column headerText="Codigo" style="text-align: center;">
+                            <p:outputLabel value="#{itemsDisp.iditem}"/>
+                        </p:column>
                         <p:column headerText="Nombre" style="text-align: center;">
                             <p:outputLabel value="#{itemsSelec.nombre_tItem}"/>
                         </p:column>
@@ -230,6 +238,9 @@
                         </p:column>
                          <p:column headerText="Familia" style="text-align: center;">
                              <p:outputLabel value="#{itemsSelec.nombre_familia}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center;">
+                            <p:outputLabel value="#{itemsSelec.idmovimiento}"/>
                         </p:column>
                     </p:dataTable>
                     <br/>
@@ -277,6 +288,14 @@
                 Cantidad del item
                 <p:inputText value="#{movimientoMB.cantidadItem}"/>
                 <p:commandButton value="Agregar" actionListener="#{movimientoMB.addCantidadToItemLista()}"/>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_item_almacen" resizable="false" width="500"> 
+            <h:form id="formCantidadItemAlmacen">
+                Cantidad del item
+                <p:inputText value="#{movimientoMB.cantidadItemAlmacen}"/>
+                <p:commandButton value="Agregar" actionListener="#{movimientoMB.addCantidadToItemAlmacenLista()}"/>
             </h:form>
         </p:dialog>
         
