@@ -13,6 +13,7 @@ import bo.ItemBO;
 import bo.LoteBO;
 import bo.MovimientoBO;
 import bo.TipoMovimientoBO;
+import bo.VentasBO;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.DocumentoDTO;
@@ -22,6 +23,7 @@ import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
 import dto.MovimientoitemDTOVista;
 import dto.TipomovimientoDTO;
+import dto.VentaDTO;
 import dto.loteDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,7 +57,8 @@ public class MovimientoMB implements Serializable{
     private CompraBO compraBO = new CompraBO();
     @EJB
     private LoteBO loteBO = new LoteBO();
-    
+    @EJB
+    private VentasBO ventasBO = new VentasBO();
     
     private Utils ut = new Utils();
     
@@ -92,18 +95,29 @@ public class MovimientoMB implements Serializable{
         private List<CompraDTO> listaCompras = new ArrayList<CompraDTO>();
         private List<loteDTO> listaLotesCompra = new ArrayList<loteDTO>();
         private List<loteDTO> listaLotesCompraAux = new ArrayList<loteDTO>();
+        private List<VentaDTO> listaVentas = new ArrayList<VentaDTO>();
+        private List<ItemDTO> listaItemsVenta = new ArrayList<ItemDTO>();
+        private List<ItemDTO> listaItemsVentaAux = new ArrayList<ItemDTO>();
         
         //MOVIMIENTO SELECCIONADO
         private MovimientoDTO movimientoSeleccionado;
         
-        //ITEM SELECCIONADO
+        //ITEM SELECCIONADO Movimiento
         private MovimientoitemDTOVista itemSeleccionado = new MovimientoitemDTOVista();
         private MovimientoitemDTOVista itemSeleccionadoAux = new MovimientoitemDTOVista();
+        
+        //ITEM SELECCIONADO VENTA
+        private ItemDTO itemSeleccionadoVenta = new ItemDTO();
+        private ItemDTO itemSeleccionadoVentaAux = new ItemDTO();
         
         //COMPRA SELECCIONADA
         private CompraDTO compraSeleccionada = new CompraDTO();
         private loteDTO loteSeleccionado = new loteDTO();
         private loteDTO loteSeleccionadoAux = new loteDTO();
+        
+        //VENTA SELECCIONADA
+        private VentaDTO ventaSeleccionada = new VentaDTO();
+        private boolean disableBTNCambioOVenta = true;
         
         //REGISTRO
         private int idTipoMovimientoSelectNuevo;
@@ -145,7 +159,13 @@ public class MovimientoMB implements Serializable{
         //ADD CANTIDAD TO LOTES
         private String cantidadLote;
         private boolean disableTablaCompras = false;
+        private boolean disableTablaVentas = false;
         private boolean disableBTNCambioOCompra = true;
+        private String codItemCompra;
+        
+        //ADD CANTIDAD TO ITEM
+        private String cantidadItem;
+ 
 
     @PostConstruct
     public void init(){
@@ -233,6 +253,17 @@ public class MovimientoMB implements Serializable{
             setIdAlmacenDestinoNuevo(0);
             setIdAlmacenOrigenNuevo(0);
         }
+        
+        setListaItemsVenta(new ArrayList<ItemDTO>());
+        setListaItemsVentaAux(new ArrayList<ItemDTO>());
+        setListaLotesCompra(new ArrayList<loteDTO>());
+        setListaLotesCompraAux(new ArrayList<loteDTO>());
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabLotesCompraSelec");
+        context.update("formTabLotesCompra");
+        context.update("formTabItemsVenta");
+        context.update("formTabItemsVentasSelec");
     }
     
     public void selectAlmacen(){
@@ -267,11 +298,12 @@ public class MovimientoMB implements Serializable{
         setListaCompras(compraBO.getComprasByEstado(1));
         setListaLotesCompra(new ArrayList<loteDTO>());
         setListaLotesCompraAux(new ArrayList<loteDTO>());
+        setListaVentas(ventasBO.getVentasByEstado(1));
 
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_nuevo_mov').show();");
-        context.update("formTabItemsDisp");
-        context.update("formTabItemsSelecc");
+        //context.update("formTabItemsDisp");
+        //context.update("formTabItemsSelecc");
     }
     
     public String validarCamposRegistro(int idTipoMov){
@@ -299,7 +331,7 @@ public class MovimientoMB implements Serializable{
             else if(getNombreDestinoNuevo().equals("") || getNombreDestinoNuevo().equals(null)){
                 sms = "Seleccione un almacen Cliente";
             }
-            else if(getListaItemAux().isEmpty()){
+            else if(getListaItemsVentaAux().isEmpty()){
                 sms = "Ingrese items al movimiento";
             }
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
@@ -360,6 +392,7 @@ public class MovimientoMB implements Serializable{
                 for(loteDTO DTO : listaLoteSelecc){
                     ItemDTO i = new ItemDTO();
                     i.setEstado("1");
+                    i.setIditem(Integer.parseInt(DTO.getIdItem()));
                     i.setIdLote(DTO.getIdLote());
                     i.setOperatividad("0");
                     i.setIdTipoItem(DTO.getIdtipoitem());
@@ -373,18 +406,9 @@ public class MovimientoMB implements Serializable{
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
                 mov.setNombreDestino(nombreDestino);
                 
-                List<MovimientoitemDTOVista> listaItemsSelec = getListaItemAux();
-                for(MovimientoitemDTOVista DTO : listaItemsSelec){
-                    MovimientoitemDTO movItem = new MovimientoitemDTO();
-                    ItemDTO it = new ItemDTO();
-
-                    it.setIditem(DTO.getIditem());
-
-                    movItem.setEstado(getEstadoMovimientoCreado());
-                    movItem.setItem(it);
-
-                    listaItemsAg.add(movItem);
-                }
+                mov.setIdVenta(getVentaSeleccionada().getIdventa());
+                
+                listaItemsReg = getListaItemsVentaAux();
             }
 
             mov.setComentario(comentario);
@@ -393,22 +417,8 @@ public class MovimientoMB implements Serializable{
             mov.setMotivo(motivo);
             mov.setIddocumento(idDocumento); 
             mov.setIdTipoMovimiento(idTipoMovimiento);
-
             
-            List<MovimientoitemDTOVista> listaItemsSelec = getListaItemAux();
-            for(MovimientoitemDTOVista DTO : listaItemsSelec){
-                MovimientoitemDTO movItem = new MovimientoitemDTO();
-                ItemDTO it = new ItemDTO();
-                
-                it.setIditem(DTO.getIditem());
-
-                movItem.setEstado(getEstadoMovimientoCreado());
-                movItem.setItem(it);
-
-                listaItemsAg.add(movItem);
-            }
-            
-            getMovimientoBO().insertMovimiento(mov,listaItemsAg, listaItemsReg, idTipoMovimiento);
+            getMovimientoBO().insertMovimiento(mov, listaItemsReg, idTipoMovimiento);
             setListaMovimiento(getMovimientoBO().getAllMovimiento());
             setDisableEditar(true);
             setDisableVerItems(true);
@@ -548,6 +558,7 @@ public class MovimientoMB implements Serializable{
     public void openModalAddCantidadLote(){
         if(getLoteSeleccionado() != null){
             setCantidadLote("");
+            setCodItemCompra("");
         
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formCantidadLote");
@@ -555,10 +566,21 @@ public class MovimientoMB implements Serializable{
         }
     }
     
+    public void openModalAddCantidadItem(){
+        if(getItemSeleccionadoVenta() != null){
+            setCantidadItem("");
+
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formCantidadItem");
+            context.execute("PF('dialog_add_cantidad_item').show();");  
+        } 
+    }
+    
     public void addCantidadToLoteLista(){
         loteDTO lote = getLoteSeleccionado();
         getListaLotesCompra().remove(lote);
         lote.setCantidadIngresar(Integer.parseInt(getCantidadLote()));
+        lote.setIdItem(getCodItemCompra());
         
         getListaLotesCompraAux().add(lote);
         
@@ -568,6 +590,33 @@ public class MovimientoMB implements Serializable{
         context.update("formTabLotesCompra");
         
         context.execute("PF('dialog_add_cantidad_lote').hide();");
+    }
+    
+    public void addCantidadToItemLista(){
+        ItemDTO item = getItemSeleccionadoVenta();
+        getListaItemsVenta().remove(item);
+        item.setCantidad(Integer.parseInt(getCantidadItem()));
+        
+        getListaItemsVentaAux().add(item);
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabItemsVentasSelec");
+        context.update("formTabItemsVenta");
+        
+        context.execute("PF('dialog_add_cantidad_item').hide();");
+    }
+    
+    public void removeItemToLista(){
+        if(getItemSeleccionadoVentaAux()!= null){
+            ItemDTO item = getItemSeleccionadoVentaAux();
+        
+            getListaItemsVentaAux().remove(item);
+            getListaItemsVenta().add(item);
+
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formTabItemsVentasSelec");
+            context.update("formTabItemsVenta");
+        }
     }
     
     public void removeLoteToLista(){
@@ -594,6 +643,26 @@ public class MovimientoMB implements Serializable{
         context.update("formTabCompras");
     }
     
+    public void selectVenta(SelectEvent event){
+        setVentaSeleccionada((VentaDTO)event.getObject());
+        setListaItemsVenta(ventasBO.listaItemsxVenta(getVentaSeleccionada().getIdventa()));
+        
+        setDisableTablaVentas(true);
+        setDisableBTNCambioOVenta(false);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabItemsVenta");
+        context.update("formTabVentas");
+    }
+    
+    public void selectItemVenta(SelectEvent event){
+        setItemSeleccionadoVenta((ItemDTO)event.getObject());
+    }
+    
+    public void selectItemVentaAux(SelectEvent event){
+        setItemSeleccionadoVentaAux((ItemDTO)event.getObject());
+    }
+    
     public void cambiarOCompra(){
         setListaLotesCompra(new ArrayList<loteDTO>());
         setListaLotesCompraAux(new ArrayList<loteDTO>());
@@ -607,6 +676,21 @@ public class MovimientoMB implements Serializable{
         context.update("formTabLotesCompra");
         context.update("formTabLotesCompraSelec");
         context.update("formTabCompras");
+    }
+    
+    public void cambiarOVenta(){
+        setListaItemsVenta(new ArrayList<ItemDTO>());
+        setListaItemsVentaAux(new ArrayList<ItemDTO>());
+        setItemSeleccionadoVenta(null);
+        setItemSeleccionadoVentaAux(null);
+        
+        setDisableTablaVentas(false);
+        setDisableBTNCambioOVenta(true);
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabVentas");
+        context.update("formTabItemsVenta");
+        context.update("formTabItemsVentasSelec");
     }
     
     public void abrirEditMov(){
@@ -1577,7 +1661,144 @@ public class MovimientoMB implements Serializable{
         this.styleBTNItemsAlmacen = styleBTNItemsAlmacen;
     }
 
-    
-    
-    
+    /**
+     * @return the listaVentas
+     */
+    public List<VentaDTO> getListaVentas() {
+        return listaVentas;
+    }
+
+    /**
+     * @param listaVentas the listaVentas to set
+     */
+    public void setListaVentas(List<VentaDTO> listaVentas) {
+        this.listaVentas = listaVentas;
+    }
+
+    /**
+     * @return the disableTablaVentas
+     */
+    public boolean isDisableTablaVentas() {
+        return disableTablaVentas;
+    }
+
+    /**
+     * @param disableTablaVentas the disableTablaVentas to set
+     */
+    public void setDisableTablaVentas(boolean disableTablaVentas) {
+        this.disableTablaVentas = disableTablaVentas;
+    }
+
+    /**
+     * @return the ventaSeleccionada
+     */
+    public VentaDTO getVentaSeleccionada() {
+        return ventaSeleccionada;
+    }
+
+    /**
+     * @param ventaSeleccionada the ventaSeleccionada to set
+     */
+    public void setVentaSeleccionada(VentaDTO ventaSeleccionada) {
+        this.ventaSeleccionada = ventaSeleccionada;
+    }
+
+    /**
+     * @return the disableBTNCambioOVenta
+     */
+    public boolean isDisableBTNCambioOVenta() {
+        return disableBTNCambioOVenta;
+    }
+
+    /**
+     * @param disableBTNCambioOVenta the disableBTNCambioOVenta to set
+     */
+    public void setDisableBTNCambioOVenta(boolean disableBTNCambioOVenta) {
+        this.disableBTNCambioOVenta = disableBTNCambioOVenta;
+    }
+
+    /**
+     * @return the listaItemsVenta
+     */
+    public List<ItemDTO> getListaItemsVenta() {
+        return listaItemsVenta;
+    }
+
+    /**
+     * @param listaItemsVenta the listaItemsVenta to set
+     */
+    public void setListaItemsVenta(List<ItemDTO> listaItemsVenta) {
+        this.listaItemsVenta = listaItemsVenta;
+    }
+
+    /**
+     * @return the listaItemsVentaAux
+     */
+    public List<ItemDTO> getListaItemsVentaAux() {
+        return listaItemsVentaAux;
+    }
+
+    /**
+     * @param listaItemsVentaAux the listaItemsVentaAux to set
+     */
+    public void setListaItemsVentaAux(List<ItemDTO> listaItemsVentaAux) {
+        this.listaItemsVentaAux = listaItemsVentaAux;
+    }
+
+    /**
+     * @return the itemSeleccionadoVenta
+     */
+    public ItemDTO getItemSeleccionadoVenta() {
+        return itemSeleccionadoVenta;
+    }
+
+    /**
+     * @param itemSeleccionadoVenta the itemSeleccionadoVenta to set
+     */
+    public void setItemSeleccionadoVenta(ItemDTO itemSeleccionadoVenta) {
+        this.itemSeleccionadoVenta = itemSeleccionadoVenta;
+    }
+
+    /**
+     * @return the itemSeleccionadoVentaAux
+     */
+    public ItemDTO getItemSeleccionadoVentaAux() {
+        return itemSeleccionadoVentaAux;
+    }
+
+    /**
+     * @param itemSeleccionadoVentaAux the itemSeleccionadoVentaAux to set
+     */
+    public void setItemSeleccionadoVentaAux(ItemDTO itemSeleccionadoVentaAux) {
+        this.itemSeleccionadoVentaAux = itemSeleccionadoVentaAux;
+    }
+
+    /**
+     * @return the cantidadItem
+     */
+    public String getCantidadItem() {
+        return cantidadItem;
+    }
+
+    /**
+     * @param cantidadItem the cantidadItem to set
+     */
+    public void setCantidadItem(String cantidadItem) {
+        this.cantidadItem = cantidadItem;
+    }
+
+    /**
+     * @return the codItemCompra
+     */
+    public String getCodItemCompra() {
+        return codItemCompra;
+    }
+
+    /**
+     * @param codItemCompra the codItemCompra to set
+     */
+    public void setCodItemCompra(String codItemCompra) {
+        this.codItemCompra = codItemCompra;
+    }
+
 }

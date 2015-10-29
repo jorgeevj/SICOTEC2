@@ -103,7 +103,7 @@
                                            itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
                         </p:selectOneMenu>
 
-                        <p:commandButton value="Items" style="#{movimientoMB.styleBTNItems}"    id="btnItemsAdd" onclick="PF('dialog_nuevo_items').show();" update="formTabItemsDisp"/>
+                        <p:commandButton value="Ventas" style="#{movimientoMB.styleBTNItems}"    id="btnItemsAdd" onclick="PF('dialog_nueva_ventas').show();" update="formTabVentas formTabItemsVenta formTabItemsVentasSelec"/>
                         <p:commandButton value="Compras" style="#{movimientoMB.styleBTNICompras}" id="btnComprasAdd" onclick="PF('dialog_nueva_compras').show();" update="formTabCompras formTabLotesCompra formTabLotesCompraSelec"/>
                     </h:panelGrid>
                 </p:panel>
@@ -263,9 +263,20 @@
         
         <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_lote" resizable="false" width="500"> 
             <h:form id="formCantidadLote">
-                Cantidad del items
+                Codigo Item
+                <p:inputText value="#{movimientoMB.codItemCompra}"/>
+                <br/>
+                Cantidad del item
                 <p:inputText value="#{movimientoMB.cantidadLote}"/>
                 <p:commandButton value="Agregar" actionListener="#{movimientoMB.addCantidadToLoteLista}"/>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_item" resizable="false" width="500"> 
+            <h:form id="formCantidadItemVenta">
+                Cantidad del item
+                <p:inputText value="#{movimientoMB.cantidadItem}"/>
+                <p:commandButton value="Agregar" actionListener="#{movimientoMB.addCantidadToItemLista()}"/>
             </h:form>
         </p:dialog>
         
@@ -342,6 +353,69 @@
                    </p:column>
                </p:dataTable>
                 <p:commandButton value="Remover" actionListener="#{movimientoMB.removeLoteToLista}"/>
+            </h:form>
+        </p:dialog>
+        
+        
+        <p:dialog header="Orden de Ventas" widgetVar="dialog_nueva_ventas" resizable="false" width="1000"> 
+            <h:form id="formTabVentas">
+                Ordenes de Compra:
+                <p:dataTable value="#{movimientoMB.listaVentas}" var="ventaSelecc" selectionMode="single" id="tb_ver_ventas"
+                             rowKey="#{ventaSelecc.idventa}" rowIndexVar="var" disabledSelection="#{movimientoMB.disableTablaVentas}" 
+                             selection="#{movimientoMB.ventaSeleccionada}">
+                   <p:ajax listener="#{movimientoMB.selectVenta}" event="rowSelect"/>
+                   <p:column headerText="Fecha" style="text-align: center;">
+                       <p:outputLabel value="#{ventaSelecc.fecha}">
+                           <f:convertDateTime pattern="dd/MM/yyyy" />
+                       </p:outputLabel>
+                   </p:column>
+                   <p:column headerText="Serie" style="text-align: center;">
+                       <p:outputLabel value="#{ventaSelecc.serie}"/>
+                   </p:column>
+                    <p:column headerText="Correlativo" style="text-align: center;">
+                        <p:outputLabel value="#{ventaSelecc.correlativo}"/>
+                   </p:column>
+                    <p:column headerText="Empresa" style="text-align: center;">
+                        <p:outputLabel value="#{ventaSelecc.nombreEmpresa}"/>
+                   </p:column>
+                    <p:column headerText="Impuesto" style="text-align: center;">
+                        <p:outputLabel value="#{ventaSelecc.nombreImpuesto}"/>
+                   </p:column>
+               </p:dataTable>
+                <p:commandButton value="Cambiar Orden Venta" actionListener="#{movimientoMB.cambiarOVenta}" disabled="#{movimientoMB.disableBTNCambioOVenta}"/>
+            </h:form>
+            <br/>
+            <h:form id="formTabItemsVenta">
+                Items de la orden de Ventas:
+                <p:dataTable value="#{movimientoMB.listaItemsVenta}" var="itemsDispVenta" selectionMode="single" id="tb_ver_items_desp_ventas"
+                             rowKey="#{itemsDispVenta.iditem}" rowIndexVar="var" selection="#{movimientoMB.itemSeleccionadoVenta}">
+                   <p:ajax listener="#{movimientoMB.selectItemVenta}" event="rowSelect"/>
+                   <p:column headerText="Codigo" style="text-align: center;">
+                       <p:outputLabel value="#{itemsDispVenta.iditem}"/>
+                   </p:column>
+                   <p:column headerText="Operatividad" style="text-align: center;">
+                       <p:outputLabel value="#{itemsDispVenta.operatividad}"/>
+                   </p:column>
+               </p:dataTable>
+                <p:commandButton value="Agregar" actionListener="#{movimientoMB.openModalAddCantidadItem}"/>
+            </h:form>
+            <br/>
+            <h:form id="formTabItemsVentasSelec">
+                Items Seleccionados
+                <p:dataTable value="#{movimientoMB.listaItemsVentaAux}" var="itemsSeleccVenta" selectionMode="single" id="tb_ver_items_selec_ventas"
+                             rowKey="#{itemsSeleccVenta.iditem}" rowIndexVar="var" selection="#{movimientoMB.itemSeleccionadoVentaAux}">
+                    <p:ajax listener="#{movimientoMB.itemSeleccionadoVentaAux}" event="rowSelect"/>
+                    <p:column headerText="Codigo" style="text-align: center;">
+                        <p:outputLabel value="#{itemsSeleccVenta.iditem}"/>
+                   </p:column>
+                   <p:column headerText="Operatividad" style="text-align: center;">
+                       <p:outputLabel value="#{itemsSeleccVenta.operatividad}"/>
+                   </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center;">
+                        <p:outputLabel value="#{itemsSeleccVenta.cantidad}"/>
+                   </p:column>
+               </p:dataTable>
+                <p:commandButton value="Remover" actionListener="#{movimientoMB.removeItemToLista()}"/>
             </h:form>
         </p:dialog>
         
