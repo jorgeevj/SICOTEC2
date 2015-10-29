@@ -74,7 +74,11 @@ public class TipoItemBO {
         List<Categoria> lista= categoriaFacade.findAll();
         return lista;
     }
-    
+    public Caracteristica getCaracteristicaPorIdItem(Integer a){
+        Caracteristica obj=new Caracteristica();
+        //obj=caracteristicaFacade.fi
+        return obj;
+    }
     public Caracteristica getCaracteristiaXID(Integer e){
         Caracteristica obj;
         obj=caracteristicaFacade.find(e);
