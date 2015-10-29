@@ -830,7 +830,7 @@ jorgeevj 15.09.15 Creacion.
 
 
                     <p:outputLabel value="Familia:" for="familiaItem"/>                            
-                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.familiaSelect}"  >
+                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}"  >
                         <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
                                        itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
@@ -838,20 +838,20 @@ jorgeevj 15.09.15 Creacion.
 
                     <p:outputLabel value="Categoría:" for="categoriaItem"/>                           
 
-                    <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.categoriaSelect}">
+                    <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.categoria.idcategoria}">
                         <f:selectItem itemLabel="Seleccione categoría..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaCategoria}" var="nomCategoria" 
                                        itemValue="#{nomCategoria.idcategoria}" itemLabel="#{nomCategoria.nombre}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Marca:" for="marcaItem"/>                            
-                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
+                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.marca.idmarca}" >
                         <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
                                        itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
                     </p:selectOneMenu>
                     <p:outputLabel value="Color:" for="colorItem"/>                            
-                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" >
+                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.color.idcolor}" >
                         <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
                                        itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
@@ -866,7 +866,7 @@ jorgeevj 15.09.15 Creacion.
 
                     <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="tabla2"/> 
 
-                    <p:dataTable id="tabla2" value="#{tipoitemMB.lista2}" var="tite"> 
+                    <p:dataTable id="tabla2" value="#{tipoitemMB.listaCaracteristicas}" var="tite"> 
                         <p:column headerText="Características">
                             <h:outputText value="#{tite.nombre}" />
                         </p:column>                            
