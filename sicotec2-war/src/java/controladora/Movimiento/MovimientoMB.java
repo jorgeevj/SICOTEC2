@@ -346,9 +346,7 @@ public class MovimientoMB implements Serializable{
     
     public String validarCamposEdicion(){
         String sms = "";
-        if(getIdDocumentoEdit() == 0){
-            sms = "Seleccione un documento";
-        }else if(getEstadoEdit() == 0){
+        if(getEstadoEdit() == 100){
             sms = "Seleccione un estado";
         }
         
@@ -472,15 +470,14 @@ public class MovimientoMB implements Serializable{
             int tipoMov = mov.getIdTipoMovimiento();
 
             mov.setComentario(getComentarioEdit());
-            mov.setIddocumento(getIdDocumentoEdit());
             mov.setMotivo(getMotivoEdit());
-            if(tipoMov == getIdtipoMovimientoEntrada() || tipoMov == getIdtipoMovimientoSalida()){
+            /*if(tipoMov == getIdtipoMovimientoEntrada() || tipoMov == getIdtipoMovimientoSalida()){
                 mov.setNombreOrigen(getNombreOrigenEdit());
                 mov.setNombreDestino(getNombreDestinoEdit());
             }else{
                 mov.setIdalmacenOrigen(getIdAlmacenOrigenEdit());
                 mov.setIdalmacenDestino(getIdAlmacenDestinoEdit());
-            }
+            }*/
 
             mov.setEstado(getEstadoEdit());
 
