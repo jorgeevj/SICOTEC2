@@ -37,11 +37,16 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
     return em.createQuery(sql, Altipoitem.class).getResultList();
     }
     
-    public boolean updateCantidadAltipoItem(String idTipoItem, int idAlmacen, int cantidad){
+    //1 = sumar, 2 = restar
+    public boolean updateCantidadAltipoItem(String idTipoItem, int idAlmacen, int cantidad, int opc){
         boolean tof = false;
         try{
+            String p = "SET cantidad = cantidad + "+cantidad+" ";
+            if(opc == 2){
+                p = "SET cantidad = cantidad - "+cantidad+" ";
+            }
             String sql = "UPDATE altipoitem "
-                       + "SET cantidad = cantidad + "+cantidad+" "
+                       +p
                        + "WHERE idtipoitem = '"+idTipoItem+"' "
                        + "AND idalmacen = "+idAlmacen;
                     

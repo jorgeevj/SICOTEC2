@@ -20,6 +20,8 @@ public class loteDTO {
     private String numParte;
     private String nombreTipoItem;
     private String descripcionTipoItem;
+    
+    private String idItem;
 
     /**
      * @return the idLote
@@ -131,6 +133,20 @@ public class loteDTO {
      */
     public void setCantidadIngresar(Integer cantidadIngresar) {
         this.cantidadIngresar = cantidadIngresar;
+    }
+
+    /**
+     * @return the idItem
+     */
+    public String getIdItem() {
+        return idItem;
+    }
+
+    /**
+     * @param idItem the idItem to set
+     */
+    public void setIdItem(String idItem) {
+        this.idItem = idItem;
     }
 
     

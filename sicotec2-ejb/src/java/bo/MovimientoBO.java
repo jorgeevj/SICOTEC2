@@ -7,11 +7,13 @@ package bo;
 
 import dao.AltipoitemFacade;
 import dao.CompraFacade;
+import dao.DocalmacenFacade;
 import dao.ItemFacade;
 import dao.MovimientoFacade;
 import dao.MovimientoitemFacade;
 import dao.TipomovimientoFacade;
 import dao.UsuarioFacade;
+import dao.VentaFacade;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
@@ -20,6 +22,7 @@ import dto.TipomovimientoDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
 import entidades.AltipoitemPK;
+import entidades.Docalmacen;
 import entidades.Item;
 import entidades.Lote;
 import entidades.Movimiento;
@@ -53,6 +56,12 @@ public class MovimientoBO {
     private AltipoitemFacade alltipoitemFacede;
     @EJB
     private CompraFacade compraFacade;
+    @EJB
+    private VentaFacade ventaFacade;
+    @EJB
+    private DocalmacenFacade docalmacenFacade;
+    @EJB
+    private CotizacionBO cotizacionBO;
     
     public List<MovimientoDTO> getAllMovimiento(){
         List<MovimientoDTO> lista = new ArrayList<MovimientoDTO>();
@@ -69,7 +78,7 @@ public class MovimientoBO {
         return lista;
     }
     
-    public void insertMovimiento(MovimientoDTO mov, List<MovimientoitemDTO> movItem, List<ItemDTO> itemsReg, int idTipoMovimiento){
+    public void insertMovimiento(MovimientoDTO mov, List<ItemDTO> itemsReg, int idTipoMovimiento){
         Movimiento movEnt = new Movimiento();
         
         movEnt = convertDTOToEntity(mov,1);
@@ -88,17 +97,17 @@ public class MovimientoBO {
                 l.setIdlote(DTO.getIdLote());
                 i.setIdlote(l);
                 i.setEstado(DTO.getEstado());
+                i.setIditem(DTO.getIditem());
                 i.setOperatividad(DTO.getOperatividad());
                 
-                Item i1 = itemFacade.insertItem(i);
+                itemFacade.create(i);
                 
                 //INSERTAR EL MOV-ITEM
                 Movimientoitem movI = new Movimientoitem();
                 MovimientoitemPK movIPK = new MovimientoitemPK();
-                movIPK.setIditem(i1.getIditem());
+                movIPK.setIditem(i.getIditem());
                 movIPK.setIdmovimiento(idMovimiento);
                 Item i2 = new Item();
-                i.setIditem(i1.getIditem());
 
                 movI.setItem(i);
                 movI.setEstado(1);
@@ -108,7 +117,7 @@ public class MovimientoBO {
                 movimentoItemFacade.create(movI);
                 
                 //AGREGAR ITEMS I EN ALMACEN N
-                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad());
+                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
                 if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
@@ -126,6 +135,8 @@ public class MovimientoBO {
                     pk.setIdalmacen(idAlmacenDestino);
                     pk.setIdtipoItem(DTO.getIdTipoItem());
                     
+                    al.setAltipoitemPK(pk);
+                    
                     alltipoitemFacede.create(al);
                 }
             }
@@ -134,21 +145,26 @@ public class MovimientoBO {
             
         }else if(idTipoMovimiento == 2){
             int idAlmacenOring = mov.getIdalmacenOrigen();
-            for(MovimientoitemDTO DTO : movItem){
+            for(ItemDTO DTO : itemsReg){
                 //INSERTAR EL MOV-ITEM
                 Movimientoitem movI = new Movimientoitem();
                 MovimientoitemPK movIPK = new MovimientoitemPK();
-                movIPK.setIditem(DTO.getItem().getIditem());
-                movIPK.setIdmovimiento(idMovimiento);
                 Item i = new Item();
-                i.setIditem(DTO.getItem().getIditem());
+                
+                movIPK.setIditem(DTO.getIditem());
+                movIPK.setIdmovimiento(idMovimiento);
+                i.setIditem(DTO.getIditem());
 
                 movI.setItem(i);
-                movI.setEstado(DTO.getEstado());
+                movI.setEstado(1);
                 movI.setMovimiento(m);
                 movI.setMovimientoitemPK(movIPK);
 
                 movimentoItemFacade.create(movI);
+                
+                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOring, DTO.getCantidad(),2);
+                
+                ventaFacade.cambiarEstadoVenta(2, mov.getIdVenta());
             }
         }else if(idTipoMovimiento == 3){
             int idAlmacenOringe = mov.getIdalmacenOrigen();
@@ -229,10 +245,22 @@ public class MovimientoBO {
         
         if(tipo == 0){
             Ent.setIdmovimiento(movimiento.getIdmovimiento());
+            Ent.setCorrelativo(movimiento.getCorrelativo());
+            Ent.setSerie(movimiento.getSerie());
+            
+        }else{
+            if(movimiento.getIdTipoMovimiento() == 1){
+                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenDestino());
+                Ent.setSerie(String.format("%03d", da.getSerie()));
+                Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
+            }else if(movimiento.getIdTipoMovimiento() == 2){
+                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Ent.setSerie(String.format("%03d", da.getSerie()));
+                Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
+            }
         }
         
         Ent.setComentario(movimiento.getComentario());
-        Ent.setCorrelativo(movimiento.getCorrelativo());
         Ent.setFecha(movimiento.getFecha());
         Ent.setIdalmacenDestino(movimiento.getIdalmacenDestino());
         Ent.setIdalmacenOrigen(movimiento.getIdalmacenOrigen());
@@ -241,12 +269,15 @@ public class MovimientoBO {
         Ent.setNombreDestino(movimiento.getNombreDestino());
         Ent.setNombreOrigen(movimiento.getNombreOrigen());
         Ent.setCorrelativo(movimiento.getCorrelativo());
-        Ent.setSerie(movimiento.getSerie());
         Ent.setEstado(movimiento.getEstado());
         
         
         return Ent;
     }
-    
+    public Docalmacen getNewSerieAndCorrelativo(Integer idalmacen){
+   Docalmacen da = docalmacenFacade.findBy2key(idalmacen, 4);
+        da = cotizacionBO.updateDocAlm(da);
+       return da;
+   }
     
 }

@@ -37,9 +37,10 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
      public List<MovimientoitemDTOVista> getItemsByMovimiento(MovimientoDTO mov){
         List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
         try{
-             String ejbQuery = "{CALL vistaItems_x_movimiento(?)}";
+             String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
              Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
              query.setParameter(1, mov.getIdmovimiento());
+             query.setParameter(2, 0);
              
             listaItems = query.getResultList();   
         }catch(Exception e){
