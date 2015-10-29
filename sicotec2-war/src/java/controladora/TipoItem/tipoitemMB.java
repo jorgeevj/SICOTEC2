@@ -76,8 +76,13 @@ public class tipoitemMB {
     public void init() {
         lista = new ArrayList<>();
         lista2= new ArrayList<>();
-        setLista((List<TipoItemDTO>) new ArrayList());
         setLista(tipoItemBO.getAllTipoItem());
+        tipoItemSelect=new TipoItemDTO();
+        tipoItemSelect.setFamilia(new Familia());
+        tipoItemSelect.setCategoria(new Categoria());
+        tipoItemSelect.setColor(new Color());
+        tipoItemSelect.setMarca(new Marca());
+        tipoItemSelect.setCaracteristica(new Caracteristica());
         //setLista2(listarTablaCaracteristicas());
         listarCaracteristicas();
         listarCategoria();
@@ -115,6 +120,11 @@ public class tipoitemMB {
     }
     
     ///
+    
+    public void listarCaracteristicasDelItem(String id){
+        Caracteristica obj;
+       // obj=tipoItemBO
+    }
     public void buscarItem(ActionEvent actionEvent){        
         
         TipoItemDTO lis=new TipoItemDTO();
@@ -145,14 +155,6 @@ public class tipoitemMB {
         //solo cambiaremos el tipo de objeto de DTO a Entidad de caracteristicasTablaSelect
         Caracteristica obj;
         obj=tipoItemBO.getCaracteristiaXID(caracteristicasTablaSelect.getIdcaracteristica());
-        
-        for(Caracteristica ite1: lista2){
-            if(ite1.getIdcaracteristica()==obj.getIdcaracteristica())
-            {
-                lista2.remove(ite1);
-                break;
-            }
-        }
         for(Caracteristica ite: listaCaracteristicas){
             if(ite.getIdcaracteristica()==caracteristicasTablaSelect.getIdcaracteristica())
             {
@@ -160,6 +162,14 @@ public class tipoitemMB {
                 break;
             }
         }    
+        for(Caracteristica ite1: lista2){
+            if(ite1.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                lista2.remove(ite1);
+                break;
+            }
+        }
+        
         return lista2;
        
     }
@@ -251,7 +261,7 @@ public class tipoitemMB {
             lista4.add(obj1);
             objTipoItem.setCaracteristica(new Caracteristica());            
             objTipoItem.getCaracteristica().setTipoitemList(lista4);
-            tipoItemBO.registrarTipoItemXCaracteristica(objTipoItem);//mal
+            tipoItemBO.registrarTipoItemXCaracteristica(objTipoItem);
         
         
         
