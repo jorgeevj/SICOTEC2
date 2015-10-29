@@ -170,7 +170,32 @@ public class MovimientoBO {
             int idAlmacenOringe = mov.getIdalmacenOrigen();
             int idAlmacenDestino = mov.getIdalmacenDestino();
             
-            
+            for(ItemDTO DTO : itemsReg){
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOringe, DTO.getCantidad(),2);
+                
+                /*boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
+                if(!tof){//EN CASO NO EXISTA EL ITEM
+                    //INSERTAR NUEVO ITEM EN ALMACEN
+                    Altipoitem al = new Altipoitem();
+                    Almacen alm = new Almacen();
+                    Tipoitem ti = new Tipoitem();
+                    alm.setIdalmacen(idAlmacenDestino);
+                    al.setAlmacen(alm);
+                    ti.setIdtipoItem(DTO.getIdTipoItem());
+                    al.setTipoitem(ti);
+                    al.setCantidad(DTO.getCantidad());
+                    al.setEstado(1);
+                    al.setReservado(0);
+                    
+                    AltipoitemPK pk = new AltipoitemPK();
+                    pk.setIdalmacen(idAlmacenDestino);
+                    pk.setIdtipoItem(DTO.getIdTipoItem());
+                    
+                    al.setAltipoitemPK(pk);
+                    
+                    alltipoitemFacede.create(al);
+                }*/
+            }
         }
     }
     

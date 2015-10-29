@@ -18,6 +18,7 @@ public class MovimientoitemDTOVista implements Serializable{
     @Id
     private Integer iditem;
     @Id
+    private String idtipoitem;
     private Integer idmovimiento;
     private String nombre_tItem;
     private String descripcion_tItem;
@@ -109,7 +110,18 @@ public class MovimientoitemDTOVista implements Serializable{
     public void setIdmovimiento(Integer idmovimiento) {
         this.idmovimiento = idmovimiento;
     }
-    
-    
-    
+
+    /**
+     * @return the idtipoitem
+     */
+    public String getIdtipoitem() {
+        return idtipoitem;
+    }
+
+    /**
+     * @param idtipoitem the idtipoitem to set
+     */
+    public void setIdtipoitem(String idtipoitem) {
+        this.idtipoitem = idtipoitem;
+    }
 }
