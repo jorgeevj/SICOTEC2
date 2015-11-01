@@ -53,18 +53,23 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
         
         try{
             String jpa = "SELECT p "
-                       + "  FROM Pedido p"
-                       + "  WHERE 1=1 ";
+                       + "  FROM Pedido p,"
+                       + "       Empresa e"
+                       + " WHERE e.idempresa = p.idempresa.idempresa ";
             
-            if(pedidoDto.getIdEmpresa().getNombre()!=null && !pedidoDto.getIdEmpresa().getNombre().equals("")){
-                jpa+= " AND p.idempresa.nombre like '%" + pedidoDto.getIdEmpresa().getNombre()+"%' ";
+            if(pedidoDto.getIdEmpresa().getIdempresa() != 0){
+                jpa += " AND p.idempresa.idempresa = " + pedidoDto.getIdEmpresa().getIdempresa();
             }
-            if(pedidoDto.getIdEmpresa().getRuc()!= null && !pedidoDto.getIdEmpresa().getRuc().equals("")){
-                jpa+= " AND p.idempresa.ruc like '%" + pedidoDto.getIdEmpresa().getRuc()+"%' ";
+            if(!pedidoDto.getIdEmpresa().getRuc().equals("") && pedidoDto.getIdEmpresa().getRuc() != null){
+                jpa += " AND e.ruc = '" + pedidoDto.getIdEmpresa().getRuc()+"'";
+            }
+            if(pedidoDto.getIdalmacen() != 0){
+                jpa += " AND p.idalmacen = " + pedidoDto.getIdalmacen();
             }
             
               listaPedido=em.createQuery(jpa, Pedido.class).getResultList();
         }catch(Exception e){
+            System.out.println("mensaje: " + e.getMessage());
             listaPedido = new ArrayList<Pedido>();
         }
         return listaPedido;

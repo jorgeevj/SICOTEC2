@@ -7,6 +7,7 @@ package bo;
 
 import dao.AlmacenFacade;
 import dao.AltipoitemFacade;
+import dao.DocalmacenFacade;
 import dao.PealtipoitemFacade;
 import dao.PedidoFacade;
 import dto.AltipoitemDTO;
@@ -15,6 +16,7 @@ import dto.PedidoDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
 import entidades.AltipoitemPK;
+import entidades.Docalmacen;
 import entidades.Pealtipoitem;
 import entidades.PealtipoitemPK;
 import entidades.Pedido;
@@ -42,6 +44,10 @@ public class PedidoBO {
     private PealtipoitemFacade pealtipoitemFacade = new PealtipoitemFacade();
     @EJB
     private AltipoitemFacade altipoitemFacace = new AltipoitemFacade();
+    @EJB
+    private DocalmacenFacade docalmacenFacade = new DocalmacenFacade();
+    @EJB
+    private CotizacionBO cotizacionBO = new CotizacionBO();
 
     public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();
@@ -82,11 +88,16 @@ public class PedidoBO {
         Pedido entidad = new Pedido();
         if(tipo == 0){
             entidad.setIdpedido(dto.getIdpedido());
+            entidad.setCorrelativo(dto.getCorrelativo());
+            entidad.setSerie(dto.getSerie());
+            entidad.setFecha(dto.getFecha());
+        } else{
+            entidad.setFecha(new Date());
+            Docalmacen da = this.getNewSerieAndCorrelativo(dto.getIdalmacen());
+            entidad.setSerie(String.valueOf(da.getSerie()));
+            entidad.setCorrelativo(String.valueOf(da.getCorrelativo()));
         }
-        entidad.setFecha(new Date());
         entidad.setIdempresa(dto.getIdEmpresa());
-        entidad.setSerie(dto.getSerie());
-        entidad.setCorrelativo(dto.getCorrelativo());
         entidad.setIdalmacen(dto.getIdalmacen());
         return entidad;
     }
@@ -183,5 +194,25 @@ public class PedidoBO {
             listaEntidad.add(entidad);
         }
         return listaEntidad;
+    }
+    
+    public Docalmacen getNewSerieAndCorrelativo(Integer idalmacen){
+        Docalmacen da = docalmacenFacade.findBy2key(idalmacen, 3);
+        da = cotizacionBO.updateDocAlm(da);
+        return da;
+    }
+    
+    public void deletePedidosItems(List<PealtipoitemDTO> listaDTO){
+        List<Pealtipoitem> listaEntidad = this.convertDTOtoEntityPealTipoItem(listaDTO);
+        for(Pealtipoitem entidad : listaEntidad){
+            pealtipoitemFacade.remove(entidad);
+        }
+    }
+    
+    public void updatePedidosItems(List<PealtipoitemDTO> listaDTO){
+        List<Pealtipoitem> listaEntidad = this.convertDTOtoEntityPealTipoItem(listaDTO);
+        for(Pealtipoitem entidad : listaEntidad){
+            pealtipoitemFacade.edit(entidad);
+        }
     }
 }

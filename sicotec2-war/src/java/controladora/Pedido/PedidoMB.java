@@ -81,8 +81,17 @@ public class PedidoMB{
     private Integer almacenEdit;
     private String correlativEdit;
     private String serieEdit;
-    private String fechaEdit;
+    private Date fechaEdit;
+    private Integer idPedidoEdit;
+    private List<PealtipoitemDTO> listaPealtipoitemDelete;
     Utils ut = new Utils();
+    
+    //BUSCAR
+    private List<EmpresaDTO> listaEmpresaBusqueda;
+    private List<AlmacenDTO> listaAlmacenBusqueda;
+    private Integer empresaBusqueda;
+    private Integer almacenBusqueda;
+    private String rucBusqueda;
     
     
     private boolean disableEditar = true;
@@ -97,10 +106,12 @@ public class PedidoMB{
         ListaItemsSeleccionado = new ArrayList<TipoItemDTO>(); 
         ListaEmpresaAdd = this.comboEmpresas();
         listaAlmacenesAdd = this.comboAlmacen();
+        setListaEmpresaBusqueda(this.comboEmpresas());
+        setListaAlmacenBusqueda(this.comboAlmacen());
         campos = new PedidoDTO();
         campos.setIdpedido(0);
         campos.setIdEmpresa(emp);
-        
+        setDisableEditar(true);
         camposAdd = new PedidoDTO();
         camposAdd.setIdpedido(0);
         camposAdd.setIdEmpresa(emp);
@@ -109,8 +120,15 @@ public class PedidoMB{
         
     
     
-    public List<PedidoDTO> buscarPedido(ActionEvent actionEvent){     
-        getSessionBeanPedido().setListPedido(pedidoBO.getPedidosByFiltro(campos));
+    public List<PedidoDTO> buscarPedido(ActionEvent actionEvent){
+        PedidoDTO dto = new PedidoDTO();
+            Empresa entidadEmpresa = new Empresa();
+            entidadEmpresa.setIdempresa(getEmpresaBusqueda());
+            entidadEmpresa.setRuc(getRucBusqueda());
+        dto.setIdEmpresa(entidadEmpresa);
+        Integer aux = getAlmacenBusqueda();
+        dto.setIdalmacen(getAlmacenBusqueda());
+        getSessionBeanPedido().setListPedido(pedidoBO.getPedidosByFiltro(dto));
         return getSessionBeanPedido().getListPedido();
     }
     
@@ -141,7 +159,7 @@ public class PedidoMB{
         String sms = this.validarCamposRegistro();
         System.out.println("sms: " + sms);
         if(!sms.isEmpty()){
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Faltan Algunos Campos", sms);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
             PedidoDTO dto = new PedidoDTO();
@@ -165,6 +183,8 @@ public class PedidoMB{
             RequestContext context = RequestContext.getCurrentInstance(); 
             context.update("tabPedidosFrom");
             this.cerrar();
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", "Se registraron los datos");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         //pedidoBO.insertarNuevoPedido(dto);
     }
@@ -228,6 +248,7 @@ public class PedidoMB{
             entidadPedido.setIdpedido(getObjPedidoEditar().getIdpedido());
         dto.setPedido(entidadPedido);
         setListaItemsPedido(pedidoaltipoitemBO.getItemsForPedido(dto));
+        setListaPealtipoitemDelete(new ArrayList<PealtipoitemDTO>());
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formItemsPedido");
         context.execute("PF('verItemsEdit').show();");
@@ -289,14 +310,8 @@ public class PedidoMB{
         if(getAlmacenAdd()== 0){
             sms = "Seleccione un almacen";
         }      
-        else if(getCorrelativoAdd().isEmpty()){
-            sms = "Ingrese el correlativo";
-        }
         else if(getEmpresaAdd() == 0){
             sms = "Seleccione una empresa";
-        }
-        else if(getSerieAdd().isEmpty()){
-            sms = "Ingrese la serie";
         }
         return sms;
     }
@@ -311,19 +326,72 @@ public class PedidoMB{
     }
      
     public void abirModalEditPedido(ActionEvent actionEvent){
+        setIdPedidoEdit(objPedidoEditar.getIdpedido());
         setListaEmpresaEdit(this.comboEmpresas());
         setListaAlmacenesEdit(this.comboAlmacen());
         setEmpresasEdit(getObjPedidoEditar().getEmpresaId());
         setAlmacenEdit(getObjPedidoEditar().getIdalmacen());
         setCorrelativEdit(getObjPedidoEditar().getCorrelativo());
         setSerieEdit(getObjPedidoEditar().getSerie());
-        setFechaEdit(getObjPedidoEditar().getFecha().toString());
+        setFechaEdit(getObjPedidoEditar().getFecha());
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.update("formEditPedido");
         context.execute("PF('editPedidoModal').show();");
-    } 
+    }
     
+    public void editarPedido(ActionEvent actionEvent){
+        String msj = this.validarCamposEdit();
+        if(!msj.equals("")){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", msj);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            PedidoDTO dto = new PedidoDTO();
+            dto.setIdpedido(getIdPedidoEdit());
+            dto.setCorrelativo(getCorrelativEdit());
+            dto.setSerie(getSerieEdit());
+            dto.setFecha(getFechaEdit());
+                Empresa entidadEmrpresa = new Empresa();
+                entidadEmrpresa.setIdempresa(getEmpresasEdit());
+            dto.setIdEmpresa(entidadEmrpresa);
+            dto.setIdalmacen(getAlmacenEdit());
+            pedidoBO.actualizarPedido(dto);
+            getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
+            setDisableEditar(true);
+            pedidoBO.deletePedidosItems(getListaPealtipoitemDelete()); 
+            pedidoBO.updatePedidosItems(getListaItemsPedido());
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("formBotones");
+            context.update("tabPedidosFrom");
+            context.execute("PF('editPedidoModal').hide();");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", "Se editaron los campos");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
     
+    public String validarCamposEdit(){
+        String sms = "";
+        if(getAlmacenEdit() == 0){
+            sms = "Seleccione un almacen";
+        }      
+        else if(getCorrelativEdit().isEmpty()){
+            sms = "Ingrese el correlativo";
+        }
+        else if(getEmpresasEdit() == 0){
+            sms = "Seleccione una empresa";
+        }
+        else if(getSerieEdit().isEmpty()){
+            sms = "Ingrese la serie";
+        }
+        return sms;
+    }
+    
+    public void quitarPealTipoItem(ActionEvent actionEvent){
+        getListaPealtipoitemDelete().add(getObjPealTipoEdit());
+        getListaItemsPedido().remove(getObjPealTipoEdit());
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formItemsPedido");
+    }  
 
     public PedidoBO getPedidoBO() {
         return pedidoBO;
@@ -509,14 +577,14 @@ public class PedidoMB{
         this.serieEdit = serieEdit;
     }
 
-    public String getFechaEdit() {
+    public Date getFechaEdit() {
         return fechaEdit;
     }
 
-    public void setFechaEdit(String fechaEdit) {
+    public void setFechaEdit(Date fechaEdit) {
         this.fechaEdit = fechaEdit;
     }
-
+    
     public List<EmpresaDTO> getListaEmpresaEdit() {
         return ListaEmpresaEdit;
     }
@@ -572,4 +640,64 @@ public class PedidoMB{
     public void setObjPealTipoEdit(PealtipoitemDTO objPealTipoEdit) {
         this.objPealTipoEdit = objPealTipoEdit;
     }
+
+    public Integer getIdPedidoEdit() {
+        return idPedidoEdit;
+    }
+
+    public void setIdPedidoEdit(Integer idPedidoEdit) {
+        this.idPedidoEdit = idPedidoEdit;
+    }
+
+    public Integer getEmpresaBusqueda() {
+        return empresaBusqueda;
+    }
+
+    public void setEmpresaBusqueda(Integer empresaBusqueda) {
+        this.empresaBusqueda = empresaBusqueda;
+    }
+    
+    
+
+    public Integer getAlmacenBusqueda() {
+        return almacenBusqueda;
+    }
+
+    public void setAlmacenBusqueda(Integer almacenBusqueda) {
+        this.almacenBusqueda = almacenBusqueda;
+    }
+
+    public String getRucBusqueda() {
+        return rucBusqueda;
+    }
+
+    public void setRucBusqueda(String rucBusqueda) {
+        this.rucBusqueda = rucBusqueda;
+    }
+
+    public List<EmpresaDTO> getListaEmpresaBusqueda() {
+        return listaEmpresaBusqueda;
+    }
+
+    public void setListaEmpresaBusqueda(List<EmpresaDTO> listaEmpresaBusqueda) {
+        this.listaEmpresaBusqueda = listaEmpresaBusqueda;
+    }
+
+    public List<AlmacenDTO> getListaAlmacenBusqueda() {
+        return listaAlmacenBusqueda;
+    }
+
+    public void setListaAlmacenBusqueda(List<AlmacenDTO> listaAlmacenBusqueda) {
+        this.listaAlmacenBusqueda = listaAlmacenBusqueda;
+    }
+
+    public List<PealtipoitemDTO> getListaPealtipoitemDelete() {
+        return listaPealtipoitemDelete;
+    }
+
+    public void setListaPealtipoitemDelete(List<PealtipoitemDTO> listaPealtipoitemDelete) {
+        this.listaPealtipoitemDelete = listaPealtipoitemDelete;
+    }
+
+    
 }

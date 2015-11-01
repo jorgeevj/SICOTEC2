@@ -11,14 +11,24 @@
         <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Pedido Details" style="margin-bottom:20px">
             <h:form id="formPedido">
                 <h:panelGrid columns="2">
-                    <p:outputLabel for="it1" value="Empresa: "></p:outputLabel>
-                    <p:inputText   id="it1" value="#{pedidoMB.campos.idEmpresa.nombre}"/>
-                    <p:outputLabel for="it2" value="Ruc: "></p:outputLabel>
-                    <p:inputText   id="it2" value="#{pedidoMB.campos.idEmpresa.ruc}"/>
+                    <p:outputLabel value="Empresa: "></p:outputLabel>
+                    <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaBusqueda}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{pedidoMB.listaEmpresaBusqueda}" var="emp" 
+                                           itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Ruc: "></p:outputLabel>
+                    <p:inputText value="#{pedidoMB.rucBusqueda}"></p:inputText>
+                    <p:outputLabel value="Almacen: "></p:outputLabel>
+                    <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenBusqueda}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems value="#{pedidoMB.listaAlmacenBusqueda}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                    </p:selectOneMenu>
                 </h:panelGrid>
-            </h:form>  
-            <h:form id="formBotones">
                 <p:commandButton  value="Buscar" actionListener="#{pedidoMB.buscarPedido}" update=":tabPedidosFrom:tabPedidos"/>
+            </h:form>   
+            <h:form id="formBotones">
                 <p:commandButton value="Agregar" actionListener="#{pedidoMB.abrirModalAddPedido}" id="btnAgregar" title="Agregar" />
                 <p:commandButton value="Editar" actionListener="#{pedidoMB.abirModalEditPedido}" id="btnEditar" title="Editar"  disabled="#{pedidoMB.disableEditar}"/>
             </h:form>   

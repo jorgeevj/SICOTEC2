@@ -599,7 +599,7 @@ jorgeevj 15.09.15 Creacion.
         <!-- DIALOG DE PEDIDOS-->
             <p:dialog header="Agregar Pedidos" widgetVar="addPedidosModal" modal="true" resizable="true">
                 <h:form id="formAddPedido">
-                    <p:growl id="msj1" showDetail="true"/>
+                    <p:growl showDetail="true" sticky="true" id="msnRegistrar"/>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}">
@@ -607,10 +607,6 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{pedidoMB.listaEmpresaAdd}" var="emp" 
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="N° de Serie "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.serieAdd}"/>
-                        <p:outputLabel value="Correlativo: "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.correlativoAdd}"/>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenAdd}">
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
@@ -620,11 +616,11 @@ jorgeevj 15.09.15 Creacion.
                     </h:panelGrid>
                     <p:commandButton value="Agregar Items" onclick="PF('addItemsPedidosModal').show();"/>
                     <br/><br/><br/>
-                        <p:commandButton value="Agregar" actionListener="#{pedidoMB.addNuevoPedido}"/>
+                    <p:commandButton value="Agregar" actionListener="#{pedidoMB.addNuevoPedido}" update="msnRegistrar"/>
                 </h:form>
             </p:dialog> 
 
-            <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" resizable="false"> 
+        <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" rendered="true" height="500" width="700"> 
                 <p:outputLabel value="Items Disponibles "></p:outputLabel>
                 <h:form id="formAddItems">
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.listaItemsDisponibles}" var="tItemsDisp" 
@@ -678,6 +674,7 @@ jorgeevj 15.09.15 Creacion.
             
             <p:dialog header="Editar Pedido" widgetVar="editPedidoModal" modal="true" resizable="false">
                 <h:form id="formEditPedido">
+                    <p:growl showDetail="true" sticky="true" id="msnEditar"/>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresasEdit}" disabled="false" >
@@ -686,9 +683,9 @@ jorgeevj 15.09.15 Creacion.
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="N° de Serie "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.serieEdit}"/>
+                        <p:inputText   value="#{pedidoMB.serieEdit}" disabled="true"/>
                         <p:outputLabel value="Correlativo: "></p:outputLabel>
-                        <p:inputText   value="#{pedidoMB.correlativEdit}"/>
+                        <p:inputText   value="#{pedidoMB.correlativEdit}" disabled="true"/>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenEdit}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
@@ -697,11 +694,11 @@ jorgeevj 15.09.15 Creacion.
                         </p:selectOneMenu>
                         <p:commandButton value="Ver Items" actionListener="#{pedidoMB.abrirModalAgregarItemsEdit}"/>
                     </h:panelGrid>
-                    <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
+                    <p:commandButton value="Editar" actionListener="#{pedidoMB.editarPedido}" update="msnEditar"/>
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Ver Items" widgetVar="verItemsEdit" modal="true" resizable="false"> 
+            <p:dialog header="Ver Items" widgetVar="verItemsEdit" modal="true" rendered="true" height="500" width="700"> 
                 <p:outputLabel value="Items del pedido"></p:outputLabel>
                 <h:form id="formItemsPedido">
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsPedido" value="#{pedidoMB.listaItemsPedido}" var="tItemsPedido" 
@@ -724,7 +721,7 @@ jorgeevj 15.09.15 Creacion.
                             </p:cellEditor>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}"/>
+                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarPealTipoItem}"/>
                 </h:form>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('verItemsEdit').hide();"/>
