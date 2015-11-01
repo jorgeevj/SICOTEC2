@@ -10,7 +10,7 @@ package dto;
  * @author rikardo308
  */
 public class ItemDTO {
-    private Integer iditem;
+    private String iditem;
     private String estado;
     private String operatividad;
     
@@ -21,14 +21,14 @@ public class ItemDTO {
     /**
      * @return the iditem
      */
-    public Integer getIditem() {
+    public String getIditem() {
         return iditem;
     }
 
     /**
      * @param iditem the iditem to set
      */
-    public void setIditem(Integer iditem) {
+    public void setIditem(String iditem) {
         this.iditem = iditem;
     }
 

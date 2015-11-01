@@ -7,7 +7,7 @@ package bo;
 
 import dao.ItemFacade;
 import dto.ItemDTO;
-import dto.MovimientoitemDTOVista;
+import entidades.Movimientoitemvista;
 import entidades.Item;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ public class ItemBO {
     @EJB
     ItemFacade itemFacade;
     
-    public List<MovimientoitemDTOVista> getAlliTems(){
-        List<MovimientoitemDTOVista> items = itemFacade.getAllItems();
+    public List<Movimientoitemvista> getAlliTems(){
+        List<Movimientoitemvista> items = itemFacade.getAllItems();
         
         return items;
     }

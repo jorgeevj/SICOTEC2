@@ -30,9 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Veitem.findAll", query = "SELECT v FROM Veitem v"),
     @NamedQuery(name = "Veitem.findByIdventa", query = "SELECT v FROM Veitem v WHERE v.veitemPK.idventa = :idventa"),
-    @NamedQuery(name = "Veitem.findByIditem", query = "SELECT v FROM Veitem v WHERE v.veitemPK.iditem = :iditem"),
     @NamedQuery(name = "Veitem.findByPrecio", query = "SELECT v FROM Veitem v WHERE v.precio = :precio"),
-    @NamedQuery(name = "Veitem.findByDescuento", query = "SELECT v FROM Veitem v WHERE v.descuento = :descuento")})
+    @NamedQuery(name = "Veitem.findByDescuento", query = "SELECT v FROM Veitem v WHERE v.descuento = :descuento"),
+    @NamedQuery(name = "Veitem.findByIditem", query = "SELECT v FROM Veitem v WHERE v.veitemPK.iditem = :iditem")})
 public class Veitem implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -58,7 +58,7 @@ public class Veitem implements Serializable {
         this.veitemPK = veitemPK;
     }
 
-    public Veitem(int idventa, int iditem) {
+    public Veitem(int idventa, String iditem) {
         this.veitemPK = new VeitemPK(idventa, iditem);
     }
 

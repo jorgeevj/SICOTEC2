@@ -43,7 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cotizacion.findByEntrega", query = "SELECT c FROM Cotizacion c WHERE c.entrega = :entrega"),
     @NamedQuery(name = "Cotizacion.findBySerie", query = "SELECT c FROM Cotizacion c WHERE c.serie = :serie"),
     @NamedQuery(name = "Cotizacion.findByCorrelativo", query = "SELECT c FROM Cotizacion c WHERE c.correlativo = :correlativo"),
-    @NamedQuery(name = "Cotizacion.findByIdalmacen", query = "SELECT c FROM Cotizacion c WHERE c.idalmacen = :idalmacen")})
+    @NamedQuery(name = "Cotizacion.findByIdalmacen", query = "SELECT c FROM Cotizacion c WHERE c.idalmacen = :idalmacen"),
+    @NamedQuery(name = "Cotizacion.findByIdusuario", query = "SELECT c FROM Cotizacion c WHERE c.idusuario = :idusuario"),
+    @NamedQuery(name = "Cotizacion.findByNombreusuario", query = "SELECT c FROM Cotizacion c WHERE c.nombreusuario = :nombreusuario")})
 public class Cotizacion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -68,6 +70,11 @@ public class Cotizacion implements Serializable {
     private String correlativo;
     @Column(name = "idalmacen")
     private Integer idalmacen;
+    @Column(name = "idusuario")
+    private Integer idusuario;
+    @Size(max = 45)
+    @Column(name = "nombreusuario")
+    private String nombreusuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cotizacion")
     private List<Cotipoitem> cotipoitemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
@@ -143,6 +150,22 @@ public class Cotizacion implements Serializable {
 
     public void setIdalmacen(Integer idalmacen) {
         this.idalmacen = idalmacen;
+    }
+
+    public Integer getIdusuario() {
+        return idusuario;
+    }
+
+    public void setIdusuario(Integer idusuario) {
+        this.idusuario = idusuario;
+    }
+
+    public String getNombreusuario() {
+        return nombreusuario;
+    }
+
+    public void setNombreusuario(String nombreusuario) {
+        this.nombreusuario = nombreusuario;
     }
 
     @XmlTransient

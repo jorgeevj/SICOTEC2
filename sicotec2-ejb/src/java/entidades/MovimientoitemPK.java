@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,13 +24,14 @@ public class MovimientoitemPK implements Serializable {
     private int idmovimiento;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "iditem")
-    private int iditem;
+    private String iditem;
 
     public MovimientoitemPK() {
     }
 
-    public MovimientoitemPK(int idmovimiento, int iditem) {
+    public MovimientoitemPK(int idmovimiento, String iditem) {
         this.idmovimiento = idmovimiento;
         this.iditem = iditem;
     }
@@ -42,11 +44,11 @@ public class MovimientoitemPK implements Serializable {
         this.idmovimiento = idmovimiento;
     }
 
-    public int getIditem() {
+    public String getIditem() {
         return iditem;
     }
 
-    public void setIditem(int iditem) {
+    public void setIditem(String iditem) {
         this.iditem = iditem;
     }
 
@@ -54,7 +56,7 @@ public class MovimientoitemPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idmovimiento;
-        hash += (int) iditem;
+        hash += (iditem != null ? iditem.hashCode() : 0);
         return hash;
     }
 
@@ -68,7 +70,7 @@ public class MovimientoitemPK implements Serializable {
         if (this.idmovimiento != other.idmovimiento) {
             return false;
         }
-        if (this.iditem != other.iditem) {
+        if ((this.iditem == null && other.iditem != null) || (this.iditem != null && !this.iditem.equals(other.iditem))) {
             return false;
         }
         return true;

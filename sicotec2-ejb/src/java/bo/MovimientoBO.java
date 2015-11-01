@@ -17,7 +17,6 @@ import dao.VentaFacade;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
-import dto.MovimientoitemDTOVista;
 import dto.TipomovimientoDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
@@ -28,6 +27,7 @@ import entidades.Lote;
 import entidades.Movimiento;
 import entidades.Movimientoitem;
 import entidades.MovimientoitemPK;
+import entidades.Movimientoitemvista;
 import entidades.Tipoitem;
 import entidades.Tipomovimiento;
 import java.util.ArrayList;
@@ -71,9 +71,9 @@ public class MovimientoBO {
         return lista;
     }
     
-    public List<MovimientoitemDTOVista> getItemsByMov(MovimientoDTO mov){
+    public List<Movimientoitemvista> getItemsByMov(MovimientoDTO mov){
         List<ItemDTO> listaItems = new ArrayList<ItemDTO>();
-        List<MovimientoitemDTOVista> lista = movimentoFacade.getItemsByMovimiento(mov);
+        List<Movimientoitemvista> lista = movimentoFacade.getItemsByMovimiento(mov);
         
         return lista;
     }
@@ -199,8 +199,8 @@ public class MovimientoBO {
         }
     }
     
-    public List<MovimientoitemDTOVista> getItemsByAlmacen(int idAlmacen){
-        List<MovimientoitemDTOVista> items = new ArrayList<MovimientoitemDTOVista>();
+    public List<Movimientoitemvista> getItemsByAlmacen(int idAlmacen){
+        List<Movimientoitemvista> items = new ArrayList<Movimientoitemvista>();
         items = itemFacade.getItemsByAlmacen(idAlmacen);
         
         return items;

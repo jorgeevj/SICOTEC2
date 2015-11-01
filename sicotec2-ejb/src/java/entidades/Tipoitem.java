@@ -13,7 +13,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -71,10 +70,7 @@ public class Tipoitem implements Serializable {
     private Double desCliente;
     @Column(name = "desDistribuidor")
     private Double desDistribuidor;
-    @JoinTable(name = "catipoitem", joinColumns = {
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")}, inverseJoinColumns = {
-        @JoinColumn(name = "idcaracteristica", referencedColumnName = "idcaracteristica")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "tipoitemList")
     private List<Caracteristica> caracteristicaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoitem")
     private List<Cotipoitem> cotipoitemList;

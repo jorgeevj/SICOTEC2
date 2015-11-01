@@ -21,7 +21,7 @@ import dto.EmpresaDTO;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
-import dto.MovimientoitemDTOVista;
+import entidades.Movimientoitemvista;
 import dto.TipomovimientoDTO;
 import dto.VentaDTO;
 import dto.loteDTO;
@@ -85,13 +85,13 @@ public class MovimientoMB implements Serializable{
         private List<TipomovimientoDTO> listaTipoMovimiento = new ArrayList<TipomovimientoDTO>();
         private List<MovimientoDTO> listaMovimiento = new ArrayList<MovimientoDTO>();
         private List<DocumentoDTO> listaDocumento = new ArrayList<DocumentoDTO>();
-        private List<MovimientoitemDTOVista> listaItem = new ArrayList<MovimientoitemDTOVista>();
-        private List<MovimientoitemDTOVista> listaItemAux = new ArrayList<MovimientoitemDTOVista>();
+        private List<Movimientoitemvista> listaItem = new ArrayList<Movimientoitemvista>();
+        private List<Movimientoitemvista> listaItemAux = new ArrayList<Movimientoitemvista>();
         private List<EmpresaDTO> listaEmpresasProveedoras = new ArrayList<EmpresaDTO>();
         private List<EmpresaDTO> listaEmpresasClientes = new ArrayList<EmpresaDTO>();
         private List<AlmacenDTO> listaAlmacenes = new ArrayList<AlmacenDTO>();
         private ArrayList listaEstados = new ArrayList();
-        private List<MovimientoitemDTOVista> listaItemsMovimiento = new ArrayList<MovimientoitemDTOVista>();
+        private List<Movimientoitemvista> listaItemsMovimiento = new ArrayList<Movimientoitemvista>();
         private List<CompraDTO> listaCompras = new ArrayList<CompraDTO>();
         private List<loteDTO> listaLotesCompra = new ArrayList<loteDTO>();
         private List<loteDTO> listaLotesCompraAux = new ArrayList<loteDTO>();
@@ -103,8 +103,8 @@ public class MovimientoMB implements Serializable{
         private MovimientoDTO movimientoSeleccionado;
         
         //ITEM SELECCIONADO Movimiento
-        private MovimientoitemDTOVista itemSeleccionado = new MovimientoitemDTOVista();
-        private MovimientoitemDTOVista itemSeleccionadoAux = new MovimientoitemDTOVista();
+        private Movimientoitemvista itemSeleccionado = new Movimientoitemvista();
+        private Movimientoitemvista itemSeleccionadoAux = new Movimientoitemvista();
         
         //ITEM SELECCIONADO VENTA
         private ItemDTO itemSeleccionadoVenta = new ItemDTO();
@@ -297,7 +297,7 @@ public class MovimientoMB implements Serializable{
         setDisableTablaCompras(false);
         
         setListaItem(itemBO.getAlliTems());
-        setListaItemAux(new ArrayList<MovimientoitemDTOVista>());
+        setListaItemAux(new ArrayList<Movimientoitemvista>());
         setListaCompras(compraBO.getComprasByEstado(1));
         setListaLotesCompra(new ArrayList<loteDTO>());
         setListaLotesCompraAux(new ArrayList<loteDTO>());
@@ -377,8 +377,8 @@ public class MovimientoMB implements Serializable{
                 mov.setIdalmacenDestino(idAlmacenDestino);
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
                 
-                 List<MovimientoitemDTOVista> listaItemSelecc = getListaItemAux();
-                 for(MovimientoitemDTOVista DTO : listaItemSelecc){
+                 List<Movimientoitemvista> listaItemSelecc = getListaItemAux();
+                 for(Movimientoitemvista DTO : listaItemSelecc){
                      ItemDTO i = new ItemDTO();
                      i.setEstado("1");
                      i.setIditem(DTO.getIditem());
@@ -400,7 +400,7 @@ public class MovimientoMB implements Serializable{
                 for(loteDTO DTO : listaLoteSelecc){
                     ItemDTO i = new ItemDTO();
                     i.setEstado("1");
-                    i.setIditem(Integer.parseInt(DTO.getIdItem()));
+                    i.setIditem(DTO.getIdItem());
                     i.setIdLote(DTO.getIdLote());
                     i.setOperatividad("0");
                     i.setIdTipoItem(DTO.getIdtipoitem());
@@ -524,11 +524,11 @@ public class MovimientoMB implements Serializable{
     }
     
     public void selectItemToMovimientoDispo(SelectEvent event){
-        setItemSeleccionado((MovimientoitemDTOVista)event.getObject());
+        setItemSeleccionado((Movimientoitemvista)event.getObject());
     }
     
     public void selectItemToMovimientoSelect(SelectEvent event){
-        setItemSeleccionadoAux((MovimientoitemDTOVista)event.getObject());
+        setItemSeleccionadoAux((Movimientoitemvista)event.getObject());
     }
     
     public void agregarItemToMovimiento(){
@@ -537,7 +537,7 @@ public class MovimientoMB implements Serializable{
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsSelecc");
             context.update("formTabItemsDisp");
-            setItemSeleccionado(new MovimientoitemDTOVista());
+            setItemSeleccionado(new Movimientoitemvista());
     }
     
     public void eliminarItemToMovimiento(){
@@ -547,7 +547,7 @@ public class MovimientoMB implements Serializable{
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsSelecc");
             context.update("formTabItemsDisp");
-            setItemSeleccionadoAux(new MovimientoitemDTOVista());
+            setItemSeleccionadoAux(new Movimientoitemvista());
         }
     }
     
@@ -621,7 +621,7 @@ public class MovimientoMB implements Serializable{
     }
     
     public void addCantidadToItemAlmacenLista(){
-        MovimientoitemDTOVista item = getItemSeleccionado();
+        Movimientoitemvista item = getItemSeleccionado();
         getListaItem().remove(item);
         item.setIdmovimiento(Integer.parseInt(getCantidadItemAlmacen()));//PARA LA CANTIDAD
         
@@ -978,28 +978,28 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaItem
      */
-    public List<MovimientoitemDTOVista> getListaItem() {
+    public List<Movimientoitemvista> getListaItem() {
         return listaItem;
     }
 
     /**
      * @param listaItem the listaItem to set
      */
-    public void setListaItem(List<MovimientoitemDTOVista> listaItem) {
+    public void setListaItem(List<Movimientoitemvista> listaItem) {
         this.listaItem = listaItem;
     }
 
     /**
      * @return the listaItemAux
      */
-    public List<MovimientoitemDTOVista> getListaItemAux() {
+    public List<Movimientoitemvista> getListaItemAux() {
         return listaItemAux;
     }
 
     /**
      * @param listaItemAux the listaItemAux to set
      */
-    public void setListaItemAux(List<MovimientoitemDTOVista> listaItemAux) {
+    public void setListaItemAux(List<Movimientoitemvista> listaItemAux) {
         this.listaItemAux = listaItemAux;
     }
 
@@ -1076,14 +1076,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the itemSeleccionado
      */
-    public MovimientoitemDTOVista getItemSeleccionado() {
+    public Movimientoitemvista getItemSeleccionado() {
         return itemSeleccionado;
     }
 
     /**
      * @param itemSeleccionado the itemSeleccionado to set
      */
-    public void setItemSeleccionado(MovimientoitemDTOVista itemSeleccionado) {
+    public void setItemSeleccionado(Movimientoitemvista itemSeleccionado) {
         this.itemSeleccionado = itemSeleccionado;
     }
 
@@ -1412,14 +1412,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the itemSeleccionadoAux
      */
-    public MovimientoitemDTOVista getItemSeleccionadoAux() {
+    public Movimientoitemvista getItemSeleccionadoAux() {
         return itemSeleccionadoAux;
     }
 
     /**
      * @param itemSeleccionadoAux the itemSeleccionadoAux to set
      */
-    public void setItemSeleccionadoAux(MovimientoitemDTOVista itemSeleccionadoAux) {
+    public void setItemSeleccionadoAux(Movimientoitemvista itemSeleccionadoAux) {
         this.itemSeleccionadoAux = itemSeleccionadoAux;
     }
 
@@ -1440,14 +1440,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaItemsMovimiento
      */
-    public List<MovimientoitemDTOVista> getListaItemsMovimiento() {
+    public List<Movimientoitemvista> getListaItemsMovimiento() {
         return listaItemsMovimiento;
     }
 
     /**
      * @param listaItemsMovimiento the listaItemsMovimiento to set
      */
-    public void setListaItemsMovimiento(List<MovimientoitemDTOVista> listaItemsMovimiento) {
+    public void setListaItemsMovimiento(List<Movimientoitemvista> listaItemsMovimiento) {
         this.listaItemsMovimiento = listaItemsMovimiento;
     }
 

@@ -8,14 +8,13 @@ package entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -43,11 +42,8 @@ public class Mediopago implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @JoinTable(name = "vemediopago", joinColumns = {
-        @JoinColumn(name = "idmedioPago", referencedColumnName = "idmedioPago")}, inverseJoinColumns = {
-        @JoinColumn(name = "idventa", referencedColumnName = "idventa")})
-    @ManyToMany
-    private List<Venta> ventaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mediopago")
+    private List<Vemediopago> vemediopagoList;
 
     public Mediopago() {
     }
@@ -73,12 +69,12 @@ public class Mediopago implements Serializable {
     }
 
     @XmlTransient
-    public List<Venta> getVentaList() {
-        return ventaList;
+    public List<Vemediopago> getVemediopagoList() {
+        return vemediopagoList;
     }
 
-    public void setVentaList(List<Venta> ventaList) {
-        this.ventaList = ventaList;
+    public void setVemediopagoList(List<Vemediopago> vemediopagoList) {
+        this.vemediopagoList = vemediopagoList;
     }
 
     @Override

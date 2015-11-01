@@ -56,6 +56,9 @@ public class Lote implements Serializable {
     @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")
     @ManyToOne(optional = false)
     private Compra idcompra;
+    @JoinColumn(name = "idunidades", referencedColumnName = "idunidades")
+    @ManyToOne(optional = false)
+    private Unidades idunidades;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlote")
     private List<Item> itemList;
 
@@ -104,6 +107,14 @@ public class Lote implements Serializable {
 
     public void setIdcompra(Compra idcompra) {
         this.idcompra = idcompra;
+    }
+
+    public Unidades getIdunidades() {
+        return idunidades;
+    }
+
+    public void setIdunidades(Unidades idunidades) {
+        this.idunidades = idunidades;
     }
 
     @XmlTransient

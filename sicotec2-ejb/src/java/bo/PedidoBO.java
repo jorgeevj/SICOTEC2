@@ -185,12 +185,12 @@ public class PedidoBO {
         List<Pealtipoitem> listaEntidad = new ArrayList<Pealtipoitem>();
         for(PealtipoitemDTO dto : listDTO){
             Pealtipoitem entidad = new Pealtipoitem();
-            entidad.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(), dto.getAltipoitem().getAlmacen().getIdalmacen(), dto.getAltipoitem().getTipoitem().getIdtipoItem()));
+            entidad.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(), dto.getAltipoitem().getTipoitem().getIdtipoItem(), dto.getAltipoitem().getAlmacen().getIdalmacen(),dto.getRequerimientos().getRequerimientosPK().getIdrequerimientos()));
             entidad.setPedido(dto.getPedido());
             entidad.setCantidad(dto.getCantidad());
             entidad.setCostoUni(dto.getCostoUni());
             entidad.setEstado(dto.getEstado());
-            entidad.setAltipoitem(dto.getAltipoitem());
+            entidad.getRequerimientos().setAltipoitem(dto.getAltipoitem());
             listaEntidad.add(entidad);
         }
         return listaEntidad;

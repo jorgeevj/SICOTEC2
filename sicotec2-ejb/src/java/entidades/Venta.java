@@ -16,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,7 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Venta.findByIddocumento", query = "SELECT v FROM Venta v WHERE v.iddocumento = :iddocumento"),
     @NamedQuery(name = "Venta.findBySerie", query = "SELECT v FROM Venta v WHERE v.serie = :serie"),
     @NamedQuery(name = "Venta.findByCorrelativo", query = "SELECT v FROM Venta v WHERE v.correlativo = :correlativo"),
-    @NamedQuery(name = "Venta.findByIdalmacen", query = "SELECT v FROM Venta v WHERE v.idalmacen = :idalmacen")})
+    @NamedQuery(name = "Venta.findByIdalmacen", query = "SELECT v FROM Venta v WHERE v.idalmacen = :idalmacen"),
+    @NamedQuery(name = "Venta.findByIdusuario", query = "SELECT v FROM Venta v WHERE v.idusuario = :idusuario"),
+    @NamedQuery(name = "Venta.findByNombreusuario", query = "SELECT v FROM Venta v WHERE v.nombreusuario = :nombreusuario")})
 public class Venta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -74,8 +75,11 @@ public class Venta implements Serializable {
     private String correlativo;
     @Column(name = "idalmacen")
     private Integer idalmacen;
-    @ManyToMany(mappedBy = "ventaList")
-    private List<Mediopago> mediopagoList;
+    @Column(name = "idusuario")
+    private Integer idusuario;
+    @Size(max = 45)
+    @Column(name = "nombreusuario")
+    private String nombreusuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
     private List<Veitem> veitemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
@@ -84,6 +88,8 @@ public class Venta implements Serializable {
     @JoinColumn(name = "idimpuesto", referencedColumnName = "idimpuesto")
     @ManyToOne(optional = false)
     private Impuesto idimpuesto;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
+    private List<Vemediopago> vemediopagoList;
 
     public Venta() {
     }
@@ -164,13 +170,20 @@ public class Venta implements Serializable {
         this.idalmacen = idalmacen;
     }
 
-    @XmlTransient
-    public List<Mediopago> getMediopagoList() {
-        return mediopagoList;
+    public Integer getIdusuario() {
+        return idusuario;
     }
 
-    public void setMediopagoList(List<Mediopago> mediopagoList) {
-        this.mediopagoList = mediopagoList;
+    public void setIdusuario(Integer idusuario) {
+        this.idusuario = idusuario;
+    }
+
+    public String getNombreusuario() {
+        return nombreusuario;
+    }
+
+    public void setNombreusuario(String nombreusuario) {
+        this.nombreusuario = nombreusuario;
     }
 
     @XmlTransient
@@ -196,6 +209,15 @@ public class Venta implements Serializable {
 
     public void setIdimpuesto(Impuesto idimpuesto) {
         this.idimpuesto = idimpuesto;
+    }
+
+    @XmlTransient
+    public List<Vemediopago> getVemediopagoList() {
+        return vemediopagoList;
+    }
+
+    public void setVemediopagoList(List<Vemediopago> vemediopagoList) {
+        this.vemediopagoList = vemediopagoList;
     }
 
     @Override

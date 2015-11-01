@@ -8,6 +8,7 @@ package dto;
 import entidades.Altipoitem;
 import entidades.Compra;
 import entidades.Pedido;
+import entidades.Requerimientos;
 
 /**
  *
@@ -21,7 +22,7 @@ public class PealtipoitemDTO {
     private Compra idcompra;
     private Pedido pedido;
     private Integer idalmacen;
-    
+    private Requerimientos requerimientos;
     
     private String nombreItems;
 
@@ -109,6 +110,14 @@ public class PealtipoitemDTO {
 
     public void setPrecioItem(Double precioItem) {
         this.precioItem = precioItem;
+    }
+
+    public Requerimientos getRequerimientos() {
+        return requerimientos;
+    }
+
+    public void setRequerimientos(Requerimientos requerimientos) {
+        this.requerimientos = requerimientos;
     }
     
     

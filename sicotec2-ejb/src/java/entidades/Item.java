@@ -6,18 +6,23 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,14 +41,24 @@ public class Item implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "iditem")
-    private Integer iditem;
+    private String iditem;
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
     @Size(max = 45)
     @Column(name = "operatividad")
     private String operatividad;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
+    private List<Veitem> veitemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
+    private List<Movimientoitem> movimientoitemList;
+    @JoinColumns({
+        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
+    @ManyToOne(optional = false)
+    private Altipoitem altipoitem;
     @JoinColumn(name = "idlote", referencedColumnName = "idlote")
     @ManyToOne(optional = false)
     private Lote idlote;
@@ -51,15 +66,15 @@ public class Item implements Serializable {
     public Item() {
     }
 
-    public Item(Integer iditem) {
+    public Item(String iditem) {
         this.iditem = iditem;
     }
 
-    public Integer getIditem() {
+    public String getIditem() {
         return iditem;
     }
 
-    public void setIditem(Integer iditem) {
+    public void setIditem(String iditem) {
         this.iditem = iditem;
     }
 
@@ -77,6 +92,32 @@ public class Item implements Serializable {
 
     public void setOperatividad(String operatividad) {
         this.operatividad = operatividad;
+    }
+
+    @XmlTransient
+    public List<Veitem> getVeitemList() {
+        return veitemList;
+    }
+
+    public void setVeitemList(List<Veitem> veitemList) {
+        this.veitemList = veitemList;
+    }
+
+    @XmlTransient
+    public List<Movimientoitem> getMovimientoitemList() {
+        return movimientoitemList;
+    }
+
+    public void setMovimientoitemList(List<Movimientoitem> movimientoitemList) {
+        this.movimientoitemList = movimientoitemList;
+    }
+
+    public Altipoitem getAltipoitem() {
+        return altipoitem;
+    }
+
+    public void setAltipoitem(Altipoitem altipoitem) {
+        this.altipoitem = altipoitem;
     }
 
     public Lote getIdlote() {

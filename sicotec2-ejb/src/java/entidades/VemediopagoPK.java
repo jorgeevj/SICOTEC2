@@ -10,30 +10,28 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
  * @author Jorge
  */
 @Embeddable
-public class VeitemPK implements Serializable {
+public class VemediopagoPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "idventa")
     private int idventa;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "iditem")
-    private String iditem;
+    @Column(name = "idmedioPago")
+    private int idmedioPago;
 
-    public VeitemPK() {
+    public VemediopagoPK() {
     }
 
-    public VeitemPK(int idventa, String iditem) {
+    public VemediopagoPK(int idventa, int idmedioPago) {
         this.idventa = idventa;
-        this.iditem = iditem;
+        this.idmedioPago = idmedioPago;
     }
 
     public int getIdventa() {
@@ -44,33 +42,33 @@ public class VeitemPK implements Serializable {
         this.idventa = idventa;
     }
 
-    public String getIditem() {
-        return iditem;
+    public int getIdmedioPago() {
+        return idmedioPago;
     }
 
-    public void setIditem(String iditem) {
-        this.iditem = iditem;
+    public void setIdmedioPago(int idmedioPago) {
+        this.idmedioPago = idmedioPago;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idventa;
-        hash += (iditem != null ? iditem.hashCode() : 0);
+        hash += (int) idmedioPago;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VeitemPK)) {
+        if (!(object instanceof VemediopagoPK)) {
             return false;
         }
-        VeitemPK other = (VeitemPK) object;
+        VemediopagoPK other = (VemediopagoPK) object;
         if (this.idventa != other.idventa) {
             return false;
         }
-        if ((this.iditem == null && other.iditem != null) || (this.iditem != null && !this.iditem.equals(other.iditem))) {
+        if (this.idmedioPago != other.idmedioPago) {
             return false;
         }
         return true;
@@ -78,7 +76,7 @@ public class VeitemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.VeitemPK[ idventa=" + idventa + ", iditem=" + iditem + " ]";
+        return "entidades.VemediopagoPK[ idventa=" + idventa + ", idmedioPago=" + idmedioPago + " ]";
     }
     
 }

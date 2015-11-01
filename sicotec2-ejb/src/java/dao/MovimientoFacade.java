@@ -6,7 +6,7 @@
 package dao;
 
 import dto.MovimientoDTO;
-import dto.MovimientoitemDTOVista;
+import entidades.Movimientoitemvista;
 import entidades.Item;
 import entidades.Movimiento;
 import java.text.SimpleDateFormat;
@@ -34,18 +34,18 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
     public MovimientoFacade() {
         super(Movimiento.class);
     }
-     public List<MovimientoitemDTOVista> getItemsByMovimiento(MovimientoDTO mov){
-        List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
+     public List<Movimientoitemvista> getItemsByMovimiento(MovimientoDTO mov){
+        List<Movimientoitemvista> listaItems = new ArrayList<Movimientoitemvista>();
         try{
              String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
-             Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
+             Query query = em.createNativeQuery(ejbQuery, Movimientoitemvista.class);
              query.setParameter(1, mov.getIdmovimiento());
              query.setParameter(2, 0);
              
             listaItems = query.getResultList();   
         }catch(Exception e){
             System.out.println(e.getMessage());
-            listaItems = new ArrayList<MovimientoitemDTOVista>();
+            listaItems = new ArrayList<Movimientoitemvista>();
         }
         
         return listaItems;

@@ -65,7 +65,7 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
                 + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
                 + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
                 + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
-                + "AND pti.pealtipoitemPK.idalmacen =  " + a.getAltipoitem().getAlmacen().getIdalmacen();
+                + "AND pti.pealtipoitemPK.idalmacen =  " + a.getRequerimientos().getAltipoitem().getAlmacen().getIdalmacen();
 
         return em.createQuery(jpa, Pealtipoitem.class).getResultList();
 

@@ -167,12 +167,12 @@ public class CompraBO {
 
     private PealtipoitemDTO convertEntidadByPealtipoitemDTO(Pealtipoitem e) {
        PealtipoitemDTO dto=new PealtipoitemDTO();
-       dto.setAltipoitem(e.getAltipoitem());
+       dto.setAltipoitem(e.getRequerimientos().getAltipoitem());
        dto.setCantidad(e.getCantidad());
-       dto.setIdalmacen(e.getAltipoitem().getAlmacen().getIdalmacen());
+       dto.setIdalmacen(e.getRequerimientos().getAltipoitem().getAlmacen().getIdalmacen());
        dto.setEstado(e.getEstado());
-       dto.setIdcompra(e.getIdcompra());
-       dto.setNombreItems(e.getAltipoitem().getTipoitem().getNombre());
+       dto.setIdcompra(e.getRequerimientos().getIdcompra());
+       dto.setNombreItems(e.getRequerimientos().getAltipoitem().getTipoitem().getNombre());
        dto.setCostoUni(e.getCostoUni());
        dto.setPedido(e.getPedido());
        return dto;

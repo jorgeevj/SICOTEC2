@@ -7,7 +7,7 @@ package dao;
 
 import dto.CotipoitemDTO;
 import dto.MovimientoDTO;
-import dto.MovimientoitemDTOVista;
+import entidades.Movimientoitemvista;
 import entidades.Item;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,35 +48,35 @@ public class ItemFacade extends AbstractFacade<Item> {
 
         return em.createQuery(jpa, Item.class).setMaxResults(ct.getCantidad()).getResultList();
     }
-    public List<MovimientoitemDTOVista> getAllItems(){
-        List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
+    public List<Movimientoitemvista> getAllItems(){
+        List<Movimientoitemvista> listaItems = new ArrayList<Movimientoitemvista>();
         try{
              String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
-             Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
+             Query query = em.createNativeQuery(ejbQuery, Movimientoitemvista.class);
              query.setParameter(1, 0);
              query.setParameter(2, 0);
              
             listaItems = query.getResultList();   
         }catch(Exception e){
             System.out.println(e.getMessage());
-            listaItems = new ArrayList<MovimientoitemDTOVista>();
+            listaItems = new ArrayList<Movimientoitemvista>();
         }
         
         return listaItems;
     }
     
-    public List<MovimientoitemDTOVista> getItemsByAlmacen(int idAlmacen){
-        List<MovimientoitemDTOVista> listaItems = new ArrayList<MovimientoitemDTOVista>();
+    public List<Movimientoitemvista> getItemsByAlmacen(int idAlmacen){
+        List<Movimientoitemvista> listaItems = new ArrayList<Movimientoitemvista>();
         try{
              String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
-             Query query = em.createNativeQuery(ejbQuery, MovimientoitemDTOVista.class);
+             Query query = em.createNativeQuery(ejbQuery, Movimientoitemvista.class);
              query.setParameter(1, 0);
              query.setParameter(2, idAlmacen);
              
             listaItems = query.getResultList();   
         }catch(Exception e){
             System.out.println(e.getMessage());
-            listaItems = new ArrayList<MovimientoitemDTOVista>();
+            listaItems = new ArrayList<Movimientoitemvista>();
         }
         
         return listaItems;

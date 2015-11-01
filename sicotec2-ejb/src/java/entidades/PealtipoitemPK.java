@@ -24,21 +24,26 @@ public class PealtipoitemPK implements Serializable {
     private int idpedido;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "idtipoItem")
+    private String idtipoItem;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "idalmacen")
     private int idalmacen;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "idtipoItem")
-    private String idtipoItem;
+    @Column(name = "idrequerimientos")
+    private int idrequerimientos;
 
     public PealtipoitemPK() {
     }
 
-    public PealtipoitemPK(int idpedido, int idalmacen, String idtipoItem) {
+    public PealtipoitemPK(int idpedido, String idtipoItem, int idalmacen, int idrequerimientos) {
         this.idpedido = idpedido;
-        this.idalmacen = idalmacen;
         this.idtipoItem = idtipoItem;
+        this.idalmacen = idalmacen;
+        this.idrequerimientos = idrequerimientos;
     }
 
     public int getIdpedido() {
@@ -49,14 +54,6 @@ public class PealtipoitemPK implements Serializable {
         this.idpedido = idpedido;
     }
 
-    public int getIdalmacen() {
-        return idalmacen;
-    }
-
-    public void setIdalmacen(int idalmacen) {
-        this.idalmacen = idalmacen;
-    }
-
     public String getIdtipoItem() {
         return idtipoItem;
     }
@@ -65,12 +62,29 @@ public class PealtipoitemPK implements Serializable {
         this.idtipoItem = idtipoItem;
     }
 
+    public int getIdalmacen() {
+        return idalmacen;
+    }
+
+    public void setIdalmacen(int idalmacen) {
+        this.idalmacen = idalmacen;
+    }
+
+    public int getIdrequerimientos() {
+        return idrequerimientos;
+    }
+
+    public void setIdrequerimientos(int idrequerimientos) {
+        this.idrequerimientos = idrequerimientos;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) idpedido;
-        hash += (int) idalmacen;
         hash += (idtipoItem != null ? idtipoItem.hashCode() : 0);
+        hash += (int) idalmacen;
+        hash += (int) idrequerimientos;
         return hash;
     }
 
@@ -84,10 +98,13 @@ public class PealtipoitemPK implements Serializable {
         if (this.idpedido != other.idpedido) {
             return false;
         }
+        if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
+            return false;
+        }
         if (this.idalmacen != other.idalmacen) {
             return false;
         }
-        if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
+        if (this.idrequerimientos != other.idrequerimientos) {
             return false;
         }
         return true;
@@ -95,7 +112,7 @@ public class PealtipoitemPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.PealtipoitemPK[ idpedido=" + idpedido + ", idalmacen=" + idalmacen + ", idtipoItem=" + idtipoItem + " ]";
+        return "entidades.PealtipoitemPK[ idpedido=" + idpedido + ", idtipoItem=" + idtipoItem + ", idalmacen=" + idalmacen + ", idrequerimientos=" + idrequerimientos + " ]";
     }
     
 }

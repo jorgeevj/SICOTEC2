@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Movimientoitem.findAll", query = "SELECT m FROM Movimientoitem m"),
     @NamedQuery(name = "Movimientoitem.findByIdmovimiento", query = "SELECT m FROM Movimientoitem m WHERE m.movimientoitemPK.idmovimiento = :idmovimiento"),
-    @NamedQuery(name = "Movimientoitem.findByIditem", query = "SELECT m FROM Movimientoitem m WHERE m.movimientoitemPK.iditem = :iditem"),
-    @NamedQuery(name = "Movimientoitem.findByEstado", query = "SELECT m FROM Movimientoitem m WHERE m.estado = :estado")})
+    @NamedQuery(name = "Movimientoitem.findByEstado", query = "SELECT m FROM Movimientoitem m WHERE m.estado = :estado"),
+    @NamedQuery(name = "Movimientoitem.findByIditem", query = "SELECT m FROM Movimientoitem m WHERE m.movimientoitemPK.iditem = :iditem")})
 public class Movimientoitem implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -48,7 +48,7 @@ public class Movimientoitem implements Serializable {
         this.movimientoitemPK = movimientoitemPK;
     }
 
-    public Movimientoitem(int idmovimiento, int iditem) {
+    public Movimientoitem(int idmovimiento, String iditem) {
         this.movimientoitemPK = new MovimientoitemPK(idmovimiento, iditem);
     }
 
