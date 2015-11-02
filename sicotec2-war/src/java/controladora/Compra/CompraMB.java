@@ -236,7 +236,7 @@ public class CompraMB {
       }
       public void quitarPedido(ActionEvent actionEvent){
       for(Lote l:ll){
-          if(l.getIdlote()==loteSelec.getIdlote()){
+          if(l.getLotePK().getIdlote()==loteSelec.getLotePK().getIdlote()){
              listPealItem.addAll(compraBO.getPedidosByCompraAndItem(co,loteSelec));
               ll.remove(l);
              break;
