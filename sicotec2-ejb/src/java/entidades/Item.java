@@ -55,13 +55,10 @@ public class Item implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
     private List<Movimientoitem> movimientoitemList;
     @JoinColumns({
-        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
+        @JoinColumn(name = "idlote", referencedColumnName = "idlote"),
+        @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")})
     @ManyToOne(optional = false)
-    private Altipoitem altipoitem;
-    @JoinColumn(name = "idlote", referencedColumnName = "idlote")
-    @ManyToOne
-    private Lote idlote;
+    private Lote lote;
 
     public Item() {
     }
@@ -112,20 +109,12 @@ public class Item implements Serializable {
         this.movimientoitemList = movimientoitemList;
     }
 
-    public Altipoitem getAltipoitem() {
-        return altipoitem;
+    public Lote getLote() {
+        return lote;
     }
 
-    public void setAltipoitem(Altipoitem altipoitem) {
-        this.altipoitem = altipoitem;
-    }
-
-    public Lote getIdlote() {
-        return idlote;
-    }
-
-    public void setIdlote(Lote idlote) {
-        this.idlote = idlote;
+    public void setLote(Lote lote) {
+        this.lote = lote;
     }
 
     @Override

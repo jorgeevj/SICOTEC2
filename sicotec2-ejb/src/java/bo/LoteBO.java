@@ -50,7 +50,7 @@ public class LoteBO {
         loteDTO DTO = new loteDTO();
             
         DTO.setCantidad(lote.getCantidad());
-        DTO.setIdLote(lote.getIdlote());
+        DTO.setIdLote(lote.getLotePK().getIdlote());
         DTO.setPrecioUni(lote.getPrecioUni());
         DTO.setNombreTipoItem(lote.getAltipoitem().getTipoitem().getNombre());
         DTO.setDescripcionTipoItem(lote.getAltipoitem().getTipoitem().getDescripcion());

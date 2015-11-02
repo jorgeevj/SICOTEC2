@@ -51,11 +51,12 @@ public class PedidoaltipoitemBO {
      public PealtipoitemDTO convertEntityToDTO(Pealtipoitem pealtipoitem){
         PealtipoitemDTO DTO = new PealtipoitemDTO();
             
-            DTO.setAltipoitem(pealtipoitem.getRequerimientos().getAltipoitem());
+            DTO.setAltipoitem(pealtipoitem.getAltipoitem());
             DTO.setCantidad(pealtipoitem.getCantidad());
             DTO.setCostoUni(pealtipoitem.getCostoUni());
             DTO.setEstado(pealtipoitem.getEstado());
-            DTO.setIdcompra(pealtipoitem.getRequerimientos().getIdcompra());
+//            DTO.setIdcompra(pealtipoitem.getIdcompra());//ya no hay id de compra en el los pedidos ahora es requerimiento
+            DTO.setRequerimientos(pealtipoitem.getIdrequerimientos());
             DTO.setPedido(pealtipoitem.getPedido());
             String idTipoItem = DTO.getAltipoitem().getAltipoitemPK().getIdtipoItem();
             System.out.println("dto.nombreItems: " + idTipoItem);
@@ -72,12 +73,13 @@ public class PedidoaltipoitemBO {
       public Pealtipoitem convertDTOtoEntity(PealtipoitemDTO dto){
         Pealtipoitem entidad = new Pealtipoitem();
         
-        entidad.getRequerimientos().setAltipoitem(dto.getAltipoitem());
+        entidad.setAltipoitem(dto.getAltipoitem());
         entidad.setCantidad(dto.getCantidad());
         entidad.setCostoUni(dto.getCostoUni());
         entidad.setEstado(dto.getEstado());
         entidad.setPedido(dto.getPedido());
-        entidad.getRequerimientos().setIdcompra(dto.getIdcompra());
+//        entidad.setIdcompra(dto.getIdcompra());
+        entidad.setIdrequerimientos(dto.getRequerimientos());
         
         
         

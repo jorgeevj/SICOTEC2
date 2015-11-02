@@ -10,7 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -23,25 +22,14 @@ public class LotePK implements Serializable {
     private int idlote;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idalmacen")
-    private int idalmacen;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "idtipoItem")
-    private String idtipoItem;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "idcompra")
     private int idcompra;
 
     public LotePK() {
     }
 
-    public LotePK(int idlote, int idalmacen, String idtipoItem, int idcompra) {
+    public LotePK(int idlote, int idcompra) {
         this.idlote = idlote;
-        this.idalmacen = idalmacen;
-        this.idtipoItem = idtipoItem;
         this.idcompra = idcompra;
     }
 
@@ -51,22 +39,6 @@ public class LotePK implements Serializable {
 
     public void setIdlote(int idlote) {
         this.idlote = idlote;
-    }
-
-    public int getIdalmacen() {
-        return idalmacen;
-    }
-
-    public void setIdalmacen(int idalmacen) {
-        this.idalmacen = idalmacen;
-    }
-
-    public String getIdtipoItem() {
-        return idtipoItem;
-    }
-
-    public void setIdtipoItem(String idtipoItem) {
-        this.idtipoItem = idtipoItem;
     }
 
     public int getIdcompra() {
@@ -81,8 +53,6 @@ public class LotePK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (int) idlote;
-        hash += (int) idalmacen;
-        hash += (idtipoItem != null ? idtipoItem.hashCode() : 0);
         hash += (int) idcompra;
         return hash;
     }
@@ -97,12 +67,6 @@ public class LotePK implements Serializable {
         if (this.idlote != other.idlote) {
             return false;
         }
-        if (this.idalmacen != other.idalmacen) {
-            return false;
-        }
-        if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
-            return false;
-        }
         if (this.idcompra != other.idcompra) {
             return false;
         }
@@ -111,7 +75,7 @@ public class LotePK implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.LotePK[ idlote=" + idlote + ", idalmacen=" + idalmacen + ", idtipoItem=" + idtipoItem + ", idcompra=" + idcompra + " ]";
+        return "entidades.LotePK[ idlote=" + idlote + ", idcompra=" + idcompra + " ]";
     }
     
 }

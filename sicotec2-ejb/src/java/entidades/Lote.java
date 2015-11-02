@@ -33,8 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lote.findByIdlote", query = "SELECT l FROM Lote l WHERE l.lotePK.idlote = :idlote"),
     @NamedQuery(name = "Lote.findByCantidad", query = "SELECT l FROM Lote l WHERE l.cantidad = :cantidad"),
     @NamedQuery(name = "Lote.findByPrecioUni", query = "SELECT l FROM Lote l WHERE l.precioUni = :precioUni"),
-    @NamedQuery(name = "Lote.findByIdalmacen", query = "SELECT l FROM Lote l WHERE l.lotePK.idalmacen = :idalmacen"),
-    @NamedQuery(name = "Lote.findByIdtipoItem", query = "SELECT l FROM Lote l WHERE l.lotePK.idtipoItem = :idtipoItem"),
     @NamedQuery(name = "Lote.findByIdcompra", query = "SELECT l FROM Lote l WHERE l.lotePK.idcompra = :idcompra")})
 public class Lote implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -45,20 +43,21 @@ public class Lote implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precioUni")
     private Double precioUni;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lote")
-    private List<Requerimientos> requerimientosList;
     @JoinColumns({
-        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false),
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false)})
+        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
     @ManyToOne(optional = false)
     private Altipoitem altipoitem;
     @JoinColumn(name = "idcompra", referencedColumnName = "idcompra", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Compra compra;
+    @JoinColumn(name = "idrequerimientos", referencedColumnName = "idrequerimientos")
+    @ManyToOne(optional = false)
+    private Requerimientos idrequerimientos;
     @JoinColumn(name = "idunidades", referencedColumnName = "idunidades")
     @ManyToOne(optional = false)
     private Unidades idunidades;
-    @OneToMany(mappedBy = "idlote")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lote")
     private List<Item> itemList;
 
     public Lote() {
@@ -68,8 +67,8 @@ public class Lote implements Serializable {
         this.lotePK = lotePK;
     }
 
-    public Lote(int idlote, int idalmacen, String idtipoItem, int idcompra) {
-        this.lotePK = new LotePK(idlote, idalmacen, idtipoItem, idcompra);
+    public Lote(int idlote, int idcompra) {
+        this.lotePK = new LotePK(idlote, idcompra);
     }
 
     public LotePK getLotePK() {
@@ -96,15 +95,6 @@ public class Lote implements Serializable {
         this.precioUni = precioUni;
     }
 
-    @XmlTransient
-    public List<Requerimientos> getRequerimientosList() {
-        return requerimientosList;
-    }
-
-    public void setRequerimientosList(List<Requerimientos> requerimientosList) {
-        this.requerimientosList = requerimientosList;
-    }
-
     public Altipoitem getAltipoitem() {
         return altipoitem;
     }
@@ -119,6 +109,14 @@ public class Lote implements Serializable {
 
     public void setCompra(Compra compra) {
         this.compra = compra;
+    }
+
+    public Requerimientos getIdrequerimientos() {
+        return idrequerimientos;
+    }
+
+    public void setIdrequerimientos(Requerimientos idrequerimientos) {
+        this.idrequerimientos = idrequerimientos;
     }
 
     public Unidades getIdunidades() {

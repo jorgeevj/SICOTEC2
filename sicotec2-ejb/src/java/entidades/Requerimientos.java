@@ -8,14 +8,12 @@ package entidades;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,13 +41,8 @@ public class Requerimientos implements Serializable {
     private Integer idrequerimientos;
     @Column(name = "cantidad")
     private Integer cantidad;
-    @JoinColumns({
-        @JoinColumn(name = "idlote", referencedColumnName = "idlote"),
-        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem"),
-        @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")})
-    @ManyToOne(optional = false)
-    private Lote lote;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idrequerimientos")
+    private List<Lote> loteList;
     @OneToMany(mappedBy = "idrequerimientos")
     private List<Pealtipoitem> pealtipoitemList;
 
@@ -76,12 +69,13 @@ public class Requerimientos implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Lote getLote() {
-        return lote;
+    @XmlTransient
+    public List<Lote> getLoteList() {
+        return loteList;
     }
 
-    public void setLote(Lote lote) {
-        this.lote = lote;
+    public void setLoteList(List<Lote> loteList) {
+        this.loteList = loteList;
     }
 
     @XmlTransient

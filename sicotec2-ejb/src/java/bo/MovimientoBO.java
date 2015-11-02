@@ -24,6 +24,7 @@ import entidades.AltipoitemPK;
 import entidades.Docalmacen;
 import entidades.Item;
 import entidades.Lote;
+import entidades.LotePK;
 import entidades.Movimiento;
 import entidades.Movimientoitem;
 import entidades.MovimientoitemPK;
@@ -94,8 +95,8 @@ public class MovimientoBO {
                 //INSERTAR EL NUEVO ITEM
                 Item i = new Item();
                 Lote l = new Lote();
-                l.setIdlote(DTO.getIdLote());
-                i.setIdlote(l);
+                l.getLotePK().setIdlote(DTO.getIdLote());
+                i.setLote(l);
                 i.setEstado(DTO.getEstado());
                 i.setIditem(DTO.getIditem());
                 i.setOperatividad(DTO.getOperatividad());

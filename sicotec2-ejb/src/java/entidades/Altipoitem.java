@@ -49,8 +49,6 @@ public class Altipoitem implements Serializable {
     private Integer comprados;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
     private List<Lote> loteList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
-    private List<Item> itemList;
     @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Almacen almacen;
@@ -118,15 +116,6 @@ public class Altipoitem implements Serializable {
 
     public void setLoteList(List<Lote> loteList) {
         this.loteList = loteList;
-    }
-
-    @XmlTransient
-    public List<Item> getItemList() {
-        return itemList;
-    }
-
-    public void setItemList(List<Item> itemList) {
-        this.itemList = itemList;
     }
 
     public Almacen getAlmacen() {

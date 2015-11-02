@@ -95,7 +95,7 @@ public class VentasBO {
         DTO.setIditem(item.getIditem());
         DTO.setEstado(item.getEstado());
         DTO.setOperatividad(item.getOperatividad());
-        DTO.setIdLote(item.getIdlote().getIdlote());
+        DTO.setIdLote(item.getLote().getLotePK().getIdlote());
 
         return DTO;
     }
