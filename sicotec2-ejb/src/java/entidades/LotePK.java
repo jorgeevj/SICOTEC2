@@ -17,10 +17,10 @@ import javax.validation.constraints.Size;
  * @author Jorge
  */
 @Embeddable
-public class RequerimientosPK implements Serializable {
+public class LotePK implements Serializable {
     @Basic(optional = false)
-    @Column(name = "idrequerimientos")
-    private int idrequerimientos;
+    @Column(name = "idlote")
+    private int idlote;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idalmacen")
@@ -30,22 +30,27 @@ public class RequerimientosPK implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "idtipoItem")
     private String idtipoItem;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idcompra")
+    private int idcompra;
 
-    public RequerimientosPK() {
+    public LotePK() {
     }
 
-    public RequerimientosPK(int idrequerimientos, int idalmacen, String idtipoItem) {
-        this.idrequerimientos = idrequerimientos;
+    public LotePK(int idlote, int idalmacen, String idtipoItem, int idcompra) {
+        this.idlote = idlote;
         this.idalmacen = idalmacen;
         this.idtipoItem = idtipoItem;
+        this.idcompra = idcompra;
     }
 
-    public int getIdrequerimientos() {
-        return idrequerimientos;
+    public int getIdlote() {
+        return idlote;
     }
 
-    public void setIdrequerimientos(int idrequerimientos) {
-        this.idrequerimientos = idrequerimientos;
+    public void setIdlote(int idlote) {
+        this.idlote = idlote;
     }
 
     public int getIdalmacen() {
@@ -64,23 +69,32 @@ public class RequerimientosPK implements Serializable {
         this.idtipoItem = idtipoItem;
     }
 
+    public int getIdcompra() {
+        return idcompra;
+    }
+
+    public void setIdcompra(int idcompra) {
+        this.idcompra = idcompra;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idrequerimientos;
+        hash += (int) idlote;
         hash += (int) idalmacen;
         hash += (idtipoItem != null ? idtipoItem.hashCode() : 0);
+        hash += (int) idcompra;
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RequerimientosPK)) {
+        if (!(object instanceof LotePK)) {
             return false;
         }
-        RequerimientosPK other = (RequerimientosPK) object;
-        if (this.idrequerimientos != other.idrequerimientos) {
+        LotePK other = (LotePK) object;
+        if (this.idlote != other.idlote) {
             return false;
         }
         if (this.idalmacen != other.idalmacen) {
@@ -89,12 +103,15 @@ public class RequerimientosPK implements Serializable {
         if ((this.idtipoItem == null && other.idtipoItem != null) || (this.idtipoItem != null && !this.idtipoItem.equals(other.idtipoItem))) {
             return false;
         }
+        if (this.idcompra != other.idcompra) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "entidades.RequerimientosPK[ idrequerimientos=" + idrequerimientos + ", idalmacen=" + idalmacen + ", idtipoItem=" + idtipoItem + " ]";
+        return "entidades.LotePK[ idlote=" + idlote + ", idalmacen=" + idalmacen + ", idtipoItem=" + idtipoItem + ", idcompra=" + idcompra + " ]";
     }
     
 }

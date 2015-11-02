@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Ubicacion.findAll", query = "SELECT u FROM Ubicacion u"),
     @NamedQuery(name = "Ubicacion.findByIdubicacion", query = "SELECT u FROM Ubicacion u WHERE u.idubicacion = :idubicacion"),
-    @NamedQuery(name = "Ubicacion.findByEmail", query = "SELECT u FROM Ubicacion u WHERE u.email = :email"),
     @NamedQuery(name = "Ubicacion.findByNombre", query = "SELECT u FROM Ubicacion u WHERE u.nombre = :nombre"),
     @NamedQuery(name = "Ubicacion.findByNumero", query = "SELECT u FROM Ubicacion u WHERE u.numero = :numero"),
     @NamedQuery(name = "Ubicacion.findByCodDist", query = "SELECT u FROM Ubicacion u WHERE u.codDist = :codDist"),
@@ -50,10 +49,6 @@ public class Ubicacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "idubicacion")
     private Integer idubicacion;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Correo electrónico no válido")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 45)
-    @Column(name = "email")
-    private String email;
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
@@ -95,14 +90,6 @@ public class Ubicacion implements Serializable {
 
     public void setIdubicacion(Integer idubicacion) {
         this.idubicacion = idubicacion;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getNombre() {

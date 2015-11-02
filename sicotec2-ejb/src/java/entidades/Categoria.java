@@ -40,7 +40,7 @@ public class Categoria implements Serializable {
     @Basic(optional = false)
     @Column(name = "idcategoria")
     private Integer idcategoria;
-    @Size(max = 45)
+    @Size(max = 100)
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcategoria")

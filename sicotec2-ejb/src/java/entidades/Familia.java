@@ -42,7 +42,7 @@ public class Familia implements Serializable {
     @Basic(optional = false)
     @Column(name = "idfamilia")
     private Integer idfamilia;
-    @Size(max = 45)
+    @Size(max = 150)
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idfamilia")

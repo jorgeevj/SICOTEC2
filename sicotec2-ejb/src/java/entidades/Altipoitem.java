@@ -48,8 +48,6 @@ public class Altipoitem implements Serializable {
     @Column(name = "comprados")
     private Integer comprados;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
-    private List<Requerimientos> requerimientosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
     private List<Lote> loteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
     private List<Item> itemList;
@@ -59,6 +57,8 @@ public class Altipoitem implements Serializable {
     @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Tipoitem tipoitem;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "altipoitem")
+    private List<Pealtipoitem> pealtipoitemList;
 
     public Altipoitem() {
     }
@@ -112,15 +112,6 @@ public class Altipoitem implements Serializable {
     }
 
     @XmlTransient
-    public List<Requerimientos> getRequerimientosList() {
-        return requerimientosList;
-    }
-
-    public void setRequerimientosList(List<Requerimientos> requerimientosList) {
-        this.requerimientosList = requerimientosList;
-    }
-
-    @XmlTransient
     public List<Lote> getLoteList() {
         return loteList;
     }
@@ -152,6 +143,15 @@ public class Altipoitem implements Serializable {
 
     public void setTipoitem(Tipoitem tipoitem) {
         this.tipoitem = tipoitem;
+    }
+
+    @XmlTransient
+    public List<Pealtipoitem> getPealtipoitemList() {
+        return pealtipoitemList;
+    }
+
+    public void setPealtipoitemList(List<Pealtipoitem> pealtipoitemList) {
+        this.pealtipoitemList = pealtipoitemList;
     }
 
     @Override

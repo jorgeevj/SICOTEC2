@@ -27,12 +27,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Pealtipoitem.findAll", query = "SELECT p FROM Pealtipoitem p"),
     @NamedQuery(name = "Pealtipoitem.findByIdpedido", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idpedido = :idpedido"),
-    @NamedQuery(name = "Pealtipoitem.findByIdtipoItem", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idtipoItem = :idtipoItem"),
-    @NamedQuery(name = "Pealtipoitem.findByIdalmacen", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idalmacen = :idalmacen"),
     @NamedQuery(name = "Pealtipoitem.findByCantidad", query = "SELECT p FROM Pealtipoitem p WHERE p.cantidad = :cantidad"),
     @NamedQuery(name = "Pealtipoitem.findByCostoUni", query = "SELECT p FROM Pealtipoitem p WHERE p.costoUni = :costoUni"),
     @NamedQuery(name = "Pealtipoitem.findByEstado", query = "SELECT p FROM Pealtipoitem p WHERE p.estado = :estado"),
-    @NamedQuery(name = "Pealtipoitem.findByIdrequerimientos", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idrequerimientos = :idrequerimientos")})
+    @NamedQuery(name = "Pealtipoitem.findByIdalmacen", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idalmacen = :idalmacen"),
+    @NamedQuery(name = "Pealtipoitem.findByIdtipoItem", query = "SELECT p FROM Pealtipoitem p WHERE p.pealtipoitemPK.idtipoItem = :idtipoItem")})
 public class Pealtipoitem implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -44,15 +43,17 @@ public class Pealtipoitem implements Serializable {
     private Double costoUni;
     @Column(name = "estado")
     private Integer estado;
-    @JoinColumn(name = "idpedido", referencedColumnName = "idpedido", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Pedido pedido;
     @JoinColumns({
-        @JoinColumn(name = "idrequerimientos", referencedColumnName = "idrequerimientos", insertable = false, updatable = false),
         @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false),
         @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
-    private Requerimientos requerimientos;
+    private Altipoitem altipoitem;
+    @JoinColumn(name = "idpedido", referencedColumnName = "idpedido", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Pedido pedido;
+    @JoinColumn(name = "idrequerimientos", referencedColumnName = "idrequerimientos")
+    @ManyToOne
+    private Requerimientos idrequerimientos;
 
     public Pealtipoitem() {
     }
@@ -61,8 +62,8 @@ public class Pealtipoitem implements Serializable {
         this.pealtipoitemPK = pealtipoitemPK;
     }
 
-    public Pealtipoitem(int idpedido, String idtipoItem, int idalmacen, int idrequerimientos) {
-        this.pealtipoitemPK = new PealtipoitemPK(idpedido, idtipoItem, idalmacen, idrequerimientos);
+    public Pealtipoitem(int idpedido, int idalmacen, String idtipoItem) {
+        this.pealtipoitemPK = new PealtipoitemPK(idpedido, idalmacen, idtipoItem);
     }
 
     public PealtipoitemPK getPealtipoitemPK() {
@@ -97,6 +98,14 @@ public class Pealtipoitem implements Serializable {
         this.estado = estado;
     }
 
+    public Altipoitem getAltipoitem() {
+        return altipoitem;
+    }
+
+    public void setAltipoitem(Altipoitem altipoitem) {
+        this.altipoitem = altipoitem;
+    }
+
     public Pedido getPedido() {
         return pedido;
     }
@@ -105,12 +114,12 @@ public class Pealtipoitem implements Serializable {
         this.pedido = pedido;
     }
 
-    public Requerimientos getRequerimientos() {
-        return requerimientos;
+    public Requerimientos getIdrequerimientos() {
+        return idrequerimientos;
     }
 
-    public void setRequerimientos(Requerimientos requerimientos) {
-        this.requerimientos = requerimientos;
+    public void setIdrequerimientos(Requerimientos idrequerimientos) {
+        this.idrequerimientos = idrequerimientos;
     }
 
     @Override

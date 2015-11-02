@@ -7,13 +7,10 @@ package entidades;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -33,48 +30,54 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Lote.findAll", query = "SELECT l FROM Lote l"),
-    @NamedQuery(name = "Lote.findByIdlote", query = "SELECT l FROM Lote l WHERE l.idlote = :idlote"),
+    @NamedQuery(name = "Lote.findByIdlote", query = "SELECT l FROM Lote l WHERE l.lotePK.idlote = :idlote"),
     @NamedQuery(name = "Lote.findByCantidad", query = "SELECT l FROM Lote l WHERE l.cantidad = :cantidad"),
-    @NamedQuery(name = "Lote.findByPrecioUni", query = "SELECT l FROM Lote l WHERE l.precioUni = :precioUni")})
+    @NamedQuery(name = "Lote.findByPrecioUni", query = "SELECT l FROM Lote l WHERE l.precioUni = :precioUni"),
+    @NamedQuery(name = "Lote.findByIdalmacen", query = "SELECT l FROM Lote l WHERE l.lotePK.idalmacen = :idalmacen"),
+    @NamedQuery(name = "Lote.findByIdtipoItem", query = "SELECT l FROM Lote l WHERE l.lotePK.idtipoItem = :idtipoItem"),
+    @NamedQuery(name = "Lote.findByIdcompra", query = "SELECT l FROM Lote l WHERE l.lotePK.idcompra = :idcompra")})
 public class Lote implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idlote")
-    private Integer idlote;
+    @EmbeddedId
+    protected LotePK lotePK;
     @Column(name = "cantidad")
     private Integer cantidad;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precioUni")
     private Double precioUni;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lote")
+    private List<Requerimientos> requerimientosList;
     @JoinColumns({
-        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
-        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
+        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen", insertable = false, updatable = false),
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Altipoitem altipoitem;
-    @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")
+    @JoinColumn(name = "idcompra", referencedColumnName = "idcompra", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Compra idcompra;
+    private Compra compra;
     @JoinColumn(name = "idunidades", referencedColumnName = "idunidades")
     @ManyToOne(optional = false)
     private Unidades idunidades;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlote")
+    @OneToMany(mappedBy = "idlote")
     private List<Item> itemList;
 
     public Lote() {
     }
 
-    public Lote(Integer idlote) {
-        this.idlote = idlote;
+    public Lote(LotePK lotePK) {
+        this.lotePK = lotePK;
     }
 
-    public Integer getIdlote() {
-        return idlote;
+    public Lote(int idlote, int idalmacen, String idtipoItem, int idcompra) {
+        this.lotePK = new LotePK(idlote, idalmacen, idtipoItem, idcompra);
     }
 
-    public void setIdlote(Integer idlote) {
-        this.idlote = idlote;
+    public LotePK getLotePK() {
+        return lotePK;
+    }
+
+    public void setLotePK(LotePK lotePK) {
+        this.lotePK = lotePK;
     }
 
     public Integer getCantidad() {
@@ -93,6 +96,15 @@ public class Lote implements Serializable {
         this.precioUni = precioUni;
     }
 
+    @XmlTransient
+    public List<Requerimientos> getRequerimientosList() {
+        return requerimientosList;
+    }
+
+    public void setRequerimientosList(List<Requerimientos> requerimientosList) {
+        this.requerimientosList = requerimientosList;
+    }
+
     public Altipoitem getAltipoitem() {
         return altipoitem;
     }
@@ -101,12 +113,12 @@ public class Lote implements Serializable {
         this.altipoitem = altipoitem;
     }
 
-    public Compra getIdcompra() {
-        return idcompra;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setIdcompra(Compra idcompra) {
-        this.idcompra = idcompra;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 
     public Unidades getIdunidades() {
@@ -129,7 +141,7 @@ public class Lote implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idlote != null ? idlote.hashCode() : 0);
+        hash += (lotePK != null ? lotePK.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +152,7 @@ public class Lote implements Serializable {
             return false;
         }
         Lote other = (Lote) object;
-        if ((this.idlote == null && other.idlote != null) || (this.idlote != null && !this.idlote.equals(other.idlote))) {
+        if ((this.lotePK == null && other.lotePK != null) || (this.lotePK != null && !this.lotePK.equals(other.lotePK))) {
             return false;
         }
         return true;
@@ -148,7 +160,7 @@ public class Lote implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Lote[ idlote=" + idlote + " ]";
+        return "entidades.Lote[ lotePK=" + lotePK + " ]";
     }
     
 }

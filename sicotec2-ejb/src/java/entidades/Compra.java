@@ -69,9 +69,7 @@ public class Compra implements Serializable {
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcompra")
-    private List<Requerimientos> requerimientosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcompra")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "compra")
     private List<Lote> loteList;
 
     public Compra() {
@@ -143,15 +141,6 @@ public class Compra implements Serializable {
 
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
-    }
-
-    @XmlTransient
-    public List<Requerimientos> getRequerimientosList() {
-        return requerimientosList;
-    }
-
-    public void setRequerimientosList(List<Requerimientos> requerimientosList) {
-        this.requerimientosList = requerimientosList;
     }
 
     @XmlTransient

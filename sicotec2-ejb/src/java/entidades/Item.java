@@ -60,7 +60,7 @@ public class Item implements Serializable {
     @ManyToOne(optional = false)
     private Altipoitem altipoitem;
     @JoinColumn(name = "idlote", referencedColumnName = "idlote")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Lote idlote;
 
     public Item() {
