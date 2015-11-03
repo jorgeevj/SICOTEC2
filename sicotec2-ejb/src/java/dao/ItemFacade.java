@@ -9,6 +9,7 @@ import dto.CotipoitemDTO;
 import dto.MovimientoDTO;
 import entidades.Movimientoitemvista;
 import entidades.Item;
+import entidades.Venta;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -34,13 +35,12 @@ public class ItemFacade extends AbstractFacade<Item> {
         super(Item.class);
     }
 
-    public List<Item> getItemForVenta(int idalmacen,CotipoitemDTO ct) {
-        String jpa = "SELECT i "
-                + "FROM Item i "
-                + "where i.lote.altipoitem.tipoitem.idtipoItem='"+ct.getTipoitem().getIdtipoItem()+"' "
-                + "and i.lote.altipoitem.almacen.idalmacen= "+idalmacen+" "
-                + "and i.estado=0 "
-                + "and i.operatividad=0 "
+    public List<Item> getItemForVenta(CotipoitemDTO ct,Venta v) {
+        String jpa = "select i from Item i "
+                + "where i.altipoitem.tipoitem.idtipoItem='"+ct.getTipoitem().getIdtipoItem()+"' "
+                + "and i.altipoitem.almacen.idalmacen= "+v.getIdalmacen()+" "
+                + "and i.estado='0' "
+                + "and i.operatividad='0' "
                 + "order by i.lote.compra.fecha";
 
         return em.createQuery(jpa, Item.class).setMaxResults(ct.getCantidad()).getResultList();

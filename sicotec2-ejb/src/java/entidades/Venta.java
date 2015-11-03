@@ -80,8 +80,8 @@ public class Venta implements Serializable {
     @Size(max = 45)
     @Column(name = "nombreusuario")
     private String nombreusuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
-    private List<Veitem> veitemList;
+    @OneToMany(mappedBy = "idventa")
+    private List<Item> itemList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
@@ -187,12 +187,12 @@ public class Venta implements Serializable {
     }
 
     @XmlTransient
-    public List<Veitem> getVeitemList() {
-        return veitemList;
+    public List<Item> getItemList() {
+        return itemList;
     }
 
-    public void setVeitemList(List<Veitem> veitemList) {
-        this.veitemList = veitemList;
+    public void setItemList(List<Item> itemList) {
+        this.itemList = itemList;
     }
 
     public Empresa getIdempresa() {

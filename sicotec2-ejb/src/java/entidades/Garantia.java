@@ -16,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -53,11 +52,9 @@ public class Garantia implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
-    @JoinColumns({
-        @JoinColumn(name = "idventa", referencedColumnName = "idventa"),
-        @JoinColumn(name = "iditem", referencedColumnName = "iditem")})
+    @JoinColumn(name = "iditem", referencedColumnName = "iditem")
     @ManyToOne(optional = false)
-    private Veitem veitem;
+    private Item iditem;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idgarantia")
     private List<Informe> informeList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idgarantia")
@@ -94,12 +91,12 @@ public class Garantia implements Serializable {
         this.estado = estado;
     }
 
-    public Veitem getVeitem() {
-        return veitem;
+    public Item getIditem() {
+        return iditem;
     }
 
-    public void setVeitem(Veitem veitem) {
-        this.veitem = veitem;
+    public void setIditem(Item iditem) {
+        this.iditem = iditem;
     }
 
     @XmlTransient

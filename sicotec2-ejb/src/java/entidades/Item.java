@@ -50,15 +50,23 @@ public class Item implements Serializable {
     @Size(max = 45)
     @Column(name = "operatividad")
     private String operatividad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
-    private List<Veitem> veitemList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iditem")
+    private List<Garantia> garantiaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "item")
     private List<Movimientoitem> movimientoitemList;
+    @JoinColumns({
+        @JoinColumn(name = "idalmacen", referencedColumnName = "idalmacen"),
+        @JoinColumn(name = "idtipoItem", referencedColumnName = "idtipoItem")})
+    @ManyToOne(optional = false)
+    private Altipoitem altipoitem;
     @JoinColumns({
         @JoinColumn(name = "idlote", referencedColumnName = "idlote"),
         @JoinColumn(name = "idcompra", referencedColumnName = "idcompra")})
     @ManyToOne(optional = false)
     private Lote lote;
+    @JoinColumn(name = "idventa", referencedColumnName = "idventa")
+    @ManyToOne
+    private Venta idventa;
 
     public Item() {
     }
@@ -92,12 +100,12 @@ public class Item implements Serializable {
     }
 
     @XmlTransient
-    public List<Veitem> getVeitemList() {
-        return veitemList;
+    public List<Garantia> getGarantiaList() {
+        return garantiaList;
     }
 
-    public void setVeitemList(List<Veitem> veitemList) {
-        this.veitemList = veitemList;
+    public void setGarantiaList(List<Garantia> garantiaList) {
+        this.garantiaList = garantiaList;
     }
 
     @XmlTransient
@@ -109,12 +117,28 @@ public class Item implements Serializable {
         this.movimientoitemList = movimientoitemList;
     }
 
+    public Altipoitem getAltipoitem() {
+        return altipoitem;
+    }
+
+    public void setAltipoitem(Altipoitem altipoitem) {
+        this.altipoitem = altipoitem;
+    }
+
     public Lote getLote() {
         return lote;
     }
 
     public void setLote(Lote lote) {
         this.lote = lote;
+    }
+
+    public Venta getIdventa() {
+        return idventa;
+    }
+
+    public void setIdventa(Venta idventa) {
+        this.idventa = idventa;
     }
 
     @Override
