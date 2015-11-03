@@ -68,6 +68,12 @@ public class indexMB {
         p.setUrl("http://localhost:8080/sicotec2-war/faces/personas/PersonasJSF.xhtml");
         permisos.add(p);
         
+        p=new Permiso();
+        p.setIdpermiso(7);
+        p.setNombre("Usuarios");
+        p.setUrl("http://localhost:8080/sicotec2-war/faces/usuario/UsuarioJSF.xhtml");
+        permisos.add(p);
+        
    return permisos;
    }
 

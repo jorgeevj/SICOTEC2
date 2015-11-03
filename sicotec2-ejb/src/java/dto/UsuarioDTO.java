@@ -19,15 +19,21 @@ import java.util.List;
  *
  * @author Jorge
  */
-public class UsuarioDTO implements Serializable{
-private Integer idusuario;
+public class UsuarioDTO {
+    
+    private Integer idusuario;
     private String nombre;
     private String clave;
+    private Date fecha;
     private Persona idpersona;
     private Rol idrol;
     
     //EXTRAS
     private int idRol;
+    
+    //AGREGADOS
+     private Date fechaInicio;
+     private Date fechaFin;
     
     //
     private List<Evento> eventoList;
@@ -128,6 +134,30 @@ private Integer idusuario;
      */
     public void setIdRol(int idRol) {
         this.idRol = idRol;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
     
 }

@@ -65,8 +65,15 @@ public class UsuarioBO {
         DTO.setIdpersona(usuario.getIdpersona());
         DTO.setNombre(usuario.getNombre());
         DTO.setClave(usuario.getClave());
+        DTO.setIdrol(usuario.getIdrol());
         DTO.setIdRol(usuario.getIdrol().getIdrol());
-
+        DTO.setFecha(usuario.getFecha());
+        
         return DTO;
+    }
+    
+    public List<UsuarioDTO> BuscarUsuario(UsuarioDTO dto) {
+       List<UsuarioDTO> listaDto = this.convertListEntityToDTO(usuarioFacade.buscarUsuario(dto));
+        return listaDto;
     }
 }

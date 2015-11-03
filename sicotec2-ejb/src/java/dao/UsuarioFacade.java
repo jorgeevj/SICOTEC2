@@ -7,6 +7,9 @@ package dao;
 
 import dto.UsuarioDTO;
 import entidades.Usuario;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,4 +52,32 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         
         return u;
     } 
+    public List<Usuario> buscarUsuario(UsuarioDTO dto) {
+            List<Usuario> l = new ArrayList<Usuario>();
+             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String sql = "SELECT c FROM Usuario c WHERE 1=1 ";
+     
+           try{
+               
+                if(dto.getNombre()!=null && !dto.getNombre().equals("")){
+                sql+=" and c.nombre like '%"+dto.getNombre()+"%' ";
+                }
+                if(dto.getIdpersona().getNombre()!=null && !dto.getIdpersona().getNombre().equals("")){
+                sql+="and c.idpersona.nombre like '%"+dto.getIdpersona().getNombre()+"%' ";
+                }
+                if(dto.getFechaInicio() != null){
+                sql += "and c.fecha >= '"+sdf.format(dto.getFechaInicio())+"' ";
+                }
+                if(dto.getFechaFin()!= null){
+                sql += "and c.fecha <= '"+sdf.format(dto.getFechaFin())+"' ";
+                }
+            
+                
+               l=em.createQuery(sql, Usuario.class).getResultList();
+           } catch(Exception e){
+               l = new ArrayList<Usuario>();
+           } 
+          return l;    
+    }
+     
 }
