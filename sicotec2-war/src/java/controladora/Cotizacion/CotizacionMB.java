@@ -262,7 +262,7 @@ public class CotizacionMB {
             return;
         }
         camposCrear.setFechaEnvio(new Date());
-        camposCrear.setEstado(3);
+        camposCrear.setEstado(2);
         guardarCrear(actionEvent);
         cerrarCrear(actionEvent);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha Enviado la cotizacion", ""));
@@ -295,7 +295,7 @@ public class CotizacionMB {
 
     public void acepAproCrear(ActionEvent actionEvent) {
         
-        camposCrear.setEstado(2);
+        camposCrear.setEstado(3);
         guardarCrear(actionEvent);
         cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
         cerrarAproCrear(actionEvent);
@@ -353,7 +353,7 @@ public class CotizacionMB {
         }
     }
     public void acepAproEditar(ActionEvent actionEvent) {
-        cotizacionSelec.setEstado(2);
+        cotizacionSelec.setEstado(3);
         GuardarEditar(actionEvent);
         cotizacionBO.generaVentaEdit(listaCoItemSelect, cotizacionSelec);
         cerrarAproEdit(actionEvent);
@@ -409,7 +409,7 @@ public class CotizacionMB {
             return;
         }
         cotizacionSelec.setFechaEnvio(new Date());
-        cotizacionSelec.setEstado(3);
+        cotizacionSelec.setEstado(2);
         GuardarEditar(actionEvent);
         cerrarEditar(actionEvent);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se ha Enviado la cotizacion", ""));
