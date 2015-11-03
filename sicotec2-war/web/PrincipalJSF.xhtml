@@ -494,6 +494,66 @@ jorgeevj 15.09.15 Creacion.
                 <p:commandButton id="btnCancelAproedit" value="Cancelar" actionListener="#{cotizacionMB.cerrarAproCrear}" />
             </h:form>
         </p:dialog>
+            
+          <p:dialog header="VER COTIZACION" widgetVar="verCotizacion" modal="true" rendered="true" >
+            <h:form id="formVerCot">
+                <p:outputLabel value="Duracion/Dias:" for="itvc2" />
+                        <p:inputText id="itvc2" value="#{cotizacionMB.cotizacionSelec.duracion}" 
+                                     disabled="true"/>
+
+                        <p:outputLabel value="Entrega:" for="itvc3" />
+                        <p:selectOneMenu id="itvc3" value="#{cotizacionMB.cotizacionSelec.entrega}" disabled="true">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Domicilio" itemValue="0" />
+                            <f:selectItem itemLabel="Almacen" itemValue="1" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="choiceEmpVC" value="Empresa: "/>
+                        <p:selectOneMenu id="choiceEmpVC" value="#{cotizacionMB.cotizacionSelec.empresaDTO.idemp}" 
+                                         disabled="true" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{cotizacionMB.listaEmpresas}" var="emp" 
+                                           itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="almacenesVC" value="Almacen:" />
+                        <p:selectOneMenu id="almacenesVC" value="#{cotizacionMB.cotizacionSelec.idalm}" 
+                                         valueChangeListener="#{cotizacionMB.almacenSelect}" disabled="true">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
+                
+                
+               <p:dataTable id="tbVerCot" widgetVar="tbVerCot"
+                            value="#{cotizacionMB.listaCotipoItem}" var="coitem"
+                            emptyMessage="No se encontraron Items" style="margin-bottom:0">
+                    <f:facet name="header">
+                        Lista de Items de la Cotizacion
+                    </f:facet>
+                    <p:column headerText="Cod Item" >
+                        <h:outputText value="#{coitem.tipoitem.idtipoItem}" />
+                    </p:column>
+                    <p:column headerText="Nombre" > 
+                        <h:outputText value="#{coitem.tipoitem.nombre}" />
+                    </p:column>
+                    <p:column headerText="Stock" >
+                        <h:outputText value="#{coitem.stock}" />
+                    </p:column>
+                    <p:column headerText="Cantidad" >
+                        <h:outputText value="#{coitem.cantidad}" />  
+                    </p:column>
+                    <p:column headerText="Precio U." >
+                        <h:outputText value="#{coitem.precio}" />
+                    </p:column>
+                    <p:column headerText="Sub. Total" >
+                        <h:outputText value="#{coitem.cantidad*coitem.precio}" />
+                    </p:column>
+                   
+                </p:dataTable>  
+            </h:form>
+        </p:dialog>   
+            
         <!--  FIN DIALOG DE COTIZACIONES-->
 
 

@@ -53,6 +53,7 @@ public class CotizacionMB {
     private List<Almacen> listaAlmacenes;
     private String selectAlmacen;
     private boolean btnEditarEstado;
+    private boolean btnVerEstado;
 
     private List<Tipoitem> listaTipoItem;
     private List<Tipoitem> filtroTipoItem;
@@ -102,10 +103,12 @@ public class CotizacionMB {
     campos=new CotizacionDTO();
     listaCotizacion = cotizacionBO.getAllCotizaciones();
     btnEditarEstado = true;
+    btnVerEstado=true;
     }
 
     public void onRowSelectCot(SelectEvent event) {
         btnEditarEstado = false;
+        btnVerEstado=false;
     }
 
     public void crear(ActionEvent actionEvent) {
@@ -393,7 +396,17 @@ public class CotizacionMB {
         context.execute("PF('editCot').hide();");
     }
     // FIN EDITAR
-
+//VER
+    public void ver(ActionEvent actionEvent){
+    listaCotipoItem=cotizacionBO.getListCotipoitemByidCot(cotizacionSelec.getIdcotizacion());
+    
+    RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('verCotizacion').show();");
+//        context.update("formVerCot");
+    }
+    
+    //FIN VER
+    
     public CotizacionBO getCotizacionBO() {
         return cotizacionBO;
     }
@@ -584,6 +597,14 @@ public class CotizacionMB {
 
     public void setCatipoItemtemp(CotipoitemDTO catipoItemtemp) {
         this.catipoItemtemp = catipoItemtemp;
+    }
+
+    public boolean isBtnVerEstado() {
+        return btnVerEstado;
+    }
+
+    public void setBtnVerEstado(boolean btnVerEstado) {
+        this.btnVerEstado = btnVerEstado;
     }
 
 }

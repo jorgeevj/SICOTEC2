@@ -44,20 +44,22 @@
                         <f:selectItem itemLabel="Caducado" itemValue="4" />
                     </p:selectOneMenu>
                 </p:panelGrid>
-                <p:panelGrid columns="4" styleClass="hideborder">
+                <p:panelGrid columns="5" styleClass="hideborder">
                     <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
                                      actionListener="#{cotizacionMB.limpiar}" update="formCotizacion"/>
                     <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
                                      actionListener="#{cotizacionMB.consultar}" update="tabCotizaciones"/>
                     <p:commandButton value="Crear" actionListener="#{cotizacionMB.crear}" id="btnCrear" title="Crear"  update="formRegCot"/>
                     <p:commandButton value="Editar" actionListener="#{cotizacionMB.editar}" id="btnEditarCot" title="Editar" 
-                                     disabled="#{cotizacionMB.btnEditarEstado}" update="formEditCot,growlCot"/>         
+                                     disabled="#{cotizacionMB.btnEditarEstado}" update="formEditCot,growlCot"/> 
+                    <p:commandButton value="Ver" actionListener="#{cotizacionMB.ver}" id="btnVerCot" title="Ver" 
+                                     disabled="#{cotizacionMB.btnVerEstado}" update="formVerCot"/> 
                 </p:panelGrid>
 
                 
                     <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}" 
                                  selectionMode="single" rowKey="#{cot.idcotizacion}" selection="#{cotizacionMB.cotizacionSelec}">
-                        <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot" />
+                        <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot,formCotizacion:btnVerCot" />
 
                         <p:column headerText="N° Serie" width="40">
                             <h:outputText value="#{cot.serie}" />
