@@ -7,7 +7,6 @@ package controladora.Empresa;
 
 import bo.EmpresaBO;
 import dto.EmpresaDTO;
-import entidades.Empresa;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -24,8 +23,9 @@ public class EmpresaMB {
     @EJB
     private EmpresaBO empresaBO;
 
-    EmpresaDTO consultaEmpresaDTO;
-    List<EmpresaDTO> listaEmpresa;
+    private EmpresaDTO consultaEmpresaDTO;
+    private EmpresaDTO EmpresaSelectDTO;
+    private List<EmpresaDTO> listaEmpresa;
     /**
      * Creates a new instance of EmpresaMB
      */
@@ -35,5 +35,29 @@ public class EmpresaMB {
     public void init() {
       consultaEmpresaDTO=new EmpresaDTO();
       listaEmpresa=empresaBO.getAllEmpresas();
+    }
+
+    public EmpresaDTO getConsultaEmpresaDTO() {
+        return consultaEmpresaDTO;
+    }
+
+    public void setConsultaEmpresaDTO(EmpresaDTO consultaEmpresaDTO) {
+        this.consultaEmpresaDTO = consultaEmpresaDTO;
+    }
+
+    public List<EmpresaDTO> getListaEmpresa() {
+        return listaEmpresa;
+    }
+
+    public void setListaEmpresa(List<EmpresaDTO> listaEmpresa) {
+        this.listaEmpresa = listaEmpresa;
+    }
+
+    public EmpresaDTO getEmpresaSelectDTO() {
+        return EmpresaSelectDTO;
+    }
+
+    public void setEmpresaSelectDTO(EmpresaDTO EmpresaSelectDTO) {
+        this.EmpresaSelectDTO = EmpresaSelectDTO;
     }
 }

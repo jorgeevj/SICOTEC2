@@ -2,13 +2,33 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../PrincipalJSF.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:define name="body">
-       <p:outputLabel value="N° Serie" for="itemp1" />
-                    <p:inputText id="itemp1" value="#{cotizacionMB.campos.serie}" maxlength="3" 
-                                 onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;">
-                    </p:inputText>
+       <p:outputLabel value="Nombre:" for="itemp1" />
+       <p:inputText id="itemp1" value="#{empresaMB.consultaEmpresaDTO.nombre}">
+       </p:inputText>
+       <p:outputLabel value="RUC:" for="itemp2" />
+       <p:inputText id="itemp2" value="#{empresaMB.consultaEmpresaDTO.ruc}">
+       </p:inputText>
+       <p:outputLabel value="Email" for="itemp3" />
+       <p:inputText id="itemp3" value="#{empresaMB.consultaEmpresaDTO.em}">
+       </p:inputText>
+       
+       <p:dataTable id="tabEmpresas" var="emp" value="#{empresaMB.listaEmpresa}" 
+                    selectionMode="single" rowKey="#{emp.idempresa}" selection="#{empresaMB.empresaSelectDTO}">
+                       
+                        <p:column headerText="Nombre:" >
+                            <h:outputText value="#{emp.nombre}" />
+                        </p:column>
+                        <p:column headerText="RUC:">
+                            <h:outputText value="#{emp.ruc}" />
+                        </p:column>
+                        <p:column headerText="Email:">
+                            <h:outputText value="#{emp.email}" />
+                        </p:column>
+                    </p:dataTable>
     </ui:define>
 
 </ui:composition>
