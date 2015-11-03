@@ -132,6 +132,10 @@ public class CotizacionMB {
     }
 
     public void guardarCrear(ActionEvent actionEvent) {
+        if (cotizacionSelec.getDuracion()<=0) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Para enviar debes colocar la duracion", ""));
+            return;
+        }
         if (listaCotipoItem.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay Items Agregados", ""));
             return;
@@ -139,6 +143,7 @@ public class CotizacionMB {
         
         camposCrear.setEstado(1);
         camposCrear = cotizacionBO.guardarCrear(camposCrear);
+        listaCotizacion=cotizacionBO.getAllCotizaciones();
         for (int i = 0; i < listaCotipoItem.size(); i++) {
             listaCotipoItem.get(i).setCotizacion(camposCrear);
             listaCotipoItem.get(i).setDescuento(listaCotipoItem.get(i).getTipoitem().getPrecioLista() - listaCotipoItem.get(i).getPrecio());
@@ -272,6 +277,14 @@ public class CotizacionMB {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha Seleccionado ningun Item", ""));
             return;
         }
+        for (CotipoitemDTO lci : listaCoItemSelect) {
+        if(lci.getCantidad()>lci.getStock()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficiente Stock de algun iten seleccionado", ""));    
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("messages");
+        return;
+        } 
+        }
         for(CotipoitemDTO cti:listaCoItemSelect){
         if(cti.getStock()<cti.getCantidad()){
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficiente Stock de un Iten Seleccionado", ""));
@@ -283,6 +296,7 @@ public class CotizacionMB {
     }
 
     public void acepAproCrear(ActionEvent actionEvent) {
+        
         camposCrear.setEstado(2);
         guardarCrear(actionEvent);
         cotizacionBO.generaVentaCrea(listaCoItemSelect, camposCrear);
@@ -353,6 +367,14 @@ public class CotizacionMB {
         if (listaCoItemSelect.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha Seleccionado ningun Item", ""));
             return;
+        }
+        for (CotipoitemDTO lci : listaCoItemSelect) {
+        if(lci.getCantidad()>lci.getStock()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay suficiente Stock de algun iten seleccionado", ""));    
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("messagesEdit");
+        return;
+        } 
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('aproVentaEdit').show();");
