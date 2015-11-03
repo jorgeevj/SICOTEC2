@@ -21,6 +21,7 @@ public class EmpresaDTO {
     private Integer idempresa;
     private String nombre;
     private String ruc;
+    private String email;
     private Integer tipo;
     private List<Tipo> tipoList;
     private List<Compra> compraList;
@@ -137,6 +138,14 @@ public class EmpresaDTO {
 
     public void setIdemp(int idemp) {
         this.idemp = idemp;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
    
