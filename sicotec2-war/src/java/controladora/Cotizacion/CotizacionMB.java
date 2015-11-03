@@ -132,10 +132,7 @@ public class CotizacionMB {
     }
 
     public void guardarCrear(ActionEvent actionEvent) {
-        if (cotizacionSelec.getDuracion()<=0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Para enviar debes colocar la duracion", ""));
-            return;
-        }
+       
         if (listaCotipoItem.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay Items Agregados", ""));
             return;
@@ -258,7 +255,8 @@ public class CotizacionMB {
     }
 
     public void enviaCrear(ActionEvent actionEvent) {
-       if (camposCrear.getDuracion()==null) {
+        
+        if (camposCrear.getDuracion()==null || camposCrear.getDuracion()<1) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Duracion minima de Envio es 1 dia", ""));
 
             return;
@@ -405,6 +403,11 @@ public class CotizacionMB {
         context.update("formCotizacion");
     }
     public void enviaEditar(ActionEvent actionEvent) {
+        if (cotizacionSelec.getDuracion()<1) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Duracion minima de Envio es 1 dia", ""));
+
+            return;
+        }
         cotizacionSelec.setFechaEnvio(new Date());
         cotizacionSelec.setEstado(3);
         GuardarEditar(actionEvent);

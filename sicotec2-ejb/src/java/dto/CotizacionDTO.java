@@ -175,10 +175,10 @@ public class CotizacionDTO {
         nombEstado="CREADA";
         }
         if(estado==2){
-        nombEstado="APROBADA";
+        nombEstado="ENVIADA";
         }
         if(estado==3){
-        nombEstado="ENVIADA";
+        nombEstado="APROBADA";
         }
         if(estado==4){
         nombEstado="CADUCADA";
