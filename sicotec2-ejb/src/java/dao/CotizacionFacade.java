@@ -41,8 +41,8 @@ public class CotizacionFacade extends AbstractFacade<Cotizacion> {
             if(dto.getIdcotizacion()!=0){
             sql+="and c.idcotizacion = "+dto.getIdcotizacion()+" ";
             }      
-            if(dto.getIdempresa().getNombre()!=null && !dto.getIdempresa().getNombre().equals("")){
-            sql+="and c.idempresa.nombre like '%"+dto.getIdempresa().getNombre()+"%' ";
+            if(dto.getIdempresa().getIdempresa()!=null){
+            sql+="and c.idempresa.idempresa ="+dto.getIdempresa().getIdempresa()+" ";
             }
             if(dto.getIdempresa().getRuc()!=null && !dto.getIdempresa().getRuc().equals("")){
             sql+="and c.idempresa.ruc like '%"+dto.getIdempresa().getRuc()+"%' ";
