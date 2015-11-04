@@ -9,14 +9,13 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,24 +24,24 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jorge
  */
 @Entity
-@Table(name = "ubicacion")
+@Table(name = "ubipers")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ubicacion.findAll", query = "SELECT u FROM Ubicacion u"),
-    @NamedQuery(name = "Ubicacion.findByIdubicacion", query = "SELECT u FROM Ubicacion u WHERE u.idubicacion = :idubicacion"),
-    @NamedQuery(name = "Ubicacion.findByNombre", query = "SELECT u FROM Ubicacion u WHERE u.nombre = :nombre"),
-    @NamedQuery(name = "Ubicacion.findByNumero", query = "SELECT u FROM Ubicacion u WHERE u.numero = :numero"),
-    @NamedQuery(name = "Ubicacion.findByCodDist", query = "SELECT u FROM Ubicacion u WHERE u.codDist = :codDist"),
-    @NamedQuery(name = "Ubicacion.findByCodProv", query = "SELECT u FROM Ubicacion u WHERE u.codProv = :codProv"),
-    @NamedQuery(name = "Ubicacion.findByCodDept", query = "SELECT u FROM Ubicacion u WHERE u.codDept = :codDept"),
-    @NamedQuery(name = "Ubicacion.findByPrincipal", query = "SELECT u FROM Ubicacion u WHERE u.principal = :principal")})
-public class Ubicacion implements Serializable {
+    @NamedQuery(name = "Ubipers.findAll", query = "SELECT u FROM Ubipers u"),
+    @NamedQuery(name = "Ubipers.findByIdubiPers", query = "SELECT u FROM Ubipers u WHERE u.idubiPers = :idubiPers"),
+    @NamedQuery(name = "Ubipers.findByNombre", query = "SELECT u FROM Ubipers u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Ubipers.findByNumero", query = "SELECT u FROM Ubipers u WHERE u.numero = :numero"),
+    @NamedQuery(name = "Ubipers.findByCodDist", query = "SELECT u FROM Ubipers u WHERE u.codDist = :codDist"),
+    @NamedQuery(name = "Ubipers.findByCodProv", query = "SELECT u FROM Ubipers u WHERE u.codProv = :codProv"),
+    @NamedQuery(name = "Ubipers.findByCodDept", query = "SELECT u FROM Ubipers u WHERE u.codDept = :codDept"),
+    @NamedQuery(name = "Ubipers.findByPrincipal", query = "SELECT u FROM Ubipers u WHERE u.principal = :principal")})
+public class Ubipers implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idubicacion")
-    private Integer idubicacion;
+    @NotNull
+    @Column(name = "idubiPers")
+    private Integer idubiPers;
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
@@ -58,25 +57,26 @@ public class Ubicacion implements Serializable {
     @Size(max = 45)
     @Column(name = "cod_dept")
     private String codDept;
+    @Size(max = 45)
     @Column(name = "principal")
-    private Integer principal;
-    @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
+    private String principal;
+    @JoinColumn(name = "idpersona", referencedColumnName = "idpersona")
     @ManyToOne(optional = false)
-    private Empresa idempresa;
+    private Persona idpersona;
 
-    public Ubicacion() {
+    public Ubipers() {
     }
 
-    public Ubicacion(Integer idubicacion) {
-        this.idubicacion = idubicacion;
+    public Ubipers(Integer idubiPers) {
+        this.idubiPers = idubiPers;
     }
 
-    public Integer getIdubicacion() {
-        return idubicacion;
+    public Integer getIdubiPers() {
+        return idubiPers;
     }
 
-    public void setIdubicacion(Integer idubicacion) {
-        this.idubicacion = idubicacion;
+    public void setIdubiPers(Integer idubiPers) {
+        this.idubiPers = idubiPers;
     }
 
     public String getNombre() {
@@ -119,37 +119,37 @@ public class Ubicacion implements Serializable {
         this.codDept = codDept;
     }
 
-    public Integer getPrincipal() {
+    public String getPrincipal() {
         return principal;
     }
 
-    public void setPrincipal(Integer principal) {
+    public void setPrincipal(String principal) {
         this.principal = principal;
     }
 
-    public Empresa getIdempresa() {
-        return idempresa;
+    public Persona getIdpersona() {
+        return idpersona;
     }
 
-    public void setIdempresa(Empresa idempresa) {
-        this.idempresa = idempresa;
+    public void setIdpersona(Persona idpersona) {
+        this.idpersona = idpersona;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idubicacion != null ? idubicacion.hashCode() : 0);
+        hash += (idubiPers != null ? idubiPers.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ubicacion)) {
+        if (!(object instanceof Ubipers)) {
             return false;
         }
-        Ubicacion other = (Ubicacion) object;
-        if ((this.idubicacion == null && other.idubicacion != null) || (this.idubicacion != null && !this.idubicacion.equals(other.idubicacion))) {
+        Ubipers other = (Ubipers) object;
+        if ((this.idubiPers == null && other.idubiPers != null) || (this.idubiPers != null && !this.idubiPers.equals(other.idubiPers))) {
             return false;
         }
         return true;
@@ -157,7 +157,7 @@ public class Ubicacion implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Ubicacion[ idubicacion=" + idubicacion + " ]";
+        return "entidades.Ubipers[ idubiPers=" + idubiPers + " ]";
     }
     
 }

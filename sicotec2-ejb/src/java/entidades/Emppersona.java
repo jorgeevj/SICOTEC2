@@ -34,14 +34,14 @@ public class Emppersona implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EmppersonaPK emppersonaPK;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emppersona")
-    private List<Ubicacion> ubicacionList;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
     @JoinColumn(name = "idpersona", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Persona persona;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emppersona")
+    private List<Telefono> telefonoList;
 
     public Emppersona() {
     }
@@ -62,15 +62,6 @@ public class Emppersona implements Serializable {
         this.emppersonaPK = emppersonaPK;
     }
 
-    @XmlTransient
-    public List<Ubicacion> getUbicacionList() {
-        return ubicacionList;
-    }
-
-    public void setUbicacionList(List<Ubicacion> ubicacionList) {
-        this.ubicacionList = ubicacionList;
-    }
-
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -85,6 +76,15 @@ public class Emppersona implements Serializable {
 
     public void setPersona(Persona persona) {
         this.persona = persona;
+    }
+
+    @XmlTransient
+    public List<Telefono> getTelefonoList() {
+        return telefonoList;
+    }
+
+    public void setTelefonoList(List<Telefono> telefonoList) {
+        this.telefonoList = telefonoList;
     }
 
     @Override

@@ -56,6 +56,10 @@ public class Persona implements Serializable {
     @Size(max = 100)
     @Column(name = "email")
     private String email;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpersona")
+    private List<Ubipers> ubipersList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpersona")
+    private List<Telefpersona> telefpersonaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "persona")
     private List<Emppersona> emppersonaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idpersona")
@@ -106,6 +110,24 @@ public class Persona implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @XmlTransient
+    public List<Ubipers> getUbipersList() {
+        return ubipersList;
+    }
+
+    public void setUbipersList(List<Ubipers> ubipersList) {
+        this.ubipersList = ubipersList;
+    }
+
+    @XmlTransient
+    public List<Telefpersona> getTelefpersonaList() {
+        return telefpersonaList;
+    }
+
+    public void setTelefpersonaList(List<Telefpersona> telefpersonaList) {
+        this.telefpersonaList = telefpersonaList;
     }
 
     @XmlTransient
