@@ -120,7 +120,32 @@ public class tipoitemMB {
     }
     
     ///
-    
+    public String validarRegistro(){
+        String msjError="";
+        if(getNombre().equals("") || getNombre().equals(null))
+            msjError="Ingrese nombre del item";
+        else if(getPrecio().equals(null) || getPrecio().equals(0))
+            msjError="Ingrese precio del item";
+        else if(getLista2().isEmpty())
+            msjError="eliga Caracteristicas";
+        else if(getNumParte().equals(null) || getNumParte().equals(0))
+            msjError="Ingrese un numero de parte";
+        else if(getDescripcion().equals(null) || getDescripcion().equals(0))
+            msjError="Ingrese una descripcion del item";
+        else if(getColorSelect().equals(null) || getColorSelect().equals(0))
+            msjError="Seleccione un color";
+        else if(getFamiliaSelect().equals(null) || getFamiliaSelect().equals(0))
+            msjError="Seleccione una familia";
+        else if(getDsctoCliente() == 0.0)
+            msjError="Ingrese un dscto Cliente";
+        else if(getDsctoDistribuidor() == 0.0)
+            msjError="Ingrese un dscto Distribuidor";
+        else if(getTipo().equals("") || getTipo().equals(null))
+            msjError="Ingrese un Tipo";
+                                 
+          return msjError;  
+    }
+    ///
     public void listarCaracteristicasDelItem(String id){
         Caracteristica obj;
        // obj=tipoItemBO
@@ -207,29 +232,35 @@ public class tipoitemMB {
     
     
     public void registrarNuevoTipoItem(ActionEvent e){
-        TipoItemDTO objTipoItem=new TipoItemDTO();
-        objTipoItem.setIdtipoItem(codigoItem);
-        objTipoItem.setNumParte(numParte);
-        objTipoItem.setNombre(nombre);
-        objTipoItem.setDescipcion(descripcion);
-        objTipoItem.setTipo(tipo);
-        objTipoItem.setPrecioLista(Double.parseDouble(precio));
-        objTipoItem.setDesCliente(dsctoCliente);
-        objTipoItem.setDesDistribuidor(dsctoDistribuidor);
-        
-        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));
-        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        objTipoItem.setIdColor(Integer.parseInt(colorSelect));
-        //objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
-        
-        //hasta aqui bien ahora debes meter tambien la lista de caracteristicas dentro de la entidad tipoiten
-        //el DTO al igual que una entidad debia de contener la lista de caracteristicas
-        //pero como tu DTO lo creaste sin esa lista 
-        //(ojo revisa bien la entidad que atributos tiene para que no te falte ninguno al crear el dto)
-        //lo que hare es meterle otro parametro a tu metodo
-        tipoItemBO.registrarTipoItem(objTipoItem,lista2);// este es el metodo que debes usar para todo el registro 
-        //comentamos este metodo---> registrarTipoItemXCaracteristica();
-        
+        String sms = validarRegistro();
+        if(sms != ""){
+            
+        }else{
+            TipoItemDTO objTipoItem=new TipoItemDTO();
+            objTipoItem.setIdtipoItem(codigoItem);
+            objTipoItem.setNumParte(numParte);
+            objTipoItem.setNombre(nombre);
+            objTipoItem.setDescipcion(descripcion);
+            objTipoItem.setTipo(tipo);
+            objTipoItem.setPrecioLista(Double.parseDouble(precio));
+            objTipoItem.setDesCliente(dsctoCliente);
+            objTipoItem.setDesDistribuidor(dsctoDistribuidor);
+
+            objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));
+            objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
+            objTipoItem.setIdColor(Integer.parseInt(colorSelect));
+            //objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
+
+            //hasta aqui bien ahora debes meter tambien la lista de caracteristicas dentro de la entidad tipoiten
+            //el DTO al igual que una entidad debia de contener la lista de caracteristicas
+            //pero como tu DTO lo creaste sin esa lista 
+            //(ojo revisa bien la entidad que atributos tiene para que no te falte ninguno al crear el dto)
+            //lo que hare es meterle otro parametro a tu metodo
+            tipoItemBO.registrarTipoItem(objTipoItem,lista2);// este es el metodo que debes usar para todo el registro 
+            //comentamos este metodo---> registrarTipoItemXCaracteristica();
+            RequestContext context = RequestContext.getCurrentInstance();   
+            context.execute("PF('crearMarcaItem').hide();");
+        }
     }
     
     public void registrarNuevaMarca(ActionEvent e){
@@ -252,6 +283,7 @@ public class tipoitemMB {
     }
     
     public void registrarTipoItemXCaracteristica(){//este metodo esta mal no lo usare
+        
         TipoItemDTO objTipoItem=new TipoItemDTO();   
         List<Tipoitem> lista4=new ArrayList<Tipoitem>(); // la lista que necessitas llenar es de tipo "Caracteristica"   no tipoItem     
         
@@ -268,6 +300,10 @@ public class tipoitemMB {
     }
     
     public void modificarTipoItem(ActionEvent e){
+        String sms = validarRegistro();
+        if(sms != ""){
+            
+        }else{
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setIdtipoItem(codigoItem);
         objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
@@ -277,6 +313,7 @@ public class tipoitemMB {
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
         tipoItemBO.modificarTipoItem(objTipoItem);
+        }
     }
     
     
