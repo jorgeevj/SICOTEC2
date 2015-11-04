@@ -68,6 +68,7 @@ public class tipoitemMB {
     
     
     private List<Caracteristica> lista2; //para listar en la tabla caracteristicas
+    private List<CaracteristicaDTO> lista3;
 
     public tipoitemMB() {
     }
@@ -76,6 +77,7 @@ public class tipoitemMB {
     public void init() {
         lista = new ArrayList<>();
         lista2= new ArrayList<>();
+        lista3= new ArrayList<>();
         setLista(tipoItemBO.getAllTipoItem());
         tipoItemSelect=new TipoItemDTO();
         tipoItemSelect.setFamilia(new Familia());
@@ -214,6 +216,7 @@ public class tipoitemMB {
     RequestContext context = RequestContext.getCurrentInstance(); 
     
     context.execute("PF('modificarItem').show();");
+    lista3=tipoItemBO.getCaracteristicaPorIdItem(Integer.parseInt(tipoItemSelect.getIdtipoItem()));
     
     }
     
@@ -583,6 +586,14 @@ public class tipoitemMB {
 
     public void setCaracteristicasTablaSelect(Caracteristica caracteristicasTablaSelect) {
         this.caracteristicasTablaSelect = caracteristicasTablaSelect;
+    }
+
+    public List<CaracteristicaDTO> getLista3() {
+        return lista3;
+    }
+
+    public void setLista3(List<CaracteristicaDTO> lista3) {
+        this.lista3 = lista3;
     }
     
     
