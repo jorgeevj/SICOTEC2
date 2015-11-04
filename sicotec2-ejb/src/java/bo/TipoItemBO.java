@@ -74,10 +74,13 @@ public class TipoItemBO {
         List<Categoria> lista= categoriaFacade.findAll();
         return lista;
     }
-    public Caracteristica getCaracteristicaPorIdItem(Integer a){
+    public List<CaracteristicaDTO> getCaracteristicaPorIdItem(Integer a){
         Caracteristica obj=new Caracteristica();
-        //obj=caracteristicaFacade.fi
-        return obj;
+        List<CaracteristicaDTO> listaDTO;
+        List<Caracteristica> lista = caracteristicaFacade.getCaracteristicaXTipoItem(a);
+        
+        listaDTO=convertEntidadtoDTOCaracteristica(lista);
+        return listaDTO;
     }
     public Caracteristica getCaracteristiaXID(Integer e){
         Caracteristica obj;
@@ -87,18 +90,18 @@ public class TipoItemBO {
     
     //////
     public List<TipoItemDTO> buscarTipoItem(TipoItemDTO t){       
-        Tipoitem r=convertDTOtoEntidad(t);
+        Tipoitem r=convertDTOtoEntidad(t,1);
         List<Tipoitem> lista =tipoItemFacade.getAllBusqueda(r);
         List<TipoItemDTO> lista1=convertEntidadToDTO(lista);
         return lista1;      
     }    
     public void registrarTipoItem(TipoItemDTO t,List<Caracteristica> c){ //hacemos que reciba la lista de caracteristicas
-        Tipoitem ti=convertDTOtoEntidad(t);
+        Tipoitem ti=convertDTOtoEntidad(t,1);
         ti.setCaracteristicaList(c);//aqui seteamos la lista para que tambien persista junto a tipoitem
         tipoItemFacade.create(ti); 
     }    
     public void modificarTipoItem(TipoItemDTO t){
-        tipoItemFacade.edit(convertDTOtoEntidad(t));
+        tipoItemFacade.edit(convertDTOtoEntidad(t,2));
     }
     
     public void registrarCaracteristica(TipoItemDTO t){
@@ -135,10 +138,29 @@ public class TipoItemBO {
          return lista3;
     }
     
+    public List<CaracteristicaDTO> convertEntidadtoDTOCaracteristica(List<Caracteristica> lista){
+        List<CaracteristicaDTO> lista3=new ArrayList<CaracteristicaDTO>();
+        
+        for(Caracteristica ite: lista){
+            
+            CaracteristicaDTO T=new CaracteristicaDTO();
+            T=convertEntidadtoDTOCara(ite);
+            lista3.add(T);
+        }
+         return lista3;
+    }    
     public Caracteristica convertDTOtoEntidadCaracteristica(TipoItemDTO b){
         Caracteristica e=new Caracteristica();        
         e.setNombre(b.getCaracteristica().getNombre());
         e.setDescripcion(b.getCaracteristica().getDescripcion());
+        return e;
+    }
+    
+    public CaracteristicaDTO convertEntidadtoDTOCara(Caracteristica b){
+        CaracteristicaDTO e=new CaracteristicaDTO();
+        e.setIdCaracteristica(b.getIdcaracteristica());
+        e.setNombreCaracteristica(b.getNombre());
+        
         return e;
     }
     public Caracteristica covertDTOtoEntidadTipoItemXCaracteristica(TipoItemDTO b){
@@ -154,9 +176,13 @@ public class TipoItemBO {
         e.setFormato(c.getMarca().getFormato());
         return e;
     }
-    public Tipoitem convertDTOtoEntidad(TipoItemDTO a){
-        Tipoitem e=new Tipoitem();        
-            e.setIdtipoItem(a.getIdtipoItem());
+    
+    //1 = insertar o buscar; 2 = editar
+    public Tipoitem convertDTOtoEntidad(TipoItemDTO a, int opc){
+        Tipoitem e = new Tipoitem(); 
+            if(opc == 2){
+                e.setIdtipoItem(a.getIdtipoItem());
+            }
             e.setNumParte(a.getNumParte());
             e.setNombre(a.getNombre());
             e.setDescripcion(a.getDescipcion());
