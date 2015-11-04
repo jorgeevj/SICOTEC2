@@ -259,7 +259,7 @@ public class tipoitemMB {
             tipoItemBO.registrarTipoItem(objTipoItem,lista2);// este es el metodo que debes usar para todo el registro 
             //comentamos este metodo---> registrarTipoItemXCaracteristica();
             RequestContext context = RequestContext.getCurrentInstance();   
-            context.execute("PF('crearMarcaItem').hide();");
+            context.execute("PF('registrarItem').hide();");
         }
     }
     
