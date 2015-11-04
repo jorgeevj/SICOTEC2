@@ -39,11 +39,22 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
         return lista;
     }
     
-    public List<Tipoitem> getCaracteristicaXTipoItem(Tipoitem e){
-        List<Tipoitem> lista= new ArrayList<Tipoitem>();
-        String sql="SELECT t.nombre FROM CaTipoItem t ";
-        Query q=em.createQuery(sql,Tipoitem.class);
-        lista=q.getResultList();       
+    public List<Caracteristica> getCaracteristicaXTipoItem(int idTipoItem){
+        List<Caracteristica> lista = new ArrayList<Caracteristica>();
+        try{
+        String sql = "SELECT t "
+                    + "FROM CaTipoItem t, "
+                    + "     Caracteristica c "
+                    + "WHERE t.tipoitem.idtipoItem = :idTipoitem "
+                    + "AND   t.caracteristica.idcaracteristica = c.idcaracteristica";
+        Query q = em.createQuery(sql,Caracteristica.class);
+        q.setParameter("idTipoitem", idTipoItem);
+        lista=q.getResultList(); 
+        }catch(Exception e){
+            System.out.println("error en CaTipoItem: "+e.getMessage()); 
+            lista=new ArrayList<Caracteristica>();
+        }
+              
         return lista;
     }
 }
