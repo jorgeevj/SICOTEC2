@@ -180,7 +180,7 @@ public class TipoItemBO {
     //1 = insertar o buscar; 2 = editar
     public Tipoitem convertDTOtoEntidad(TipoItemDTO a, int opc){
         Tipoitem e = new Tipoitem(); 
-            if(opc == 2){
+            if(opc == 1){
                 e.setIdtipoItem(a.getIdtipoItem());
             }
             e.setNumParte(a.getNumParte());
