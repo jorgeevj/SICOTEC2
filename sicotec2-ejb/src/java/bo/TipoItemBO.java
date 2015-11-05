@@ -77,8 +77,8 @@ public class TipoItemBO {
     public List<CaracteristicaDTO> getCaracteristicaPorIdItem(String a){
         Caracteristica obj=new Caracteristica();
         List<CaracteristicaDTO> listaDTO;
-        List<Caracteristica> lista = caracteristicaFacade.getCaracteristicaXTipoItem(a);
-        
+        List<Caracteristica> lista = tipoItemFacade.find(a).getCaracteristicaList();
+//        caracteristicaFacade.getCaracteristicaXTipoItem(a); //lo comentamos por que no es necesario hacer un query
         listaDTO=convertEntidadtoDTOCaracteristica(lista);
         return listaDTO;
     }

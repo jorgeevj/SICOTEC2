@@ -978,9 +978,9 @@ jorgeevj 15.09.15 Creacion.
                     </p:selectOneMenu>
 
                     <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formModificarTipoItem:tabla3"/> 
-
+                       </h:panelGrid>
                     <p:dataTable id="tabla3" value="#{tipoitemMB.lista2}" var="titee" selectionMode="single"
-                                 rowKey="#{titee.idCaracteristica}" scrollable="true" rows="5" selection="#{tipoitemMB.caracteristicasTablaSelect}"> 
+                                 rowKey="#{titee.idcaracteristica}" scrollable="true" rows="5" selection="#{tipoitemMB.caracteristicasTablaSelect}"> 
                         <p:column headerText="Características">
                             <h:outputText value="#{titee.nombre}"/>
                         </p:column>                            
@@ -992,7 +992,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:commandButton value="Crear una nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />
 
                     <p:commandButton  value="Modificar Item" actionListener="#{tipoitemMB.modificarTipoItem}"/>
-                </h:panelGrid>
+                
             </h:form>
 
         </p:dialog>
