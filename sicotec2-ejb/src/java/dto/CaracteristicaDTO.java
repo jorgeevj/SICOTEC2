@@ -12,6 +12,15 @@ package dto;
 public class CaracteristicaDTO {
     private Integer idCaracteristica;
     private String nombreCaracteristica;
+    private String descripcion;
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
     /**
      * @return the idCaracteristica
