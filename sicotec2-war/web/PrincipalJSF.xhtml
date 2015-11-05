@@ -712,7 +712,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Precio Lista" style="text-align: center">
                             <p:outputLabel value="#{tItemsSelec.precioLista}"/>
                         </p:column>
-                        <p:column headerText="Precio Lista" style="text-align: center">
+                        <p:column headerText="Cantidad" style="text-align: center">
                             <p:outputLabel value="#{tItemsSelec.cantidad}"/>
                         </p:column>
                     </p:dataTable>
@@ -771,13 +771,21 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad" style="text-align: center">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputLabel value="#{tItemsPedido.cantidad}"/></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{tItemsPedido.cantidad}" style="width:96%"/></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{tItemsPedido.cantidad}" style="width:96%">
+                                        <f:validateDoubleRange minimum="1" maximum="1000" />
+                                    </p:inputText>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
                         <p:column headerText="Costo Unitario" style="text-align: center">
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{tItemsPedido.costoUni}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{tItemsPedido    .costoUni}" style="width:96%"/></f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{tItemsPedido.costoUni}" style="width:96%">
+                                        <f:validateDoubleRange minimum="1" maximum="10000" />
+                                    </p:inputText>
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
                     </p:dataTable>

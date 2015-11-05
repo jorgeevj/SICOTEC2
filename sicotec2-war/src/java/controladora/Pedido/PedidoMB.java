@@ -102,8 +102,6 @@ public class PedidoMB{
         emp=new Empresa();
         campos = new PedidoDTO();
         getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
-        ListaItemsDisponibles = tipoItemBO.getAllTipoItem();
-        ListaItemsSeleccionado = new ArrayList<TipoItemDTO>(); 
         ListaEmpresaAdd = this.comboEmpresas();
         listaAlmacenesAdd = this.comboAlmacen();
         setListaEmpresaBusqueda(this.comboEmpresas());
@@ -157,7 +155,6 @@ public class PedidoMB{
     
     public void addNuevoPedido(ActionEvent actionEvent){
         String sms = this.validarCamposRegistro();
-        System.out.println("sms: " + sms);
         if(!sms.isEmpty()){
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -231,15 +228,24 @@ public class PedidoMB{
     }
     
     public void agregarCantidad(ActionEvent actionEvent){
-        getListaItemsDisponibles().remove(getObjTipoItem());
-        getObjTipoItem().setCantidad(Integer.parseInt(getCantidadAdd()));
-        getListaItemsSeleccionado().add(getObjTipoItem()); 
-        
-        
         RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formAddItems");
-        context.update("formTbSelec");
-        context.execute("PF('addCantidad').hide();");
+        if(!isNumeric(getCantidadAdd())){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "Debe ingresar un numero");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            if(Integer.parseInt(getCantidadAdd()) < 0){
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "Debe ingresar una cantidad mayor a 0");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            } else{
+                getListaItemsDisponibles().remove(getObjTipoItem());
+                getObjTipoItem().setCantidad(Integer.parseInt(getCantidadAdd()));
+                getListaItemsSeleccionado().add(getObjTipoItem()); 
+                context.update("formAddItems");
+                context.update("formTbSelec");
+                context.execute("PF('addCantidad').hide();");
+            }
+        }
+        
     }    
     
     public void abrirModalAgregarItemsEdit(ActionEvent actionEvent){
@@ -357,6 +363,8 @@ public class PedidoMB{
             pedidoBO.actualizarPedido(dto);
             getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
             setDisableEditar(true);
+            pedidoBO.updateAltipoItems(this.getListaAltipoitemEdit(getListaPealtipoitemDelete()),0,dto.getIdpedido());
+            pedidoBO.updateAltipoItems(this.getListaAltipoitemEdit(getListaItemsPedido()),1,dto.getIdpedido());
             pedidoBO.deletePedidosItems(getListaPealtipoitemDelete()); 
             pedidoBO.updatePedidosItems(getListaItemsPedido());
             RequestContext context = RequestContext.getCurrentInstance(); 
@@ -366,6 +374,22 @@ public class PedidoMB{
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", "Se editaron los campos");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+    
+    public List<AltipoitemDTO> getListaAltipoitemEdit(List<PealtipoitemDTO> listaDTO){
+        List<AltipoitemDTO> altiDTO = new ArrayList<AltipoitemDTO>();
+        for(PealtipoitemDTO paltiDTO : listaDTO){
+            AltipoitemDTO dto = new AltipoitemDTO();
+                Almacen entidadAlmacen = new Almacen();
+                entidadAlmacen.setIdalmacen(paltiDTO.getAltipoitem().getAlmacen().getIdalmacen());
+            dto.setAlmacen(entidadAlmacen);
+                Tipoitem entidadTipoitem = new Tipoitem();
+                entidadTipoitem.setIdtipoItem(paltiDTO.getAltipoitem().getTipoitem().getIdtipoItem());
+            dto.setTipoitem(entidadTipoitem);
+            dto.setReservado(paltiDTO.getCantidad());
+            altiDTO.add(dto);
+        }
+        return altiDTO;
     }
     
     public String validarCamposEdit(){
@@ -392,6 +416,15 @@ public class PedidoMB{
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formItemsPedido");
     }  
+    
+    private static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+    }   
 
     public PedidoBO getPedidoBO() {
         return pedidoBO;

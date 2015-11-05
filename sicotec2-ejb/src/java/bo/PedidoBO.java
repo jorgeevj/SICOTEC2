@@ -94,8 +94,8 @@ public class PedidoBO {
         } else{
             entidad.setFecha(new Date());
             Docalmacen da = this.getNewSerieAndCorrelativo(dto.getIdalmacen());
-            entidad.setSerie(String.valueOf(da.getSerie()));
-            entidad.setCorrelativo(String.valueOf(da.getCorrelativo()));
+            entidad.setSerie(String.format("%03d", da.getSerie()));
+            entidad.setCorrelativo(String.format("%06d", da.getSerie()));
         }
         entidad.setIdempresa(dto.getIdEmpresa());
         entidad.setIdalmacen(dto.getIdalmacen());
@@ -132,7 +132,6 @@ public class PedidoBO {
         List<Altipoitem> listaEntidad = new ArrayList<Altipoitem>();
         
         for(AltipoitemDTO dto : listaDTO){
-            System.out.println("dtoids: " + dto.getAlmacen().getIdalmacen() + "||" + dto.getTipoitem().getIdtipoItem());
             Altipoitem entidadATI = altipoitemFacace.getAllByTipoItemIdAlmacen(this.converDTOtoEntityAltipoitemAux(dto));
             
             Altipoitem entidad = new Altipoitem();
@@ -164,7 +163,6 @@ public class PedidoBO {
     
     public Altipoitem converDTOtoEntityAltipoitemAux(AltipoitemDTO dto){
         Altipoitem entidad = new Altipoitem();
-        System.out.println("dtoids: " + dto.getAlmacen().getIdalmacen() + "||" + dto.getTipoitem().getIdtipoItem());
             Almacen entidadAlmacen = new Almacen();
             entidadAlmacen.setIdalmacen(dto.getAlmacen().getIdalmacen());
         entidad.setAlmacen(entidadAlmacen);
@@ -172,7 +170,6 @@ public class PedidoBO {
             entidadTipoItem.setIdtipoItem(dto.getTipoitem().getIdtipoItem());
         entidad.setTipoitem(entidadTipoItem);
         entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
-        System.out.println("entidadids: " + entidad.getAlmacen().getIdalmacen()+"|" +entidad.getTipoitem().getIdtipoItem());
         return entidad;
     }
     
@@ -180,12 +177,13 @@ public class PedidoBO {
         Pedido entidad = convertDTOtoEntity(dto, 0);
         pedidoFacade.edit(entidad);
     }
-    
+    //CAE ACA
     public List<Pealtipoitem> convertDTOtoEntityPealTipoItem(List<PealtipoitemDTO> listDTO){
         List<Pealtipoitem> listaEntidad = new ArrayList<Pealtipoitem>();
         for(PealtipoitemDTO dto : listDTO){
             Pealtipoitem entidad = new Pealtipoitem();
-            entidad.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(),dto.getIdalmacen(), dto.getAltipoitem().getTipoitem().getIdtipoItem()));
+            entidad.setIdrequerimientos(null);
+            entidad.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(),dto.getAltipoitem().getAlmacen().getIdalmacen(), dto.getAltipoitem().getTipoitem().getIdtipoItem()));
             entidad.setPedido(dto.getPedido());
             entidad.setCantidad(dto.getCantidad());
             entidad.setCostoUni(dto.getCostoUni());
@@ -214,5 +212,63 @@ public class PedidoBO {
         for(Pealtipoitem entidad : listaEntidad){
             pealtipoitemFacade.edit(entidad);
         }
+    }
+    //quitar cantidad 0 , reemplazar cantidad 1
+    public void updateAltipoItems(List<AltipoitemDTO> listaDTO,int tipo,int idPedido){        
+        //List<Altipoitem> listaEntidad = new ArrayList<Altipoitem>();
+        if(tipo == 0){
+            for(AltipoitemDTO dto : listaDTO){
+                Altipoitem entidadATI = altipoitemFacace.getAllByTipoItemIdAlmacen(this.converDTOtoEntityAltipoitemAux(dto));
+                Altipoitem entidad = new Altipoitem();
+
+                entidad.setAlmacen(dto.getAlmacen());
+                Integer lastCantidad = entidadATI.getCantidad();
+                entidad.setCantidad(lastCantidad);
+                entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+                entidad.setComprados(entidadATI.getComprados());
+                entidad.setEstado(entidadATI.getEstado());
+                    Integer lastReserva = entidadATI.getReservado();
+                entidad.setReservado(lastReserva-dto.getReservado());
+                entidad.setTipoitem(dto.getTipoitem());
+                altipoitemFacace.edit(entidad);
+                //listaEntidad.add(entidad);
+            }
+        } else if(tipo == 1){
+            
+            for(AltipoitemDTO dto : listaDTO){
+                Pealtipoitem entidadPATI = this.getObjPealtipoitem(dto, idPedido);
+                entidadPATI = pealtipoitemFacade.getAllBytipoItemPedidoAlmacenId(entidadPATI);
+                Altipoitem entidadATI = altipoitemFacace.getAllByTipoItemIdAlmacen(this.converDTOtoEntityAltipoitemAux(dto));
+                Altipoitem entidad = new Altipoitem();
+                
+                entidad.setAlmacen(dto.getAlmacen());
+                Integer lastCantidad = entidadATI.getCantidad();
+                entidad.setCantidad(lastCantidad);
+                entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
+                entidad.setComprados(entidadATI.getComprados());
+                entidad.setEstado(entidadATI.getEstado());
+                    Integer lastReserva = entidadATI.getReservado();
+                entidad.setReservado(lastReserva-entidadPATI.getCantidad() + dto.getReservado());
+                entidad.setTipoitem(dto.getTipoitem());
+                altipoitemFacace.edit(entidad);
+                //listaEntidad.add(entidad);
+            }
+        }
+    }
+    
+    public Pealtipoitem getObjPealtipoitem(AltipoitemDTO dto , int idPedido){
+         Pealtipoitem entidadPATI = new Pealtipoitem();
+                    Pedido entidadPedido = new Pedido();
+                    entidadPedido.setIdpedido(idPedido);
+                entidadPATI.setPedido(entidadPedido);
+                    Altipoitem entidadALTI = new Altipoitem();
+                        Almacen entidadAlmacen = new Almacen();
+                        entidadAlmacen.setIdalmacen(dto.getAlmacen().getIdalmacen());
+                        Tipoitem entidadTipoitem = new Tipoitem();
+                        entidadTipoitem.setIdtipoItem(dto.getTipoitem().getIdtipoItem());
+                    entidadALTI.setAlmacen(entidadAlmacen);
+                    entidadALTI.setTipoitem(entidadTipoitem);
+                entidadPATI.setAltipoitem(entidadALTI);
+        return entidadPATI;
     }
 }
