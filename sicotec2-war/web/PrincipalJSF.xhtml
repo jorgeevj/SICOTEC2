@@ -970,7 +970,7 @@ jorgeevj 15.09.15 Creacion.
                                        itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel value="Características:" for="caracteristicasItem"/>                            
+                    <p:outputLabel value="Características:" for="caracteristicasItem2"/>                            
                     <p:selectOneMenu id="caracteristicasItem2" styleClass="browser-default" value="#{tipoitemMB.caracteristicaSelect}" >
                         <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
@@ -986,7 +986,7 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>                            
                     </p:dataTable>
 
-                    <p:commandButton value="Quitar" update="tabla2"/>
+                    <p:commandButton value="Quitar" update="tabla3"/>
 
                     <p:commandButton value="Crear una nueva característica" type="button" onclick="PF('crearCaraItem').show();"/>
                     <p:commandButton value="Crear una nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />

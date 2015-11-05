@@ -39,7 +39,7 @@ public class CaracteristicaFacade extends AbstractFacade<Caracteristica> {
         return lista;
     }
     
-    public List<Caracteristica> getCaracteristicaXTipoItem(int idTipoItem){
+    public List<Caracteristica> getCaracteristicaXTipoItem(String idTipoItem){
         List<Caracteristica> lista = new ArrayList<Caracteristica>();
         try{
         String sql = "SELECT t "

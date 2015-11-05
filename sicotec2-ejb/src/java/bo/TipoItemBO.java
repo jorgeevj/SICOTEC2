@@ -74,7 +74,7 @@ public class TipoItemBO {
         List<Categoria> lista= categoriaFacade.findAll();
         return lista;
     }
-    public List<CaracteristicaDTO> getCaracteristicaPorIdItem(int a){
+    public List<CaracteristicaDTO> getCaracteristicaPorIdItem(String a){
         Caracteristica obj=new Caracteristica();
         List<CaracteristicaDTO> listaDTO;
         List<Caracteristica> lista = caracteristicaFacade.getCaracteristicaXTipoItem(a);

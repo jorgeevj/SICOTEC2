@@ -217,7 +217,7 @@ public class tipoitemMB {
     }
     
     public void modificarItem(){
-    lista3=tipoItemBO.getCaracteristicaPorIdItem(Integer.parseInt(tipoItemSelect.getIdtipoItem()));
+    lista3=tipoItemBO.getCaracteristicaPorIdItem(tipoItemSelect.getIdtipoItem());
     lista2=tipoItemBO.convertirDTOtoCaracteristicaLista(lista3);
     RequestContext context = RequestContext.getCurrentInstance(); 
     context.execute("PF('modificarItem').show();");
