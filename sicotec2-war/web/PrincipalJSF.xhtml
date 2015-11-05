@@ -860,6 +860,7 @@ jorgeevj 15.09.15 Creacion.
                         <h:outputText value="#{tite.nombre}" />
                     </p:column>                            
                 </p:dataTable>
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
                 <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarca}" />
 
@@ -943,15 +944,15 @@ jorgeevj 15.09.15 Creacion.
 
 
                     <p:outputLabel value="Familia:" for="familiaItem"/>                            
-                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}"  >
+                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}" >
                         <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
-                                       itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
+                                       itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}" />
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Categoría:" for="categoriaItem"/>                           
 
-                    <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.categoria.idcategoria}">
+                    <p:selectOneMenu id="categoriaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.categoria.idcategoria}" disabled="true">
                         <f:selectItem itemLabel="Seleccione categoría..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaCategoria}" var="nomCategoria" 
                                        itemValue="#{nomCategoria.idcategoria}" itemLabel="#{nomCategoria.nombre}"/>
@@ -987,9 +988,9 @@ jorgeevj 15.09.15 Creacion.
                     </p:dataTable>
 
                     <p:commandButton value="Quitar" update="tabla3"/>
-
-                    <p:commandButton value="Crear una nueva característica" type="button" onclick="PF('crearCaraItem').show();"/>
-                    <p:commandButton value="Crear una nueva marca" type="button" onclick="PF('crearMarcaItem').show();" />
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
+                    <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarca}" />
 
                     <p:commandButton  value="Modificar Item" actionListener="#{tipoitemMB.modificarTipoItem}"/>
                 
