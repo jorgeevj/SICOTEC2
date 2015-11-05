@@ -74,7 +74,7 @@ public class TipoItemBO {
         List<Categoria> lista= categoriaFacade.findAll();
         return lista;
     }
-    public List<CaracteristicaDTO> getCaracteristicaPorIdItem(Integer a){
+    public List<CaracteristicaDTO> getCaracteristicaPorIdItem(int a){
         Caracteristica obj=new Caracteristica();
         List<CaracteristicaDTO> listaDTO;
         List<Caracteristica> lista = caracteristicaFacade.getCaracteristicaXTipoItem(a);
@@ -100,8 +100,10 @@ public class TipoItemBO {
         ti.setCaracteristicaList(c);//aqui seteamos la lista para que tambien persista junto a tipoitem
         tipoItemFacade.create(ti); 
     }    
-    public void modificarTipoItem(TipoItemDTO t){
-        tipoItemFacade.edit(convertDTOtoEntidad(t,2));
+    public void modificarTipoItem(TipoItemDTO t,List<Caracteristica> c){
+        Tipoitem ti=convertDTOtoEntidad(t,2);
+        ti.setCaracteristicaList(c);//aqui seteamos la lista para que tambien persista junto a tipoitem
+        tipoItemFacade.edit(ti);
     }
     
     public void registrarCaracteristica(TipoItemDTO t){
@@ -148,7 +150,28 @@ public class TipoItemBO {
             lista3.add(T);
         }
          return lista3;
-    }    
+    }   
+    
+    public List<Caracteristica> convertirDTOtoCaracteristicaLista(List<CaracteristicaDTO> lista){
+        List<Caracteristica> lista4=new ArrayList<Caracteristica>();
+        
+        for(CaracteristicaDTO ite: lista){
+            Caracteristica T=new Caracteristica();
+            T=convertDTOtoEtidadCara(ite);
+            lista4.add(T);
+        }
+        return lista4;
+        
+    }
+    
+    public Caracteristica convertDTOtoEtidadCara(CaracteristicaDTO a){
+        Caracteristica e=new Caracteristica();  
+        e.setIdcaracteristica(a.getIdCaracteristica());
+        e.setNombre(a.getNombreCaracteristica());
+        e.setDescripcion(a.getDescripcion());
+        return e;
+        
+    }
     public Caracteristica convertDTOtoEntidadCaracteristica(TipoItemDTO b){
         Caracteristica e=new Caracteristica();        
         e.setNombre(b.getCaracteristica().getNombre());
