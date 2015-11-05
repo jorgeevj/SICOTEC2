@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -54,11 +53,9 @@ public class Telefono implements Serializable {
     @Size(max = 45)
     @Column(name = "principal")
     private String principal;
-    @JoinColumns({
-        @JoinColumn(name = "idempresa", referencedColumnName = "idempresa"),
-        @JoinColumn(name = "idpersona", referencedColumnName = "idpersona")})
+    @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
-    private Emppersona emppersona;
+    private Empresa idempresa;
 
     public Telefono() {
     }
@@ -107,12 +104,12 @@ public class Telefono implements Serializable {
         this.principal = principal;
     }
 
-    public Emppersona getEmppersona() {
-        return emppersona;
+    public Empresa getIdempresa() {
+        return idempresa;
     }
 
-    public void setEmppersona(Emppersona emppersona) {
-        this.emppersona = emppersona;
+    public void setIdempresa(Empresa idempresa) {
+        this.idempresa = idempresa;
     }
 
     @Override

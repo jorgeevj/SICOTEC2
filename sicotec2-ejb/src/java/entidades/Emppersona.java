@@ -6,18 +6,16 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,19 +27,21 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Emppersona.findAll", query = "SELECT e FROM Emppersona e"),
     @NamedQuery(name = "Emppersona.findByIdempresa", query = "SELECT e FROM Emppersona e WHERE e.emppersonaPK.idempresa = :idempresa"),
-    @NamedQuery(name = "Emppersona.findByIdpersona", query = "SELECT e FROM Emppersona e WHERE e.emppersonaPK.idpersona = :idpersona")})
+    @NamedQuery(name = "Emppersona.findByIdpersona", query = "SELECT e FROM Emppersona e WHERE e.emppersonaPK.idpersona = :idpersona"),
+    @NamedQuery(name = "Emppersona.findByCargo", query = "SELECT e FROM Emppersona e WHERE e.cargo = :cargo")})
 public class Emppersona implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EmppersonaPK emppersonaPK;
+    @Size(max = 45)
+    @Column(name = "cargo")
+    private String cargo;
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
     @JoinColumn(name = "idpersona", referencedColumnName = "idpersona", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Persona persona;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emppersona")
-    private List<Telefono> telefonoList;
 
     public Emppersona() {
     }
@@ -62,6 +62,14 @@ public class Emppersona implements Serializable {
         this.emppersonaPK = emppersonaPK;
     }
 
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -76,15 +84,6 @@ public class Emppersona implements Serializable {
 
     public void setPersona(Persona persona) {
         this.persona = persona;
-    }
-
-    @XmlTransient
-    public List<Telefono> getTelefonoList() {
-        return telefonoList;
-    }
-
-    public void setTelefonoList(List<Telefono> telefonoList) {
-        this.telefonoList = telefonoList;
     }
 
     @Override
