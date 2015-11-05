@@ -69,6 +69,7 @@ public class tipoitemMB {
     
     private List<Caracteristica> lista2; //para listar en la tabla caracteristicas
     private List<CaracteristicaDTO> lista3;
+    private List<Caracteristica> lista4;
 
     public tipoitemMB() {
     }
@@ -177,6 +178,10 @@ public class tipoitemMB {
        return lista2;
     }
     
+    
+    
+    
+    
     public List<Caracteristica> quitarElementosTablaCaracteristicas(ActionEvent actionEvent){
         //el error no esta en el metodo sino en el de objeto que colocarte en la vista al seleccionar de la tabala
         //solo cambiaremos el tipo de objeto de DTO a Entidad de caracteristicasTablaSelect
@@ -212,11 +217,11 @@ public class tipoitemMB {
     }
     
     public void modificarItem(){
-    
-    RequestContext context = RequestContext.getCurrentInstance(); 
-    
-    context.execute("PF('modificarItem').show();");
     lista3=tipoItemBO.getCaracteristicaPorIdItem(Integer.parseInt(tipoItemSelect.getIdtipoItem()));
+    lista2=tipoItemBO.convertirDTOtoCaracteristicaLista(lista3);
+    RequestContext context = RequestContext.getCurrentInstance(); 
+    context.execute("PF('modificarItem').show();");
+    
     
     }
     
@@ -309,13 +314,17 @@ public class tipoitemMB {
         }else{
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setIdtipoItem(codigoItem);
-        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));        
-        objTipoItem.setIdCaracteristica(Integer.parseInt(caracteristicaSelect));
-        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));        
+        objTipoItem.setNumParte(numParte);
+        objTipoItem.setNombre(nombre);
+        objTipoItem.setDescipcion(descripcion);
+        objTipoItem.setTipo(tipo);
         objTipoItem.setPrecioLista(Double.parseDouble(precio));
         objTipoItem.setDesCliente(dsctoCliente);
         objTipoItem.setDesDistribuidor(dsctoDistribuidor);
-        tipoItemBO.modificarTipoItem(objTipoItem);
+
+        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));
+        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
+        objTipoItem.setIdColor(Integer.parseInt(colorSelect));
         }
     }
     
@@ -594,6 +603,14 @@ public class tipoitemMB {
 
     public void setLista3(List<CaracteristicaDTO> lista3) {
         this.lista3 = lista3;
+    }
+
+    public List<Caracteristica> getLista4() {
+        return lista4;
+    }
+
+    public void setLista4(List<Caracteristica> lista4) {
+        this.lista4 = lista4;
     }
     
     
