@@ -10,6 +10,7 @@ import entidades.Cotizacion;
 import entidades.Emppersona;
 import entidades.Pedido;
 import entidades.Tipo;
+import entidades.Ubicacion;
 import entidades.Venta;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @author Cesar
  */
 public class EmpresaDTO {
+
     private Integer idempresa;
     private String nombre;
     private String ruc;
@@ -30,8 +32,23 @@ public class EmpresaDTO {
     private List<Venta> ventaList;
     private List<Cotizacion> cotizacionList;
     private int idemp;
+    private List<UbicacionDTO> ubicacionList;
+    private List<TelefonoDTO> telefonoList;
+    //extras
+    private List<EmppersonaDTO> emppersonaListDTO;
+    private List<TipoDTO> tipoListDTO;
+    private UbicacionDTO ubicacionDTO;
+    private TelefonoDTO telefonoDTO;
+    private int cantidadDirecciones;
+    private int cantidadTelefonos;
+
+    public EmpresaDTO(int id) {
+        idemp = id;
+    }
+
     public EmpresaDTO() {
-        
+        ubicacionDTO = new UbicacionDTO();
+        telefonoDTO = new TelefonoDTO();
     }
 
     public EmpresaDTO(String nombre, String ruc, int idemp) {
@@ -39,7 +56,8 @@ public class EmpresaDTO {
         this.ruc = ruc;
         this.idemp = idemp;
     }
-    public EmpresaDTO(Integer idempresa, String nombre, String ruc,  Integer tipo, List<Tipo> tipoList, List<Compra> compraList, List<Emppersona> emppersonaList, List<Pedido> pedidoList, List<Venta> ventaList, List<Cotizacion> cotizacionList){
+
+    public EmpresaDTO(Integer idempresa, String nombre, String ruc, Integer tipo, List<Tipo> tipoList, List<Compra> compraList, List<Emppersona> emppersonaList, List<Pedido> pedidoList, List<Venta> ventaList, List<Cotizacion> cotizacionList) {
         this.idempresa = idempresa;
         this.nombre = nombre;
         this.ruc = ruc;
@@ -148,5 +166,68 @@ public class EmpresaDTO {
         this.email = email;
     }
 
-   
+    public List<UbicacionDTO> getUbicacionList() {
+        return ubicacionList;
+    }
+
+    public void setUbicacionList(List<UbicacionDTO> ubicacionList) {
+        this.ubicacionList = ubicacionList;
+    }
+
+    public List<EmppersonaDTO> getEmppersonaListDTO() {
+        return emppersonaListDTO;
+    }
+
+    public void setEmppersonaListDTO(List<EmppersonaDTO> emppersonaListDTO) {
+        this.emppersonaListDTO = emppersonaListDTO;
+    }
+
+    public List<TelefonoDTO> getTelefonoList() {
+        return telefonoList;
+    }
+
+    public void setTelefonoList(List<TelefonoDTO> telefonoList) {
+        this.telefonoList = telefonoList;
+    }
+
+    public List<TipoDTO> getTipoListDTO() {
+        return tipoListDTO;
+    }
+
+    public void setTipoListDTO(List<TipoDTO> tipoListDTO) {
+        this.tipoListDTO = tipoListDTO;
+    }
+
+    public UbicacionDTO getUbicacionDTO() {
+        return ubicacionDTO;
+    }
+
+    public void setUbicacionDTO(UbicacionDTO ubicacionDTO) {
+        this.ubicacionDTO = ubicacionDTO;
+    }
+
+    public TelefonoDTO getTelefonoDTO() {
+        return telefonoDTO;
+    }
+
+    public void setTelefonoDTO(TelefonoDTO telefonoDTO) {
+        this.telefonoDTO = telefonoDTO;
+    }
+
+    public int getCantidadDirecciones() {
+        return cantidadDirecciones;
+    }
+
+    public void setCantidadDirecciones(int cantidadDirecciones) {
+        this.cantidadDirecciones = cantidadDirecciones;
+    }
+
+    public int getCantidadTelefonos() {
+        return cantidadTelefonos;
+    }
+
+    public void setCantidadTelefonos(int cantidadTelefonos) {
+        this.cantidadTelefonos = cantidadTelefonos;
+    }
+
 }

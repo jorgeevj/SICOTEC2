@@ -3,32 +3,64 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../PrincipalJSF.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="body">
-       <p:outputLabel value="Nombre:" for="itemp1" />
-       <p:inputText id="itemp1" value="#{empresaMB.consultaEmpresaDTO.nombre}">
-       </p:inputText>
-       <p:outputLabel value="RUC:" for="itemp2" />
-       <p:inputText id="itemp2" value="#{empresaMB.consultaEmpresaDTO.ruc}">
-       </p:inputText>
-       <p:outputLabel value="Email" for="itemp3" />
-       <p:inputText id="itemp3" value="#{empresaMB.consultaEmpresaDTO.em}">
-       </p:inputText>
-       
-       <p:dataTable id="tabEmpresas" var="emp" value="#{empresaMB.listaEmpresa}" 
-                    selectionMode="single" rowKey="#{emp.idempresa}" selection="#{empresaMB.empresaSelectDTO}">
-                       
-                        <p:column headerText="Nombre:" >
-                            <h:outputText value="#{emp.nombre}" />
-                        </p:column>
-                        <p:column headerText="RUC:">
-                            <h:outputText value="#{emp.ruc}" />
-                        </p:column>
-                        <p:column headerText="Email:">
-                            <h:outputText value="#{emp.email}" />
-                        </p:column>
-                    </p:dataTable>
+    <ui:define name="body" id="iuEmpresa">
+        <h:form id="formEmpresa">
+            <p:panelGrid columns="4" styleClass="hideborder">
+                <p:outputLabel value="Nombre:" for="itemp1" />
+                <p:inputText id="itemp1" value="#{empresaMB.consultaEmpresaDTO.nombre}">
+                </p:inputText>
+                <p:outputLabel value="RUC:" for="itemp2" />
+                <p:inputText id="itemp2" value="#{empresaMB.consultaEmpresaDTO.ruc}">
+                </p:inputText>
+                <p:outputLabel value="Email" for="itemp3" />
+                <p:inputText id="itemp3" value="#{empresaMB.consultaEmpresaDTO.email}">
+                </p:inputText>
+                <p:outputLabel value="Email" for="somemp1" />
+                <p:selectOneMenu id="somemp1" value="#{empresaMB.consultaEmpresaDTO.tipo}" style="width: 100%">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItem itemLabel="Cliente" itemValue="1" />
+                    <f:selectItem itemLabel="Distribuidor" itemValue="2" />
+                    <f:selectItem itemLabel="Proveedor" itemValue="3" />
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <p:panelGrid columns="4" styleClass="hideborder">
+                <p:commandButton value="Limpiar" id="btnLimpiarEmp" icon="ui-icon-refresh"
+                                 actionListener="#{empresaMB.btnLimpiarEmp}" update="formEmpresa"/>
+                <p:commandButton value="Consultar" id="btnConsultarEmp" icon="ui-icon-search"
+                                 actionListener="#{empresaMB.btnConsultarEmp}" update="formEmpresa"/>
+                <p:commandButton value="Registrar" id="btnRegistrarEmp" icon="ui-icon-document"
+                                 actionListener="#{empresaMB.btnRegistrarEmp}" 
+                                 onclick="PF('dlRegEmpresa').show();" update="formRegEmp"/>
+                <p:commandButton value="Editar" id="btnEditarEmp" icon="ui-icon-pencil"
+                                 actionListener="#{empresaMB.btnEditEmp}" />
+            </p:panelGrid>
+            <p:dataTable id="tabEmpresas" var="emp" value="#{empresaMB.listaEmpresa}"
+                         selectionMode="single" rowKey="#{emp.idempresa}" 
+                         selection="#{empresaMB.empresaSelectDTO}"
+                         scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150">
+                <f:facet name="header">
+                    Lista de Empresas
+                </f:facet>
+                <p:column headerText="Nombre:" >
+                    <h:outputText value="#{emp.nombre}" />
+                </p:column>
+                <p:column headerText="RUC:">
+                    <h:outputText value="#{emp.ruc}" />
+                </p:column>
+                <p:column headerText="Email:">
+                    <h:outputText value="#{emp.email}" />
+                </p:column>
+                <p:column headerText="Cant. Direcciones:">
+                    <h:outputText value="#{emp.cantidadDirecciones}" />
+                </p:column>
+                <p:column headerText="Cant. Telefonos:">
+                    <h:outputText value="#{emp.cantidadTelefonos}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
     </ui:define>
 
 </ui:composition>

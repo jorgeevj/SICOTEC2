@@ -33,15 +33,25 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
     }
    public List<Empresa>getEmpresaBusqueda(EmpresaDTO empresaDTO){
         List<Empresa> empresas = new ArrayList<Empresa>();
-        String ejbQuery = "SELECT u FROM Empresa u " +
-                          "WHERE u.tipo = 1 ";
-        if(empresaDTO.getNombre() != null && empresaDTO.getNombre() != ""){
-            ejbQuery +="AND u.nombre = " + empresaDTO.getNombre();
+        String ejbQuery = "SELECT u FROM Empresa u";
+        
+        if(empresaDTO.getTipo()!=null && empresaDTO.getTipo()>0){        
+             ejbQuery+=", u.tipoList t WHERE t.idtipo = "+empresaDTO.getTipo(); 
+        }else{
+            ejbQuery+=" WHERE 1=1";
         }
-        if(empresaDTO.getRuc()    != null && empresaDTO.getRuc()    != ""){
-            ejbQuery +="AND u.ruc = " + empresaDTO.getRuc();
+        if(empresaDTO.getIdempresa()!=null && empresaDTO.getIdempresa()>0){        
+             ejbQuery+=" and u.idempresa = "+empresaDTO.getIdempresa(); 
         }
-
+        if(empresaDTO.getNombre() != null && !empresaDTO.getNombre().equals("")){
+            ejbQuery +=" AND u.nombre like '%" + empresaDTO.getNombre()+"%'";
+        }
+        if(empresaDTO.getRuc()    != null && !empresaDTO.getRuc().equals("")){
+            ejbQuery +=" AND u.ruc like '%" + empresaDTO.getRuc()+"%'";
+        }
+        if(empresaDTO.getEmail()    != null && !empresaDTO.getEmail().equals("")){
+            ejbQuery +=" AND u.email like '%" + empresaDTO.getEmail()+"%'";
+        }
         try{
             Query query = em.createQuery(ejbQuery,Empresa.class);
             empresas = query.getResultList();
