@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -55,6 +57,7 @@ public class tipoitemMB {
     private String categoriaSelect; //posible no uso
     
     private boolean btnEditarEstado;
+    private boolean btnQuitarEstado;
     
     private List<TipoItemDTO> lista;
     private TipoItemDTO tipoItemSelect;
@@ -92,6 +95,8 @@ public class tipoitemMB {
         listarFamilia();
         listarMarca();
         listarColor();
+        btnEditarEstado = true;
+        btnQuitarEstado = true;
         
         
     }
@@ -123,36 +128,107 @@ public class tipoitemMB {
     }
     
     ///
+    public void onRowSelectTipoItem(SelectEvent event) {
+        btnEditarEstado = false;
+        
+    } 
+    
+    public void onRowSelectCaracteristica(SelectEvent event) {
+        btnQuitarEstado = false;
+        
+    }
+    public String validarRegistroCaracteristicas(){
+        String msjError="";
+        if(buscarPorNomCara())
+            msjError="El nombre de la caracteristica ya existe";
+        return msjError;
+    }
+    public String validarRegistroMarca(){
+        String msjError="";
+        if(buscarPorNomMarca())
+            msjError="El nombre de la marca ya existe";
+        return msjError;
+    }
     public String validarRegistro(){
         String msjError="";
-        if(getNombre().equals("") || getNombre().equals(null))
-            msjError="Ingrese nombre del item";
-        else if(getPrecio().equals(null) || getPrecio().equals(0))
-            msjError="Ingrese precio del item";
+        
+        if(getCodigoItem().equals("") || getCodigoItem()==null)
+            msjError="Ingrese Codigo del item";
+        if(buscarPorIDItem())
+            msjError="Codigo del item ya existe";
+        if(getNombre().equals("") || getNombre()==null)
+            msjError="Ingrese nombre del item";        
+        else if(getPrecio()==null)
+            msjError="Precio del Item debe ser numero";
+        else if(Integer.parseInt(getPrecio())==0.0)
+            msjError="Ingrese un precio del item mayor que cero";
+        else if(Double.parseDouble(getPrecio())<0.0)
+            msjError="Precio del Item no puede ser negativo";
         else if(getLista2().isEmpty())
             msjError="eliga Caracteristicas";
-        else if(getNumParte().equals(null) || getNumParte().equals(0))
+        else if(getNumParte().equals("") || getNumParte().equals(0))
             msjError="Ingrese un numero de parte";
-        else if(getDescripcion().equals(null) || getDescripcion().equals(0))
+        else if(getDescripcion()==null || getDescripcion().equals(""))
             msjError="Ingrese una descripcion del item";
-        else if(getColorSelect().equals(null) || getColorSelect().equals(0))
+        else if(Integer.parseInt(getColorSelect())==0)
             msjError="Seleccione un color";
-        else if(getFamiliaSelect().equals(null) || getFamiliaSelect().equals(0))
+        else if(Integer.parseInt(getFamiliaSelect())==0 )
             msjError="Seleccione una familia";
-        else if(getDsctoCliente() == 0.0)
-            msjError="Ingrese un dscto Cliente";
-        else if(getDsctoDistribuidor() == 0.0)
-            msjError="Ingrese un dscto Distribuidor";
-        else if(getTipo().equals("") || getTipo().equals(null))
+        else if(Integer.parseInt(getMarcaSelect())==0 )
+            msjError="Seleccione una marca";
+        
+        else if(getDsctoCliente() < 0.0)
+            msjError="el dscto Cliente no puede ser negativo";
+        
+        else if(getDsctoDistribuidor() < 0.0)
+            msjError="el dscto Distribuidor no puede ser negativo";
+        else if(getTipo().equals("") || getTipo()==null)
             msjError="Ingrese un Tipo";
+        
+                                 
+          return msjError;  
+    }
+    
+    public String validarEditar(){
+        String msjError="";
+        if(tipoItemSelect.getNombre().equals("") || tipoItemSelect.getNombre().equals(null))
+            msjError="Ingrese nombre del item";
+        else if(tipoItemSelect.getPrecioLista()==null)
+            msjError="Ingrese precio del item";
+        else if(tipoItemSelect.getPrecioLista()<0.0 )
+            msjError="El precio del item no puede ser negativo";        
+        else if(getLista2().isEmpty())
+            msjError="eliga Caracteristicas";
+        else if(tipoItemSelect.getNumParte()==null|| tipoItemSelect.getNumParte().equals(""))
+            msjError="Ingrese un numero de parte";
+        else if(tipoItemSelect.getDescipcion()==null || tipoItemSelect.getDescipcion().equals(""))
+            msjError="Ingrese una descripcion del item";
+        else if(tipoItemSelect.getColor().getIdcolor()==0)
+            msjError="Seleccione un color";
+        else if( tipoItemSelect.getMarca().getIdmarca()==0)
+            msjError="Seleccione una marca";
+        else if( tipoItemSelect.getFamilia().getIdfamilia()==0)
+            msjError="Seleccione una familia";
+        else if(tipoItemSelect.getDesCliente()==null)
+            msjError="Ingrese un dscto Cliente";
+        else if(tipoItemSelect.getDesCliente()< 0.0)
+            msjError="El dscto Cliente no puede ser negativo";
+        else if(tipoItemSelect.getDesDistribuidor()==null)
+            msjError="Ingrese un dscto Distribuidor";
+        else if(tipoItemSelect.getDesDistribuidor() < 0.0 )
+            msjError="El dscto Distribuidor no puede ser negativo";
+        
+        else if(tipoItemSelect.getTipo().equals("") || tipoItemSelect.getTipo().equals(null))
+            msjError="Ingrese un Tipo";
+        else
+        {
+            try{ double precio=tipoItemSelect.getPrecioLista(); }catch(Exception e){ msjError="Precio debe ser numerico";}
+        }
                                  
           return msjError;  
     }
     ///
-    public void listarCaracteristicasDelItem(String id){
-        Caracteristica obj;
-       // obj=tipoItemBO
-    }
+    
     public void buscarItem(ActionEvent actionEvent){        
         
         TipoItemDTO lis=new TipoItemDTO();
@@ -162,7 +238,39 @@ public class tipoitemMB {
         lista=tipoItemBO.buscarTipoItem(lis);
     }
     
+    public boolean buscarPorIDItem(){
+        TipoItemDTO lis=new TipoItemDTO();
+        lis.setIdtipoItem(codigoItem);
+        boolean encontro=tipoItemBO.buscarTipoItemPorID(lis);
+        return encontro;
+    }
+    
+    public boolean buscarPorNomCara(){
+        boolean encontro=tipoItemBO.buscarCaracteristicasPorNombre(nombreCaracteristica);
+        return encontro;
+    }
+    
+    public boolean buscarPorNomMarca(){
+        boolean encontro=tipoItemBO.buscarMarcaPorNombre(nombreMarca);
+                return encontro;
+    }
     public List<Caracteristica> listarTablaCaracteristicas(ActionEvent actionEvent){
+        Caracteristica obj=new Caracteristica();
+        
+        obj=tipoItemBO.getCaracteristiaXID(Integer.parseInt(caracteristicaSelect));
+        lista2.add(obj);
+        for(Caracteristica ite: listaCaracteristicas){
+            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                listaCaracteristicas.remove(ite);
+                break;
+            }
+        }
+        
+       return lista2;
+    }
+    
+    public List<Caracteristica> listarTabla3Caracteristicas(ActionEvent actionEvent){
         Caracteristica obj=new Caracteristica();
         
         obj=tipoItemBO.getCaracteristiaXID(Integer.parseInt(caracteristicaSelect));
@@ -187,13 +295,8 @@ public class tipoitemMB {
         //solo cambiaremos el tipo de objeto de DTO a Entidad de caracteristicasTablaSelect
         Caracteristica obj;
         obj=tipoItemBO.getCaracteristiaXID(caracteristicasTablaSelect.getIdcaracteristica());
-        for(Caracteristica ite: listaCaracteristicas){
-            if(ite.getIdcaracteristica()==caracteristicasTablaSelect.getIdcaracteristica())
-            {
-                listaCaracteristicas.add(ite);
-                break;
-            }
-        }    
+        listaCaracteristicas.add(obj);
+        
         for(Caracteristica ite1: lista2){
             if(ite1.getIdcaracteristica()==obj.getIdcaracteristica())
             {
@@ -217,8 +320,11 @@ public class tipoitemMB {
     }
     
     public void modificarItem(){
+    lista2= new ArrayList<>();
     lista3=tipoItemBO.getCaracteristicaPorIdItem(tipoItemSelect.getIdtipoItem());
     lista2=tipoItemBO.convertirDTOtoCaracteristicaLista(lista3);
+    listarCaracteristicas();
+    btnQuitarEstado = true;
     RequestContext context = RequestContext.getCurrentInstance(); 
     context.execute("PF('modificarItem').show();");
     
@@ -231,10 +337,22 @@ public class tipoitemMB {
     context.execute("PF('crearCaraItem').show();");
     }
     
+    public void registrarCaracteristicaMod(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+    
+    context.execute("PF('crearCaraItemMod').show();");
+    }
+    
     public void registrarMarca(){
         RequestContext context = RequestContext.getCurrentInstance(); 
     
     context.execute("PF('crearMarcaItem').show();");
+    }
+    
+    public void registrarMarcaMod(){
+        RequestContext context = RequestContext.getCurrentInstance(); 
+    
+    context.execute("PF('crearMarcaItemMod').show();");
     }
     
     
@@ -242,7 +360,7 @@ public class tipoitemMB {
     public void registrarNuevoTipoItem(ActionEvent e){
         String sms = validarRegistro();
         if(sms != ""){
-            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
         }else{
             TipoItemDTO objTipoItem=new TipoItemDTO();
             objTipoItem.setIdtipoItem(codigoItem);
@@ -268,26 +386,49 @@ public class tipoitemMB {
             //comentamos este metodo---> registrarTipoItemXCaracteristica();
             RequestContext context = RequestContext.getCurrentInstance();   
             context.execute("PF('registrarItem').hide();");
+            
+            btnQuitarEstado = true;
         }
     }
     
     public void registrarNuevaMarca(ActionEvent e){
-        TipoItemDTO objTipoItem=new TipoItemDTO();
-        objTipoItem.setMarca(new Marca());        
-        objTipoItem.getMarca().setNombre(nombreMarca);
-        //objTipoItem.getMarca().setImagen(imagenMarca);
-        objTipoItem.getMarca().setFormato(nombre);
-        tipoItemBO.registrarMarca(objTipoItem);
+        String sms=validarRegistroMarca();
+        if(sms!=""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
+        }else{
+            TipoItemDTO objTipoItem=new TipoItemDTO();
+            objTipoItem.setMarca(new Marca());        
+            objTipoItem.getMarca().setNombre(nombreMarca);
+            //objTipoItem.getMarca().setImagen(imagenMarca);
+            objTipoItem.getMarca().setFormato(nombre);
+            tipoItemBO.registrarMarca(objTipoItem);
+            listarMarca();
+            RequestContext context = RequestContext.getCurrentInstance();   
+            context.execute("PF('crearMarcaItem').hide();");
+            RequestContext context2 = RequestContext.getCurrentInstance();   
+            context2.execute("PF('crearMarcaItemMod').hide();");
+        }
+        
         
     }
     
     public void registrarNuevaCaracteristica(ActionEvent e){
+        String sms=validarRegistroCaracteristicas();
+        if(sms!=""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
+        }else{
         TipoItemDTO objTipoItem=new TipoItemDTO();
         objTipoItem.setCaracteristica(new Caracteristica());       
         objTipoItem.getCaracteristica().setNombre(nombreCaracteristica);
         objTipoItem.getCaracteristica().setDescripcion(descripcionCaracteristica);
         tipoItemBO.registrarCaracteristica(objTipoItem);
         listarCaracteristicas();
+        RequestContext context = RequestContext.getCurrentInstance();   
+            context.execute("PF('crearCaraItem').hide();");
+        RequestContext context2 = RequestContext.getCurrentInstance();   
+        context2.execute("PF('crearCaraItemMod').hide();");
+        
+        }
     }
     
     public void registrarTipoItemXCaracteristica(){//este metodo esta mal no lo usare
@@ -308,23 +449,27 @@ public class tipoitemMB {
     }
     
     public void modificarTipoItem(ActionEvent e){
-        String sms = validarRegistro();
+        String sms = validarEditar() ;
         if(sms != ""){
-            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
         }else{
         TipoItemDTO objTipoItem=new TipoItemDTO();
-        objTipoItem.setIdtipoItem(codigoItem);
-        objTipoItem.setNumParte(numParte);
-        objTipoItem.setNombre(nombre);
-        objTipoItem.setDescipcion(descripcion);
-        objTipoItem.setTipo(tipo);
-        objTipoItem.setPrecioLista(Double.parseDouble(precio));
-        objTipoItem.setDesCliente(dsctoCliente);
-        objTipoItem.setDesDistribuidor(dsctoDistribuidor);
+        objTipoItem.setIdtipoItem(tipoItemSelect.getIdtipoItem());
+        objTipoItem.setNumParte(tipoItemSelect.getNumParte());
+        objTipoItem.setNombre(tipoItemSelect.getNombre());
+        objTipoItem.setDescipcion(tipoItemSelect.getDescipcion());
+        objTipoItem.setTipo(tipoItemSelect.getTipo());
+        objTipoItem.setPrecioLista(tipoItemSelect.getPrecioLista());
+        objTipoItem.setDesCliente(tipoItemSelect.getDesCliente());
+        objTipoItem.setDesDistribuidor(tipoItemSelect.getDesDistribuidor());
 
-        objTipoItem.setIdFamilia(Integer.parseInt(familiaSelect));
-        objTipoItem.setIdMarca(Integer.parseInt(marcaSelect));
-        objTipoItem.setIdColor(Integer.parseInt(colorSelect));
+        objTipoItem.setIdFamilia(tipoItemSelect.getFamilia().getIdfamilia());
+        objTipoItem.setIdMarca(tipoItemSelect.getMarca().getIdmarca());
+        objTipoItem.setIdColor(tipoItemSelect.getColor().getIdcolor());
+        tipoItemBO.modificarTipoItem(objTipoItem,lista2);
+        RequestContext context = RequestContext.getCurrentInstance();   
+        context.execute("PF('modificarItem').hide();");
+        btnQuitarEstado = true;
         }
     }
     
@@ -611,6 +756,14 @@ public class tipoitemMB {
 
     public void setLista4(List<Caracteristica> lista4) {
         this.lista4 = lista4;
+    }
+
+    public boolean isBtnQuitarEstado() {
+        return btnQuitarEstado;
+    }
+
+    public void setBtnQuitarEstado(boolean btnQuitarEstado) {
+        this.btnQuitarEstado = btnQuitarEstado;
     }
     
     
