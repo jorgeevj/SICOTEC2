@@ -6,12 +6,14 @@
 package controladora.Empresa;
 
 import bo.EmpresaBO;
+import bo.PersonaBO;
 import dto.EmppersonaDTO;
 import dto.EmpresaDTO;
 import dto.PersonaDTO;
 import dto.TelefonoDTO;
 import dto.TipoDTO;
 import dto.UbicacionDTO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -29,6 +31,9 @@ import org.primefaces.context.RequestContext;
 public class EmpresaMB {
 
     @EJB
+    private PersonaBO personaBO;
+
+    @EJB
     private EmpresaBO empresaBO;
 
     private EmpresaDTO consultaEmpresaDTO;
@@ -43,8 +48,10 @@ public class EmpresaMB {
     private List<TelefonoDTO> listaTelEmp;
     private TelefonoDTO TelEmpSelectDTO;
     private List<PersonaDTO> listaPersonas;
-    private List<PersonaDTO> listaPersonasSelected;
+    private List<PersonaDTO> filtroPersonas;
+    private PersonaDTO consultaPersona;
     private PersonaDTO personaSelected;
+
     /**
      * Creates a new instance of EmpresaMB
      */
@@ -54,7 +61,8 @@ public class EmpresaMB {
     @PostConstruct
     public void init() {
         tipoEmp = empresaBO.getALLTipos();
-        listaPersonas=empresaBO.getAllPersonas();
+        listaEmpPersona=new ArrayList<>();
+        limpiarSelectPersonas();
         limpiarEmpresas();
     }
 
@@ -71,8 +79,17 @@ public class EmpresaMB {
         listaEmpresa = empresaBO.findByConsulta(consultaEmpresaDTO);
     }
 
-    //REGISTRAR
+    public void btnRegistrarEmp(ActionEvent actionEvent) {
+        limpiarRegistrarEmpresa();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlRegEmpresa').show();");
+    }
 
+    public void btnEditEmp(ActionEvent actionEvent) {
+
+    }
+
+    //REGISTRAR
     public void btnGuardarEmpresa(ActionEvent actionEvent) {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlRegEmpresa').hide();");
@@ -80,23 +97,60 @@ public class EmpresaMB {
     }
 
     public void btnAgreReprReg(ActionEvent actionEvent) {
+        limpiarSelectPersonas();
         RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlRegEmpresa').hide();");
-        context.update("formEmpresa");
+        context.execute("PF('dlSelectPersona').show();");
+        context.update("formSelectPer");
+    }
+    
+    public void limpiarSelectPersonas(){
+    listaPersonas=new ArrayList<>();
+    consultaPersona=new PersonaDTO();
     }
 
-    public void btnRegistrarEmp(ActionEvent actionEvent) {
+    public void btnQuitReprReg(ActionEvent actionEvent) {
 
     }
 
     public void btnLimpiarRegEmp(ActionEvent actionEvent) {
+        limpiarRegistrarEmpresa();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formRegEmp");
 
     }
 
-    public void seleccionarCliente(ActionEvent actionEvent) {
+    public void limpiarRegistrarEmpresa() {
+        consultaEmpresaDTO = new EmpresaDTO();
 
     }
 
+    public void btnBusPersonaRegEmp(ActionEvent actionEvent) {
+        listaPersonas = personaBO.findPersona(consultaPersona);
+        int l=listaPersonas.size();
+        for (int i=l-1;i>=0;i--) {
+            for (EmppersonaDTO ep : listaEmpPersona) {
+                if (listaPersonas.get(i).getIdpersona() == ep.getIdpersona()) {
+                    listaPersonas.remove(i);
+                }
+            }
+        }
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectPersona').show();");
+        context.update("formSelectPer");
+    }
+
+    public void btnSelectPersonaRegEmp(ActionEvent actionEvent) {
+
+    }
+     public void btnAceptarPersona(ActionEvent actionEvent) {
+         listaEmpPersona.add(new EmppersonaDTO(personaSelected, null, personaSelected.getIdpersona()));
+         RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectPersona').hide();");
+        context.update("formRegEmp");
+    }
+            
+            
     public EmpresaDTO getConsultaEmpresaDTO() {
         return consultaEmpresaDTO;
     }
@@ -193,14 +247,6 @@ public class EmpresaMB {
         this.listaPersonas = listaPersonas;
     }
 
-    public List<PersonaDTO> getListaPersonasSelected() {
-        return listaPersonasSelected;
-    }
-
-    public void setListaPersonasSelected(List<PersonaDTO> listaPersonasSelected) {
-        this.listaPersonasSelected = listaPersonasSelected;
-    }
-
     public PersonaDTO getPersonaSelected() {
         return personaSelected;
     }
@@ -208,4 +254,21 @@ public class EmpresaMB {
     public void setPersonaSelected(PersonaDTO personaSelected) {
         this.personaSelected = personaSelected;
     }
+
+    public List<PersonaDTO> getFiltroPersonas() {
+        return filtroPersonas;
+    }
+
+    public void setFiltroPersonas(List<PersonaDTO> filtroPersonas) {
+        this.filtroPersonas = filtroPersonas;
+    }
+
+    public PersonaDTO getConsultaPersona() {
+        return consultaPersona;
+    }
+
+    public void setConsultaPersona(PersonaDTO consultaPersona) {
+        this.consultaPersona = consultaPersona;
+    }
+
 }

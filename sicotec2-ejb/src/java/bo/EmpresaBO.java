@@ -127,6 +127,8 @@ public class EmpresaBO {
         EmppersonaDTO dto = new EmppersonaDTO();
         dto.setIdempresa(ep.getEmpresa().getIdempresa());
         dto.setIdpersona(ep.getPersona().getIdpersona());
+        dto.setEmpresa(new EmpresaDTO(ep.getEmpresa().getIdempresa(), ep.getEmpresa().getNombre(), ep.getEmpresa().getRuc(), ep.getEmpresa().getEmail()));
+        dto.setPersona(new PersonaDTO(ep.getPersona().getIdpersona(),ep.getPersona().getNombre(),ep.getPersona().getApellido(),ep.getPersona().getDni(),ep.getPersona().getEmail()));
         return dto;
 
     }

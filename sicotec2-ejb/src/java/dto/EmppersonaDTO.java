@@ -26,6 +26,12 @@ public class EmppersonaDTO {
     public EmppersonaDTO() {
     
     }
+
+    public EmppersonaDTO(PersonaDTO persona, String cargo, int idpersona) {
+        this.persona = persona;
+        this.cargo = cargo;
+        this.idpersona = idpersona;
+    }
     
     
     public EmppersonaDTO(int idempresa, int idpersona) {

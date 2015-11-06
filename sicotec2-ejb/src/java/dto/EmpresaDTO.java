@@ -47,8 +47,14 @@ public class EmpresaDTO {
     }
 
     public EmpresaDTO() {
-        ubicacionDTO = new UbicacionDTO();
-        telefonoDTO = new TelefonoDTO();
+        
+    }
+
+    public EmpresaDTO(Integer idempresa, String nombre, String ruc, String email) {
+        this.idempresa = idempresa;
+        this.nombre = nombre;
+        this.ruc = ruc;
+        this.email = email;
     }
 
     public EmpresaDTO(String nombre, String ruc, int idemp) {

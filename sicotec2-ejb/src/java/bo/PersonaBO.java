@@ -53,5 +53,9 @@ public class PersonaBO {
         return listDTO;
     }
 
+    public List<PersonaDTO> findPersona(PersonaDTO consultaPersona) {
+      return convertListaPersonaByListDTO(personaFacade.findPersona(consultaPersona));
+    }
+
     
 }

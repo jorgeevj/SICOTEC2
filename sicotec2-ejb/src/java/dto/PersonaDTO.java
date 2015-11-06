@@ -18,6 +18,17 @@ public class PersonaDTO {
      private String dni;
      private String email;
 
+    public PersonaDTO() {
+    }
+
+    public PersonaDTO(Integer idpersona, String nombre, String apellido, String dni, String email) {
+        this.idpersona = idpersona;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.email = email;
+    }
+
     public Integer getIdpersona() {
         return idpersona;
     }
