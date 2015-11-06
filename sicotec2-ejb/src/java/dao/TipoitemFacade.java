@@ -56,6 +56,24 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         return lista;     
            
     } 
+    
+    public List<Tipoitem> getBusquedaDuplicados(Tipoitem e){
+        List<Tipoitem> lista= new ArrayList<Tipoitem>();
+        String sql="SELECT t FROM Tipoitem t where t.idtipoItem="+e.getIdtipoItem();
+        Query q=em.createQuery(sql,Tipoitem.class);
+        lista=q.getResultList();       
+        return lista;     
+           
+    } 
+    
+    public List<Tipoitem> getBusquedaCaracteristicasDuplicados(Tipoitem e){
+        List<Tipoitem> lista= new ArrayList<Tipoitem>();
+        String sql="SELECT t FROM Tipoitem t where t.idtipoItem="+e.getIdtipoItem();
+        Query q=em.createQuery(sql,Tipoitem.class);
+        lista=q.getResultList();       
+        return lista;     
+           
+    } 
     public Tipoitem getTipoItemsNombre(String idtipoItem){
         Tipoitem entidad = new Tipoitem();
         try{
