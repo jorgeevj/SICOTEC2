@@ -798,8 +798,10 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE PEDIDOS-->
 
 
-            <!-- DIALOG DE TIPOITEM-->
-            <p:dialog header="Registrar Item" widgetVar="registrarItem" minHeight="40" height="500" width="1350">
+
+        <!-- DIALOG DE TIPOITEM-->
+        <p:dialog header="Registrar Item" widgetVar="registrarItem" minHeight="40" height="500" width="880" modal="true">
+
 
                 <h:form id="formRegistrar">
 
@@ -823,110 +825,191 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Precio:" for="precioItem"/>                            
                         <p:inputText id="precioItem" value="#{tipoitemMB.precio}"/>
 
-                        <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItem"/>                            
-                        <p:inputText id="dsctClienteItem" value="#{tipoitemMB.dsctoCliente}"/>                      
 
-                        <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItem"/>                            
-                        <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.dsctoDistribuidor}"/>
+                    <p:outputLabel value="Dsco. Cliente: %" for="dsctClienteItem"/>                            
+                    <p:inputText id="dsctClienteItem" value="#{tipoitemMB.dsctoCliente}"/>                      
 
 
 
-                        <p:outputLabel value="Familia:" for="familiaItem"/>                            
-                        <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.familiaSelect}"  >
-                            <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
-                                           itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
-                        </p:selectOneMenu>                        
+                    <p:outputLabel value="Dsco. Distribuidor: %" for="dsctDistribuidorItem" style="width:96%"/>                            
+                    <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.dsctoDistribuidor}"/>
 
-                        <p:outputLabel value="Marca:" for="marcaItem"/>                            
-                        <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
-                            <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
-                                           itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Color:" for="colorItem"/>                            
-                        <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" >
-                            <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
-                                           itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
-                        </p:selectOneMenu>
 
-                        <p:outputLabel value="Características:" for="caracteristicasItem"/>                            
-                        <p:selectOneMenu id="caracteristicasItem" styleClass="browser-default" value="#{tipoitemMB.caracteristicaSelect}" >
-                            <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
-                                           itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
-                        </p:selectOneMenu>
+
+
+
+                    <p:outputLabel value="Familia:" for="familiaItem"/>                            
+                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.familiaSelect}" style="width:96%"  >
+                        <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
+                                       itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}"/>
+                    </p:selectOneMenu>                        
+
+
+
+                    <p:outputLabel value="Marca:" for="marcaItem"/>                            
+                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" style="width:96%" >
+                        <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
+                                       itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Color:" for="colorItem"/>                            
+                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" style="width:96%" >
+                        <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
+                                       itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
+                    </p:selectOneMenu>
+
                     </h:panelGrid>
-                    <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formRegistrar:panelRegistrarItem,tabla2"/> 
-                    <p:commandButton value="Quitar" id="btnQuitarCaracteristica" actionListener="#{tipoitemMB.quitarElementosTablaCaracteristicas}" update="formRegistrar:panelRegistrarItem,tabla2"/>       
-                    <p:dataTable id="tabla2" value="#{tipoitemMB.lista2}" var="tite" selectionMode="single" 
-                                 rowKey="#{tite.idcaracteristica}" 
-                                 scrollable="true" rows="5" selection="#{tipoitemMB.caracteristicasTablaSelect}"> 
-                        <p:ajax event="rowSelect"  />
-                        <p:column headerText="Características">
-                            <h:outputText value="#{tite.nombre}" />
-                        </p:column>                            
-                    </p:dataTable>
+                    <br/>
+                    <br/>
+                
+                    <h:panelGrid columns="4"  id="panel2">
+
+                    <p:outputLabel value="Características:" for="caracteristicasItem"/>                            
+                    <p:selectOneMenu id="caracteristicasItem" styleClass="browser-default" value="#{tipoitemMB.caracteristicaSelect}" >
+                        <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
+                                       itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
+                    </p:selectOneMenu>
+                
+                <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formRegistrar:panel2,tabla2"/> 
+                <p:commandButton value="Quitar" id="btnQuitarCaracteristicaR" actionListener="#{tipoitemMB.quitarElementosTablaCaracteristicas}" 
+                                 update="formRegistrar:panel2,tabla2" disabled="#{tipoitemMB.btnQuitarEstado}"/> 
+                </h:panelGrid>
+                <p:dataTable id="tabla2" value="#{tipoitemMB.lista2}" var="tite" selectionMode="single" 
+                             rowKey="#{tite.idcaracteristica}" 
+                             scrollable="true" rows="5" selection="#{tipoitemMB.caracteristicasTablaSelect}"> 
+                    <p:ajax event="rowSelect" listener="#{tipoitemMB.onRowSelectCaracteristica(event)}" update="formRegistrar:btnQuitarCaracteristicaR" />
+                    <f:facet name="header">
+                            Lista de Caracteristicas
+                        </f:facet>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{tite.nombre}" />
+                    </p:column> 
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{tite.descripcion}" />
+                    </p:column> 
+                </p:dataTable>
+
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                
                 <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
                 <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarca}" />
 
-                    <p:commandButton  value="Registrar nuevo Item" actionListener="#{tipoitemMB.registrarNuevoTipoItem}"/>
+                
+                <br/>
+                <br/>
+                <h:panelGrid columns="2"  >
 
+
+                    <p:commandButton  value="Registrar nuevo Item" actionListener="#{tipoitemMB.registrarNuevoTipoItem}" />
+                <p:commandButton  value="Cancelar" update="formRegistrar:panelRegistrarItem" onclick="PF('registrarItem').hide();" />
+                </h:panelGrid>
 
                 </h:form>
 
                 <!-- CREAR NUEVA CARACTERISTICA -->
             </p:dialog>
 
-            <p:dialog header="Crear Característica" widgetVar="crearCaraItem" minHeight="40" height="150" width="700">
-                <h:form>
-                    <h:panelGrid columns="2" id="ee">
+
+        <p:dialog header="Crear Característica" widgetVar="crearCaraItem" minHeight="40" height="150" width="700" modal="true">
+            <h:form>
+                <h:panelGrid columns="2" id="ee">
+
 
                         <p:outputLabel value="Nombre:" for="nombreCaracteristica"/>                            
                         <p:inputText id="nombreCaracteristica" value="#{tipoitemMB.nombreCaracteristica}"/>  
                         <p:outputLabel value="Descripcion:" for="descripCaracteristica"/>                            
                         <p:inputText id="descripCaracteristica" value="#{tipoitemMB.descripcionCaracteristica}"/>  
+                    <p:messages id="messages2" showDetail="true" autoUpdate="true" closable="true" />
 
-                        <p:commandButton  value="Crear nueva caracteristica" 
-                                          actionListener="#{tipoitemMB.registrarNuevaCaracteristica}"  
-                                          update="formRegistrar:panelRegistrarItem" onclick="PF('crearCaraItem').hide();"/>
-                    </h:panelGrid>        
-                </h:form>
+                    <p:commandButton  value="Crear nueva caracteristica" 
+                                      actionListener="#{tipoitemMB.registrarNuevaCaracteristica}"  
+                                      update="formRegistrar:panelRegistrarItem"/>
+                    
+                </h:panelGrid>        
+            </h:form>
+
+        </p:dialog>
+        
+        <p:dialog header="Crear Característica" widgetVar="crearCaraItemMod" minHeight="40" height="150" width="700" modal="true">
+            <h:form>
+                <h:panelGrid columns="2" id="ee">
+
+
+                    <p:outputLabel value="Nombre:" for="nombreCaracteristica"/>                            
+                    <p:inputText id="nombreCaracteristica" value="#{tipoitemMB.nombreCaracteristica}"/>  
+                    <p:outputLabel value="Descripcion:" for="descripCaracteristica"/>                            
+                    <p:inputText id="descripCaracteristica" value="#{tipoitemMB.descripcionCaracteristica}"/>  
+                    <p:messages id="messages3" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:commandButton  value="Crear nueva caracteristica" 
+                                      actionListener="#{tipoitemMB.registrarNuevaCaracteristica}"  
+                                      update="formModificarTipoItem:panelModTipoItem" />
+                </h:panelGrid>        
+            </h:form>
+
 
             </p:dialog>
 
             <!-- CREAR NUEVA MARCA -->
-            <p:dialog header="Crear Marca" widgetVar="crearMarcaItem" minHeight="40" height="300" width="420">
-                <h:form>
-                    <h:panelGrid columns="2">
 
-
-                        <p:outputLabel value="Nombre:" for="nomCrearMarcaItem"/>                            
-                        <p:inputText id="nomCrearMarcaItem" value="#{tipoitemMB.nombreMarca}" style="width: 70%"/>                
-
-                        <p:outputLabel value="Imagen:" for="imgCrearMarcaItem"/>                            
-                        <p:inputText id="imgCrearMarcaItem" value="#{tipoitemMB.imagenMarca}" style="width: 70%"/>                             
-                        <p:outputLabel value="Formato:" for="formatoCrearMarcaItem"/>                            
-                        <p:inputText id="formatoCrearMarcaItem" value="#{tipoitemMB.formatoMarca}" style="width: 70%"/> 
+        <p:dialog header="Crear Marca" widgetVar="crearMarcaItem" minHeight="40" height="200" width="420" modal="true">
+            <h:form>
+                <h:panelGrid columns="2">
 
 
 
-                        <p:commandButton  value="Crear Marca" actionListener="#{tipoitemMB.registrarNuevaMarca}"/>
-                    </h:panelGrid> 
-                </h:form>
-            </p:dialog>
+
+                    <p:outputLabel value="Nombre:" for="nomCrearMarcaItem"/>                            
+                    <p:inputText id="nomCrearMarcaItem" value="#{tipoitemMB.nombreMarca}" style="width: 70%"/> 
+                    <p:outputLabel value="Formato:" for="formatoCrearMarcaItem"/>                            
+                    <p:inputText id="formatoCrearMarcaItem" value="#{tipoitemMB.formatoMarca}" style="width: 70%"/> 
+
+
+
+                    <p:messages id="messages4" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:commandButton  value="Crear Marca" actionListener="#{tipoitemMB.registrarNuevaMarca}" 
+                                      update="formRegistrar:panelRegistrarItem" />
+                </h:panelGrid> 
+            </h:form>
+        </p:dialog>
+            
+        <p:dialog header="Crear Marca" widgetVar="crearMarcaItemMod" minHeight="40" height="200" width="420" modal="true">
+            <h:form>
+                <h:panelGrid columns="2">
+
+
+
+                    <p:outputLabel value="Nombre:" for="nomCrearMarcaItem"/>                            
+                    <p:inputText id="nomCrearMarcaItem" value="#{tipoitemMB.nombreMarca}" style="width: 70%"/> 
+                    <p:outputLabel value="Formato:" for="formatoCrearMarcaItem"/>                            
+                    <p:inputText id="formatoCrearMarcaItem" value="#{tipoitemMB.formatoMarca}" style="width: 70%"/> 
+
+                    <p:messages id="messages5" showDetail="true" autoUpdate="true" closable="true" />
+
+                    <p:commandButton  value="Crear Marca" actionListener="#{tipoitemMB.registrarNuevaMarca}" 
+                                      update="formModificarTipoItem:panelModTipoItem" />
+                </h:panelGrid> 
+            </h:form>
+        </p:dialog>
+
 
             <!-- MODIFICAR TIPOITEM -->
 
-            <p:dialog header="Modificar Item" widgetVar="modificarItem" minHeight="40" height="500" width="1200">
 
-                <h:form id="formModificarTipoItem">
-                    <h:panelGrid columns="2" id="panelModTipoItem">
+            <p:dialog header="Modificar Item" widgetVar="modificarItem" minHeight="40" height="500" width="1300" modal="true">
 
-                        <p:outputLabel value="Cod. Item:" for="codigoItem"/>                            
-                        <p:inputText id="codigoItem" value="#{tipoitemMB.tipoItemSelect.idtipoItem}"/>
+
+
+            <h:form id="formModificarTipoItem">
+                <h:panelGrid columns="6" id="panelModTipoItem">
+
+
+
+                    <p:outputLabel value="Cod. Item:" for="codigoItem"/>                            
+                    <p:inputText id="codigoItem" value="#{tipoitemMB.tipoItemSelect.idtipoItem}" disabled="true"/>
+
 
                         <p:outputLabel value="Nombre Item:" for="nombreItem"/>                            
                         <p:inputText id="nombreItem" value="#{tipoitemMB.tipoItemSelect.nombre}"/>
@@ -943,16 +1026,26 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Precio:" for="precioItem"/>                            
                         <p:inputText id="precioItem" value="#{tipoitemMB.tipoItemSelect.precioLista}"/>
 
-                        <p:outputLabel value="Dsco. Cliente:" for="dsctClienteItem"/>                            
+
+                    <p:outputLabel value="Dsco. Cliente: %" for="dsctClienteItem"/>                            
+
                         <p:inputText id="dsctClienteItem" value="#{tipoitemMB.tipoItemSelect.desCliente}"/>                      
 
-                        <p:outputLabel value="Dsco. Distribuidor:" for="dsctDistribuidorItem"/>                            
+
+                    <p:outputLabel value="Dsco. Distribuidor: %" for="dsctDistribuidorItem"/>                            
+
                         <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.tipoItemSelect.desDistribuidor}"/>
 
 
-
+                    <p:outputLabel value="Marca:" for="marcaItem"/>                            
+                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.marca.idmarca}" >
+                        <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
+                                       itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
+                    </p:selectOneMenu>
+                    
                         <p:outputLabel value="Familia:" for="familiaItem"/>                            
-                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}" >
+                    <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}" style="width:90%" >
                         <f:selectItem itemLabel="Seleccione familia..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaFamilia}" var="nomFamilia" 
                                        itemValue="#{nomFamilia.idfamilia}" itemLabel="#{nomFamilia.nombre}" />
@@ -966,19 +1059,19 @@ jorgeevj 15.09.15 Creacion.
                                        itemValue="#{nomCategoria.idcategoria}" itemLabel="#{nomCategoria.nombre}"/>
                     </p:selectOneMenu>
 
-                        <p:outputLabel value="Marca:" for="marcaItem"/>                            
-                        <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.marca.idmarca}" >
-                            <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
-                                           itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Color:" for="colorItem"/>                            
-                        <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.color.idcolor}" >
-                            <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
-                            <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
-                                           itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
-                        </p:selectOneMenu>
 
+                    
+                    <p:outputLabel value="Color:" for="colorItem"/>                            
+                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.color.idcolor}" >
+                        <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
+                                       itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
+                    </p:selectOneMenu>
+
+                    <br/>
+                    <br/>
+                    </h:panelGrid>
+                <h:panelGrid columns="4" id="panel3">
                         <p:outputLabel value="Características:" for="caracteristicasItem2"/>                            
                         <p:selectOneMenu id="caracteristicasItem2" styleClass="browser-default" value="#{tipoitemMB.caracteristicaSelect}" >
                             <f:selectItem itemLabel="Seleccione característica..." itemValue="0" />
@@ -986,23 +1079,42 @@ jorgeevj 15.09.15 Creacion.
                                            itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
                         </p:selectOneMenu>
 
-                        <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formModificarTipoItem:tabla3"/> 
+
+                    
+                    
+                    <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formModificarTipoItem:panel3,tabla3"/> 
+                     <p:commandButton value="Quitar" id="btnquitarCara" actionListener="#{tipoitemMB.quitarElementosTablaCaracteristicas}" 
+                                      update="formModificarTipoItem:panel3,tabla3" disabled="#{tipoitemMB.btnQuitarEstado}"/>  
                     </h:panelGrid>
+
                     <p:dataTable id="tabla3" value="#{tipoitemMB.lista2}" var="titee" selectionMode="single"
                                  rowKey="#{titee.idcaracteristica}" scrollable="true" rows="5" selection="#{tipoitemMB.caracteristicasTablaSelect}"> 
-                        <p:column headerText="Características">
+                        <p:ajax event="rowSelect" listener="#{tipoitemMB.onRowSelectCaracteristica(event)}" update="formModificarTipoItem:btnquitarCara" />
+                        <f:facet name="header">
+                            Lista de Caracteristicas
+                        </f:facet>
+                        <p:column headerText="Nombre">
                             <h:outputText value="#{titee.nombre}"/>
-                        </p:column>                            
+                        </p:column>
+                        <p:column headerText="Descripcion">
+                            <h:outputText value="#{titee.descripcion}"/>
+                        </p:column>
+                        
                     </p:dataTable>
 
-                    <p:commandButton value="Quitar" update="tabla3"/>
+                   
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
-                    <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarca}" />
-
+                    <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristicaMod}" />
+                    <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarcaMod}" />
+                    <br/>
+                    <br/>
+                    <h:panelGrid columns="2" >
                     <p:commandButton  value="Modificar Item" actionListener="#{tipoitemMB.modificarTipoItem}"/>
 
-                </h:form>
+                    <p:commandButton  value="Cancelar" update="formModificarTipoItem:panelModTipoItem" onclick="PF('modificarItem').hide();"/>
+                    </h:panelGrid>
+            </h:form>
+
 
             </p:dialog>
 
