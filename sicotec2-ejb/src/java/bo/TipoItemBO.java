@@ -89,6 +89,39 @@ public class TipoItemBO {
     }
     
     //////
+    public boolean buscarTipoItemPorID(TipoItemDTO t){       
+        boolean encontro=true;
+        Tipoitem r=convertDTOtoEntidad(t,1);
+        List<Tipoitem> lista =tipoItemFacade.getBusquedaDuplicados(r);
+        if(lista.isEmpty())
+        {
+            encontro=false;
+        }
+        
+        return encontro;          
+    }
+    public boolean buscarCaracteristicasPorNombre(String a){
+        boolean encontro=false;
+        List<Caracteristica> lista = caracteristicaFacade.findAll();        
+        for(Caracteristica ite:lista){
+            if(ite.getNombre().equalsIgnoreCase(a) )
+                encontro=true;            
+        }
+        
+        return encontro; 
+        
+    }
+    public boolean buscarMarcaPorNombre(String a){
+        boolean encontro=false;
+        List<Marca> lista = marcaFacade.findAll();        
+        for(Marca ite:lista){
+            if(ite.getNombre().equalsIgnoreCase(a) )
+                encontro=true;            
+        }
+        
+        return encontro; 
+        
+    }
     public List<TipoItemDTO> buscarTipoItem(TipoItemDTO t){       
         Tipoitem r=convertDTOtoEntidad(t,1);
         List<Tipoitem> lista =tipoItemFacade.getAllBusqueda(r);
@@ -183,6 +216,7 @@ public class TipoItemBO {
         CaracteristicaDTO e=new CaracteristicaDTO();
         e.setIdCaracteristica(b.getIdcaracteristica());
         e.setNombreCaracteristica(b.getNombre());
+        e.setDescripcion(b.getDescripcion());
         
         return e;
     }
