@@ -6,8 +6,10 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.DocumentoFacade;
 import dto.AlmacenDTO;
 import entidades.Almacen;
+import entidades.Documento;
 import entidades.Pealtipoitem;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,14 @@ import javax.faces.model.SelectItem;
 public class AlmacenBO {
     @EJB
     private AlmacenFacade almacenFacade;
+    @EJB
+    private DocumentoFacade documentoFacade;
+    
+    
+    public List<Documento> getNombreDocumento(){
+        List<Documento> lista=documentoFacade.findAll();
+        return lista;
+    }
 
     public List<Almacen> findAll() {
         List<Almacen> listaAlmacen=almacenFacade.findAll();
