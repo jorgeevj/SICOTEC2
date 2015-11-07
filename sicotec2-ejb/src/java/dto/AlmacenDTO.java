@@ -7,6 +7,7 @@ package dto;
 
 import entidades.Altipoitem;
 import entidades.Docalmacen;
+import entidades.Documento;
 import entidades.Pealtipoitem;
 import entidades.Tipoitem;
 import java.util.Collection;
@@ -29,6 +30,8 @@ public class AlmacenDTO {
     private String codProv;
    
     private String codDist;
+    
+    private Documento documento;
     
     //EXTRAS
     private Pealtipoitem pealtipoitem;
@@ -116,6 +119,14 @@ public class AlmacenDTO {
 
     public void setTipoItem(Tipoitem tipoItem) {
         this.tipoItem = tipoItem;
+    }
+
+    public Documento getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(Documento documento) {
+        this.documento = documento;
     }
    
    
