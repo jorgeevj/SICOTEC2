@@ -71,7 +71,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                 if(dto.getFechaFin()!= null){
                 sql += "and c.fecha <= '"+sdf.format(dto.getFechaFin())+"' ";
                 }
-            
+                if(dto.getIdrol().getIdrol()!= null){
+                sql += "and c.idrol.idrol = " + dto.getIdrol().getIdrol()+" ";
+                }
                 
                l=em.createQuery(sql, Usuario.class).getResultList();
            } catch(Exception e){

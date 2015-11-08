@@ -622,16 +622,6 @@ jorgeevj 15.09.15 Creacion.
                      <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}" /> 
                         <p:column headerText="Item" style="text-align: center">
                         <p:outputLabel value="#{pealtipoitem.nombreItems}"/>
-
-
-                    <p:commandButton value="Agregar Pedidos"  />
-                    <br/><br/><br/><br/>
-                    <p:outputLabel value="Pedidos Seleccionados "></p:outputLabel>
-                    <p:dataTable tableStyleClass="table table-hover" var="lote" value="#{compraMB.ll}" 
-                                 selectionMode="single" rowKey="#{lote.idlote}" selection="#{compraMB.loteSelec}">
-                        <p:column headerText="Nombre" style="text-align: center">
-                            <p:outputLabel value="#{lote.altipoitem.tipoitem.nombre}"/>
-
                         </p:column>
                         <p:column headerText="Cantidad Pedida" style="text-align: center">
                             <p:outputLabel value="#{pealtipoitem.cantidad}"/>
@@ -650,40 +640,6 @@ jorgeevj 15.09.15 Creacion.
                 <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
             </h:form>
         </p:dialog>
-        
-
-                    </p:dataTable>
-                    <br/>
-                    <p:commandButton value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
-                    <br/><br/><br/>
-                    <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
-                </h:form>
-            </p:dialog>
-
-            <p:dialog header="Editar Compras" widgetVar="EditComprasModal" modal="true" height="300" width="500">
-                <h:form id="formEditCompra">
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="Empresa: "/>
-                        <p:selectOneMenu id="empresasPedido" value="#{compraMB.co.idempresa.idempresa}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
-                            <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
-                                             itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Almacen: "/>
-                        <p:selectOneMenu id="almacenesCompra" value="#{compraMB.co.idAlmacen}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
-                            <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
-                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
-                        </p:selectOneMenu>
-                    </h:panelGrid>
-
-                    <p:commandButton value="Editar Pedidos" actionListener="#{compraMB.OpenAddPedido}"/>
-                    <br/><br/><br/>
-                    <p:commandButton id="editCompra" value="Guardar" actionListener="#{compraMB.editCompra}" />
-                </h:form>
-            </p:dialog> 
-
-
             <!-- FIN DIALOG DE COMPRAS-->
 
 
