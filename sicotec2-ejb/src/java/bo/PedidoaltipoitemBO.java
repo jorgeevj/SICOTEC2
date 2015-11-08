@@ -38,12 +38,10 @@ public class PedidoaltipoitemBO {
     
      public List<PealtipoitemDTO> convertListEntityToDTO(List<Pealtipoitem> listaPealtipoitem){
         List<PealtipoitemDTO> listaDTO = new ArrayList<PealtipoitemDTO>();
+         
         for(Pealtipoitem usuario: listaPealtipoitem){
-            PealtipoitemDTO DTO = new PealtipoitemDTO();
-            
-            DTO = convertEntityToDTO(usuario);
-            
-            listaDTO.add(DTO);
+        
+            listaDTO.add(convertEntityToDTO(usuario));
         }
         
         return listaDTO;
@@ -61,7 +59,7 @@ public class PedidoaltipoitemBO {
             String idTipoItem = DTO.getAltipoitem().getAltipoitemPK().getIdtipoItem();
             System.out.println("dto.nombreItems: " + idTipoItem);
             String nombreItems=tipoitemFacade.getTipoItemsNombre(idTipoItem).getNombre();
-            
+            DTO.setTotal(pealtipoitem.getCostoUni()*pealtipoitem.getCantidad());
             System.out.println("nombre: " + nombreItems);
             DTO.setNombreItems(nombreItems);
             /*String aux = (pealtipoitem.getAltipoitem().getAlmacen().getIdalmacen()).toString();
@@ -86,9 +84,9 @@ public class PedidoaltipoitemBO {
         return entidad;
     }
      public List<PealtipoitemDTO> AlmacenForPedidos(PealtipoitemDTO t){       
-        //Pealtipoitem r=convertDTOtoEntity(t);
-        List<Pealtipoitem> lista =pealtipoitemFacade.getAlmacenForPedido(new Pealtipoitem());
-        List<PealtipoitemDTO> lista1= new ArrayList<PealtipoitemDTO>();/*convertListEntityToDTO(lista);*/
+        Pealtipoitem r=convertDTOtoEntity(t);
+        List<Pealtipoitem> lista =pealtipoitemFacade.getAlmacenForPedido(r);
+        List<PealtipoitemDTO> lista1= convertListEntityToDTO(lista);
         return lista1;      
     }  
       

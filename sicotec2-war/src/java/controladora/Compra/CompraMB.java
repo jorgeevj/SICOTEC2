@@ -10,12 +10,14 @@ import bo.AlmacenBO;
 import bo.CompraBO;
 import bo.CotizacionBO;
 import bo.EmpresaBO;
+import bo.PedidoBO;
 import bo.PedidoaltipoitemBO;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
 import entidades.Almacen;
+import entidades.Altipoitem;
 import entidades.Compra;
 import entidades.Docalmacen;
 import entidades.Documento;
@@ -31,6 +33,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -53,6 +56,8 @@ public class CompraMB {
     private EmpresaBO empresaBO;
     @EJB
     private AlmacenBO almacenBO;
+    @EJB
+    private PedidoBO pedidoBO;
     @EJB
     private PedidoaltipoitemBO pedidoaltipoitemBO;
     
@@ -95,6 +100,9 @@ public class CompraMB {
     private List<Lote> llTemp;
     private PealtipoitemDTO pealtiSelecDTO;
     private Lote loteSelec;
+    private List<PealtipoitemDTO> listaPealTipoItemSelct;
+    private PealtipoitemDTO objPealtipoItemSelecDTO;
+    private PealtipoitemDTO objPealtipoItemQuitarDTO;
     //
     private SessionBeanCompra sessionBeanCompra = new SessionBeanCompra();
     Utils ut = new Utils();
@@ -137,12 +145,12 @@ public class CompraMB {
             return getSessionBeanCompra().getListaCompra();
     }
     
-    public void OpenAddPedido(ActionEvent actionEvent){
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formAddPedidoss");
-        context.execute("PF('addPedidosItemsModal').show();");
-    
-    }
+//    public void OpenAddPedido(ActionEvent actionEvent){
+//        RequestContext context = RequestContext.getCurrentInstance(); 
+//        context.update("formAddPedidoss");
+//        context.execute("PF('addPedidosItemsModal').show();");
+//    
+//    }
     public void crear(ActionEvent actionEvent){
        limpiaCrearCompra();
         
@@ -150,6 +158,7 @@ public class CompraMB {
         context.execute("PF('addComprasModal').show();");
     }
     private void limpiaCrearCompra() {
+        setListaPealTipoItemSelct(new ArrayList<PealtipoitemDTO>());
         idempresaNuevo=0;
         idalmacenNuevo=0;
         }
@@ -163,20 +172,34 @@ public class CompraMB {
          return listaDto;
      }
      
+     public void selectTipoItemAdd(SelectEvent event){
+         setObjPealtipoItemSelecDTO((PealtipoitemDTO)event.getObject());
+     
+     }
+     public void selectTipoItemQuitar(SelectEvent event){
+         setObjPealtipoItemQuitarDTO((PealtipoitemDTO)event.getObject());
+     
+     }
     
      public void getAlmacenForPedidoForItems(ActionEvent actionEvent){        
         
         PealtipoitemDTO lis=new PealtipoitemDTO();
-       
+         Altipoitem alti = new Altipoitem();
+            Almacen alm = new Almacen();
+            alm.setIdalmacen(getIdalmacenNuevo());
+         alti.setAlmacen(alm);
+        lis.setAltipoitem(alti);
         
-//        AlmacenDTO lis=new AlmacenDTO();
-//        lis.setIdalmacen(codigoAlamacen);
+       //AlmacenDTO lis=new AlmacenDTO();
+//       lis.setIdalmacen(codigoAlamacen);
 //        lis.setNombre(nombreAlamacen);
 ////       
         
-      
-       listPealItem=pedidoaltipoitemBO.AlmacenForPedidos(lis);
-       
+         setListPealItem(pedidoaltipoitemBO.AlmacenForPedidos(lis));
+         setListaPealTipoItemSelct(new ArrayList<PealtipoitemDTO>());
+       RequestContext context = RequestContext.getCurrentInstance(); 
+       context.execute("PF('addPedidosItemsModal').show();");
+        context.update("formAddPedidoss");
     }
       public void addNuevoCompra(ActionEvent actionEvent){
           CompraDTO dto=new CompraDTO();
@@ -185,11 +208,14 @@ public class CompraMB {
 //           dto.setCorrelativo(getCorrelativoNuevo());
            dto.setFecha(new Date());
 //           dto.setSerie(getSerieNuevo());
+           List<PealtipoitemDTO> listAux = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), 0);
            dto.setTotal(getTotalNuevo());
            dto.setIdEmpresa(getIdempresaNuevo());
            System.out.println("data: " + dto.getCorrelativo());
            
            Compra entidad = compraBO.insertarNuevoCompra(dto);
+           /*List<PealtipoitemDTO> listaPealDTO = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), entidad.getIdcompra());
+           pedidoBO.updatePedidosItems(listaPealDTO);*/
            
         getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
         RequestContext context = RequestContext.getCurrentInstance(); 
@@ -197,6 +223,23 @@ public class CompraMB {
         this.cerrar();
         
     }
+      public List<PealtipoitemDTO> getListaPealtipoItemCompra(List<PealtipoitemDTO> listaTipoItem,int idCompra){
+          if(idCompra != 0){
+              for(PealtipoitemDTO dtoTI : listaTipoItem){
+                    
+                Compra entidadCompra = new Compra();
+                    
+                entidadCompra.setIdcompra(idCompra);
+             }
+          } else{
+              for(PealtipoitemDTO dtoTI : listaTipoItem){
+                    setTotalNuevo(getTotalNuevo()+dtoTI.getTotal());
+             }
+          }
+          
+            return listaTipoItem;
+        }
+ 
     
       public void cerrar(){
         RequestContext context = RequestContext.getCurrentInstance(); 
@@ -235,15 +278,10 @@ public class CompraMB {
         
       }
       public void quitarPedido(ActionEvent actionEvent){
-      for(Lote l:ll){
-          if(l.getLotePK().getIdlote()==loteSelec.getLotePK().getIdlote()){
-             listPealItem.addAll(compraBO.getPedidosByCompraAndItem(co,loteSelec));
-              ll.remove(l);
-             break;
-          }
-      }
-      RequestContext context = RequestContext.getCurrentInstance();
-        context.update("formAddPedidoss");
+          getListaPealTipoItemSelct().remove(getObjPealtipoItemSelecDTO());
+          getListPealItem().add(getObjPealtipoItemSelecDTO());
+          RequestContext context = RequestContext.getCurrentInstance();
+          context.update("formAddPedidoss");
       }
       
       public void editCompra(ActionEvent actionEvent){
@@ -269,6 +307,12 @@ public class CompraMB {
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('EditComprasModal').hide();");
     }
+      public void agregarTipoItems(ActionEvent actionEvent){
+          getListaPealTipoItemSelct().add(getObjPealtipoItemSelecDTO());
+          getListPealItem().remove(getObjPealtipoItemSelecDTO());
+          RequestContext context = RequestContext.getCurrentInstance();
+          context.update("formAddPedidoss");
+     }
       
     public CompraBO getCompraBO() {
         return compraBO;
@@ -608,6 +652,30 @@ public class CompraMB {
 
     public void setNombreEmpresaBuqueda(String nombreEmpresaBuqueda) {
         this.nombreEmpresaBuqueda = nombreEmpresaBuqueda;
+    }
+
+    public PealtipoitemDTO getObjPealtipoItemSelecDTO() {
+        return objPealtipoItemSelecDTO;
+    }
+
+    public void setObjPealtipoItemSelecDTO(PealtipoitemDTO objPealtipoItemSelecDTO) {
+        this.objPealtipoItemSelecDTO = objPealtipoItemSelecDTO;
+    }
+
+    public List<PealtipoitemDTO> getListaPealTipoItemSelct() {
+        return listaPealTipoItemSelct;
+    }
+
+    public void setListaPealTipoItemSelct(List<PealtipoitemDTO> listaPealTipoItemSelct) {
+        this.listaPealTipoItemSelct = listaPealTipoItemSelct;
+    }
+
+    public PealtipoitemDTO getObjPealtipoItemQuitarDTO() {
+        return objPealtipoItemQuitarDTO;
+    }
+
+    public void setObjPealtipoItemQuitarDTO(PealtipoitemDTO objPealtipoItemQuitarDTO) {
+        this.objPealtipoItemQuitarDTO = objPealtipoItemQuitarDTO;
     }
 
     

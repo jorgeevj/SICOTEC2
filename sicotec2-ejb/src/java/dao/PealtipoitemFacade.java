@@ -58,16 +58,20 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
     }
 
     public List<Pealtipoitem> getAlmacenForPedido(Pealtipoitem a) {
+        List<Pealtipoitem> entidad = new ArrayList<Pealtipoitem>();
+        try{
+            String jpa = "SELECT pti "
+                + "FROM Pealtipoitem pti "
+                + "WHERE pti.estado = 0 "
+                + "AND pti.pealtipoitemPK.idalmacen = " + a.getAltipoitem().getAlmacen().getIdalmacen();
+            
+            entidad = em.createQuery(jpa, Pealtipoitem.class).getResultList();
+        } catch(Exception e){
+            
+        }
+        
 
-        String jpa = "SELECT pti "
-                + "FROM Pealtipoitem pti , Almacen a, Tipoitem ti, Altipoitem ati "
-                + "WHERE a.idalmacen = pti.pealtipoitemPK.idalmacen "
-                + "AND pti.pealtipoitemPK.idtipoItem = ati.altipoitemPK.idtipoItem "
-                + "AND pti.pealtipoitemPK.idalmacen = ati.altipoitemPK.idalmacen "
-                + "AND ti.idtipoItem = ati.altipoitemPK.idtipoItem "
-                + "AND pti.pealtipoitemPK.idalmacen =  " + a.getAltipoitem().getAlmacen().getIdalmacen();
-
-        return em.createQuery(jpa, Pealtipoitem.class).getResultList();
+        return entidad;
 
     }
 

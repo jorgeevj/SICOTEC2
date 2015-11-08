@@ -587,16 +587,20 @@ jorgeevj 15.09.15 Creacion.
 
 
                     </h:panelGrid>
-                    <p:commandButton value="Agregar Pedidos" actionListener="#{compraMB.OpenAddPedido}"/>
+                    <p:commandButton value="Agregar Pedidos" actionListener="#{compraMB.getAlmacenForPedidoForItems}"/>
                     <br/><br/><br/>
                     <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
                 </h:form>
             </p:dialog> 
+        
+        
             <p:dialog header="Agregar Pedidos" widgetVar="addPedidosItemsModal" modal="true" height="500" width="700"> 
                 <h:form id="formAddPedidoss">
                     <p:outputLabel value="Pedidos Disponibles "></p:outputLabel>
-                    <p:dataTable tableStyleClass="table table-hover" var="tPealtipoitem" value="#{compraMB.listPealItem}" >
-                        <p:column headerText="Nombre" style="text-align: center">
+                    <p:dataTable var="tPealtipoitem" value="#{compraMB.listPealItem}"  id="tbPedidosItemsDisp"
+                                 selectionMode="single" rowKey="#{tPealtipoitem}"  >
+                        <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemAdd}" /> 
+                        <p:column headerText="Item" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: center">
@@ -605,8 +609,20 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Costo Unitario" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.costoUni}"/>
                         </p:column>
+                       
                     </p:dataTable>
                     <br/>
+
+                
+                    <p:commandButton value="Agregar Pedido"  actionListener="#{compraMB.agregarTipoItems}" />
+                <br/><br/><br/><br/>
+                <p:outputLabel value="Compra Seleccionados "></p:outputLabel>
+                <p:dataTable tableStyleClass="table table-hover" var="pealtipoitem" id="tbPedidosItemsSelec" value="#{compraMB.listaPealTipoItemSelct}"
+                             selectionMode="single" rowKey="#{pealtipoitem}"  >
+                     <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}" /> 
+                        <p:column headerText="Item" style="text-align: center">
+                        <p:outputLabel value="#{pealtipoitem.nombreItems}"/>
+
 
                     <p:commandButton value="Agregar Pedidos"  />
                     <br/><br/><br/><br/>
@@ -615,13 +631,27 @@ jorgeevj 15.09.15 Creacion.
                                  selectionMode="single" rowKey="#{lote.idlote}" selection="#{compraMB.loteSelec}">
                         <p:column headerText="Nombre" style="text-align: center">
                             <p:outputLabel value="#{lote.altipoitem.tipoitem.nombre}"/>
+
                         </p:column>
-                        <p:column headerText="Cantidad" style="text-align: center">
-                            <p:outputLabel value="#{lote.cantidad}"/>
+                        <p:column headerText="Cantidad Pedida" style="text-align: center">
+                            <p:outputLabel value="#{pealtipoitem.cantidad}"/>
                         </p:column>
                         <p:column headerText="Costo Unitario" style="text-align: center">
-                            <p:outputLabel value="#{lote.precioUni}"/>
+                        <p:outputLabel value="#{pealtipoitem.costoUni}"/>
                         </p:column>
+                        <p:column headerText="Total" style="text-align: center">
+                            <p:outputLabel value="#{pealtipoitem.total}"/>
+                        </p:column>
+
+                </p:dataTable>
+                <br/>
+                <p:commandButton value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
+                <br/><br/><br/>
+                <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
+            </h:form>
+        </p:dialog>
+        
+
                     </p:dataTable>
                     <br/>
                     <p:commandButton value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
@@ -652,6 +682,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:commandButton id="editCompra" value="Guardar" actionListener="#{compraMB.editCompra}" />
                 </h:form>
             </p:dialog> 
+
 
             <!-- FIN DIALOG DE COMPRAS-->
 
