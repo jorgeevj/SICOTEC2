@@ -13,6 +13,7 @@ public class loteDTO {
     private Integer idLote;
     private Integer cantidad;
     private Integer cantidadIngresar;
+    private Integer cantidadConvertida;
     private Double precioUni;
     private String idtipoitem;
     
@@ -22,6 +23,8 @@ public class loteDTO {
     private String descripcionTipoItem;
     
     private String idItem;
+    private int idUMedida;
+    private String descUMedida;
 
     /**
      * @return the idLote
@@ -147,6 +150,48 @@ public class loteDTO {
      */
     public void setIdItem(String idItem) {
         this.idItem = idItem;
+    }
+
+    /**
+     * @return the idUMedida
+     */
+    public int getIdUMedida() {
+        return idUMedida;
+    }
+
+    /**
+     * @param idUMedida the idUMedida to set
+     */
+    public void setIdUMedida(int idUMedida) {
+        this.idUMedida = idUMedida;
+    }
+
+    /**
+     * @return the descUMedida
+     */
+    public String getDescUMedida() {
+        return descUMedida;
+    }
+
+    /**
+     * @param descUMedida the descUMedida to set
+     */
+    public void setDescUMedida(String descUMedida) {
+        this.descUMedida = descUMedida;
+    }
+
+    /**
+     * @return the cantidadConvertida
+     */
+    public Integer getCantidadConvertida() {
+        return cantidadConvertida;
+    }
+
+    /**
+     * @param cantidadConvertida the cantidadConvertida to set
+     */
+    public void setCantidadConvertida(Integer cantidadConvertida) {
+        this.cantidadConvertida = cantidadConvertida;
     }
 
     

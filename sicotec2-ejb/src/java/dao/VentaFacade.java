@@ -61,14 +61,12 @@ public class VentaFacade extends AbstractFacade<Venta> {
     public List<Item> getItemsxVenta(int idVenta){
         List<Item> items = new ArrayList<Item>();
          try{
-             String sql = "SELECT i.* "
-                        + "FROM veitem vi, "
-                        + "     item i "
-                        + "WHERE vi.iditem = i.iditem "
-                        + "AND vi.idventa = "+idVenta;
+             String sql = "SELECT i "
+                        + "FROM Item i " 
+                        + "WHERE i.idventa.idventa = :idVenta";
              
-             Query query = em.createNativeQuery(sql, Item.class);
-             
+             Query query = em.createQuery(sql);
+             query.setParameter("idVenta", idVenta);
              items = query.getResultList();
          }catch(Exception e){
              System.out.println(e.getMessage());

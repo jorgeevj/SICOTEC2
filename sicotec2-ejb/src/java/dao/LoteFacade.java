@@ -36,7 +36,7 @@ public class LoteFacade extends AbstractFacade<Lote> {
         try{
             String jpa = "SELECT l "
                         +"FROM Lote l "
-                        +"WHERE l.idcompra.idcompra = :idCompra";
+                        +"WHERE l.compra.idcompra = :idCompra";
             
             Query query = em.createQuery(jpa);
             query.setParameter("idCompra", idCompra);

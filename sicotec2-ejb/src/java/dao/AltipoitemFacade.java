@@ -77,4 +77,11 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
         }
         return entidad;
     }
+    
+    public Altipoitem insertAlTipoItems(Altipoitem alt){
+        getEntityManager().persist(alt);
+        getEntityManager().flush();
+        
+        return alt;
+    }
 }

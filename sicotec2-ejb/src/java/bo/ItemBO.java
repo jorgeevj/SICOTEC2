@@ -31,6 +31,11 @@ public class ItemBO {
         return items;
     }
     
+    public boolean validarCodDuplicado(String cod){
+        boolean tof = itemFacade.validateCod(cod);
+        return tof;
+    }
+    
     public List<ItemDTO> convertListEntityToDTO(List<Item> listaItem){
         List<ItemDTO> listaDTO = new ArrayList<ItemDTO>();
         for(Item movimiento : listaItem){

@@ -128,6 +128,28 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         entidadLista = em.createQuery(jpa, Pealtipoitem.class).getResultList();
         return entidadLista;
     }
+
+    
+    public boolean cambiarEstadoPeAlTipoItem(int idEstado, int idPeAlTipoItem){
+         boolean tof = false;
+        try{
+            String sql = "UPDATE pealtipoitem "
+                       + "SET    estado = "+idEstado+" "
+                       + "WHERE  idpedido = "+idPeAlTipoItem;
+                    
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+     }
+
     
     public Pealtipoitem getAllBytipoItemPedidoAlmacenId(Pealtipoitem entidad){
         Pealtipoitem entidadPti = new Pealtipoitem();
@@ -143,4 +165,5 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         }
         return entidadPti;
     }
+
 }

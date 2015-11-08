@@ -9,6 +9,7 @@ import dto.MovimientoDTO;
 import entidades.Movimientoitemvista;
 import entidades.Item;
 import entidades.Movimiento;
+import entidades.Movimientoitemvista;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,7 @@ public class MovimientoFacade extends AbstractFacade<Movimiento> {
   
             listaMov = query.getResultList();
         }catch(Exception e){
+            System.out.println(e.getMessage());
             listaMov = new ArrayList<Movimiento>();
         }
         

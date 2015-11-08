@@ -7,8 +7,11 @@ package dao;
 
 import dto.CotipoitemDTO;
 import dto.MovimientoDTO;
+import dto.TipoItemDTO;
+import entidades.Altipoitem;
 import entidades.Movimientoitemvista;
 import entidades.Item;
+import entidades.Tipoitem;
 import entidades.Venta;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,22 +65,72 @@ public class ItemFacade extends AbstractFacade<Item> {
         return listaItems;
     }
     
-    public List<Movimientoitemvista> getItemsByAlmacen(int idAlmacen){
-        List<Movimientoitemvista> listaItems = new ArrayList<Movimientoitemvista>();
+    public List<TipoItemDTO> getItemsByAlmacen(int idAlmacen){
+        List<TipoItemDTO> listaItems = new ArrayList<TipoItemDTO>();
         try{
-             String ejbQuery = "{CALL vistaItems_x_movimiento(?,?)}";
-             Query query = em.createNativeQuery(ejbQuery, Movimientoitemvista.class);
-             query.setParameter(1, 0);
-             query.setParameter(2, idAlmacen);
+             String ejbQuery = "SELECT al "
+                             + "FROM Altipoitem al "
+                             + "WHERE  al.almacen.idalmacen = "+idAlmacen+" "
+                             + "AND    al.estado = 1";
+             Query query = em.createQuery(ejbQuery);
              
-            listaItems = query.getResultList();   
+            List<Altipoitem>altipoitem = query.getResultList();   
+            for(Altipoitem al : altipoitem){
+                TipoItemDTO dto = new TipoItemDTO();
+                dto.setIdtipoItem(al.getTipoitem().getIdtipoItem());
+                dto.setDescipcion(al.getTipoitem().getDescripcion());
+                dto.setCantidad(al.getCantidad() - al.getReservado());
+                dto.setNumParte(al.getTipoitem().getNumParte());
+                
+                listaItems.add(dto);
+            }
         }catch(Exception e){
             System.out.println(e.getMessage());
-            listaItems = new ArrayList<Movimientoitemvista>();
+            listaItems = new ArrayList<TipoItemDTO>();
         }
         
         return listaItems;
     }
+    
+    public boolean validateCod(String cod){
+        boolean tof = false;
+        try{
+            String sql = "SELECT i "
+                       + "FROM Item i "
+                       + "WHERE i.iditem = :idItem";
+            Query query = em.createQuery(sql);
+            query.setParameter("idItem", cod);
+            
+            Item i = (Item)query.getSingleResult();
+            if(i != null){
+                tof = true;
+            }
+        }catch(Exception e){
+            
+        }
+        
+        return tof;
+    }
+    
+    public boolean cambiarEstadoItem(int idEstado, String idItem){
+         boolean tof = false;
+        try{
+            String sql = "UPDATE item "
+                       + "SET    estado = "+idEstado+" "
+                       + "WHERE  iditem = "+idItem;
+                    
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+     }
     
     public Item insertItem(Item item){
         getEntityManager().persist(item);

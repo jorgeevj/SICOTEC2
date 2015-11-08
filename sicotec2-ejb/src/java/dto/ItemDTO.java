@@ -16,6 +16,11 @@ public class ItemDTO {
     
     private Integer idLote;
     private String idTipoItem;
+    private String descTipoItem;
+    private String numParte;
+    private String descColor;
+    private String descMarca;
+    private String descFamilia;
     private Integer cantidad;
 
     /**
@@ -100,6 +105,76 @@ public class ItemDTO {
      */
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    /**
+     * @return the descTipoItem
+     */
+    public String getDescTipoItem() {
+        return descTipoItem;
+    }
+
+    /**
+     * @param descTipoItem the descTipoItem to set
+     */
+    public void setDescTipoItem(String descTipoItem) {
+        this.descTipoItem = descTipoItem;
+    }
+
+    /**
+     * @return the numParte
+     */
+    public String getNumParte() {
+        return numParte;
+    }
+
+    /**
+     * @param numParte the numParte to set
+     */
+    public void setNumParte(String numParte) {
+        this.numParte = numParte;
+    }
+
+    /**
+     * @return the descColor
+     */
+    public String getDescColor() {
+        return descColor;
+    }
+
+    /**
+     * @param descColor the descColor to set
+     */
+    public void setDescColor(String descColor) {
+        this.descColor = descColor;
+    }
+
+    /**
+     * @return the descMarca
+     */
+    public String getDescMarca() {
+        return descMarca;
+    }
+
+    /**
+     * @param descMarca the descMarca to set
+     */
+    public void setDescMarca(String descMarca) {
+        this.descMarca = descMarca;
+    }
+
+    /**
+     * @return the descFamilia
+     */
+    public String getDescFamilia() {
+        return descFamilia;
+    }
+
+    /**
+     * @param descFamilia the descFamilia to set
+     */
+    public void setDescFamilia(String descFamilia) {
+        this.descFamilia = descFamilia;
     }
     
     

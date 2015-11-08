@@ -27,7 +27,8 @@ public class LoteBO {
     
     public List<loteDTO> getLotesByCompra(int idCompra){
         List<loteDTO> lotesDTO = new ArrayList<loteDTO>();
-        List<Lote> lotes = loteFacade.getLotesByCompra(idCompra);
+        List<Lote> lotes       = loteFacade.getLotesByCompra(idCompra);
+        
         lotesDTO = convertListEntityToDTO(lotes);
         
         return lotesDTO;
@@ -49,6 +50,7 @@ public class LoteBO {
     public loteDTO convertEntityToDTO(Lote lote){
         loteDTO DTO = new loteDTO();
             
+        DTO.setCantidadConvertida((lote.getCantidad()*lote.getIdunidades().getUnidades()));
         DTO.setCantidad(lote.getCantidad());
         DTO.setIdLote(lote.getLotePK().getIdlote());
         DTO.setPrecioUni(lote.getPrecioUni());
@@ -56,6 +58,9 @@ public class LoteBO {
         DTO.setDescripcionTipoItem(lote.getAltipoitem().getTipoitem().getDescripcion());
         DTO.setNumParte(lote.getAltipoitem().getTipoitem().getNumParte());
         DTO.setIdtipoitem(lote.getAltipoitem().getTipoitem().getIdtipoItem());
+        DTO.setNombreTipoItem(lote.getAltipoitem().getTipoitem().getNombre());
+        DTO.setIdUMedida(lote.getIdunidades().getIdunidades());
+        DTO.setDescUMedida(lote.getIdunidades().getNombre());
         
         return DTO;
     }

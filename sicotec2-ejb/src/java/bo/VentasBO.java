@@ -30,14 +30,14 @@ public class VentasBO {
     ItemBO item;
     
     public List<VentaDTO> getVentasByEstado(int estado){
-        List<Venta> lista = ventaFacade.getVentasxEstado(estado);
+        List<Venta> lista          = ventaFacade.getVentasxEstado(estado);
         List<VentaDTO> listaVentas = convertListEntityToDTO(lista);
                 
         return listaVentas;
     }
     
     public List<ItemDTO>listaItemsxVenta(int idVenta){
-        List<Item> items = ventaFacade.getItemsxVenta(idVenta);
+        List<Item> items         = ventaFacade.getItemsxVenta(idVenta);
         List<ItemDTO> listaItems = convertListEntityToDTOItem(items);
         
         return listaItems;
@@ -96,7 +96,13 @@ public class VentasBO {
         DTO.setEstado(item.getEstado());
         DTO.setOperatividad(item.getOperatividad());
         DTO.setIdLote(item.getLote().getLotePK().getIdlote());
-
+        //PROBAR
+        DTO.setIdTipoItem(item.getLote().getAltipoitem().getTipoitem().getIdtipoItem());
+        DTO.setDescTipoItem(item.getLote().getAltipoitem().getTipoitem().getDescripcion());
+        DTO.setNumParte(item.getLote().getAltipoitem().getTipoitem().getNumParte());
+        DTO.setDescColor(item.getLote().getAltipoitem().getTipoitem().getIdcolor().getNombre());
+        DTO.setDescFamilia(item.getLote().getAltipoitem().getTipoitem().getIdfamilia().getNombre());
+        DTO.setDescMarca(item.getLote().getAltipoitem().getTipoitem().getIdmarca().getNombre());
         return DTO;
     }
     

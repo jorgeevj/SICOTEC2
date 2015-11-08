@@ -95,7 +95,7 @@ public class CompraBO {
         almacen = almacenFacade.getAlmacenById(compra.getIdalmacen());
 
         DTO.setIdAlmacen(almacen.getIdalmacen());
-        //DTO.setNombreAlmacen(almacen.getNombre());
+        DTO.setNombreAlmacen(almacen.getNombre());
 
             DTO.setIdcompra(compra.getIdcompra());
             DTO.setCorrelativo(compra.getCorrelativo());

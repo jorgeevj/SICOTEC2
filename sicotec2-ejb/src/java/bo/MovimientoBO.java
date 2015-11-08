@@ -17,6 +17,7 @@ import dao.VentaFacade;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
 import dto.MovimientoitemDTO;
+import dto.TipoItemDTO;
 import dto.TipomovimientoDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
@@ -63,6 +64,8 @@ public class MovimientoBO {
     private DocalmacenFacade docalmacenFacade;
     @EJB
     private CotizacionBO cotizacionBO;
+    @EJB
+    private TipoItemBO tipoItemBO;
     
     public List<MovimientoDTO> getAllMovimiento(){
         List<MovimientoDTO> lista = new ArrayList<MovimientoDTO>();
@@ -95,10 +98,24 @@ public class MovimientoBO {
                 //INSERTAR EL NUEVO ITEM
                 Item i = new Item();
                 Lote l = new Lote();
-                l.getLotePK().setIdlote(DTO.getIdLote());
+                LotePK lotepk = new LotePK();
+                lotepk.setIdlote(DTO.getIdLote());
+                lotepk.setIdcompra(mov.getIdCompra());
+                l.setLotePK(lotepk);
+                
                 i.setLote(l);
                 i.setEstado(DTO.getEstado());
                 i.setIditem(DTO.getIditem());
+                Altipoitem alt = new Altipoitem();
+                Almacen al = new Almacen();
+                al.setIdalmacen(idAlmacenDestino);
+                alt.setAlmacen(al);
+                AltipoitemPK pk = new AltipoitemPK();
+                pk.setIdalmacen(idAlmacenDestino);
+                pk.setIdtipoItem(DTO.getIdTipoItem());
+                alt.setAltipoitemPK(pk);
+                
+                i.setAltipoitem(alt);
                 i.setOperatividad(DTO.getOperatividad());
                 
                 itemFacade.create(i);
@@ -118,8 +135,8 @@ public class MovimientoBO {
                 movimentoItemFacade.create(movI);
                 
                 //AGREGAR ITEMS I EN ALMACEN N
-                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
-                if(!tof){//EN CASO NO EXISTA EL ITEM
+                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino,1,1);
+                /*if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
                     Almacen alm = new Almacen();
@@ -139,7 +156,7 @@ public class MovimientoBO {
                     al.setAltipoitemPK(pk);
                     
                     alltipoitemFacede.create(al);
-                }
+                }*/
             }
             //CAMBIAR DE ESTADO A LA COMPRA
             boolean tof1 = compraFacade.cambiarEstadoCompra(2, mov.getIdCompra());
@@ -163,8 +180,8 @@ public class MovimientoBO {
 
                 movimentoItemFacade.create(movI);
                 
-                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOring, DTO.getCantidad(),2);
-                
+                itemFacade.cambiarEstadoItem(2, DTO.getIditem());
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOring, 1,2);
                 ventaFacade.cambiarEstadoVenta(2, mov.getIdVenta());
             }
         }else if(idTipoMovimiento == 3){
@@ -174,7 +191,7 @@ public class MovimientoBO {
             for(ItemDTO DTO : itemsReg){
                 alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOringe, DTO.getCantidad(),2);
                 
-                /*boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
+                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
                 if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
@@ -195,16 +212,35 @@ public class MovimientoBO {
                     al.setAltipoitemPK(pk);
                     
                     alltipoitemFacede.create(al);
-                }*/
+                }
+                
+                
+                //INSERTAR EL MOV-ITEM
+                Item i = new Item();
+                i.setIditem(DTO.getIditem());
+                
+                Movimientoitem movI = new Movimientoitem();
+                MovimientoitemPK movIPK = new MovimientoitemPK();
+                movIPK.setIditem(DTO.getIditem());
+                movIPK.setIdmovimiento(idMovimiento);
+                Item i2 = new Item();
+
+                movI.setItem(i);
+                movI.setEstado(1);
+                movI.setMovimiento(m);
+                movI.setMovimientoitemPK(movIPK);
+
+                movimentoItemFacade.create(movI);
             }
         }
     }
     
-    public List<Movimientoitemvista> getItemsByAlmacen(int idAlmacen){
-        List<Movimientoitemvista> items = new ArrayList<Movimientoitemvista>();
-        items = itemFacade.getItemsByAlmacen(idAlmacen);
+    public List<TipoItemDTO> getItemsByAlmacen(int idAlmacen){
+        List<TipoItemDTO> tipoItems = new ArrayList<TipoItemDTO>();
         
-        return items;
+        tipoItems = itemFacade.getItemsByAlmacen(idAlmacen);
+        
+        return tipoItems;
     }
     
     public void updateMovimiento(MovimientoDTO mov){
@@ -294,7 +330,6 @@ public class MovimientoBO {
         Ent.setMotivo(movimiento.getMotivo());
         Ent.setNombreDestino(movimiento.getNombreDestino());
         Ent.setNombreOrigen(movimiento.getNombreOrigen());
-        Ent.setCorrelativo(movimiento.getCorrelativo());
         Ent.setEstado(movimiento.getEstado());
         
         
