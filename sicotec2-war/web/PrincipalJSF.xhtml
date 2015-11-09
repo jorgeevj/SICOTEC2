@@ -1260,6 +1260,26 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE EMPRESAS-->
             
             <!-- INICIO DIALOG DE ALMACENES-->
+            <p:dialog header="Registrar Almacen" widgetVar="registroAlmacen" minHeight="40" height="500" width="500" modal="true">
+                <h:form id="formRegistrarAlmacen">
+                    <h:panelGrid columns="2" id="panelRegistrarAlmacen">
+                        <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
+                        <p:inputText id="nomAlmacen" value="" />
+                        <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
+                        <p:inputText id="teleAlmacen" value="" />
+                        <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
+                        <p:inputText id="dirAlmacen" value="" />
+                        <p:outputLabel value="Cod. Departamento:" for="depAlmacen"/>                            
+                        <p:inputText id="depAlmacen" value="" />
+                        <p:outputLabel value="Cod. Provincia:" for="provAlmacen"/>                            
+                        <p:inputText id="provAlmacen" value="" />
+                        <p:outputLabel value="Cod. Distrito:" for="disAlmacen"/>                            
+                        <p:inputText id="disAlmacen" value="" />
+                        
+                    </h:panelGrid>                    
+                </h:form>                
+            </p:dialog>
+                
             
             <!-- FIN DIALOG DE ALMACENES-->
 
