@@ -1137,17 +1137,44 @@ jorgeevj 15.09.15 Creacion.
                 <f:facet name="header">
                     Lista de Representantes
                 </f:facet>
-                <p:column headerText="Nombre:" >
+                <p:column headerText="Nombre" >
                     <h:outputText value="#{ep.persona.nombre}" />
                 </p:column>
-                <p:column headerText="Apellido:">
+                <p:column headerText="Apellido">
                     <h:outputText value="#{ep.persona.apellido}" />
                 </p:column>
-                <p:column headerText="DNI:">
+                <p:column headerText="DNI">
                     <h:outputText value="#{ep.persona.dni}" />
                 </p:column>
-                <p:column headerText="Email:">
+                <p:column headerText="Email">
                     <h:outputText value="#{ep.persona.email}" />
+                </p:column>
+            </p:dataTable>
+                    <p:commandButton id="btnAgreUbiReg" value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{empresaMB.btnAgreUbiReg}" />
+                    <p:commandButton id="btnQuitUbiReg" value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{empresaMB.btnQuitUbiReg}" />
+                    <p:dataTable id="tabUbiEmp" var="ub" value="#{empresaMB.listaUbicEmp}"
+                                 selectionMode="single" rowKey="#{ub.idubicacion}" 
+                                 selection="#{empresaMB.ubicEmpSelectDTO}" emptyMessage="Agrege Ubicaciones"
+                         scrollable="true" scrollHeight="75">
+                <f:facet name="header">
+                    Lista de Ubicaciones
+                </f:facet>
+                <p:column headerText="Direccion" >
+                    <h:outputText value="#{ub.nombre}" />
+                </p:column>
+                <p:column headerText="Numero">
+                    <h:outputText value="#{ub.numero}" />
+                </p:column>
+                <p:column headerText="Distrito">
+                    <h:outputText value="#{ub.dist}" />
+                </p:column>
+                <p:column headerText="Provincia">
+                    <h:outputText value="#{ub.prov}" />
+                </p:column>
+                <p:column headerText="Departamento">
+                    <h:outputText value="#{ub.dept}" />
                 </p:column>
             </p:dataTable>
                     <p:panelGrid columns="2" styleClass="hideborder">
@@ -1159,7 +1186,7 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Seleccionar Represntantes" widgetVar="dlSelectPersona" modal="true" rendered="true" >
+            <p:dialog header="Seleccionar Representantes" widgetVar="dlSelectPersona" modal="true" rendered="true" >
                 <h:form id="formSelectPer">
                     
                     <p:commandButton id="btnBusPersonaRegEmp" value="Buscar" 
@@ -1193,6 +1220,43 @@ jorgeevj 15.09.15 Creacion.
                                      actionListener="#{empresaMB.btnAceptarPersona}"/>     
                 </h:form>
             </p:dialog>
+            
+            <p:dialog header="Agregar Ubicacion" widgetVar="dlSelectUbicacion" modal="true" rendered="true" >
+                <h:form id="formSelectUbi">
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                    <p:outputLabel value="Direccion: " for="itUb1" />    
+                    <p:inputText id="itUb1" value="#{empresaMB.ubicEmpAgregar.nombre}" placeholder="Direccion"/>
+                    <p:outputLabel value="Numero: " for="itUb2" />
+                    <p:inputText id="itUb2" value="#{empresaMB.ubicEmpAgregar.numero}" placeholder="Numero"/>
+                    <p:outputLabel value="Departamento: " for="somDptoRegEmp" />
+                    <p:selectOneMenu id="somDptoRegEmp" value="#{empresaMB.ubicEmpAgregar.codDept}"
+                                     valueChangeListener="#{empresaMB.cargarProvincias}" >
+                        <p:ajax event="valueChange" update="formSelectUbi:somProvRegEmp,formSelectUbi:somDistRegEmp"/>
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{empresaMB.listDepartamentos}" var="dpto" 
+                                           itemValue="#{dpto.codDept}" itemLabel="#{dpto.departamento}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Provincia: " for="somProvRegEmp" />
+                    <p:selectOneMenu id="somProvRegEmp" value="#{empresaMB.ubicEmpAgregar.codProv}" 
+                                     valueChangeListener="#{empresaMB.cargarDistritos}">
+                        <p:ajax event="valueChange" update="formSelectUbi:somDistRegEmp"/>
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{empresaMB.listProvincia}" var="prov" 
+                                           itemValue="#{prov.codProv}" itemLabel="#{prov.provincia}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Distrito: " for="somDistRegEmp" />
+                    <p:selectOneMenu id="somDistRegEmp" value="#{empresaMB.ubicEmpAgregar.codDist}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{empresaMB.listDistritos}" var="dist" 
+                                           itemValue="#{dist.codDist}" itemLabel="#{dist.distrito}"/>
+                    </p:selectOneMenu>
+                     </p:panelGrid>
+                    <p:messages id="msgUbicacion" showDetail="true" closable="true" />
+                    <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"
+                                     actionListener="#{empresaMB.btnAceptarUbicacion}"/>     
+                </h:form>
+            </p:dialog>
+            
             <!-- FIN DIALOG DE EMPRESAS-->
             
             <!-- INICIO DIALOG DE ALMACENES-->

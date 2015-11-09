@@ -6,6 +6,7 @@
 package dao;
 
 import entidades.Ubigeo;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,24 @@ public class UbigeoFacade extends AbstractFacade<Ubigeo> {
 
     public UbigeoFacade() {
         super(Ubigeo.class);
+    }
+
+    public List<Ubigeo> findUbigeos(String dpto,String prov,String dist) {
+    String jpa="select u from Ubigeo u where 1=1 ";
+    if(dpto!=null){
+    jpa+="and u.codDept='"+dpto+"' ";
+    }
+    if(prov!=null){
+    jpa+="and u.codProv='"+prov+"' ";
+    }else{
+    jpa+="and not (u.codProv='00') ";
+    }
+    if(dist!=null){
+    jpa+="and u.codDist='"+dist+"' ";
+    }else{
+    jpa+="and not (u.codDist='00') ";
+    }
+        return em.createQuery(jpa, Ubigeo.class).getResultList();
     }
     
 }

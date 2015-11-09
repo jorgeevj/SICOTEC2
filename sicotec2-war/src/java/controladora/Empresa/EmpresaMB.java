@@ -7,19 +7,24 @@ package controladora.Empresa;
 
 import bo.EmpresaBO;
 import bo.PersonaBO;
+import bo.UbigeoBO;
 import dto.EmppersonaDTO;
 import dto.EmpresaDTO;
 import dto.PersonaDTO;
 import dto.TelefonoDTO;
 import dto.TipoDTO;
 import dto.UbicacionDTO;
+import entidades.Ubigeo;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -29,6 +34,9 @@ import org.primefaces.context.RequestContext;
 @ManagedBean
 @SessionScoped
 public class EmpresaMB {
+
+    @EJB
+    private UbigeoBO ubigeoBO;
 
     @EJB
     private PersonaBO personaBO;
@@ -43,14 +51,21 @@ public class EmpresaMB {
     private List<TipoDTO> tipoEmp;
     private List<EmppersonaDTO> listaEmpPersona;
     private EmppersonaDTO EmpPersonaSelectDTO;
+
     private List<UbicacionDTO> listaUbicEmp;
     private UbicacionDTO UbicEmpSelectDTO;
+    private UbicacionDTO UbicEmpAgregar;
+
     private List<TelefonoDTO> listaTelEmp;
     private TelefonoDTO TelEmpSelectDTO;
     private List<PersonaDTO> listaPersonas;
     private List<PersonaDTO> filtroPersonas;
     private PersonaDTO consultaPersona;
     private PersonaDTO personaSelected;
+
+    private List<Ubigeo> listDepartamentos;
+    private List<Ubigeo> listProvincia;
+    private List<Ubigeo> listDistritos;
 
     /**
      * Creates a new instance of EmpresaMB
@@ -61,7 +76,10 @@ public class EmpresaMB {
     @PostConstruct
     public void init() {
         tipoEmp = empresaBO.getALLTipos();
-        listaEmpPersona=new ArrayList<>();
+        listaEmpPersona = new ArrayList<>();
+        UbicEmpAgregar = new UbicacionDTO();
+        listaUbicEmp = new ArrayList<>();
+        listDepartamentos = ubigeoBO.getAllDepartamentos();
         limpiarSelectPersonas();
         limpiarEmpresas();
     }
@@ -98,18 +116,21 @@ public class EmpresaMB {
 
     public void btnAgreReprReg(ActionEvent actionEvent) {
         limpiarSelectPersonas();
+        cargarPersonas();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlSelectPersona').show();");
         context.update("formSelectPer");
     }
-    
-    public void limpiarSelectPersonas(){
-    listaPersonas=new ArrayList<>();
-    consultaPersona=new PersonaDTO();
+
+    public void limpiarSelectPersonas() {
+        listaPersonas = new ArrayList<>();
+        consultaPersona = new PersonaDTO();
     }
 
     public void btnQuitReprReg(ActionEvent actionEvent) {
-
+        listaEmpPersona.remove(EmpPersonaSelectDTO);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formRegEmp");
     }
 
     public void btnLimpiarRegEmp(ActionEvent actionEvent) {
@@ -125,32 +146,81 @@ public class EmpresaMB {
     }
 
     public void btnBusPersonaRegEmp(ActionEvent actionEvent) {
-        listaPersonas = personaBO.findPersona(consultaPersona);
-        int l=listaPersonas.size();
-        for (int i=l-1;i>=0;i--) {
+        cargarPersonas();
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectPersona').show();");
+        context.update("formSelectPer");
+    }
+    
+    private void cargarPersonas(){
+    listaPersonas = personaBO.findPersona(consultaPersona);
+        int l = listaPersonas.size();
+        for (int i = l - 1; i >= 0; i--) {
             for (EmppersonaDTO ep : listaEmpPersona) {
                 if (listaPersonas.get(i).getIdpersona() == ep.getIdpersona()) {
                     listaPersonas.remove(i);
                 }
             }
         }
-
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlSelectPersona').show();");
-        context.update("formSelectPer");
     }
 
     public void btnSelectPersonaRegEmp(ActionEvent actionEvent) {
 
     }
-     public void btnAceptarPersona(ActionEvent actionEvent) {
-         listaEmpPersona.add(new EmppersonaDTO(personaSelected, null, personaSelected.getIdpersona()));
-         RequestContext context = RequestContext.getCurrentInstance();
+
+    public void btnAceptarPersona(ActionEvent actionEvent) {
+        listaEmpPersona.add(new EmppersonaDTO(personaSelected, null, personaSelected.getIdpersona()));
+        RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlSelectPersona').hide();");
         context.update("formRegEmp");
     }
-            
-            
+
+    public void btnAgreUbiReg(ActionEvent actionEvent) {
+        UbicEmpAgregar = new UbicacionDTO();
+        listProvincia = new ArrayList<>();
+        listDistritos = new ArrayList<>();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectUbicacion').show();");
+        context.update("formSelectUbi");
+    }
+
+    public void cargarProvincias(ValueChangeEvent event) {
+        listProvincia = ubigeoBO.getAllProvincias(event.getNewValue().toString());
+        listDistritos = new ArrayList<>();
+        UbicEmpAgregar.setCodProv(null);
+    }
+
+    public void cargarDistritos(ValueChangeEvent event) {
+        listDistritos = ubigeoBO.getAllDistritos(UbicEmpAgregar.getCodDept(), event.getNewValue().toString());
+
+    }
+
+    public void btnQuitUbiReg(ActionEvent actionEvent) {
+        listaUbicEmp.remove(UbicEmpSelectDTO);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formRegEmp");
+    }
+
+    public void btnAceptarUbicacion(ActionEvent actionEvent) {
+        for(UbicacionDTO ub:listaUbicEmp){
+        if(UbicEmpAgregar.getNombre().equals(ub.getNombre())&& UbicEmpAgregar.getNumero().equals(ub.getNumero())){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La Direccion y numero ya Existe", ""));
+        RequestContext context = RequestContext.getCurrentInstance();
+           context.update("formSelectUbi");
+        return;
+        }
+        }
+        Ubigeo u = ubigeoBO.getUbigeo(UbicEmpAgregar.getCodDept(), UbicEmpAgregar.getCodProv(), UbicEmpAgregar.getCodDist());
+        UbicEmpAgregar.setDept(u.getDepartamento());
+        UbicEmpAgregar.setProv(u.getProvincia());
+        UbicEmpAgregar.setDist(u.getDistrito());
+        listaUbicEmp.add(UbicEmpAgregar);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectUbicacion').hide();");
+        context.update("formRegEmp");
+    }
+
     public EmpresaDTO getConsultaEmpresaDTO() {
         return consultaEmpresaDTO;
     }
@@ -269,6 +339,38 @@ public class EmpresaMB {
 
     public void setConsultaPersona(PersonaDTO consultaPersona) {
         this.consultaPersona = consultaPersona;
+    }
+
+    public UbicacionDTO getUbicEmpAgregar() {
+        return UbicEmpAgregar;
+    }
+
+    public void setUbicEmpAgregar(UbicacionDTO UbicEmpAgregar) {
+        this.UbicEmpAgregar = UbicEmpAgregar;
+    }
+
+    public List<Ubigeo> getListDepartamentos() {
+        return listDepartamentos;
+    }
+
+    public void setListDepartamentos(List<Ubigeo> listDepartamentos) {
+        this.listDepartamentos = listDepartamentos;
+    }
+
+    public List<Ubigeo> getListProvincia() {
+        return listProvincia;
+    }
+
+    public void setListProvincia(List<Ubigeo> listProvincia) {
+        this.listProvincia = listProvincia;
+    }
+
+    public List<Ubigeo> getListDistritos() {
+        return listDistritos;
+    }
+
+    public void setListDistritos(List<Ubigeo> listDistritos) {
+        this.listDistritos = listDistritos;
     }
 
 }

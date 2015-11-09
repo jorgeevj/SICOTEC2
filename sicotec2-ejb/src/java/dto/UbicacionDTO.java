@@ -28,6 +28,12 @@ public class UbicacionDTO {
     private EmpresaDTO empresa;
     //extra
     private int idempresa;
+    
+    private String Dist;
+
+    private String Prov;
+
+    private String Dept;
 
     public UbicacionDTO() {
     }
@@ -106,6 +112,30 @@ public class UbicacionDTO {
 
     public void setIdempresa(int idempresa) {
         this.idempresa = idempresa;
+    }
+
+    public String getDist() {
+        return Dist;
+    }
+
+    public void setDist(String Dist) {
+        this.Dist = Dist;
+    }
+
+    public String getProv() {
+        return Prov;
+    }
+
+    public void setProv(String Prov) {
+        this.Prov = Prov;
+    }
+
+    public String getDept() {
+        return Dept;
+    }
+
+    public void setDept(String Dept) {
+        this.Dept = Dept;
     }
 
     

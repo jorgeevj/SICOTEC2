@@ -7,6 +7,7 @@ package controladora.Cotizacion;
 
 import bo.AlmacenBO;
 import bo.CotizacionBO;
+import bo.EmpresaBO;
 import dto.CotipoitemDTO;
 import dto.CotizacionDTO;
 import dto.EmpresaDTO;
@@ -37,6 +38,8 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @SessionScoped
 public class CotizacionMB {
+    @EJB
+    private EmpresaBO empresaBO;
 
     @EJB
     private AlmacenBO almacenBO;
@@ -47,7 +50,7 @@ public class CotizacionMB {
     private List<CotizacionDTO> listaCotizacion;
     private CotizacionDTO campos;
     private CotizacionDTO cotizacionSelec;
-    private List<Empresa> listaEmpresas;
+    private List<EmpresaDTO> listaEmpresas;
 
     private Empresa emp;
     private List<Almacen> listaAlmacenes;
@@ -79,7 +82,7 @@ public class CotizacionMB {
     @PostConstruct
     public void init() {
 
-        listaEmpresas = cotizacionBO.empresasAll();
+        listaEmpresas = empresaBO.getAllEmpresas();
         listaAlmacenes = almacenBO.findAll();
         listaTipoItem = cotizacionBO.tipoItemAll();
         listaCategoria = cotizacionBO.findCategoriaAll();
@@ -510,11 +513,11 @@ public class CotizacionMB {
         this.btnEditarEstado = btnEditarEstado;
     }
 
-    public List<Empresa> getListaEmpresas() {
+    public List<EmpresaDTO> getListaEmpresas() {
         return listaEmpresas;
     }
 
-    public void setListaEmpresas(List<Empresa> listaEmpresas) {
+    public void setListaEmpresas(List<EmpresaDTO> listaEmpresas) {
         this.listaEmpresas = listaEmpresas;
     }
 
