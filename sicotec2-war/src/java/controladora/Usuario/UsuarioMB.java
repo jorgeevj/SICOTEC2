@@ -44,6 +44,7 @@ public class UsuarioMB implements Serializable{
     private int selectEstadoBusqueda = 100;
     private String nombreUsuarioBusqueda;
     private String nombrePersonaBusqueda;
+    private String apellidoPersonaBusqueda;
     private Date fechaInicioBusqueda;
     private Date fechaFinBusqueda;
     private int idRolSelectBusqueda;
@@ -61,6 +62,7 @@ public class UsuarioMB implements Serializable{
        
          UsuarioDTO dto = new UsuarioDTO();
          Persona entidadPersona = new Persona();
+         entidadPersona.setApellido(getApellidoPersonaBusqueda());
          entidadPersona.setNombre(getNombrePersonaBusqueda());
          
         Rol entidadRol = new Rol();
@@ -87,6 +89,7 @@ public class UsuarioMB implements Serializable{
         
          setNombrePersonaBusqueda(null);
          setNombreUsuarioBusqueda(null);
+         setApellidoPersonaBusqueda(null);
          setFechaInicioBusqueda(null);
          setFechaFinBusqueda(null);
          setIdRolSelectBusqueda(100);
@@ -174,6 +177,14 @@ public class UsuarioMB implements Serializable{
 
     public void setIdRolSelectBusqueda(int idRolSelectBusqueda) {
         this.idRolSelectBusqueda = idRolSelectBusqueda;
+    }
+
+    public String getApellidoPersonaBusqueda() {
+        return apellidoPersonaBusqueda;
+    }
+
+    public void setApellidoPersonaBusqueda(String apellidoPersonaBusqueda) {
+        this.apellidoPersonaBusqueda = apellidoPersonaBusqueda;
     }
     
     

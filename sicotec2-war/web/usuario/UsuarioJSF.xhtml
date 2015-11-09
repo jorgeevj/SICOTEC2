@@ -13,8 +13,10 @@
                 <h:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="Nombre Usuario" for="it1" />
                     <p:inputText id="it1" value="#{usuarioMB.nombreUsuarioBusqueda}"/>
-                    <p:outputLabel value="Nombre Persona" for="it2" />
+                    <p:outputLabel value="Nombre" for="it2" />
                     <p:inputText id="it2" value="#{usuarioMB.nombrePersonaBusqueda}"/>
+                     <p:outputLabel value="Apellido" for="it3" />
+                     <p:inputText id="it3" value="#{usuarioMB.apellidoPersonaBusqueda}"/>
                     Fecha Inicio
                     <p:calendar value="#{usuarioMB.fechaInicioBusqueda}"/>
                     Fecha Fin
@@ -36,10 +38,10 @@
            <h:panelGrid >
                <p:dataTable id="tabUsuario"  value="#{usuarioMB.listaUsuario}" var="tUsuario" >
                 
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre Usuario">
                     <h:outputText value="#{tUsuario.nombre}" />
                 </p:column>
-                <p:column headerText="Nombre Persona">
+                <p:column headerText="Nombre">
                     <h:outputText value="#{tUsuario.idpersona.nombre}" />
                     </p:column>
                  <p:column headerText="Apellido">

@@ -65,6 +65,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
                 if(dto.getIdpersona().getNombre()!=null && !dto.getIdpersona().getNombre().equals("")){
                 sql+="and c.idpersona.nombre like '%"+dto.getIdpersona().getNombre()+"%' ";
                 }
+                if(dto.getIdpersona().getApellido()!=null && !dto.getIdpersona().getApellido().equals("")){
+                sql+="and c.idpersona.apellido like '%"+dto.getIdpersona().getApellido()+"%' ";
+                }
                 if(dto.getFechaInicio() != null){
                 sql += "and c.fecha >= '"+sdf.format(dto.getFechaInicio())+"' ";
                 }
