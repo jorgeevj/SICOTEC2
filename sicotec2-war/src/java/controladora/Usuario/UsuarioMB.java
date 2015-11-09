@@ -81,7 +81,7 @@ public class UsuarioMB implements Serializable{
 
          setListaUsuario(getUsuarioBO().BuscarUsuario(dto));
 
-         return listaUsuario;   
+         return getListaUsuario();
     }
      public void limpiar(){
         
@@ -89,7 +89,7 @@ public class UsuarioMB implements Serializable{
          setNombreUsuarioBusqueda(null);
          setFechaInicioBusqueda(null);
          setFechaFinBusqueda(null);
-         
+         setIdRolSelectBusqueda(100);
         
         
         RequestContext context = RequestContext.getCurrentInstance();
