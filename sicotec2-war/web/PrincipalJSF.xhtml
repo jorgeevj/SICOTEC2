@@ -1128,7 +1128,7 @@ jorgeevj 15.09.15 Creacion.
 
             <!-- DIALOG DE EMPRESAS-->
 
-            <p:dialog header="REGISTRAR EMPRESA" widgetVar="dlRegEmpresa" modal="true" rendered="true" >
+            <p:dialog header="REGISTRAR EMPRESA" widgetVar="dlRegEmpresa" modal="true" rendered="true" width="720" height="480">
                 <h:form id="formRegEmp">
                     <p:panelGrid columns="4" styleClass="hideborder">
                         <p:outputLabel value="Nombre: " for="itEmp1" />
@@ -1141,7 +1141,7 @@ jorgeevj 15.09.15 Creacion.
                     </p:panelGrid>
                     <p:selectManyCheckbox id="chkTipoEmp" value="#{empresaMB.selectTipoEmp}" >
                         <f:selectItems value="#{empresaMB.tipoEmp}" 
-                                           var="ti" itemLabel="#{ti.nombre}" itemValue="#{ti.idtipo}" />
+                                       var="ti" itemLabel="#{ti.nombre}" itemValue="#{ti.idtipo}" />
                     </p:selectManyCheckbox>
                     <p:messages id="messages3" showDetail="true" closable="true" />
                     <p:commandButton id="btnAgreReprReg" value="Agregar" icon="ui-icon-plusthick"
@@ -1195,6 +1195,29 @@ jorgeevj 15.09.15 Creacion.
                     <h:outputText value="#{ub.dept}" />
                 </p:column>
             </p:dataTable>
+                    
+                     <p:commandButton id="btnAgreTelReg" value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{empresaMB.btnAgreTelReg}" />
+                    <p:commandButton id="btnQuitTelReg" value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{empresaMB.btnQuitTelReg}" />
+                    <p:dataTable id="tabTelEmp" var="tel" value="#{empresaMB.listaTelEmp}"
+                                 selectionMode="single" rowKey="#{tel.idtelefono}" 
+                                 selection="#{empresaMB.telEmpSelectDTO}" emptyMessage="Agrege Telefonos"
+                         scrollable="true" scrollHeight="75">
+                <f:facet name="header">
+                    Lista de Telefonos
+                </f:facet>
+                <p:column headerText="Operador" >
+                    <h:outputText value="#{tel.operador}" />
+                </p:column>
+                <p:column headerText="Numero">
+                    <h:outputText value="#{tel.numero}" />
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{tel.tipo}" />
+                </p:column>
+            </p:dataTable>
+                    
                     <p:panelGrid columns="2" styleClass="hideborder">
                     <p:commandButton id="btnGuardarEmp" value="Aceptar" 
                                      actionListener="#{empresaMB.btnGuardarEmpresa}" />
@@ -1272,6 +1295,33 @@ jorgeevj 15.09.15 Creacion.
                     <p:messages id="msgUbicacion" showDetail="true" closable="true" />
                     <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"
                                      actionListener="#{empresaMB.btnAceptarUbicacion}"/>     
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Agregar Telefono" widgetVar="dlSelectTelefono" modal="true" rendered="true" >
+                <h:form id="formSelectTel">
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                    
+                    <p:outputLabel value="Operador: " for="somOpeRegEmp" />
+                    <p:selectOneMenu id="somOpeRegEmp" value="#{empresaMB.telEmpAgregaDTO.operador}">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Claro" itemValue="Claro" />
+                            <f:selectItem itemLabel="Entel" itemValue="Entel" />
+                            <f:selectItem itemLabel="Movistar" itemValue="Movistar" />
+                            
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Tipo: " for="somTipRegEmp" />
+                    <p:selectOneMenu id="somTipRegEmp" value="#{empresaMB.telEmpAgregaDTO.tipo}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                             <f:selectItem itemLabel="Fijo" itemValue="Fijo" />
+                              <f:selectItem itemLabel="Movil" itemValue="Movil" />
+                    </p:selectOneMenu>
+                   <p:outputLabel value="Numero: " for="itTel1" />    
+                    <p:inputText id="itTel1" value="#{empresaMB.telEmpAgregaDTO.numero}" placeholder="Ejm. 4467463"/>
+                    </p:panelGrid>
+                    <p:messages id="msgUbicacion" showDetail="true" closable="true" />
+                    <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"
+                                     actionListener="#{empresaMB.btnAceptarTelefono}"/>     
                 </h:form>
             </p:dialog>
             

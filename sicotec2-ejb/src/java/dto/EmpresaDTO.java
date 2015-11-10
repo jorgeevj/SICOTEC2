@@ -36,6 +36,7 @@ public class EmpresaDTO {
     private List<TelefonoDTO> telefonoList;
     //extras
     private List<EmppersonaDTO> emppersonaListDTO;
+    private String[] tipoArray;
     private List<TipoDTO> tipoListDTO;
     private UbicacionDTO ubicacionDTO;
     private TelefonoDTO telefonoDTO;
@@ -196,13 +197,7 @@ public class EmpresaDTO {
         this.telefonoList = telefonoList;
     }
 
-    public List<TipoDTO> getTipoListDTO() {
-        return tipoListDTO;
-    }
-
-    public void setTipoListDTO(List<TipoDTO> tipoListDTO) {
-        this.tipoListDTO = tipoListDTO;
-    }
+   
 
     public UbicacionDTO getUbicacionDTO() {
         return ubicacionDTO;
@@ -234,6 +229,22 @@ public class EmpresaDTO {
 
     public void setCantidadTelefonos(int cantidadTelefonos) {
         this.cantidadTelefonos = cantidadTelefonos;
+    }
+
+    public String[] getTipoArray() {
+        return tipoArray;
+    }
+
+    public void setTipoArray(String[] tipoArray) {
+        this.tipoArray = tipoArray;
+    }
+
+    public List<TipoDTO> getTipoListDTO() {
+        return tipoListDTO;
+    }
+
+    public void setTipoListDTO(List<TipoDTO> tipoListDTO) {
+        this.tipoListDTO = tipoListDTO;
     }
 
 }

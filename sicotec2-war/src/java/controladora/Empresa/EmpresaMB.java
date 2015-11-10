@@ -47,7 +47,7 @@ public class EmpresaMB {
     private EmpresaDTO consultaEmpresaDTO;
     private EmpresaDTO EmpresaSelectDTO;
     private List<EmpresaDTO> listaEmpresa;
-    private List<TipoDTO> selectTipoEmp;
+    private String[] selectTipoEmp;
     private List<TipoDTO> tipoEmp;
     private List<EmppersonaDTO> listaEmpPersona;
     private EmppersonaDTO EmpPersonaSelectDTO;
@@ -58,6 +58,8 @@ public class EmpresaMB {
 
     private List<TelefonoDTO> listaTelEmp;
     private TelefonoDTO TelEmpSelectDTO;
+    private TelefonoDTO TelEmpAgregaDTO;
+    
     private List<PersonaDTO> listaPersonas;
     private List<PersonaDTO> filtroPersonas;
     private PersonaDTO consultaPersona;
@@ -76,12 +78,11 @@ public class EmpresaMB {
     @PostConstruct
     public void init() {
         tipoEmp = empresaBO.getALLTipos();
-        listaEmpPersona = new ArrayList<>();
-        UbicEmpAgregar = new UbicacionDTO();
-        listaUbicEmp = new ArrayList<>();
+        
         listDepartamentos = ubigeoBO.getAllDepartamentos();
         limpiarSelectPersonas();
         limpiarEmpresas();
+        limpiarRegistrarEmpresa();
     }
 
     public void btnLimpiarEmp(ActionEvent actionEvent) {
@@ -101,6 +102,7 @@ public class EmpresaMB {
         limpiarRegistrarEmpresa();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlRegEmpresa').show();");
+        context.update("formRegEmp");
     }
 
     public void btnEditEmp(ActionEvent actionEvent) {
@@ -109,6 +111,12 @@ public class EmpresaMB {
 
     //REGISTRAR
     public void btnGuardarEmpresa(ActionEvent actionEvent) {
+       consultaEmpresaDTO.setEmppersonaListDTO(listaEmpPersona);
+       consultaEmpresaDTO.setUbicacionList(listaUbicEmp);
+       consultaEmpresaDTO.setTipoArray(selectTipoEmp);
+       consultaEmpresaDTO.setTelefonoList(listaTelEmp);
+       empresaBO.guardarEmpresa(consultaEmpresaDTO);
+       limpiarEmpresas();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlRegEmpresa').hide();");
         context.update("formEmpresa");
@@ -142,12 +150,14 @@ public class EmpresaMB {
 
     public void limpiarRegistrarEmpresa() {
         consultaEmpresaDTO = new EmpresaDTO();
-
+        listaEmpPersona = new ArrayList<>();
+        listaUbicEmp = new ArrayList<>();
+        listaTelEmp=new ArrayList<>();
+        selectTipoEmp=new String[]{};
     }
 
     public void btnBusPersonaRegEmp(ActionEvent actionEvent) {
         cargarPersonas();
-
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlSelectPersona').show();");
         context.update("formSelectPer");
@@ -220,6 +230,30 @@ public class EmpresaMB {
         context.execute("PF('dlSelectUbicacion').hide();");
         context.update("formRegEmp");
     }
+    
+    public void btnAgreTelReg(ActionEvent actionEvent) {
+        limpiarAgregarTelefonos();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectTelefono').show();");
+        context.update("formSelectTel");
+    }
+    
+    private void limpiarAgregarTelefonos() {
+       TelEmpAgregaDTO=new TelefonoDTO();
+    }
+    
+    public void btnAceptarTelefono(ActionEvent actionEvent) {
+        listaTelEmp.add(TelEmpAgregaDTO);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlSelectTelefono').hide();");
+        context.update("formRegEmp");
+    }
+    
+    public void btnQuitTelReg(ActionEvent actionEvent) {
+        listaTelEmp.remove(TelEmpSelectDTO);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formRegEmp");
+    }
 
     public EmpresaDTO getConsultaEmpresaDTO() {
         return consultaEmpresaDTO;
@@ -245,11 +279,11 @@ public class EmpresaMB {
         this.EmpresaSelectDTO = EmpresaSelectDTO;
     }
 
-    public List<TipoDTO> getSelectTipoEmp() {
+    public String[] getSelectTipoEmp() {
         return selectTipoEmp;
     }
 
-    public void setSelectTipoEmp(List<TipoDTO> selectTipoEmp) {
+    public void setSelectTipoEmp(String[] selectTipoEmp) {
         this.selectTipoEmp = selectTipoEmp;
     }
 
@@ -372,5 +406,16 @@ public class EmpresaMB {
     public void setListDistritos(List<Ubigeo> listDistritos) {
         this.listDistritos = listDistritos;
     }
+
+    public TelefonoDTO getTelEmpAgregaDTO() {
+        return TelEmpAgregaDTO;
+    }
+
+    public void setTelEmpAgregaDTO(TelefonoDTO TelEmpAgregaDTO) {
+        this.TelEmpAgregaDTO = TelEmpAgregaDTO;
+    }
+
+    
+    
 
 }

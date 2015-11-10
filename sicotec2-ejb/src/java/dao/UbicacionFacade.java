@@ -6,6 +6,7 @@
 package dao;
 
 import entidades.Ubicacion;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,11 @@ public class UbicacionFacade extends AbstractFacade<Ubicacion> {
 
     public UbicacionFacade() {
         super(Ubicacion.class);
+    }
+
+    public List<Ubicacion> findByIdEmpresa(Integer idempresa) {
+       String jpa="select u from Ubicacion u where u.idempresa.idempresa="+idempresa;
+    return em.createQuery(jpa, Ubicacion.class).getResultList();
     }
     
 }

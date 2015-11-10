@@ -5,8 +5,11 @@
  */
 package bo;
 
+import dao.EmppersonaFacade;
 import dao.EmpresaFacade;
+import dao.TelefonoFacade;
 import dao.TipoFacade;
+import dao.UbicacionFacade;
 import dto.EmppersonaDTO;
 import dto.EmpresaDTO;
 import dto.PersonaDTO;
@@ -14,6 +17,7 @@ import dto.TelefonoDTO;
 import dto.TipoDTO;
 import dto.UbicacionDTO;
 import entidades.Emppersona;
+import entidades.EmppersonaPK;
 import entidades.Empresa;
 import entidades.Telefono;
 import entidades.Tipo;
@@ -30,6 +34,13 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class EmpresaBO {
+    @EJB
+    private TelefonoFacade telefonoFacade;
+    @EJB
+    private UbicacionFacade ubicacionFacade;
+    @EJB
+    private EmppersonaFacade emppersonaFacade;
+
     @EJB
     private TipoFacade tipoFacade;
 
@@ -62,7 +73,7 @@ public class EmpresaBO {
         List<EmpresaDTO> empresaDTOList = new ArrayList<EmpresaDTO>();
         EmpresaDTO empresaDTO;
         for (Empresa empresa : empresaList) {
-            
+
             empresaDTO = convertEntityToDTO(empresa);
 
             empresaDTOList.add(empresaDTO);
@@ -76,12 +87,12 @@ public class EmpresaBO {
         empresaDTO.setNombre(empresa.getNombre());
         empresaDTO.setRuc(empresa.getRuc());
         empresaDTO.setEmail(empresa.getEmail());
-        empresaDTO.setUbicacionList(comverListUbicacionByListDTO(empresa.getUbicacionList()));
+        empresaDTO.setUbicacionList(comverListUbicacionByListDTO(ubicacionFacade.findByIdEmpresa(empresa.getIdempresa())));
         empresaDTO.setEmppersonaListDTO(convertListEmpresapersonaByListDTO(empresa.getEmppersonaList()));
-        empresaDTO.setTelefonoList(convertListTelefonoByDTO(empresa.getTelefonoList()));
+        empresaDTO.setTelefonoList(convertListTelefonoByDTO(telefonoFacade.findByIdEmpresa(empresa.getIdempresa())));
         empresaDTO.setTipoListDTO(convertListTipoByListDTO(empresa.getTipoList()));
-        empresaDTO.setCantidadDirecciones(empresa.getUbicacionList().size());
-        empresaDTO.setCantidadTelefonos(empresa.getTelefonoList().size());
+        empresaDTO.setCantidadDirecciones(empresaDTO.getUbicacionList().size());
+        empresaDTO.setCantidadTelefonos(empresaDTO.getTelefonoList().size());
         return empresaDTO;
     }
 
@@ -128,7 +139,7 @@ public class EmpresaBO {
         dto.setIdempresa(ep.getEmpresa().getIdempresa());
         dto.setIdpersona(ep.getPersona().getIdpersona());
         dto.setEmpresa(new EmpresaDTO(ep.getEmpresa().getIdempresa(), ep.getEmpresa().getNombre(), ep.getEmpresa().getRuc(), ep.getEmpresa().getEmail()));
-        dto.setPersona(new PersonaDTO(ep.getPersona().getIdpersona(),ep.getPersona().getNombre(),ep.getPersona().getApellido(),ep.getPersona().getDni(),ep.getPersona().getEmail()));
+        dto.setPersona(new PersonaDTO(ep.getPersona().getIdpersona(), ep.getPersona().getNombre(), ep.getPersona().getApellido(), ep.getPersona().getDni(), ep.getPersona().getEmail()));
         return dto;
 
     }
@@ -166,18 +177,110 @@ public class EmpresaBO {
     }
 
     private TipoDTO convertTipoByDTO(Tipo t) {
-        TipoDTO dto=new TipoDTO();
+        TipoDTO dto = new TipoDTO();
         dto.setIdtipo(t.getIdtipo());
         dto.setNombre(t.getNombre());
-    return dto;
+        return dto;
     }
 
     public List<TipoDTO> getALLTipos() {
-      return convertListTipoByListDTO(tipoFacade.findAll());
+        return convertListTipoByListDTO(tipoFacade.findAll());
     }
 
     public List<PersonaDTO> getAllPersonas() {
-    return personaBO.getAllPresonasDTO();
+        return personaBO.getAllPresonasDTO();
     }
 
+    public Empresa guardarEmpresa(EmpresaDTO e) {
+        Empresa entidad=convertDTOByEntity(e);
+        entidad = empresaFacade.guardaEmpresa(entidad);
+        e.setIdempresa(entidad.getIdempresa());
+        List<Emppersona> lep=convetListEmpPerDTOByListEntidad(e.getEmppersonaListDTO(),e.getIdempresa());
+        for(Emppersona ep:lep){
+        emppersonaFacade.create(ep);
+        }
+        List<Ubicacion> lub=convertListUbicByListDTO(e.getUbicacionList(),e.getIdempresa());
+        for(Ubicacion ub:lub){
+        ubicacionFacade.create(ub);
+        }
+        List<Telefono> tel=convertListTelfByListDTO(e.getTelefonoList(),e.getIdempresa());
+        for(Telefono t:tel){
+        telefonoFacade.create(t);
+        }
+        
+        return entidad;
+    }
+
+    public Empresa convertDTOByEntity(EmpresaDTO e) {
+        Empresa entidad = new Empresa();
+        entidad.setNombre(e.getNombre());
+        entidad.setEmail(e.getEmail());
+        entidad.setRuc(e.getRuc());
+        List<Tipo> lt = new ArrayList<>();
+        Tipo t;
+        for (String et : e.getTipoArray()) {
+            t = new Tipo();
+            t.setIdtipo(Integer.parseInt(et));
+            lt.add(t);
+        }
+        entidad.setTipoList(lt);
+        return entidad;
+    }
+
+    private List<Emppersona> convetListEmpPerDTOByListEntidad(List<EmppersonaDTO> listDTO,int idempresa) {
+     List<Emppersona> ep=new ArrayList<>();
+     for(EmppersonaDTO dto:listDTO){
+         dto.setIdempresa(idempresa);
+         ep.add(convertEmpPerDTOByEntidad(dto));
+     }
+    return ep;
+    }
+
+    private Emppersona convertEmpPerDTOByEntidad(EmppersonaDTO dto) {
+     Emppersona entidad=new  Emppersona();
+     EmppersonaPK pk=new EmppersonaPK(dto.getIdempresa(), dto.getIdpersona());
+     entidad.setEmppersonaPK(pk);
+     return entidad;
+    }
+
+    private List<Ubicacion> convertListUbicByListDTO(List<UbicacionDTO> listDTO,int idempresa) {
+        List<Ubicacion> lub=new ArrayList<>();
+        for(UbicacionDTO dto:listDTO){
+            dto.setIdempresa(idempresa);
+        lub.add(convertUbiDTOByEntidad(dto));
+        }
+    return lub;
+    }
+
+    private Ubicacion convertUbiDTOByEntidad(UbicacionDTO dto) {
+        Ubicacion u=new Ubicacion();
+        u.setIdempresa(new Empresa(dto.getIdempresa()));
+        u.setNombre(dto.getNombre());
+        u.setNumero(dto.getNumero());
+        u.setCodDept(dto.getCodDept());
+        u.setCodProv(dto.getCodProv());
+        u.setCodDist(dto.getCodDist());
+        u.setPrincipal(dto.getPrincipal());
+       return u;
+    }
+
+    private List<Telefono> convertListTelfByListDTO(List<TelefonoDTO> telefonoList, Integer idempresa) {
+      List<Telefono> lt=new ArrayList<>();
+      for(TelefonoDTO dto:telefonoList){
+          dto.setIdempresa(idempresa);
+      lt.add(convertTelDTOByentidad(dto));
+      }
+    return lt;
+    }
+
+    private Telefono convertTelDTOByentidad(TelefonoDTO dto) {
+      Telefono t=new Telefono();
+      t.setIdempresa(new Empresa(dto.getIdempresa()));
+      t.setIdtelefono(dto.getIdtelefono());
+      t.setNumero(dto.getNumero());
+      t.setOperador(dto.getOperador());
+      t.setPrincipal(dto.getPrincipal());
+      t.setTipo(dto.getTipo());
+        return t;
+    }
 }

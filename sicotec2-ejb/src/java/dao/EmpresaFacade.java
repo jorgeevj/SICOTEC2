@@ -94,4 +94,10 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         
         return empresas;
      } 
+
+    public Empresa guardaEmpresa(Empresa e) {
+        em.persist(e);
+        em.flush();
+        return e;
+    }
 }
