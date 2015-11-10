@@ -189,6 +189,11 @@ public class CompraBO {
         List<PealtipoitemDTO> l=converListEntidadBytListPealtiDTO(pealtipoitemFacade.getPedidosByCompraAndItem(co,loteSelec));
         return l;
     }
-   
+//   public void insertUpdatePealTipoItem(List<PealtipoitemDTO> listDTO){
+//        List<Pealtipoitem> listaEntidad = convertDTOtoEntityAlTipoItem(listDTO);
+//        for(Pealtipoitem entidadATI : listaEntidad){
+//            altipoitemFacace.edit(entidadATI);
+//        }
+//    }
    
 }

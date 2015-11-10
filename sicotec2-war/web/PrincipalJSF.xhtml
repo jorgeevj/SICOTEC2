@@ -593,7 +593,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formAddPedidoss">
                     <p:outputLabel value="Pedidos Disponibles "></p:outputLabel>
                     <p:dataTable var="tPealtipoitem" value="#{compraMB.listPealItem}"  id="tbPedidosItemsDisp"
-                                 selectionMode="single" rowKey="#{tPealtipoitem}"  >
+                                 selectionMode="single" selection="#{compraMB.objPealTipoItem}" rowKey="#{tPealtipoitem.cantidad}"  >
                         <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemAdd}" /> 
                         <p:column headerText="Item" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
@@ -609,11 +609,11 @@ jorgeevj 15.09.15 Creacion.
                     <br/>
 
                 
-                    <p:commandButton value="Agregar Pedido"  actionListener="#{compraMB.agregarTipoItems}" />
+                    <p:commandButton id="btnAceptarPedido"  value="Agregar Pedido"  actionListener="#{compraMB.agregarTipoItems}" />
                 <br/><br/><br/><br/>
                 <p:outputLabel value="Compra Seleccionados "></p:outputLabel>
-                <p:dataTable tableStyleClass="table table-hover" var="pealtipoitem" id="tbPedidosItemsSelec" value="#{compraMB.listaPealTipoItemSelct}"
-                             editable="true" editMode="cell" selectionMode="single" rowKey="#{pealtipoitem}"  >
+                <p:dataTable tableStyleClass="table table-hover" var="pealtipoitem" id="tbPedidosItemsSelec" value="#{compraMB.listaPealTipoItemSelct}" editable="true"
+                             editMode="cell" selection="#{compraMB.objPealTipoItemQuitar}" selectionMode="single"  rowKey="#{pealtipoitem.cantidad}">
                      <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}" /> 
                         <p:column headerText="Item" style="text-align: center">
                         <p:outputLabel value="#{pealtipoitem.nombreItems}"/>
@@ -636,14 +636,16 @@ jorgeevj 15.09.15 Creacion.
                      
                      <p:column headerText="Unidad Medida">
                        <p:cellEditor>
-                           <f:facet name="output"><h:outputText value="#{car.color}" /></f:facet>
+                           <f:facet name="output"><h:outputText value="#{compraMB.loteSelec.idunidades}" /></f:facet>
                            <f:facet name="input">
-                               <h:selectOneMenu value="#{car.color}" style="width:100%">
-                                   <f:selectItems value="#{dtEditView.colors}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                               <h:selectOneMenu value="#{compraMB.loteSelec}" style="width:100%">
+                                   <f:selectItems value="#{compraMB.listaUnidad}" var="uni" 
+                                                  itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
                                </h:selectOneMenu>
                            </f:facet>
                        </p:cellEditor>
                    </p:column>
+                     
                      
                         <p:column headerText="Total" style="text-align: center">
                             <p:outputLabel value="#{pealtipoitem.total}"/>
@@ -651,7 +653,7 @@ jorgeevj 15.09.15 Creacion.
 
                 </p:dataTable>
                 <br/>
-                <p:commandButton value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
+                <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
             </h:form>

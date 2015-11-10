@@ -12,10 +12,13 @@ import bo.CotizacionBO;
 import bo.EmpresaBO;
 import bo.PedidoBO;
 import bo.PedidoaltipoitemBO;
+import bo.UnidadBO;
 import dto.AlmacenDTO;
 import dto.CompraDTO;
 import dto.EmpresaDTO;
 import dto.PealtipoitemDTO;
+import dto.UnidadDTO;
+import dto.loteDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
 import entidades.Compra;
@@ -60,10 +63,14 @@ public class CompraMB {
     private PedidoBO pedidoBO;
     @EJB
     private PedidoaltipoitemBO pedidoaltipoitemBO;
+    @EJB
+    private UnidadBO unidadBO;
     
      private List<CompraDTO> lista;
      private List<AlmacenDTO> listaAlmacenes;
       private ArrayList listaEstados = new ArrayList();
+      private List<UnidadDTO>listaUnidad;
+     
      
      //AGREGAR
     private CompraDTO camposAdd;
@@ -91,9 +98,9 @@ public class CompraMB {
     private List<Compra> listaCompra;
     private CompraDTO campos;
     private Empresa emp=new Empresa();
-        private Documento doc=new Documento();
-        private Almacen alm=new Almacen();
-        //nuevos para edit
+    private Documento doc=new Documento();
+    private Almacen alm=new Almacen();
+    //nuevos para edit
     private CompraDTO co;    
     private List<Lote> ll;
     private List<PealtipoitemDTO> listPealItemTemp;
@@ -101,8 +108,12 @@ public class CompraMB {
     private PealtipoitemDTO pealtiSelecDTO;
     private Lote loteSelec;
     private List<PealtipoitemDTO> listaPealTipoItemSelct;
-    private PealtipoitemDTO objPealtipoItemSelecDTO;
-    private PealtipoitemDTO objPealtipoItemQuitarDTO;
+//        private PealtipoitemDTO objPealtipoItemSelecDTO;
+//        private PealtipoitemDTO objPealtipoItemQuitarDTO;
+ 
+     private PealtipoitemDTO objPealTipoItem;
+     private PealtipoitemDTO objPealTipoItemQuitar;
+     private loteDTO objLote;
     //
     private SessionBeanCompra sessionBeanCompra = new SessionBeanCompra();
     Utils ut = new Utils();
@@ -113,6 +124,7 @@ public class CompraMB {
          getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
          getSessionBeanCompra().setListaPealtipoitemAdd(pedidoaltipoitemBO.getAllPealtipoitems());
            setListaEstados(this.llenarEstados());
+           setListaUnidad(this.comboUnidades());
            limpiarCompras();
         emp=new Empresa();
         campos = new CompraDTO();
@@ -128,6 +140,8 @@ public class CompraMB {
         
         co=new CompraDTO();
         ll=new ArrayList<>();
+       // objPealTipoItemQuitar=new PealtipoitemDTO();
+        
     }
     
     public List<CompraDTO> consultar(ActionEvent actionEvent) {
@@ -171,13 +185,16 @@ public class CompraMB {
          List<AlmacenDTO> listaDto = almacenBO.getAllAlmaces();
          return listaDto;
      }
-     
+     public List<UnidadDTO> comboUnidades(){
+         List<UnidadDTO> listaDto = unidadBO.getAllUnidad();
+         return listaDto;
+     }
      public void selectTipoItemAdd(SelectEvent event){
-         setObjPealtipoItemSelecDTO((PealtipoitemDTO)event.getObject());
+         setObjPealTipoItem((PealtipoitemDTO)event.getObject());
      
      }
      public void selectTipoItemQuitar(SelectEvent event){
-         setObjPealtipoItemQuitarDTO((PealtipoitemDTO)event.getObject());
+         setObjPealTipoItemQuitar((PealtipoitemDTO)event.getObject());
      
      }
     
@@ -208,7 +225,12 @@ public class CompraMB {
 //           dto.setCorrelativo(getCorrelativoNuevo());
            dto.setFecha(new Date());
 //           dto.setSerie(getSerieNuevo());
+           
+             //Insert Update PealTipoitem
            List<PealtipoitemDTO> listAux = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), 0);
+           
+           
+           
            dto.setTotal(getTotalNuevo());
            dto.setIdEmpresa(getIdempresaNuevo());
            System.out.println("data: " + dto.getCorrelativo());
@@ -267,7 +289,7 @@ public class CompraMB {
         setSelectEstadoBusqueda(100); 
            
     }
-      
+     /////////////////// 
       public void edit(ActionEvent actionEvent){
         listPealItem=compraBO.getPedidosbyAlmacen(co);
         ll= compraBO.getLoteByCompra(co);
@@ -277,13 +299,24 @@ public class CompraMB {
         context.execute("PF('EditComprasModal').show();");
         
       }
-      public void quitarPedido(ActionEvent actionEvent){
-          getListaPealTipoItemSelct().remove(getObjPealtipoItemSelecDTO());
-          getListPealItem().add(getObjPealtipoItemSelecDTO());
-          RequestContext context = RequestContext.getCurrentInstance();
-          context.update("formAddPedidoss");
+       public void agregarTipoItems(ActionEvent actionEvent){
+           if(!getListPealItem().isEmpty()){
+              getListPealItem().remove(getObjPealTipoItem());
+              getListaPealTipoItemSelct().add(getObjPealTipoItem());
+
+              RequestContext context = RequestContext.getCurrentInstance();
+              context.update("formAddPedidoss");
+         }
       }
-      
+      public void quitarPedido(ActionEvent actionEvent){
+          if(!getListaPealTipoItemSelct().isEmpty()){
+              getListPealItem().add(getObjPealTipoItemQuitar());
+              getListaPealTipoItemSelct().remove(getObjPealTipoItemQuitar());
+              
+              RequestContext context = RequestContext.getCurrentInstance();
+              context.update("formAddPedidoss");
+          }  
+      }
       public void editCompra(ActionEvent actionEvent){
           CompraDTO dto=new CompraDTO();
            dto.setIdAlmacen(idalmacenNuevo);
@@ -307,12 +340,7 @@ public class CompraMB {
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.execute("PF('EditComprasModal').hide();");
     }
-      public void agregarTipoItems(ActionEvent actionEvent){
-          getListaPealTipoItemSelct().add(getObjPealtipoItemSelecDTO());
-          getListPealItem().remove(getObjPealtipoItemSelecDTO());
-          RequestContext context = RequestContext.getCurrentInstance();
-          context.update("formAddPedidoss");
-     }
+     
       
     public CompraBO getCompraBO() {
         return compraBO;
@@ -654,14 +682,7 @@ public class CompraMB {
         this.nombreEmpresaBuqueda = nombreEmpresaBuqueda;
     }
 
-    public PealtipoitemDTO getObjPealtipoItemSelecDTO() {
-        return objPealtipoItemSelecDTO;
-    }
-
-    public void setObjPealtipoItemSelecDTO(PealtipoitemDTO objPealtipoItemSelecDTO) {
-        this.objPealtipoItemSelecDTO = objPealtipoItemSelecDTO;
-    }
-
+    
     public List<PealtipoitemDTO> getListaPealTipoItemSelct() {
         return listaPealTipoItemSelct;
     }
@@ -670,13 +691,56 @@ public class CompraMB {
         this.listaPealTipoItemSelct = listaPealTipoItemSelct;
     }
 
-    public PealtipoitemDTO getObjPealtipoItemQuitarDTO() {
-        return objPealtipoItemQuitarDTO;
+    
+    public PedidoBO getPedidoBO() {
+        return pedidoBO;
     }
 
-    public void setObjPealtipoItemQuitarDTO(PealtipoitemDTO objPealtipoItemQuitarDTO) {
-        this.objPealtipoItemQuitarDTO = objPealtipoItemQuitarDTO;
+    public void setPedidoBO(PedidoBO pedidoBO) {
+        this.pedidoBO = pedidoBO;
     }
+
+    public PealtipoitemDTO getObjPealTipoItem() {
+        return objPealTipoItem;
+    }
+
+    public void setObjPealTipoItem(PealtipoitemDTO objPealTipoItem) {
+        this.objPealTipoItem = objPealTipoItem;
+    }
+
+    public loteDTO getObjLote() {
+        return objLote;
+    }
+
+    public void setObjLote(loteDTO objLote) {
+        this.objLote = objLote;
+    }
+
+    public UnidadBO getUnidadBO() {
+        return unidadBO;
+    }
+
+    public void setUnidadBO(UnidadBO unidadBO) {
+        this.unidadBO = unidadBO;
+    }
+
+    public List<UnidadDTO> getListaUnidad() {
+        return listaUnidad;
+    }
+
+    public void setListaUnidad(List<UnidadDTO> listaUnidad) {
+        this.listaUnidad = listaUnidad;
+    }
+
+    public PealtipoitemDTO getObjPealTipoItemQuitar() {
+        return objPealTipoItemQuitar;
+    }
+
+    public void setObjPealTipoItemQuitar(PealtipoitemDTO objPealTipoItemQuitar) {
+        this.objPealTipoItemQuitar = objPealTipoItemQuitar;
+    }
+
+    
 
     
     
