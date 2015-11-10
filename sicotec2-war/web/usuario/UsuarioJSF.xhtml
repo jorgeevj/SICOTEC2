@@ -30,14 +30,16 @@
                    </p:selectOneMenu>
                 </h:panelGrid>
                 
-                <p:commandButton value="Limpiar" id="btnLimpiarU"  title="Limpiar" actionListener="#{usuarioMB.limpiar}"  />
+             
+                <p:commandButton value="Limpiar" id="btnLimpiarU"  title="Limpiar" actionListener="#{usuarioMB.limpiar}" update="formUsuario" />
                 <p:commandButton value="Consultar" id="btnConsultarU"  title="Consultar" actionListener="#{usuarioMB.consultar}" update="tabUsuario"/>
-                    <p:commandButton value="Crear"  id="btnCrearU" title="Crear"  />
-                    <p:commandButton value="Editar"  id="btnEditarU" title="Editar"/>  
-          
+                <p:commandButton value="Crear"  id="btnCrearU" actionListener="#{usuarioMB.crear}"  update="formAddUsuario" title="Crear"  />
+                <p:commandButton value="Editar"  id="btnEditarU" actionListener="#{usuarioMB.Edit}" title="Editar" disabled="#{usuarioMB.disableEditar}"/>  
+             
            <h:panelGrid >
-               <p:dataTable id="tabUsuario"  value="#{usuarioMB.listaUsuario}" var="tUsuario" >
-                
+               <p:dataTable id="tabUsuario"  value="#{usuarioMB.listaUsuario}" 
+                            selectionMode="single" rowKey="#{tUsuario.idusuario}" var="tUsuario" >
+                   <p:ajax event="rowSelect" listener="#{usuarioMB.selectUsuarioEditar}" />
                 <p:column headerText="Nombre Usuario">
                     <h:outputText value="#{tUsuario.nombre}" />
                 </p:column>

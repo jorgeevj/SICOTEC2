@@ -563,30 +563,25 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE COMPRAS-->
-            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="300" width="500">
+            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="300" width="450">
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
+                        
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.idempresaNuevo}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
                         </p:selectOneMenu>
+                        
                         <p:outputLabel value="Almacen: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesCompra" styleClass="browser-default" value="#{compraMB.idalmacenNuevo}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
-
-                        <p:outputLabel value="N° de Serie "></p:outputLabel>
-                        <p:inputText   value="#{compraMB.serieNuevo}"/>
-
-                        <p:outputLabel value="Correlativo: "></p:outputLabel>
-                        <p:inputText   value="#{compraMB.correlativoNuevo}"/>
-
-
                     </h:panelGrid>
+                    <br/>
                     <p:commandButton value="Agregar Pedidos" actionListener="#{compraMB.getAlmacenForPedidoForItems}"/>
                     <br/><br/><br/>
                     <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
@@ -618,7 +613,7 @@ jorgeevj 15.09.15 Creacion.
                 <br/><br/><br/><br/>
                 <p:outputLabel value="Compra Seleccionados "></p:outputLabel>
                 <p:dataTable tableStyleClass="table table-hover" var="pealtipoitem" id="tbPedidosItemsSelec" value="#{compraMB.listaPealTipoItemSelct}"
-                             selectionMode="single" rowKey="#{pealtipoitem}"  >
+                             editable="true" editMode="cell" selectionMode="single" rowKey="#{pealtipoitem}"  >
                      <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}" /> 
                         <p:column headerText="Item" style="text-align: center">
                         <p:outputLabel value="#{pealtipoitem.nombreItems}"/>
@@ -629,6 +624,27 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Costo Unitario" style="text-align: center">
                         <p:outputLabel value="#{pealtipoitem.costoUni}"/>
                         </p:column>
+                     <p:column headerText="Cantidad" >
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{pealtipoitem.cantidad}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{pealtipoitem.cantidad}" style="width:96%" >
+                                        <f:validateDoubleRange minimum="1" maximum="1000" />
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                     
+                     <p:column headerText="Unidad Medida">
+                       <p:cellEditor>
+                           <f:facet name="output"><h:outputText value="#{car.color}" /></f:facet>
+                           <f:facet name="input">
+                               <h:selectOneMenu value="#{car.color}" style="width:100%">
+                                   <f:selectItems value="#{dtEditView.colors}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                               </h:selectOneMenu>
+                           </f:facet>
+                       </p:cellEditor>
+                   </p:column>
+                     
                         <p:column headerText="Total" style="text-align: center">
                             <p:outputLabel value="#{pealtipoitem.total}"/>
                         </p:column>
@@ -1282,6 +1298,76 @@ jorgeevj 15.09.15 Creacion.
                 
             
             <!-- FIN DIALOG DE ALMACENES-->
+            
+            <!-- INICIO DIALOG DE USUARIOS-->
+            <p:dialog header="Agregar Usuario" widgetVar="addUsuariosModal" modal="true" resizable="true">
+                <h:form id="formAddUsuario">
+                    <p:growl showDetail="true" sticky="true" id="msnRegistrar"/>
+                    <p:panelGrid columns="1" styleClass="hideborder">
+                        
+                        <p:outputLabel value="Nombre "></p:outputLabel>
+                        <p:inputText   value="#{usuarioMB.nombreNuevo}"/>
+                        
+                       <!--<p:outputLabel value="Clave "></p:outputLabel>
+                       <p:inputText   value="#{usuarioMB.claveNuevo}"/>-->
+                       
+                       <p:messages id="messages" showDetail="true" autoUpdate="true" />
+                       <h:outputLabel for="pwd1" value="Clave: " />
+                       <p:password id="pwd1" value="#{usuarioMB.claveNuevo}" match="pwd2" label="Clave:" required="true" />
+ 
+                       <h:outputLabel for="pwd2" value="Repetir Clave" />
+                       <p:password id="pwd2" value="#{usuarioMB.claveNuevo}" label="Repetir Clave" required="true" />
+                       
+                        <p:outputLabel value="Rol "></p:outputLabel>
+                        <p:selectOneMenu id="rolUsuario" styleClass="browser-default" value="#{usuarioMB.idrolNuevo}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems   value="#{usuarioMB.listaRolAdd}"  var="usu" 
+                                             itemValue="#{usu.idrol}" itemLabel="#{usu.nombre}"/>    
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Persona "></p:outputLabel>
+                        <p:selectOneMenu id="personaUsuario" styleClass="browser-default" value="#{usuarioMB.idpersonaNuevo}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems   value="#{usuarioMB.listaPersonaAdd}"  var="usu" 
+                                             itemValue="#{usu.idpersona}" itemLabel="#{usu.nombre}"/>    
+                        </p:selectOneMenu>
+               
+                    </p:panelGrid>
+                    
+                    <br/><br/>
+                    <p:commandButton value="Agregar" actionListener="#{usuarioMB.addNuevoUsuario}" update="msnRegistrar"/>
+                </h:form>
+            </p:dialog> 
+            
+            <p:dialog header="Editar Usuario" widgetVar="editUsuarioModal" modal="true" resizable="false">
+                <h:form id="formEditUsuario">
+                    <p:growl showDetail="true" sticky="true" id="msnEditar"/>
+                    <h:panelGrid columns="2">
+                        
+                        <p:outputLabel value="Nombre "></p:outputLabel>
+                        <p:inputText   value="#{usuarioMB.nombreEdit}" disabled="false"/>
+                        <p:outputLabel value="Clave "></p:outputLabel>
+                        <p:inputText   value="#{usuarioMB.claveEdit}" disabled="f"/>
+                        
+                        <p:outputLabel value="Rol "></p:outputLabel>
+                        <p:selectOneMenu id="rolUsuario" styleClass="browser-default" value="#{usuarioMB.rolesEdit}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems   value="#{usuarioMB.listaRolEdit}"  var="usu" 
+                                             itemValue="#{usu.idrol}" itemLabel="#{usu.nombre}"/>    
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Persona "></p:outputLabel>
+                        <p:selectOneMenu id="personaUsuario" styleClass="browser-default" value="#{usuarioMB.personasEdit}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                            <f:selectItems   value="#{usuarioMB.listaPersonaEdit}"  var="usu" 
+                                             itemValue="#{usu.idpersona}" itemLabel="#{usu.nombre}"/>    
+                        </p:selectOneMenu>
+                        
+                    </h:panelGrid>
+                    <p:commandButton value="Editar" actionListener="#{usuarioMB.editarUsuario}" update="msnEditar"/>
+                </h:form>
+            </p:dialog>
+            <!-- FIN DIALOG DE USUARIOS-->
 
         </h:body>
 

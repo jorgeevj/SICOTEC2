@@ -5,6 +5,7 @@
  */
 package controladora.Usuario;
 
+import bo.PersonaBO;
 import bo.RolBO;
 import bo.UsuarioBO;
 import dto.PersonaDTO;
@@ -12,6 +13,7 @@ import dto.RolDTO;
 import dto.UsuarioDTO;
 import entidades.Persona;
 import entidades.Rol;
+import entidades.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -34,11 +37,17 @@ public class UsuarioMB implements Serializable{
     private UsuarioBO usuarioBO = new UsuarioBO();
     @EJB
     private RolBO rolBO = new RolBO();
+    @EJB
+    private PersonaBO personaBO = new PersonaBO();
     
     
     //LISTAS
     private List<UsuarioDTO> listaUsuario = new ArrayList<UsuarioDTO>();
     private List<RolDTO> listaRol = new ArrayList<RolDTO>();
+    private List<RolDTO> listaRolAdd = new ArrayList<RolDTO>();
+    private List<PersonaDTO> listaPersonaAdd = new ArrayList<PersonaDTO>();
+    private List<RolDTO> listaRolEdit = new ArrayList<RolDTO>();
+    private List<PersonaDTO> listaPersonaEdit = new ArrayList<PersonaDTO>();
     
     //BUSQUEDA   
     private int selectEstadoBusqueda = 100;
@@ -48,7 +57,25 @@ public class UsuarioMB implements Serializable{
     private Date fechaInicioBusqueda;
     private Date fechaFinBusqueda;
     private int idRolSelectBusqueda;
-        
+    
+    //AGREGAR
+     private Integer idusuarioNuevo;   
+     private Date fechaNuevo;
+     private String nombreNuevo;
+     private String claveNuevo;
+     private int idpersonaNuevo;
+     private int idrolNuevo;
+     
+    //EDITAR
+     private UsuarioDTO objUsuarioEditar;
+     private boolean disableEditar = true;    
+     private Integer usuarioEdit;
+     private Integer rolesEdit;
+     private Integer personasEdit;
+     private String nombreEdit;
+     private String claveEdit;
+     private Date fechaEdit;
+     private Integer idUsuarioEdit;
       
     
     
@@ -56,7 +83,9 @@ public class UsuarioMB implements Serializable{
     public void init(){
         setListaUsuario(getUsuarioBO().getAllUsuarios());
         setListaRol(getRolBO().getAllRoles());
-           
+        setListaRolAdd(this.comboRoles());
+        setListaPersonaAdd(this.comboPersonas());
+        setDisableEditar(true);
     }
      public List<UsuarioDTO> consultar(ActionEvent actionEvent) {
        
@@ -93,12 +122,98 @@ public class UsuarioMB implements Serializable{
          setFechaInicioBusqueda(null);
          setFechaFinBusqueda(null);
          setIdRolSelectBusqueda(100);
+        //disableEditar = true;
         
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        context.update("formUsuario");
+    }
+    public void addNuevoUsuario(ActionEvent actionEvent){
+          UsuarioDTO dto=new UsuarioDTO();
+           dto.setIdPersona(getIdpersonaNuevo());
+           dto.setIdRol(getIdrolNuevo());
+           dto.setClave(getClaveNuevo());
+           dto.setNombre(getNombreNuevo());
+           dto.setFecha(new Date());
+
+           Usuario entidad = usuarioBO.insertarNuevoUsuario(dto);
+           
+           setListaUsuario(usuarioBO.getAllUsuarios());
+          
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formUsuario");
+        this.cerrar();
         
-        RequestContext context = RequestContext.getCurrentInstance();
+    }
+    public void crear(ActionEvent actionEvent){
+       setDisableEditar(true);
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addUsuariosModal').show();");
+    }
+    
+    public void cerrar(){
+        limpiaCrearUsuario();
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.execute("PF('addUsuariosModal').hide();");
+    }
+    private void limpiaCrearUsuario() {
+        setClaveNuevo(null);
+        setNombreNuevo(null);
+        setIdpersonaNuevo(0);
+        setIdrolNuevo(0);
+    }
+    public List<RolDTO> comboRoles(){
+         List<RolDTO> listaDto = rolBO.getAllRoles();
+         return listaDto;
+     }
+     public List<PersonaDTO> comboPersonas(){
+         List<PersonaDTO> listaDto = personaBO.getAllPresonasDTO();
+         return listaDto;
+     }
+     public void selectUsuarioEditar(SelectEvent event) {
+        setDisableEditar(false);
+        setObjUsuarioEditar((UsuarioDTO)event.getObject()); 
+        RequestContext context = RequestContext.getCurrentInstance(); 
         context.update("formUsuario");
     }
+     public void Edit(ActionEvent actionEvent){
+         setIdUsuarioEdit(objUsuarioEditar.getIdusuario());
+         setListaPersonaEdit(this.comboPersonas());
+         setListaRolEdit(this.comboRoles());
+         setPersonasEdit(getObjUsuarioEditar().getIdPersona());
+         setRolesEdit(getObjUsuarioEditar().getIdRol());
+         setNombreEdit(getObjUsuarioEditar().getNombre());
+         setClaveEdit(getObjUsuarioEditar().getClave());
+         setFechaEdit(getObjUsuarioEditar().getFecha());
+        
+        RequestContext context = RequestContext.getCurrentInstance(); 
+        context.update("formEditUsuario");
+        context.execute("PF('editUsuarioModal').show();");
+    }
+     public void editarUsuario(ActionEvent actionEvent){
+             UsuarioDTO dto = new UsuarioDTO();
+             dto.setIdusuario(getIdUsuarioEdit());
+             dto.setClave(getClaveEdit());
+             dto.setNombre(getNombreEdit());
+             dto.setFecha(getFechaEdit());
+             
+             Persona entidadPersona = new Persona();
+             entidadPersona.setIdpersona(getPersonasEdit());
+             dto.setIdpersona(entidadPersona);
+             
+              Rol entidadRol = new Rol();
+              entidadRol.setIdrol(getRolesEdit());
+              dto.setIdrol(entidadRol);
+              
+              usuarioBO.actualizarUsuario(dto);
+              setListaUsuario(usuarioBO.getAllUsuarios());
+              setDisableEditar(true);
 
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("formUsuario");
+            context.execute("PF('editUsuarioModal').hide();");
+           
+        }
+    
     public UsuarioBO getUsuarioBO() {
         return usuarioBO;
     }
@@ -185,6 +300,166 @@ public class UsuarioMB implements Serializable{
 
     public void setApellidoPersonaBusqueda(String apellidoPersonaBusqueda) {
         this.apellidoPersonaBusqueda = apellidoPersonaBusqueda;
+    }
+
+    public Integer getIdusuarioNuevo() {
+        return idusuarioNuevo;
+    }
+
+    public void setIdusuarioNuevo(Integer idusuarioNuevo) {
+        this.idusuarioNuevo = idusuarioNuevo;
+    }
+
+    public Date getFechaNuevo() {
+        return fechaNuevo;
+    }
+
+    public void setFechaNuevo(Date fechaNuevo) {
+        this.fechaNuevo = fechaNuevo;
+    }
+
+    public String getNombreNuevo() {
+        return nombreNuevo;
+    }
+
+    public void setNombreNuevo(String nombreNuevo) {
+        this.nombreNuevo = nombreNuevo;
+    }
+
+    public String getClaveNuevo() {
+        return claveNuevo;
+    }
+
+    public void setClaveNuevo(String claveNuevo) {
+        this.claveNuevo = claveNuevo;
+    }
+
+    public int getIdpersonaNuevo() {
+        return idpersonaNuevo;
+    }
+
+    public void setIdpersonaNuevo(int idpersonaNuevo) {
+        this.idpersonaNuevo = idpersonaNuevo;
+    }
+
+    public int getIdrolNuevo() {
+        return idrolNuevo;
+    }
+
+    public void setIdrolNuevo(int idrolNuevo) {
+        this.idrolNuevo = idrolNuevo;
+    }
+
+    public List<RolDTO> getListaRolAdd() {
+        return listaRolAdd;
+    }
+
+    public void setListaRolAdd(List<RolDTO> listaRolAdd) {
+        this.listaRolAdd = listaRolAdd;
+    }
+
+    public PersonaBO getPersonaBO() {
+        return personaBO;
+    }
+
+    public void setPersonaBO(PersonaBO personaBO) {
+        this.personaBO = personaBO;
+    }
+
+    public List<PersonaDTO> getListaPersonaAdd() {
+        return listaPersonaAdd;
+    }
+
+    public void setListaPersonaAdd(List<PersonaDTO> listaPersonaAdd) {
+        this.listaPersonaAdd = listaPersonaAdd;
+    }
+
+    public UsuarioDTO getObjUsuarioEditar() {
+        return objUsuarioEditar;
+    }
+
+    public void setObjUsuarioEditar(UsuarioDTO objUsuarioEditar) {
+        this.objUsuarioEditar = objUsuarioEditar;
+    }
+
+    public boolean isDisableEditar() {
+        return disableEditar;
+    }
+
+    public void setDisableEditar(boolean disableEditar) {
+        this.disableEditar = disableEditar;
+    }
+
+    public Integer getUsuarioEdit() {
+        return usuarioEdit;
+    }
+
+    public void setUsuarioEdit(Integer usuarioEdit) {
+        this.usuarioEdit = usuarioEdit;
+    }
+
+    public Integer getRolesEdit() {
+        return rolesEdit;
+    }
+
+    public void setRolesEdit(Integer rolesEdit) {
+        this.rolesEdit = rolesEdit;
+    }
+
+    public Integer getPersonasEdit() {
+        return personasEdit;
+    }
+
+    public void setPersonasEdit(Integer personasEdit) {
+        this.personasEdit = personasEdit;
+    }
+
+    public String getNombreEdit() {
+        return nombreEdit;
+    }
+
+    public void setNombreEdit(String nombreEdit) {
+        this.nombreEdit = nombreEdit;
+    }
+
+    public String getClaveEdit() {
+        return claveEdit;
+    }
+
+    public void setClaveEdit(String claveEdit) {
+        this.claveEdit = claveEdit;
+    }
+
+    public Date getFechaEdit() {
+        return fechaEdit;
+    }
+
+    public void setFechaEdit(Date fechaEdit) {
+        this.fechaEdit = fechaEdit;
+    }
+
+    public Integer getIdUsuarioEdit() {
+        return idUsuarioEdit;
+    }
+
+    public void setIdUsuarioEdit(Integer idUsuarioEdit) {
+        this.idUsuarioEdit = idUsuarioEdit;
+    }
+
+    public List<RolDTO> getListaRolEdit() {
+        return listaRolEdit;
+    }
+
+    public void setListaRolEdit(List<RolDTO> listaRolEdit) {
+        this.listaRolEdit = listaRolEdit;
+    }
+
+    public List<PersonaDTO> getListaPersonaEdit() {
+        return listaPersonaEdit;
+    }
+
+    public void setListaPersonaEdit(List<PersonaDTO> listaPersonaEdit) {
+        this.listaPersonaEdit = listaPersonaEdit;
     }
     
     

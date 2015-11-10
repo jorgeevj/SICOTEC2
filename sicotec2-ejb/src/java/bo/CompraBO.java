@@ -123,6 +123,7 @@ public class CompraBO {
             Empresa entidadEmpresa = new Empresa();
             entidadEmpresa.setIdempresa(dto.getIdEmpresa());
         entidad.setIdempresa(entidadEmpresa);
+        
         entidad.setIdalmacen(dto.getIdAlmacen());
 //        entidad.setSerie(dto.getSerie());
 //        entidad.setCorrelativo(dto.getCorrelativo());

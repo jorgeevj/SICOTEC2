@@ -219,7 +219,7 @@ public class CompraMB {
            
         getSessionBeanCompra().setListaCompra(compraBO.getAllCompras());
         RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("tabCompraFrom");
+        context.update("formCompra");
         this.cerrar();
         
     }
@@ -254,8 +254,8 @@ public class CompraMB {
     }
       
     public void limpiar(ActionEvent actionEvent){
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formCompra");
+//        RequestContext context = RequestContext.getCurrentInstance(); 
+//        context.update("formCompra");
         limpiarCompras();           
     }
     public void limpiarCompras(){

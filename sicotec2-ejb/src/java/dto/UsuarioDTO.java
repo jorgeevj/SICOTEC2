@@ -30,6 +30,7 @@ public class UsuarioDTO {
     
     //EXTRAS
     private int idRol;
+    private int idPersona;
     
     //AGREGADOS
      private Date fechaInicio;
@@ -158,6 +159,14 @@ public class UsuarioDTO {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(int idPersona) {
+        this.idPersona = idPersona;
     }
     
 }

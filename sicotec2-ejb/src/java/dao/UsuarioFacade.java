@@ -84,5 +84,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
            } 
           return l;    
     }
-     
+     public Usuario agregarUsuario(Usuario entidadUsuario) {
+        getEntityManager().persist(entidadUsuario);
+        getEntityManager().flush();
+        return entidadUsuario;
+    }
 }
