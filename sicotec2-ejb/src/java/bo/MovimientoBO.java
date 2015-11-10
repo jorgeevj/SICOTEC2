@@ -75,11 +75,18 @@ public class MovimientoBO {
         return lista;
     }
     
-    public List<Movimientoitemvista> getItemsByMov(MovimientoDTO mov){
+    public List<ItemDTO> getItemsByMov(int idMovimiento){
         List<ItemDTO> listaItems = new ArrayList<ItemDTO>();
-        List<Movimientoitemvista> lista = movimentoFacade.getItemsByMovimiento(mov);
-        
-        return lista;
+        List<Item> lista= movimentoFacade.getItemsByMovimiento(idMovimiento);
+        for(Item i : lista){
+            ItemDTO dto = new ItemDTO();
+            dto.setIditem(i.getIditem());
+            dto.setDescTipoItem(i.getAltipoitem().getTipoitem().getDescripcion());
+            dto.setDescMarca(i.getAltipoitem().getTipoitem().getIdmarca().getNombre());
+            dto.setDescFamilia(i.getAltipoitem().getTipoitem().getIdfamilia().getNombre());
+            listaItems.add(dto);
+        }
+        return listaItems;
     }
     
     public void insertMovimiento(MovimientoDTO mov, List<ItemDTO> itemsReg, int idTipoMovimiento){
@@ -185,14 +192,13 @@ public class MovimientoBO {
                 ventaFacade.cambiarEstadoVenta(2, mov.getIdVenta());
             }
         }else if(idTipoMovimiento == 3){
-            int idAlmacenOringe = mov.getIdalmacenOrigen();
+            int idAlmacenOringe  = mov.getIdalmacenOrigen();
             int idAlmacenDestino = mov.getIdalmacenDestino();
             
             for(ItemDTO DTO : itemsReg){
-                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOringe, DTO.getCantidad(),2);
-                
-                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino, DTO.getCantidad(),1);
-                if(!tof){//EN CASO NO EXISTA EL ITEM
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOringe,1,2);
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino,1,1);
+                /*if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
                     Almacen alm = new Almacen();
@@ -213,7 +219,7 @@ public class MovimientoBO {
                     
                     alltipoitemFacede.create(al);
                 }
-                
+                */
                 
                 //INSERTAR EL MOV-ITEM
                 Item i = new Item();

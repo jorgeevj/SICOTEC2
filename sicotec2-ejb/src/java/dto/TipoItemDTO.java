@@ -39,6 +39,8 @@ public class TipoItemDTO {
     private Color color;
     private Categoria categoria;
     
+    private int idLote;
+    
     //EXTRAS
     private Integer cantidad;
     
@@ -205,6 +207,20 @@ public class TipoItemDTO {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    /**
+     * @return the idLote
+     */
+    public int getIdLote() {
+        return idLote;
+    }
+
+    /**
+     * @param idLote the idLote to set
+     */
+    public void setIdLote(int idLote) {
+        this.idLote = idLote;
     }
 
     

@@ -79,8 +79,16 @@ public class ItemFacade extends AbstractFacade<Item> {
                 TipoItemDTO dto = new TipoItemDTO();
                 dto.setIdtipoItem(al.getTipoitem().getIdtipoItem());
                 dto.setDescipcion(al.getTipoitem().getDescripcion());
-                dto.setCantidad(al.getCantidad() - al.getReservado());
+                dto.setCantidad(al.getCantidad() - al.getReservado() - al.getComprados());
                 dto.setNumParte(al.getTipoitem().getNumParte());
+                
+                String ejbQuery1 = "SELECT idlote "
+                                 + "FROM lote "
+                                 + "WHERE idtipoitem = '"+al.getTipoitem().getIdtipoItem()+"' "
+                                 + "AND idalmacen = "+idAlmacen;
+                
+                int idLote = (int)em.createNativeQuery(ejbQuery1).getSingleResult();
+                dto.setIdLote(idLote);
                 
                 listaItems.add(dto);
             }
