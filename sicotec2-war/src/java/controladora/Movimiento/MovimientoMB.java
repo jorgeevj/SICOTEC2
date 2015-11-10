@@ -95,7 +95,7 @@ public class MovimientoMB implements Serializable{
         private List<EmpresaDTO> listaEmpresasClientes = new ArrayList<EmpresaDTO>();
         private List<AlmacenDTO> listaAlmacenes = new ArrayList<AlmacenDTO>();
         private ArrayList listaEstados = new ArrayList();
-        private List<Movimientoitemvista> listaItemsMovimiento = new ArrayList<Movimientoitemvista>();
+        private List<ItemDTO> listaItemsMovimiento = new ArrayList<ItemDTO>();
         private List<CompraDTO> listaCompras = new ArrayList<CompraDTO>();
         private List<loteDTO> listaLotesCompra = new ArrayList<loteDTO>();
         private List<loteDTO> listaLotesCompraAux = new ArrayList<loteDTO>();
@@ -205,9 +205,7 @@ public class MovimientoMB implements Serializable{
     
     public void verItems(){
         if(getMovimientoSeleccionado() != null){
-            MovimientoDTO mov = new MovimientoDTO();
-            mov.setIdmovimiento(getMovimientoSeleccionado().getIdmovimiento());
-            setListaItemsMovimiento(getMovimientoBO().getItemsByMov(mov));
+            setListaItemsMovimiento(getMovimientoBO().getItemsByMov(getMovimientoSeleccionado().getIdmovimiento()));
             
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsMovimiento");
@@ -229,21 +227,15 @@ public class MovimientoMB implements Serializable{
     }
     
     public void itemsByAlmacen(){
-        int idAlmacen = getIdAlmacenOrigenNuevo();
-        //setListaItem(movimientoBO.getItemsByAlmacen(idAlmacen));
-        
-        setListaItemAlmacen(movimientoBO.getItemsByAlmacen(idAlmacen));
-        
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formTabItemsDisp");
+        context.update("formTabItemsSelecc");
         context.execute("PF('dialog_nuevo_items').show();");
     }
     
     public void tipoMovElegidoNuevo(){
         int idTipoMov = getIdTipoMovimientoSelectNuevo();
         if(idTipoMov == getIdtipoMovimientoEntrada()){
-            //setPanelVisibleMovEntrada(true);
-            //setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(false);
             setStyleBTNICompras("display:block");
             setStyleBTNItems("display:none");
@@ -252,8 +244,6 @@ public class MovimientoMB implements Serializable{
             setIdAlmacenDestinoNuevo(0);
             setIdAlmacenOrigenNuevo(0);
         }else if(idTipoMov == getIdtipoMovimientoSalida()){
-            //setPanelVisibleMovEntrada(false);
-            //setPanelVisibleMovSalida(true);
             setPanelVisibleMovAlmacenes(false);
             setStyleBTNICompras("display:none");
             setStyleBTNItems("display:block");
@@ -262,8 +252,6 @@ public class MovimientoMB implements Serializable{
             setIdAlmacenDestinoNuevo(0);
             setIdAlmacenOrigenNuevo(0);
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
-            //setPanelVisibleMovEntrada(false);
-            //setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(true);
             setStyleBTNICompras("display:none");
             setStyleBTNItems("display:none");
@@ -272,8 +260,6 @@ public class MovimientoMB implements Serializable{
             setIdAlmacenDestinoNuevo(0);
             setIdAlmacenOrigenNuevo(0);
         }else{
-            //setPanelVisibleMovEntrada(false);
-            //setPanelVisibleMovSalida(false);
             setPanelVisibleMovAlmacenes(false);
             setStyleBTNICompras("display:none");
             setStyleBTNItems("display:none");
@@ -300,6 +286,14 @@ public class MovimientoMB implements Serializable{
             setStyleBTNItemsAlmacen("display:block");
             setIdAlmacenOrigenSeleccRegis(getIdAlmacenOrigenNuevo());
             setIdAlmacenDestinoSeleccRegis(getIdAlmacenDestinoNuevo());
+            
+            getListaCodigosTranslado().clear();
+            getListaCodigosTransladoAux().clear();
+            getListaItemAlmacenAux().clear();
+            setCantidadCodigosAux1(1);
+            
+            setListaItemAlmacen(movimientoBO.getItemsByAlmacen(getIdAlmacenOrigenNuevo()));
+            
         }else{
             setStyleBTNItemsAlmacen("display:none");
         }
@@ -351,7 +345,9 @@ public class MovimientoMB implements Serializable{
                 sms = "Ingrese items al movimiento";
             }
         }else if(idTipoMov == getIdtipoMovimientoEntradaAlmacen() || idTipoMov == getIdtipoMovimientoSalidaAlmacen()){
-            
+           if(getListaItemAlmacenAux().isEmpty()){
+                sms = "Ingrese Items al movimiento";
+            } 
         }
         
         return sms;
@@ -385,26 +381,18 @@ public class MovimientoMB implements Serializable{
             if(idTipoMovimiento == getIdtipoMovimientoEntradaAlmacen()|| idTipoMovimiento == getIdtipoMovimientoSalidaAlmacen()){
                 int idAlmacenDestino = getIdAlmacenDestinoSeleccRegis();
                 int idAlmacenOrigen  = getIdAlmacenOrigenSeleccRegis();
-
                 mov.setIdalmacenDestino(idAlmacenDestino);
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
+                mov.setIddocumento(7); 
                 
-                 /*List<Movimientoitemvista> listaItemSelecc = getListaItemAux();
-                 for(Movimientoitemvista DTO : listaItemSelecc){
-                     ItemDTO i = new ItemDTO();
-                     i.setEstado("1");
-                     i.setIditem(DTO.getIditem());
-                     i.setOperatividad("0");
-                     i.setIdTipoItem(DTO.getIdtipoitem());
-                     i.setCantidad(DTO.getIdmovimiento());//USADO PARA LA CANTIDAD
-                     listaItemsTransaction.add(i);
-                 }*/
-                 
+                listaItemsTransaction = getListaCodigosTransladoAux();
             }else if(idTipoMovimiento == getIdtipoMovimientoEntrada()){
                 mov.setNombreOrigen(getCompraSeleccionada().getNombreEmpresa());
                 mov.setIdalmacenDestino(getCompraSeleccionada().getIdAlmacen());
                 mov.setIdCompra(getCompraSeleccionada().getIdcompra());
                 mov.setIddocumento(4); 
+                
+                listaItemsTransaction = getListaCodigosCompraAux();
                 
                 listaItemsTransaction = getListaCodigosCompraAux();
             }else if(idTipoMovimiento == getIdtipoMovimientoSalida()){
@@ -521,6 +509,12 @@ public class MovimientoMB implements Serializable{
     
     public void selectItemToMovimientoDispo(SelectEvent event){
         setItemSeleccionado((TipoItemDTO)event.getObject());
+        setCodItemTransaldo("");
+        setCantidadCodigosAux1(1);
+        getListaCodigosTranslado().clear();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabla");
+        context.update("formCodigoItemTranslado");
     }
     
     public void selectItemToMovimientoSelect(SelectEvent event){
@@ -540,12 +534,23 @@ public class MovimientoMB implements Serializable{
     
     public void eliminarItemToMovimiento(){
         if(getItemSeleccionadoAux() != null){
-            //getListaItemAux().remove(getItemSeleccionadoAux());
-            //getListaItem().add(getItemSeleccionadoAux());
+            getListaItemAlmacen().add(getItemSeleccionadoAux());
+            getListaItemAlmacenAux().remove(getItemSeleccionadoAux());
+            
+            List<ItemDTO> listaEliminar = new ArrayList<ItemDTO>();
+            for(ItemDTO i : getListaCodigosTransladoAux()){
+                if(i.getIdTipoItem().equals(getItemSeleccionadoAux().getIdtipoItem())){ 
+                    listaEliminar.add(i);
+                }
+            }
+            
+            for(ItemDTO i : listaEliminar){
+                getListaCodigosTransladoAux().remove(i);
+            }
+            
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsSelecc");
             context.update("formTabItemsDisp");
-            //setItemSeleccionadoAux(new Movimientoitemvista());
         }
     }
     
@@ -554,7 +559,7 @@ public class MovimientoMB implements Serializable{
         setLoteSeleccionado((loteDTO)event.getObject());
         
         setCantidadLote(null);
-        setCantidadCodigosAux(0);
+        setCantidadCodigosAux(1);
         getListaCodigosCompra().clear();
         setCodItemCompra("");
         
@@ -618,8 +623,20 @@ public class MovimientoMB implements Serializable{
         String cod = getCodItemCompra();
         //int cantidad = Integer.parseInt(getCantidadLote());
         boolean tof = itemBO.validarCodDuplicado(cod);
+        boolean t = false;
+        for(ItemDTO tf : getListaCodigosCompra()){
+            if(tf.getIditem() == cod){
+                t = true;
+            }
+        }
+        for(ItemDTO tf : getListaCodigosCompraAux()){
+            if(tf.getIditem() == cod){
+                t = true;
+            }
+        }
+        
         if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux() < getLoteSeleccionado().getCantidadConvertida()
-            && !getListaCodigosCompra().contains(cod) && !tof && !getListaCodigosCompraAux().contains(cod)){
+            && !t && !tof){
             ItemDTO dto = new ItemDTO();
             dto.setIditem(cod);
             dto.setIdTipoItem(getLoteSeleccionado().getIdtipoitem());
@@ -652,11 +669,11 @@ public class MovimientoMB implements Serializable{
     }
     
     public void eliminarCoditoItemTolista(ActionEvent actionEvent){
-        if(getCantidadCodigosAux1() >= 1){
+        if(getCantidadCodigosAux() >= 1){
             int index = (int)actionEvent.getComponent().getAttributes().get("indexCod");
-            getListaCodigosTranslado().remove(index);
+            getListaCodigosCompra().remove(index);
 
-            setCantidadCodigosAux1(getCantidadCodigosAux1() - 1);
+            setCantidadCodigosAux(getCantidadCodigosAux() - 1);
 
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formCodigoItemCompra");
@@ -666,12 +683,24 @@ public class MovimientoMB implements Serializable{
     public void insertCodigoItemToLista1(){
         RequestContext context = RequestContext.getCurrentInstance();
         String cod = getCodItemTransaldo();
-        if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux1() < getItemSeleccionado().getCantidad()
-            && !getListaCodigosTranslado().contains(cod) && !getListaCodigosTransladoAux().contains(cod)){
+        boolean t = false;
+        for(ItemDTO tf : getListaCodigosTranslado()){
+            if(tf.getIditem().equals(cod)){
+                t = true;
+            }
+        }
+        for(ItemDTO tf : getListaCodigosTransladoAux()){
+            if(tf.getIditem().equals(cod)){
+                t = true;
+            }
+        }
+        if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad()
+            && !t){
             ItemDTO dto = new ItemDTO();
             dto.setIditem(cod);
-            dto.setIdTipoItem(getLoteSeleccionado().getIdtipoitem());
-            dto.setIdLote(getLoteSeleccionado().getIdLote());
+            dto.setIdTipoItem(getItemSeleccionado().getIdtipoItem());
+            //ARREGLAR!!!
+            //dto.setIdLote(getItemSeleccionado().g());
             getListaCodigosTranslado().add(dto);
             
             setCantidadCodigosAux1(getCantidadCodigosAux1() + 1);
@@ -682,28 +711,28 @@ public class MovimientoMB implements Serializable{
     }
     
     public void aceptarInsertCodifoItemLista1(){
-        if(getCantidadCodigosAux1() == getLoteSeleccionado().getCantidadConvertida()){
-            loteDTO l = getLoteSeleccionado();
-            getListaLotesCompra().remove(l);
-            getListaLotesCompraAux().add(l);
+        if(getCantidadCodigosAux1() == getItemSeleccionado().getCantidad() + 1){
+            TipoItemDTO ti = getItemSeleccionado();
+            getListaItemAlmacen().remove(ti);
+            getListaItemAlmacenAux().add(ti);
             
-            for(ItemDTO cod : getListaCodigosCompra()){
-                getListaCodigosCompraAux().add(cod);
+            for(ItemDTO cod : getListaCodigosTranslado()){
+                getListaCodigosTransladoAux().add(cod);
             }
             
             RequestContext context = RequestContext.getCurrentInstance();
-            context.update("formTabLotesCompra");
-            context.update("formTabLotesCompraSelec");
-            context.execute("PF('dialog_add_cantidad_lote').hide();");
+            context.update("formTabItemsDisp");
+            context.update("formTabItemsSelecc");
+            context.execute("PF('dialog_add_cantidad_item_almacen').hide();");
         }
     }
     
     public void eliminarCoditoItemTolista1(ActionEvent actionEvent){
         if(getCantidadCodigosAux1() >= 1){
-            int index = (int)actionEvent.getComponent().getAttributes().get("indexCod");
-            getListaCodigosCompra().remove(index);
+            int index = (int)actionEvent.getComponent().getAttributes().get("indexCod1");
+            getListaCodigosTranslado().remove(index);
 
-            setCantidadCodigosAux(getCantidadCodigosAux() - 1);
+            setCantidadCodigosAux1(getCantidadCodigosAux1() - 1);
 
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formCodigoItemTranslado");
@@ -747,12 +776,6 @@ public class MovimientoMB implements Serializable{
             getListaItemsVentaAux().remove(item);
             getListaItemsVenta().add(item);
             
-            for(ItemDTO i : getListaCodigosCompraAux()){
-                if(i.getIdTipoItem().equals(getLoteSeleccionadoAux().getIdtipoitem())){
-                    getListaCodigosCompraAux().remove(i);
-                }
-            }
-
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabItemsVentasSelec");
             context.update("formTabItemsVenta");
@@ -765,6 +788,17 @@ public class MovimientoMB implements Serializable{
         
             getListaLotesCompraAux().remove(lote);
             getListaLotesCompra().add(lote);
+            
+            List<ItemDTO> listaEliminar = new ArrayList<ItemDTO>();
+            for(ItemDTO i : getListaCodigosCompraAux()){
+                if(i.getIdTipoItem().equals(getLoteSeleccionadoAux().getIdtipoitem())){ 
+                    listaEliminar.add(i);
+                }
+            }
+            
+            for(ItemDTO i : listaEliminar){
+                getListaCodigosCompraAux().remove(i);
+            }
 
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formTabLotesCompraSelec");
@@ -777,6 +811,8 @@ public class MovimientoMB implements Serializable{
         setListaLotesCompra(loteBO.getLotesByCompra(getCompraSeleccionada().getIdcompra()));
         setDisableTablaCompras(true);
         setDisableBTNCambioOCompra(false);
+        getListaCodigosCompra().clear();
+        
         getListaCodigosCompraAux().clear();
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -1102,19 +1138,7 @@ public class MovimientoMB implements Serializable{
         this.listaItemAlmacen = listaItemAlmacen;
     }
 
-    /**
-     * @return the listaItemAux
-     */
-    public List<TipoItemDTO> getListaItemAlmacenAux() {
-        return listaItemAlmacenAux;
-    }
 
-    /**
-     * @param listaItemAux the listaItemAux to set
-     */
-    public void setListaItemAlmacenAux(List<TipoItemDTO> listaItemAlmacenAux) {
-        this.listaItemAlmacenAux = listaItemAlmacenAux;
-    }
 
     /**
      * @return the listaEmpresasProveedoras
@@ -1553,14 +1577,14 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaItemsMovimiento
      */
-    public List<Movimientoitemvista> getListaItemsMovimiento() {
+    public List<ItemDTO> getListaItemsMovimiento() {
         return listaItemsMovimiento;
     }
 
     /**
      * @param listaItemsMovimiento the listaItemsMovimiento to set
      */
-    public void setListaItemsMovimiento(List<Movimientoitemvista> listaItemsMovimiento) {
+    public void setListaItemsMovimiento(List<ItemDTO> listaItemsMovimiento) {
         this.listaItemsMovimiento = listaItemsMovimiento;
     }
 
@@ -2108,6 +2132,20 @@ public class MovimientoMB implements Serializable{
      */
     public void setCantidadCodigosAux1(int cantidadCodigosAux1) {
         this.cantidadCodigosAux1 = cantidadCodigosAux1;
+    }
+
+    /**
+     * @return the listaItemAlmacenAux
+     */
+    public List<TipoItemDTO> getListaItemAlmacenAux() {
+        return listaItemAlmacenAux;
+    }
+
+    /**
+     * @param listaItemAlmacenAux the listaItemAlmacenAux to set
+     */
+    public void setListaItemAlmacenAux(List<TipoItemDTO> listaItemAlmacenAux) {
+        this.listaItemAlmacenAux = listaItemAlmacenAux;
     }
 
 }

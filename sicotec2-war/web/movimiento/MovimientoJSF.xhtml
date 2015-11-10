@@ -192,7 +192,7 @@
                 <h:form id="formTabItemsDisp">
                     <p:dataTable value="#{movimientoMB.listaItemAlmacen}" scrollHeight="1000" rows="2" paginator="true" var="itemsDisp" selectionMode="single" id="tb_items_disponibles"
                                  rowKey="#{itemsDisp.idtipoItem}" rowIndexVar="var">
-                        <p:ajax listener="#{movimientoMB.selectItemToMovimientoSelect}" event="rowSelect"/>
+                        <p:ajax listener="#{movimientoMB.selectItemToMovimientoDispo}" event="rowSelect"/>
                         <p:column headerText="Codigo" style="text-align: center;">
                             <p:outputLabel value="#{itemsDisp.idtipoItem}"/>
                         </p:column>
@@ -212,8 +212,8 @@
             </p:panel>
             <p:panel>
                 <h:form id="formTabItemsSelecc">
-                    <p:dataTable value="#{movimientoMB.listaItemAlmacenAux}" scrollHeight="1000" rows="2" paginator="true" var="itemsSelec" selectionMode="single" id="tb_items_seleccionados"
-                                 rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
+                    <p:dataTable value="#{movimientoMB.listaItemAlmacenAux}" scrollHeight="1000" rows="2" paginator="true" var="itemsSelec" 
+                                 selectionMode="single" id="tb_items_seleccionados" rowKey="#{itemsSelec.idtipoItem}" rowIndexVar="var">
                         <p:ajax listener="#{movimientoMB.selectItemToMovimientoSelect}" event="rowSelect"/>
                         <p:column headerText="Codigo" style="text-align: center;">
                             <p:outputLabel value="#{itemsSelec.idtipoItem}"/>
@@ -239,19 +239,19 @@
         
         <p:dialog header="Items de Movimiento" widgetVar="dialog_ver_items" resizable="false" width="1000"> 
             <h:form id="formTabItemsMovimiento">
-                <p:dataTable value="#{movimientoMB.listaItemsMovimiento}" var="itemsSelec" selectionMode="single" id="tb_ver_items"
-                            selection="#{movimientoMB.itemSeleccionadoAux}" rowKey="#{itemsSelec.iditem}" rowIndexVar="var">
-                   <p:column headerText="Nombre" style="text-align: center;">
-                       <p:outputLabel value="#{itemsSelec.nombre_tItem}"/>
-                   </p:column>
-                   <p:column headerText="Descripcion" style="text-align: center;">
-                       <p:outputLabel value="#{itemsSelec.descripcion_tItem}"/>
+                <p:dataTable value="#{movimientoMB.listaItemsMovimiento}" id="tb_ver_items" var="itemsMov"
+                             rowKey="#{itemsMov.iditem}" rowIndexVar="var">
+                   <p:column headerText="Codigo" style="text-align: center;">
+                       <p:outputLabel value="#{itemsMov.iditem}"/>
                    </p:column>
                     <p:column headerText="Marca" style="text-align: center;">
-                        <p:outputLabel value="#{itemsSelec.nombre_marca}"/>
+                        <p:outputLabel value="#{itemsMov.descMarca}"/>
                    </p:column>
-                    <p:column headerText="Familia" style="text-align: center;">
-                        <p:outputLabel value="#{itemsSelec.nombre_familia}"/>
+                     <p:column headerText="Familia" style="text-align: center;">
+                         <p:outputLabel value="#{itemsMov.descFamilia}"/>
+                   </p:column>
+                     <p:column headerText="Tipo Item" style="text-align: center;">
+                         <p:outputLabel value="#{itemsMov.descTipoItem}"/>
                    </p:column>
                </p:dataTable>
             </h:form>
@@ -305,11 +305,11 @@
                             <p:outputLabel value="#{var+1}"/>
                         </p:column>
                         <p:column headerText="Codigo" style="text-align: center">
-                            <p:outputLabel value="#{codigosCompra.iditem}"/>
+                            <p:outputLabel value="#{codigosTranslado.iditem}"/>
                         </p:column>
                         <p:column headerText="Acción" style="text-align: center">
                             <p:commandButton icon="ui-icon-remove" actionListener="#{movimientoMB.eliminarCoditoItemTolista1}">
-                                <f:attribute name="indexCod" value="#{var}" />
+                                <f:attribute name="indexCod1" value="#{var}" />
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
