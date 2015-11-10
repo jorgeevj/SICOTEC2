@@ -48,7 +48,7 @@ public class PedidoaltipoitemBO {
     }
      public PealtipoitemDTO convertEntityToDTO(Pealtipoitem pealtipoitem){
         PealtipoitemDTO DTO = new PealtipoitemDTO();
-            
+        String estado = null;
             DTO.setAltipoitem(pealtipoitem.getAltipoitem());
             DTO.setCantidad(pealtipoitem.getCantidad());
             DTO.setCostoUni(pealtipoitem.getCostoUni());
@@ -57,8 +57,13 @@ public class PedidoaltipoitemBO {
             DTO.setRequerimientos(pealtipoitem.getIdrequerimientos());
             DTO.setPedido(pealtipoitem.getPedido());
             String idTipoItem = DTO.getAltipoitem().getAltipoitemPK().getIdtipoItem();
-            System.out.println("dto.nombreItems: " + idTipoItem);
             String nombreItems=tipoitemFacade.getTipoItemsNombre(idTipoItem).getNombre();
+            if(pealtipoitem.getEstado() == 0){
+                estado = "CREADA";
+            } else{
+                estado = "EN COMPRA";
+            }
+            DTO.setNombreEstado(estado);
             DTO.setTotal(pealtipoitem.getCostoUni()*pealtipoitem.getCantidad());
             System.out.println("nombre: " + nombreItems);
             DTO.setNombreItems(nombreItems);
@@ -111,4 +116,10 @@ public class PedidoaltipoitemBO {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
      
+      public List<PealtipoitemDTO> getAllItemsByPedido(PealtipoitemDTO dto){
+          Pealtipoitem entidad = this.convertDTOtoEntity(dto);
+          List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAllPealtipoitemsByPedido(entidad);
+          List<PealtipoitemDTO> listaDto = this.convertListEntityToDTO(listaEntidad);
+          return listaDto;
+      }
 }
