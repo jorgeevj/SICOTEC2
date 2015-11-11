@@ -931,7 +931,7 @@ jorgeevj 15.09.15 Creacion.
 
                     <p:commandButton  value="Crear nueva caracteristica" 
                                       actionListener="#{tipoitemMB.registrarNuevaCaracteristica}"  
-                                      update="formRegistrar:panelRegistrarItem"/>
+                                      update="formRegistrar:panel2"/>
                     
                 </h:panelGrid>        
             </h:form>
@@ -994,7 +994,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:messages id="messages5" showDetail="true" autoUpdate="true" closable="true" />
 
                     <p:commandButton  value="Crear Marca" actionListener="#{tipoitemMB.registrarNuevaMarca}" 
-                                      update="formModificarTipoItem:panelModTipoItem" />
+                                      update="formModificarTipoItem:panel3" />
                 </h:panelGrid> 
             </h:form>
         </p:dialog>
@@ -1330,21 +1330,23 @@ jorgeevj 15.09.15 Creacion.
             <!-- INICIO DIALOG DE ALMACENES-->
             <p:dialog header="Registrar Almacen" widgetVar="registroAlmacen" minHeight="40" height="500" width="500" modal="true">
                 <h:form id="formRegistrarAlmacen">
-                    <h:panelGrid columns="2" id="panelRegistrarAlmacen">
+                    <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
-                        <p:inputText id="nomAlmacen" value="" />
+                        <p:inputText id="nomAlmacen" value="#{almacenMB.nombre}" />
                         <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
-                        <p:inputText id="teleAlmacen" value="" />
+                        <p:inputText id="teleAlmacen" value="#{almacenMB.telefono}" />
                         <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
-                        <p:inputText id="dirAlmacen" value="" />
+                        <p:inputText id="dirAlmacen" value="#{almacenMB.direccion}" />
                         <p:outputLabel value="Cod. Departamento:" for="depAlmacen"/>                            
-                        <p:inputText id="depAlmacen" value="" />
+                        <p:inputText id="depAlmacen" value="#{almacenMB.cod_dept}" />
                         <p:outputLabel value="Cod. Provincia:" for="provAlmacen"/>                            
-                        <p:inputText id="provAlmacen" value="" />
+                        <p:inputText id="provAlmacen" value="#{almacenMB.cod_prov}" />
                         <p:outputLabel value="Cod. Distrito:" for="disAlmacen"/>                            
-                        <p:inputText id="disAlmacen" value="" />
+                        <p:inputText id="disAlmacen" value="#{almacenMB.cod_dist}" />
                         
-                    </h:panelGrid>                    
+                    </h:panelGrid>  
+                    
+                    
                 </h:form>                
             </p:dialog>
                 
