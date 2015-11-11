@@ -9,6 +9,7 @@ import dao.AlmacenFacade;
 import dao.DocumentoFacade;
 import dto.AlmacenDTO;
 import entidades.Almacen;
+import entidades.Docalmacen;
 import entidades.Documento;
 import entidades.Pealtipoitem;
 import java.util.ArrayList;
@@ -48,10 +49,45 @@ public class AlmacenBO {
     public List<AlmacenDTO> getAllAlmaces(){
         List<AlmacenDTO> lista = new ArrayList<AlmacenDTO>();
         List<Almacen> listaEntidad= almacenFacade.findAll();
-        lista = convertListEntityToDTO(listaEntidad);
+        lista = convertEntidadToDTO(listaEntidad);
         return lista;
     }
-
+    
+    public Documento getDocumentoXID(Integer e){
+        Documento obj;
+        obj=documentoFacade.find(e);
+                return obj;
+    }
+    
+    public List<AlmacenDTO> buscarAlmacen(AlmacenDTO t){
+        Almacen r=convertDTOtoEntidad(t);
+        List<Almacen> lista=almacenFacade.getAllBusqueda(r);
+        List<AlmacenDTO> lista1=convertEntidadToDTO(lista);
+        return lista1;
+    }
+    
+    public List<AlmacenDTO> convertEntidadToDTO(List<Almacen> lista){
+        List<AlmacenDTO> lista3= new ArrayList<AlmacenDTO>();
+        
+         for(Almacen ite: lista){
+            
+            AlmacenDTO T=new AlmacenDTO();
+            T=convertEntidadtoDTO(ite);
+            lista3.add(T);
+        }
+         return lista3;
+    }
+    public void registrarAlmacen(AlmacenDTO t,List<Docalmacen> c){ 
+        Almacen ti=convertDTOtoEntidad(t);
+        ti.setDocalmacenList(c);
+        almacenFacade.create(ti); 
+    } 
+    
+     public void modificarAlmacen(AlmacenDTO t,List<Docalmacen> c){ 
+        Almacen ti=convertDTOtoEntidad(t);
+        ti.setDocalmacenList(c);
+        almacenFacade.edit(ti); 
+    } 
     public List<AlmacenDTO> convertListEntityToDTO(List<Almacen> listaMovimiento){
         List<AlmacenDTO> listaDTO = new ArrayList<AlmacenDTO>();
         for(Almacen almacen : listaMovimiento){
@@ -77,6 +113,19 @@ public class AlmacenBO {
             
         return e;
     }
+ 
+ public AlmacenDTO convertEntidadtoDTO(Almacen a){
+        AlmacenDTO e=new AlmacenDTO(); 
+          e.setIdalmacen(a.getIdalmacen());
+          e.setDireccion(a.getDireccion());
+          e.setTelefono(a.getTelefono());
+          e.setNombre(a.getNombre());
+          e.setCodDist(a.getCodDist());
+          e.setCodDept(a.getCodDept());
+          e.setCodProv(a.getCodProv());  
+        return e;
+    }
+ 
     public AlmacenDTO convertEntityToDTO(Almacen almacen){
         AlmacenDTO DTO = new AlmacenDTO();
             
