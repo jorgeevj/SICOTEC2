@@ -7,18 +7,22 @@ package controladora.Almacen;
 
 import bo.AlmacenBO;
 import dto.AlmacenDTO;
+import entidades.Docalmacen;
 import entidades.Documento;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
 
 /**
  *
  * @author Faviana
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class almacenMB {
 
     private AlmacenBO almacenBO;
@@ -31,25 +35,93 @@ public class almacenMB {
     private String cod_dist;
     
     private String codigoDocumento;
-    private String serie;
-    private String correlativo;
+    private int serie;
+    private int correlativo;
+    
+    private String documentoSelect;
     
     private List<AlmacenDTO> lista;
     private AlmacenDTO almacenSelect;
     private List<Documento> listaDocumento;
+    private List<Docalmacen> lista2;
     public almacenMB() {
     }
     
+    @PostConstruct
     public void init(){
-        lista = new ArrayList<>();
+        lista=almacenBO.getAllAlmaces();
+        listarDocumento();
         almacenSelect=new AlmacenDTO();
         almacenSelect.setDocumento(new Documento());
     }
+    public void buscarAlmacen(ActionEvent actionEvent){
+        AlmacenDTO lis= new AlmacenDTO();
+        lis.setNombre(nombre);
+        lis.setDireccion(direccion);
+        lis.setCodDept(cod_dept);
+        lis.setCodDist(cod_dist);
+        lis.setCodProv(cod_prov);
+        lista=almacenBO.buscarAlmacen(lis);
+    }
     
+    public void registrarNuevoAlmacen(){
+        AlmacenDTO objAlmacen=new AlmacenDTO();
+        objAlmacen.setNombre(nombre);
+        objAlmacen.setTelefono(telefono);
+        objAlmacen.setDireccion(direccion);
+        objAlmacen.setCodDept(cod_dept);
+        objAlmacen.setCodProv(cod_prov);
+        objAlmacen.setCodDist(cod_dist);
+        almacenBO.registrarAlmacen(objAlmacen, lista2);
+    }
+    
+    public void modificarAlmacen(){
+        AlmacenDTO objAlmacen=new AlmacenDTO();
+        objAlmacen.setNombre(almacenSelect.getNombre());
+        objAlmacen.setTelefono(almacenSelect.getTelefono());
+        objAlmacen.setDireccion(almacenSelect.getDireccion());
+        objAlmacen.setCodDept(almacenSelect.getCodDept());
+        objAlmacen.setCodProv(almacenSelect.getCodProv());
+        objAlmacen.setCodDist(almacenSelect.getCodDist());
+        almacenBO.modificarAlmacen(objAlmacen, lista2);
+    }
+    
+    public void registrarDocAlmacen(){
+        
+    }
+    public String validarRegistroAlmacen(){
+        String msjError="";
+        return msjError;
+    }
+    
+    public String validarModificarAlmacen(){
+        String msjError="";
+        return msjError;
+    }
     public void listarDocumento(){
         listaDocumento=almacenBO.getNombreDocumento();
     }
-
+    
+   /* public List<Documento> listarTablaDocumentos(ActionEvent actionEvent){
+        
+        Documento obj1=new Documento();
+        Docalmacen obj2=new Docalmacen();
+        obj1=almacenBO.getDocumentoXID(Integer.parseInt(documentoSelect));
+        obj2.setSerie(serie);
+        obj2.setCorrelativo(correlativo);
+        lista2.add(obj);
+        
+        for(Caracteristica ite: listaCaracteristicas){
+            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
+            {
+                listaCaracteristicas.remove(ite);
+                break;
+            }
+        }
+        
+       return lista2;
+    }*/
+   //////
     public AlmacenBO getAlmacenBO() {
         return almacenBO;
     }
@@ -122,19 +194,19 @@ public class almacenMB {
         this.codigoDocumento = codigoDocumento;
     }
 
-    public String getSerie() {
+    public int getSerie() {
         return serie;
     }
 
-    public void setSerie(String serie) {
+    public void setSerie(int serie) {
         this.serie = serie;
     }
 
-    public String getCorrelativo() {
+    public int getCorrelativo() {
         return correlativo;
     }
 
-    public void setCorrelativo(String correlativo) {
+    public void setCorrelativo(int correlativo) {
         this.correlativo = correlativo;
     }
 
@@ -160,6 +232,22 @@ public class almacenMB {
 
     public void setListaDocumento(List<Documento> listaDocumento) {
         this.listaDocumento = listaDocumento;
+    }
+
+    public List<Docalmacen> getLista2() {
+        return lista2;
+    }
+
+    public void setLista2(List<Docalmacen> lista2) {
+        this.lista2 = lista2;
+    }
+
+    public String getDocumentoSelect() {
+        return documentoSelect;
+    }
+
+    public void setDocumentoSelect(String documentoSelect) {
+        this.documentoSelect = documentoSelect;
     }
     
 }
