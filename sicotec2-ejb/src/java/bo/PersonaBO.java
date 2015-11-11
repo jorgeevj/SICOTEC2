@@ -52,9 +52,26 @@ public class PersonaBO {
         }
         return listDTO;
     }
-
+    //0 - UPDATE || 1 - INSERT
+    public Persona convertDtoToEntity(PersonaDTO dto, int tipo){
+        Persona entidad = new Persona();
+        if(tipo == 0){
+            entidad.setIdpersona(dto.getIdpersona());
+        }
+        entidad.setApellido(dto.getApellido());
+        entidad.setDni(dto.getDni());
+        entidad.setEmail(dto.getEmail());
+        entidad.setNombre(dto.getNombre());
+        return entidad;
+    }
     public List<PersonaDTO> findPersona(PersonaDTO consultaPersona) {
-      return convertListaPersonaByListDTO(personaFacade.findPersona(consultaPersona));
+        Persona entidad = this.convertDtoToEntity(consultaPersona, 0);
+      return convertListaPersonaByListDTO(personaFacade.findPersona(entidad));
+    }
+    
+    public List<PersonaDTO> buscarPersonasByFiltro(PersonaDTO personaDto){
+        List<PersonaDTO> listaDTO = new ArrayList<PersonaDTO>();
+        return listaDTO;
     }
 
     

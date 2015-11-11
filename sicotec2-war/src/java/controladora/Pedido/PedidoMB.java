@@ -64,6 +64,7 @@ public class PedidoMB{
     private List<EmpresaDTO> ListaEmpresaEdit;
     private List<AlmacenDTO> listaAlmacenesEdit;
     private List<PealtipoitemDTO> listaItemsPedido;
+    private List<PealtipoitemDTO> listaAllItemsPedido;
     
     //AGREGAR
     private PedidoDTO camposAdd;
@@ -96,6 +97,9 @@ public class PedidoMB{
     
     private boolean disableEditar = true;
     private boolean disableVerItems = true;
+    private boolean disableQuitarItemEdit = true;
+    private boolean disableAgregarItemAdd = true;
+    private boolean disableQuitarItemAdd  = true;
     
     @PostConstruct
     public void init(){
@@ -110,6 +114,7 @@ public class PedidoMB{
         campos.setIdpedido(0);
         campos.setIdEmpresa(emp);
         setDisableEditar(true);
+        setDisableVerItems(true);
         camposAdd = new PedidoDTO();
         camposAdd.setIdpedido(0);
         camposAdd.setIdEmpresa(emp);
@@ -131,23 +136,45 @@ public class PedidoMB{
     }
     
     public void agregarTipoItem(ActionEvent actionEvent){
-        setCantidadAdd("");
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formCantidadItem");
-        context.execute("PF('addCantidad').show();");
+        if(getObjTipoItem() == null){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "No ha seleccionado ningun item");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            setCantidadAdd("");
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("formCantidadItem");
+            context.execute("PF('addCantidad').show();");
+        }
     }
     
     public void quitarTipoItem(ActionEvent actionEvent){
-        getListaItemsDisponibles().add(getObjTipoItemQuitar());
-        getListaItemsSeleccionado().remove(getObjTipoItemQuitar());
-        RequestContext context = RequestContext.getCurrentInstance(); 
-        context.update("formAddItems");
-        context.update("formTbSelec");
+        if(getObjTipoItemQuitar() != null){
+            getListaItemsDisponibles().add(getObjTipoItemQuitar());
+            getListaItemsSeleccionado().remove(getObjTipoItemQuitar());
+            if(getListaItemsDisponibles().size() != 0){
+                setDisableAgregarItemAdd(false);
+            } else{
+                setDisableAgregarItemAdd(true);
+            }
+            if(getListaItemsSeleccionado().size() != 0){
+                setDisableQuitarItemAdd(false);
+            } else{
+                setDisableQuitarItemAdd(true);
+            }
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("formAddItems");
+            context.update("formTbSelec");
+            setObjTipoItemQuitar(new TipoItemDTO());
+        } else{
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "No ha seleccionado ningun item");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
     }
     
     public void abrirModalAddPedido(ActionEvent ActionEvent){
         limpiarRefrescar();
         setDisableEditar(true);
+        setDisableVerItems(true);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formBotones");
         this.crear(null);
@@ -240,9 +267,22 @@ public class PedidoMB{
                 getListaItemsDisponibles().remove(getObjTipoItem());
                 getObjTipoItem().setCantidad(Integer.parseInt(getCantidadAdd()));
                 getListaItemsSeleccionado().add(getObjTipoItem()); 
+                if(getListaItemsDisponibles().size() != 0){
+                    setDisableAgregarItemAdd(false);
+                } else{
+                    setDisableAgregarItemAdd(true);
+                }
+
+                if(getListaItemsSeleccionado().size() != 0){
+                    setDisableQuitarItemAdd(false);
+                } else{
+                    setDisableQuitarItemAdd(true);
+                }
+                setObjTipoItem(new TipoItemDTO());
                 context.update("formAddItems");
                 context.update("formTbSelec");
-                context.execute("PF('addCantidad').hide();");
+                context.execute("PF('addCantidad').hide();");            
+                
             }
         }
         
@@ -254,6 +294,11 @@ public class PedidoMB{
             entidadPedido.setIdpedido(getObjPedidoEditar().getIdpedido());
         dto.setPedido(entidadPedido);
         setListaItemsPedido(pedidoaltipoitemBO.getItemsForPedido(dto));
+        if(getListaItemsPedido().size() != 0){
+            setDisableQuitarItemEdit(false);
+        } else{
+            setDisableQuitarItemEdit(true);
+        }
         setListaPealtipoitemDelete(new ArrayList<PealtipoitemDTO>());
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formItemsPedido");
@@ -270,6 +315,7 @@ public class PedidoMB{
     
     public void selectPedidoEditar(SelectEvent event) {
         setDisableEditar(false);
+        setDisableVerItems(false);
         setObjPedidoEditar((PedidoDTO)event.getObject());
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.update("formBotones");
@@ -299,7 +345,13 @@ public class PedidoMB{
 
      public void limpiarRefrescar(){
         setListaItemsDisponibles(tipoItemBO.getAllTipoItem());
+        if(getListaItemsDisponibles().size() != 0 ){
+            setDisableAgregarItemAdd(false);
+        } else{
+            setDisableAgregarItemAdd(true);
+        }
         setListaItemsSeleccionado(new ArrayList<TipoItemDTO>());
+        setDisableQuitarItemAdd(true);
         setSerieAdd("");
         setCorrelativoAdd("");
         setAlmacenAdd(0);
@@ -412,10 +464,25 @@ public class PedidoMB{
     public void quitarPealTipoItem(ActionEvent actionEvent){
         getListaPealtipoitemDelete().add(getObjPealTipoEdit());
         getListaItemsPedido().remove(getObjPealTipoEdit());
-        
+        if(getListaItemsPedido().size() != 0){
+            setDisableQuitarItemEdit(false);
+        } else{
+            setDisableQuitarItemEdit(true);
+        }
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formItemsPedido");
     }  
+    
+    public void verItemsByPedido(ActionEvent actionEvent){
+        PealtipoitemDTO dto = new PealtipoitemDTO();
+            Pedido entidadPedido = new Pedido();
+            entidadPedido.setIdpedido(getObjPedidoEditar().getIdpedido());
+        dto.setPedido(entidadPedido);
+        setListaAllItemsPedido(pedidoaltipoitemBO.getAllItemsByPedido(dto));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('verItemsPeadido').show();");
+        context.update("formTbAllItems");
+    }
     
     private static boolean isNumeric(String cadena){
 	try {
@@ -732,5 +799,36 @@ public class PedidoMB{
         this.listaPealtipoitemDelete = listaPealtipoitemDelete;
     }
 
+    public List<PealtipoitemDTO> getListaAllItemsPedido() {
+        return listaAllItemsPedido;
+    }
+
+    public void setListaAllItemsPedido(List<PealtipoitemDTO> listaAllItemsPedido) {
+        this.listaAllItemsPedido = listaAllItemsPedido;
+    }    
+
+    public boolean isDisableQuitarItemEdit() {
+        return disableQuitarItemEdit;
+    }
+
+    public void setDisableQuitarItemEdit(boolean disableQuitarItemEdit) {
+        this.disableQuitarItemEdit = disableQuitarItemEdit;
+    }
+
+    public boolean isDisableAgregarItemAdd() {
+        return disableAgregarItemAdd;
+    }
+
+    public void setDisableAgregarItemAdd(boolean disableAgregarItemAdd) {
+        this.disableAgregarItemAdd = disableAgregarItemAdd;
+    }
+
+    public boolean isDisableQuitarItemAdd() {
+        return disableQuitarItemAdd;
+    }
+
+    public void setDisableQuitarItemAdd(boolean disableQuitarItemAdd) {
+        this.disableQuitarItemAdd = disableQuitarItemAdd;
+    }
     
 }

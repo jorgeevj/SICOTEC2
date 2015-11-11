@@ -31,6 +31,7 @@
             <h:form id="formBotones">
                 <p:commandButton value="Agregar" actionListener="#{pedidoMB.abrirModalAddPedido}" id="btnAgregar" title="Agregar" />
                 <p:commandButton value="Editar" actionListener="#{pedidoMB.abirModalEditPedido}" id="btnEditar" title="Editar"  disabled="#{pedidoMB.disableEditar}"/>
+                <p:commandButton value="Ver Items" actionListener="#{pedidoMB.verItemsByPedido}" id="btnVerItems" title="Ver Items" disabled="#{pedidoMB.disableVerItems}"/>
             </h:form>   
             <h:form id="tabPedidosFrom">
                 <h:panelGrid > 

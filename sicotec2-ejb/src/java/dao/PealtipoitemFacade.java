@@ -169,5 +169,17 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
         }
         return entidadPti;
     }
-
+    
+    public List<Pealtipoitem> getAllPealtipoitemsByPedido(Pealtipoitem entidad){
+        List<Pealtipoitem> listaEntidad = new ArrayList<Pealtipoitem>();
+        try{
+            String jpa = "  SELECT p " +
+                         "    FROM Pealtipoitem p " +
+                         "   WHERE p.pealtipoitemPK.idpedido = " + entidad.getPedido().getIdpedido();
+            listaEntidad = em.createQuery(jpa, Pealtipoitem.class).getResultList();
+        } catch(Exception e){
+            listaEntidad = new ArrayList<Pealtipoitem>();
+        }
+        return listaEntidad;
+    }
 }

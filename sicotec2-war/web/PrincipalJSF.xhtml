@@ -688,6 +688,7 @@ jorgeevj 15.09.15 Creacion.
             <p:dialog header="Agregar Items" widgetVar="addItemsPedidosModal" modal="true" rendered="true" height="500" width="700"> 
                 <p:outputLabel value="Items Disponibles "></p:outputLabel>
                 <h:form id="formAddItems">
+                    <p:growl showDetail="true" sticky="true" id="msjAgregar"></p:growl>
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.listaItemsDisponibles}" var="tItemsDisp" 
                                  selectionMode="single" selection="#{pedidoMB.objTipoItem}" rowKey="#{tItemsDisp.nombre}">
                         <p:ajax event="rowSelect" listener="#{pedidoMB.selectTipoItemAdd}" /> 
@@ -701,10 +702,11 @@ jorgeevj 15.09.15 Creacion.
                             <p:outputLabel value="#{tItemsDisp.precioLista}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Agregar Item" actionListener="#{pedidoMB.agregarTipoItem}"/>
+                    <p:commandButton value="Agregar Item" actionListener="#{pedidoMB.agregarTipoItem}" disabled="#{pedidoMB.disableAgregarItemAdd}" update="msjAgregar"/>
                 </h:form>
                 <p:outputLabel value="Items Seleccionados "></p:outputLabel>
                 <h:form id="formTbSelec">
+                    <p:growl showDetail="true" sticky="true" id="msjQuitar"></p:growl>
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsSelected" value="#{pedidoMB.listaItemsSeleccionado}" var="tItemsSelec" 
                                  selectionMode="single" selection="#{pedidoMB.objTipoItemQuitar}" rowKey="#{tItemsSelec.nombre}">
                         <p:ajax event="rowSelect" listener="#{pedidoMB.selectTipoItemQuitar}"/> 
@@ -721,7 +723,7 @@ jorgeevj 15.09.15 Creacion.
                             <p:outputLabel value="#{tItemsSelec.cantidad}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}"/>
+                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}" disabled="#{pedidoMB.disableQuitarItemAdd}" update="msjQuitar"/>
                 </h:form>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('addItemsPedidosModal').hide();"/>
@@ -729,11 +731,12 @@ jorgeevj 15.09.15 Creacion.
 
             <p:dialog header="Agregar Cantidad" widgetVar="addCantidad" modal="true" resizable="false">
                 <h:form id="formCantidadItem">
+                    <p:growl showDetail="true" sticky="true" id="msnCantidad"/>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Cantidad"></p:outputLabel>
                         <p:inputText value="#{pedidoMB.cantidadAdd}"/>
                     </h:panelGrid>
-                    <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}"/>
+                    <p:commandButton value="Aceptar" actionListener="#{pedidoMB.agregarCantidad}" update="msnCantidad"/>
                 </h:form>
             </p:dialog>
 
@@ -794,12 +797,36 @@ jorgeevj 15.09.15 Creacion.
                             </p:cellEditor>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarPealTipoItem}"/>
+                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarPealTipoItem}" disabled="#{pedidoMB.disableQuitarItemEdit}"/>
                 </h:form>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('verItemsEdit').hide();"/>
-
             </p:dialog>
+        
+            <p:dialog header="Ver Items" widgetVar="verItemsPeadido" modal="true" rendered="true" height="500" width="700"> 
+                <p:outputLabel value="Items del pedido"></p:outputLabel>
+                <h:form id="formTbAllItems">
+                    <p:dataTable tableStyleClass="table table-hover"  id="tabAllItemsPedido" value="#{pedidoMB.listaAllItemsPedido}" var="tItemsPedido" 
+                                 editable="true" editMode="cell"
+                                 selectionMode="single" selection="#{pedidoMB.objPealTipoEdit}" rowKey="#{tItemsPedido.cantidad}">
+                        <p:column headerText="Item" style="text-align: center">
+                            <p:outputLabel value="#{tItemsPedido.nombreItems}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                            <p:outputLabel value="#{tItemsPedido.cantidad}"/>
+                        </p:column>
+                        <p:column headerText="Costo Unitario" style="text-align: center">
+                            <p:outputLabel value="#{tItemsPedido.costoUni}"/>
+                        </p:column>
+                        <p:column headerText="Estado" style="text-align: center">
+                            <p:outputLabel value="#{tItemsPedido.nombreEstado}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <br/><br/><br/>
+                <p:commandButton value="Aceptar" onclick="PF('verItemsPeadido').hide();"/>
+            </p:dialog>
+        
             <!-- FIN DIALOG DE PEDIDOS-->
 
 
@@ -1422,6 +1449,23 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             <!-- FIN DIALOG DE USUARIOS-->
+            
+            <!-- DIALOG DE PERSONAS -->
+                <p:dialog header="Agregar Persona" widgetVar="addPersona" modal="true" resizable="false">
+                <h:form id="formAddPersona">
+                    <p:growl showDetail="true" sticky="true" id="msnEditar"/>
+                    <h:panelGrid columns="2">
+                        
+                        <p:outputLabel value="Nombre "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.nombreAdd}" disabled="false"/>
+                        <p:outputLabel value="Clave "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.apellidoAdd}" disabled="f"/>
+                        
+                    </h:panelGrid>
+                    <p:commandButton value="Editar" update="msnEditar"/>
+                </h:form>
+            </p:dialog>
+            <!--FIN DIALOG DE PERSONAS-->
 
         </h:body>
 

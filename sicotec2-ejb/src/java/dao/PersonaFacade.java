@@ -30,7 +30,7 @@ public class PersonaFacade extends AbstractFacade<Persona> {
         super(Persona.class);
     }
 
-    public List<Persona> findPersona(PersonaDTO p) {
+    public List<Persona> findPersona(Persona p) {
     String jpa="Select p from Persona p where 1=1 ";
     if(p.getNombre()!=null && !p.getNombre().equals("")){
     jpa+="and p.nombre like '%"+p.getNombre()+"%'";

@@ -7,35 +7,28 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
-        #{cotizacionMB.init()}
+        
         <p:panel id="pCotizacion" header="Gestion de Personas" footer="Personas Details" style="margin-bottom:20px">
             <h:form id="formPersonas">
-
                 <p:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="Nombre:" for="itp0" />
-                    <p:inputText id="itp0" value=""/>
+                    <p:inputText id="itp0" value="#{personasMB.nombreBuscar}"/>
                     <p:outputLabel value="Apellido:" for="itp1" />
-                    <p:inputText id="itp1" value=""/>
+                    <p:inputText id="itp1" value="#{personasMB.apellidoBuscar}"/>
                     <p:outputLabel value="DNI:" for="itp2" />
-                    <p:inputText id="itp2" value=""/>
-                   
-                   
+                    <p:inputText id="itp2" value="#{personasMB.dniBuscar}"/>
                 </p:panelGrid>
                 <p:panelGrid columns="4" styleClass="hideborder">
-                    <p:commandButton value="Limpiar" id="btnLimpiarP"  title="Limpiar" 
-                                      />
-                    <p:commandButton value="Consultar" id="btnConsultarP"  title="Consultar" 
-                                     />
-                    <p:commandButton value="Crear"  id="btnCrearP" title="Crear"  />
+                    <p:commandButton value="Limpiar" id="btnLimpiarP"  actionListener="#{personasMB.actionLimpiar}"/>
+                    <p:commandButton value="Consultar" id="btnConsultarP"  actionListener="#{personasMB.buscarPersonas}"/>
+                    <p:commandButton value="Crear"  id="btnCrearP" actionListener="#{personasMB.abrirModalAddPersona}"/>
                     <p:commandButton value="Editar"  id="btnEditarP" title="Editar"/>         
                 </p:panelGrid>
-
-                
-                <p:dataTable id="tabPersonas" var="per" value="#{personasMB.lp}" 
-                             selectionMode="single" rowKey="#{per.idpersona}" selection="#{personasMB.personaSelec}">
-                        
-
-                        <p:column headerText="Nombre" width="40">
+            </h:form>
+            <h:form id="formTabPersonas">
+                <p:dataTable id="tabPersonas" var="per" value="#{personasMB.listaAllPersonas}" 
+                             selectionMode="single" rowKey="#{per.idpersona}">
+                        <p:column headerText="Nombre">
                             <h:outputText value="#{per.nombre}" />
                         </p:column>
                         <p:column headerText="Apellido">
@@ -44,10 +37,10 @@
                         <p:column headerText="DNI">
                             <h:outputText value="#{per.dni}" />
                         </p:column>
-                       
-                        
+                        <p:column headerText="Correo">
+                            <h:outputText value="#{per.email}" />
+                        </p:column>      
                     </p:dataTable>
-                
             </h:form>
 
         </p:panel> 

@@ -29,6 +29,7 @@ public class PealtipoitemDTO {
     //extras
      private Integer cantidadItem;
      private Double precioItem;
+     private String nombreEstado;
      private Double total;
      
      
@@ -121,6 +122,14 @@ public class PealtipoitemDTO {
         this.requerimientos = requerimientos;
     }
 
+    public String getNombreEstado() {
+        return nombreEstado;
+    }
+
+    public void setNombreEstado(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
+    }
+
     public Double getTotal() {
         return total;
     }
@@ -128,6 +137,4 @@ public class PealtipoitemDTO {
     public void setTotal(Double total) {
         this.total = total;
     }
-    
-    
 }
