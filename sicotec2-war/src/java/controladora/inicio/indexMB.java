@@ -83,7 +83,7 @@ public class indexMB {
         p=new Permiso();
         p.setIdpermiso(9);
         p.setNombre("Almacen");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/empresa/AlmacenJSF.xhtml");
+        p.setUrl("http://localhost:8080/sicotec2-war/faces/almacen/AlmacenJSF.xhtml");
         permisos.add(p);
         
    return permisos;
