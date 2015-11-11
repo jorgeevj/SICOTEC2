@@ -8,6 +8,7 @@ package dao;
 import dto.AlmacenDTO;
 import entidades.Almacen;
 import entidades.Pealtipoitem;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -64,5 +65,30 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         return em.createQuery(jpa,Almacen.class).getResultList();
         
     }
+    
+    public List<Almacen> getAllBusqueda(Almacen e){
+        List<Almacen> lista= new ArrayList<Almacen>();
+        String sql="SELECT t FROM Almacen t where 1=1 ";
+            if(e.getNombre()!=null && !e.getNombre().equals("")){
+            sql+="and t.nombre like '%"+e.getNombre()+"%' ";
+            }             
+            if(e.getDireccion()!=null && !e.getDireccion().equals("")){
+            sql+="and t.direccion like '%"+e.getDireccion()+"%' ";
+            }   
+            if(e.getCodDept()!=null && !e.getCodDept().equals("")){
+            sql+="and t.codDept like '%"+e.getCodDept()+"%' ";
+            } 
+            if(e.getCodProv()!=null && !e.getCodProv().equals("")){
+            sql+="and t.codProv like '%"+e.getCodProv()+"%' ";
+            } 
+            if(e.getCodDist()!=null && !e.getCodDist().equals("")){
+            sql+="and t.codDist like '%"+e.getCodDist()+"%' ";
+            } 
+            
+        Query q=em.createQuery(sql,Almacen.class);
+        lista=q.getResultList();       
+        return lista;     
+           
+    } 
 }
 
