@@ -227,7 +227,7 @@ public class CompraMB {
 //           dto.setSerie(getSerieNuevo());
            
              //Insert Update PealTipoitem
-           List<PealtipoitemDTO> listAux = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), 0);
+        //   List<PealtipoitemDTO> listAux = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), 0);
            
            
            
@@ -301,21 +301,27 @@ public class CompraMB {
       }
        public void agregarTipoItems(ActionEvent actionEvent){
            if(!getListPealItem().isEmpty()){
-              getListPealItem().remove(getObjPealTipoItem());
-              getListaPealTipoItemSelct().add(getObjPealTipoItem());
+               if(getObjPealTipoItem()!=null){
+                   getListPealItem().remove(getObjPealTipoItem());
+                   getListaPealTipoItemSelct().add(getObjPealTipoItem());
 
               RequestContext context = RequestContext.getCurrentInstance();
               context.update("formAddPedidoss");
-         }
+              setObjPealTipoItem(new PealtipoitemDTO());
+               }
+           }            
       }
       public void quitarPedido(ActionEvent actionEvent){
           if(!getListaPealTipoItemSelct().isEmpty()){
-              getListPealItem().add(getObjPealTipoItemQuitar());
-              getListaPealTipoItemSelct().remove(getObjPealTipoItemQuitar());
-              
-              RequestContext context = RequestContext.getCurrentInstance();
-              context.update("formAddPedidoss");
+              if(getObjPealTipoItemQuitar()!=null){
+                  getListPealItem().add(getObjPealTipoItemQuitar());
+                  getListaPealTipoItemSelct().remove(getObjPealTipoItemQuitar());
+
+                  RequestContext context = RequestContext.getCurrentInstance();
+                  context.update("formAddPedidoss");
+                  setObjPealTipoItemQuitar(new PealtipoitemDTO());
           }  
+        }
       }
       public void editCompra(ActionEvent actionEvent){
           CompraDTO dto=new CompraDTO();
