@@ -9,11 +9,10 @@ import bo.AlmacenBO;
 import dto.AlmacenDTO;
 import entidades.Docalmacen;
 import entidades.Documento;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 
@@ -24,7 +23,7 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @SessionScoped
 public class almacenMB {
-
+    @EJB//falto esta notacion
     private AlmacenBO almacenBO;
     private String idAlmancen;
     private String nombre;
@@ -122,14 +121,7 @@ public class almacenMB {
        return lista2;
     }*/
    //////
-    public AlmacenBO getAlmacenBO() {
-        return almacenBO;
-    }
-
-    public void setAlmacenBO(AlmacenBO almacenBO) {
-        this.almacenBO = almacenBO;
-    }
-
+   
     public String getIdAlmancen() {
         return idAlmancen;
     }

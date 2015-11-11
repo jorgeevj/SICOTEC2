@@ -106,7 +106,9 @@ public class EmpresaMB {
     }
 
     public void btnEditEmp(ActionEvent actionEvent) {
-
+RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlEditEmpresa').show();");
+        context.update("formRegEmp");
     }
 
     //REGISTRAR

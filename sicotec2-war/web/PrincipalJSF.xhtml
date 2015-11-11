@@ -1254,6 +1254,105 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
+            <p:dialog header="EDITAR EMPRESA" widgetVar="dlEditEmpresa" modal="true" rendered="true" width="720" height="480">
+                <h:form id="formEditEmp">
+                    <p:panelGrid columns="4" styleClass="hideborder">
+                        <p:outputLabel value="Nombre: " for="itEmp11" />
+                        <p:inputText id="itEmp11" value="#{empresaMB.consultaEmpresaDTO.nombre}" />
+                        <p:outputLabel value="RUC: " for="itEmp22"/>
+                        <p:inputText id="itEmp22" value="#{empresaMB.consultaEmpresaDTO.ruc}" />
+                        <p:outputLabel value="Email: " for="itEmp33"/>
+                        <p:inputText id="itEmp33" value="#{empresaMB.consultaEmpresaDTO.email}" />
+                        
+                    </p:panelGrid>
+                    <p:selectManyCheckbox id="chkTipoEmp1" value="#{empresaMB.selectTipoEmp}" >
+                        <f:selectItems value="#{empresaMB.tipoEmp}" 
+                                       var="ti" itemLabel="#{ti.nombre}" itemValue="#{ti.idtipo}" />
+                    </p:selectManyCheckbox>
+                    <p:messages id="messagesEditEmp" showDetail="true" closable="true" />
+                    <p:commandButton id="btnAgreReprEdit" value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{empresaMB.btnAgreReprReg}" />
+                    <p:commandButton id="btnQuitReprEdit" value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{empresaMB.btnQuitReprReg}" />
+                   <p:dataTable id="tabRepresEmp1" var="ep" value="#{empresaMB.listaEmpPersona}"
+                                selectionMode="single" rowKey="#{ep.persona.idpersona}" 
+                                selection="#{empresaMB.empPersonaSelectDTO}" emptyMessage="Agrege representantes"
+                         scrollable="true" scrollHeight="75">
+                <f:facet name="header">
+                    Lista de Representantes
+                </f:facet>
+                <p:column headerText="Nombre" >
+                    <h:outputText value="#{ep.persona.nombre}" />
+                </p:column>
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{ep.persona.apellido}" />
+                </p:column>
+                <p:column headerText="DNI">
+                    <h:outputText value="#{ep.persona.dni}" />
+                </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{ep.persona.email}" />
+                </p:column>
+            </p:dataTable>
+                    <p:commandButton id="btnAgreUbiEdit" value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{empresaMB.btnAgreUbiReg}" />
+                    <p:commandButton id="btnQuitUbiEdit" value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{empresaMB.btnQuitUbiReg}" />
+                    <p:dataTable id="tabUbiEmp1" var="ub" value="#{empresaMB.listaUbicEmp}"
+                                 selectionMode="single" rowKey="#{ub.idubicacion}" 
+                                 selection="#{empresaMB.ubicEmpSelectDTO}" emptyMessage="Agrege Ubicaciones"
+                         scrollable="true" scrollHeight="75">
+                <f:facet name="header">
+                    Lista de Ubicaciones
+                </f:facet>
+                <p:column headerText="Direccion" >
+                    <h:outputText value="#{ub.nombre}" />
+                </p:column>
+                <p:column headerText="Numero">
+                    <h:outputText value="#{ub.numero}" />
+                </p:column>
+                <p:column headerText="Distrito">
+                    <h:outputText value="#{ub.dist}" />
+                </p:column>
+                <p:column headerText="Provincia">
+                    <h:outputText value="#{ub.prov}" />
+                </p:column>
+                <p:column headerText="Departamento">
+                    <h:outputText value="#{ub.dept}" />
+                </p:column>
+            </p:dataTable>
+                    
+                     <p:commandButton id="btnAgreTelEdit" value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{empresaMB.btnAgreTelReg}" />
+                    <p:commandButton id="btnQuitTelEdit" value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{empresaMB.btnQuitTelReg}" />
+                    <p:dataTable id="tabTelEmp1" var="tel" value="#{empresaMB.listaTelEmp}"
+                                 selectionMode="single" rowKey="#{tel.idtelefono}" 
+                                 selection="#{empresaMB.telEmpSelectDTO}" emptyMessage="Agrege Telefonos"
+                         scrollable="true" scrollHeight="75">
+                <f:facet name="header">
+                    Lista de Telefonos
+                </f:facet>
+                <p:column headerText="Operador" >
+                    <h:outputText value="#{tel.operador}" />
+                </p:column>
+                <p:column headerText="Numero">
+                    <h:outputText value="#{tel.numero}" />
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{tel.tipo}" />
+                </p:column>
+            </p:dataTable>
+                    
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                    <p:commandButton id="btnGuardarEmpEdit" value="Aceptar" 
+                                     actionListener="#{empresaMB.btnGuardarEmpresa}" />
+                    <p:commandButton id="btnLimpiarEditEmp" value="Limpiar" 
+                                     actionListener="#{empresaMB.btnLimpiarRegEmp}"/>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            
             <p:dialog header="Seleccionar Representantes" widgetVar="dlSelectPersona" modal="true" rendered="true" >
                 <h:form id="formSelectPer">
                     
