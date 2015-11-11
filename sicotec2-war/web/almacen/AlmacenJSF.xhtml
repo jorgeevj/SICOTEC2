@@ -1,33 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="../PrincipalJSF.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../PrincipalJSF.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
-    
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
     <ui:define name="body">
-        <p:panel id="panel1" header="Gestion de Almacenes" style="margin-bottom:20px">
-            <h:form id="form1">
+        <p:panel id="panelA" header="Gestion de Almacenes" style="margin-bottom:20px">
+            <h:form id="formA">
                 <h:panelGrid columns="6">
-                    <p:outputLabel for="uno" value="Nombre"/>
-                    <p:inputText id="uno" value="#{almacenMB.nombre}" style="width:50%"/> 
-                    <p:outputLabel for="dos" value="Direccion"/>
-                    <p:inputText id="dos" value="#{almacenMB.direccion}" style="width:50%"/> 
-                    <p:outputLabel for="tres" value="Cod. Dpto"/>
-                    <p:inputText id="tres" value="#{almacenMB.cod_dept}" style="width:50%"/> 
-                    <p:outputLabel for="cuatro" value="Cod. Provincia"/>
-                    <p:inputText id="cuatro" value="#{almacenMB.cod_prov}" style="width:50%"/> 
-                    <p:outputLabel for="cinco" value="Cod. Distrito"/>
-                    <p:inputText id="cinco" value="#{almacenMB.cod_dist}" style="width:50%"/> 
+                    <p:outputLabel for="nomAlm" value="Nombre"/>
+                    <p:inputText id="nomAlm" value="#{almacenMB.nombre}" style="width:50%"/> 
+                    <p:outputLabel for="dirAlm" value="Direccion"/>
+                    <p:inputText id="dirAlm" value="#{almacenMB.direccion}" style="width:50%"/> 
+                    <p:outputLabel for="dtoAlm" value="Cod. Dpto"/>
+                    <p:inputText id="dtoAlm" value="#{almacenMB.cod_dept}" style="width:50%"/> 
+                    <p:outputLabel for="provAlm" value="Cod. Provincia"/>
+                    <p:inputText id="provAlm" value="#{almacenMB.cod_prov}" style="width:50%"/> 
+                    <p:outputLabel for="disAlm" value="Cod. Distrito"/>
+                    <p:inputText id="disAlm" value="#{almacenMB.cod_dist}" style="width:50%"/> 
                     
                 </h:panelGrid>
                 <p:commandButton value="Buscar"  />                
                 <p:commandButton value="Registrar"  />            
                 <p:commandButton value="Modificar"  id="btnmodificar"  />
                 
-                <p:dataTable id="tabla" value="#{almacenMB.lista}" var="titem" emptyMessage="No se encontraron Almacenes" >
+                <p:dataTable id="tablaAlmacenes" value="#{almacenMB.lista}" var="titem" emptyMessage="No se encontraron Almacenes" >
                 
                 
                 
@@ -58,8 +56,5 @@
             
         </p:panel>
     </ui:define>
-                    
+
 </ui:composition>
-    
-
-
