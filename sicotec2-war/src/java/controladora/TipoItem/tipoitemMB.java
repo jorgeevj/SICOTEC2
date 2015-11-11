@@ -152,10 +152,10 @@ public class tipoitemMB {
     public String validarRegistro(){
         String msjError="";
         
-        if(getCodigoItem().equals("") || getCodigoItem()==null)
-            msjError="Ingrese Codigo del item";
         if(buscarPorIDItem())
             msjError="Codigo del item ya existe";
+        if(getCodigoItem().equals("") || getCodigoItem()==null)
+            msjError="Ingrese Codigo del item";        
         if(getNombre().equals("") || getNombre()==null)
             msjError="Ingrese nombre del item";        
         else if(getPrecio()==null)
@@ -240,7 +240,7 @@ public class tipoitemMB {
     
     public boolean buscarPorIDItem(){
         TipoItemDTO lis=new TipoItemDTO();
-        lis.setIdtipoItem(codigoItem);
+        lis.setIdtipoItem(codigoItem.trim());
         boolean encontro=tipoItemBO.buscarTipoItemPorID(lis);
         return encontro;
     }
