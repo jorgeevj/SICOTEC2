@@ -129,7 +129,9 @@ public class UsuarioMB implements Serializable{
     }
     public void addNuevoUsuario(ActionEvent actionEvent){
           UsuarioDTO dto=new UsuarioDTO();
-           dto.setIdPersona(getIdpersonaNuevo());
+          Persona entidadPers = new Persona();
+          entidadPers.setIdpersona(getIdpersonaNuevo());
+           dto.setIdpersona(entidadPers);
            dto.setIdRol(getIdrolNuevo());
            dto.setClave(getClaveNuevo());
            dto.setNombre(getNombreNuevo());
