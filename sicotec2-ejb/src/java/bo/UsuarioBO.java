@@ -86,13 +86,13 @@ public class UsuarioBO {
             entidad.setNombre(dto.getNombre());
             entidad.setClave(dto.getClave());
             
-            Persona entidadPersona = new Persona();
-            entidadPersona.setIdpersona(dto.getIdPersona());
-            entidad.setIdpersona(entidadPersona);
+//            Persona entidadPersona = new Persona();
+//            entidadPersona.setIdpersona(dto.getIdPersona());
+            entidad.setIdpersona(dto.getIdpersona());
             
-            Rol entidadRol = new Rol();
-            entidadRol.setIdrol(dto.getIdRol());
-            entidad.setIdrol(entidadRol);
+//            Rol entidadRol = new Rol();
+//            entidadRol.setIdrol(dto.getIdRol());
+            entidad.setIdrol(dto.getIdrol());
             
         return entidad;
     }
