@@ -132,7 +132,12 @@ public class UsuarioMB implements Serializable{
           Persona entidadPers = new Persona();
           entidadPers.setIdpersona(getIdpersonaNuevo());
            dto.setIdpersona(entidadPers);
-           dto.setIdRol(getIdrolNuevo());
+           
+           Rol entidadRol=new Rol();
+           entidadRol.setIdrol(getIdrolNuevo());
+           dto.setIdrol(entidadRol);
+           
+           //dto.setIdRol(getIdrolNuevo());
            dto.setClave(getClaveNuevo());
            dto.setNombre(getNombreNuevo());
            dto.setFecha(new Date());

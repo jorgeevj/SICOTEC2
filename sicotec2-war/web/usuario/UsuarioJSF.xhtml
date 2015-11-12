@@ -10,7 +10,7 @@
         #{usuarioMB.init()}
         <p:panel id="pUsuario" header="Gestion de Usuarios" style="margin-bottom:30px">
             <h:form id="formUsuario">
-                <h:panelGrid columns="4" styleClass="hideborder">
+                <h:panelGrid columns="6" styleClass="hideborder">
                     <p:outputLabel value="Nombre Usuario" for="it1" />
                     <p:inputText id="it1" value="#{usuarioMB.nombreUsuarioBusqueda}"/>
                     <p:outputLabel value="Nombre" for="it2" />
@@ -30,7 +30,7 @@
                    </p:selectOneMenu>
                 </h:panelGrid>
                 
-             
+                <br></br>
                 <p:commandButton value="Limpiar" id="btnLimpiarU"  title="Limpiar" actionListener="#{usuarioMB.limpiar}" update="formUsuario" />
                 <p:commandButton value="Consultar" id="btnConsultarU"  title="Consultar" actionListener="#{usuarioMB.consultar}" update="tabUsuario"/>
                 <p:commandButton value="Crear"  id="btnCrearU" actionListener="#{usuarioMB.crear}"  update="formAddUsuario" title="Crear"  />
