@@ -81,6 +81,8 @@ public class almacenMB {
     public void editarAlmacen(){
         RequestContext context = RequestContext.getCurrentInstance();    
         context.execute("PF('editarAlmacen').show();");
+        listProvincia=ubigeoBO.getAllProvincias(almacenSelect.getCodDept());
+        listDistritos=ubigeoBO.getAllDistritos(almacenSelect.getCodDept(), almacenSelect.getCodProv());
     }
     
     public void limpiar(){
