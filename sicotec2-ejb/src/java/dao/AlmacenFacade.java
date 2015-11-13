@@ -90,5 +90,20 @@ public class AlmacenFacade extends AbstractFacade<Almacen> {
         return lista;     
            
     } 
+    
+    public Almacen getIdAlmacen(Almacen e){
+        em.persist(e);
+        em.flush();
+        return e;
+    }
+    
+    public List<Almacen> getBusquedaDuplicadosNombre(Almacen e){
+        List<Almacen> lista= new ArrayList<Almacen>();
+        String sql="SELECT t FROM Almacen t where t.nombre="+e.getNombre();
+        Query q=em.createQuery(sql,Almacen.class);
+        lista=q.getResultList();       
+        return lista;     
+           
+    }
 }
 
