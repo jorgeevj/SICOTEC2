@@ -21,31 +21,30 @@
                     <p:inputText id="disAlm" value="#{almacenMB.cod_dist}" style="width:50%"/> 
                     
                 </h:panelGrid>
-                <p:commandButton value="Buscar"  />                
-                <p:commandButton value="Registrar"  />            
-                <p:commandButton value="Modificar"  id="btnmodificar"  />
+                <p:commandButton value="Buscar" actionListener="#{almacenMB.buscarAlmacen}" update="tablaAlmacenes"/>                
+                <p:commandButton value="Registrar"  actionListener="#{almacenMB.registrarAlmacen}"/>            
+                <p:commandButton id="btnMod" value="Modificar" actionListener="#{almacenMB.editarAlmacen}" disabled="#{almacenMB.btnEditarEstado}" update="formEditarAlmacen"/>
                 
-                <p:dataTable id="tablaAlmacenes" value="#{almacenMB.lista}" var="titem" emptyMessage="No se encontraron Almacenes" >
-                
-                
-                
+                <p:dataTable id="tablaAlmacenes" value="#{almacenMB.lista}" var="talm" emptyMessage="No se encontraron Almacenes"
+                             selectionMode="single"  rowKey="#{talm.idalmacen}" scrollable="true" rows="20" selection="#{almacenMB.almacenSelect}">
+                <p:ajax event="rowSelect"  listener="#{almacenMB.onRowSelectAlmacen}" update="formA:btnMod"/>
                 <p:column headerText="Nombre">
-                    <h:outputText value="#{titem.nombre}" />
+                    <h:outputText value="#{talm.nombre}" />
                 </p:column>                
                 <p:column headerText="Telefono">
-                    <h:outputText value="#{titem.telefono}" />
+                    <h:outputText value="#{talm.telefono}" />
                 </p:column>     
                 <p:column headerText="Direccion">
-                    <h:outputText value="#{titem.direccion}" />
+                    <h:outputText value="#{talm.direccion}" />
                 </p:column>
                 <p:column headerText="Cod. Dpto">
-                    <h:outputText value="#{titem.codDept}" />
+                    <h:outputText value="#{talm.codDept}" />
                 </p:column>
                 <p:column headerText="Cod. Provincia">
-                    <h:outputText value="#{titem.codProv}" />
+                    <h:outputText value="#{talm.codProv}" />
                 </p:column>
                 <p:column headerText="Cod. Distrito">
-                    <h:outputText value="#{titem.codDist}" />
+                    <h:outputText value="#{talm.codDist}" />
                 </p:column>
                 
                 
