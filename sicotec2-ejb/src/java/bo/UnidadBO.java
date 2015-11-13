@@ -57,5 +57,9 @@ public class UnidadBO {
        return DTO;
     }
 
+    public String findByIdUnidad(Integer idUMedida) {
+    return unidadFacade.find(idUMedida).getNombre();
+    }
+
    
 }

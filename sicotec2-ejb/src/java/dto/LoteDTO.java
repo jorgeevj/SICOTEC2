@@ -5,13 +5,20 @@
  */
 package dto;
 
+import bo.UnidadBO;
 import entidades.Requerimientos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
  * @author rikardo308
  */
 public class LoteDTO {
+    UnidadBO unidadBO = lookupUnidadBOBean();
     private Integer idLote;
     private Integer cantidad;
     private Integer cantidadIngresar;
@@ -177,6 +184,11 @@ public class LoteDTO {
      * @return the descUMedida
      */
     public String getDescUMedida() {
+       if(idUMedida!=0 ){
+        descUMedida=unidadBO.findByIdUnidad(idUMedida);
+       }else{
+       descUMedida="Seleccione";
+       }
         return descUMedida;
     }
 
@@ -215,6 +227,16 @@ public class LoteDTO {
 
     public void setIdAlmacen(Integer idAlmacen) {
         this.idAlmacen = idAlmacen;
+    }
+
+    private UnidadBO lookupUnidadBOBean() {
+        try {
+            Context c = new InitialContext();
+            return (UnidadBO) c.lookup("java:global/sicotec2/sicotec2-ejb/UnidadBO!bo.UnidadBO");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 
     

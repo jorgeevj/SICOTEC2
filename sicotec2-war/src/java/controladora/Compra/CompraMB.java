@@ -297,11 +297,17 @@ public class CompraMB {
         loteDTO.setIdAlmacen(camposAdd.getIdAlmacen());
         loteDTO.setNombreTipoItem(objPealTipoItem.getNombreItems());
         loteDTO.setIdtipoitem(objPealTipoItem.getIdtipoitem());
+//        loteDTO.setDescUMedida("Seleccione");
         listPealItem.remove(objPealTipoItem);
         listaLoteDTO.add(loteDTO);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formAddCompra");
 
+    }
+    
+     public void cargaNombreUnidad(ValueChangeEvent changeEvent){
+         
+    
     }
 
     public void quitarPedido(ActionEvent actionEvent) {

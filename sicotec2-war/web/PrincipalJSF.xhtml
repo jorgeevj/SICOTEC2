@@ -563,7 +563,7 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE COMPRAS-->
-            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="580" width="800">
+            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="570" width="800">
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
@@ -588,7 +588,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:dataTable id="tbPedidosItemsDisp" var="tPealtipoitem" value="#{compraMB.listPealItem}"
                                  selectionMode="single" selection="#{compraMB.objPealTipoItem}" 
                                  rowKey="#{tPealtipoitem.nombreItems}"  
-                                 scrollable="true" scrollHeight="75">
+                                 scrollable="true" scrollHeight="150">
                         <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemAdd}" /> 
                         <f:facet name="header">
                            Pedidos Disponibles 
@@ -605,15 +605,15 @@ jorgeevj 15.09.15 Creacion.
                        
                     </p:dataTable>
 
-                    <p:panelGrid columns="2">
+                    <p:panelGrid columns="2" styleClass="hideborder">
                     <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido"  
                                      actionListener="#{compraMB.agregarTipoItems}" />
                      <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" 
                                       actionListener="#{compraMB.quitarPedido}"/>
                 </p:panelGrid>
                      <p:dataTable  id="tbPedidosItemsSelec" value="#{compraMB.listaLoteDTO}" var="loteReg" 
-                                   selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}">
-                     
+                                   selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}"
+                                   editable="true" editMode="cell">
                      <f:facet name="header">
                            Items Seleccionados 
                         </f:facet>
@@ -627,14 +627,43 @@ jorgeevj 15.09.15 Creacion.
                              <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
                         </p:column>
                         <p:column headerText="Cantidad a Comprar" >
-                             <p:outputLabel value="#{loteReg.cantidad}"/>
+                            <p:cellEditor>
+                  <f:facet name="output">
+                      <h:outputText value="#{loteReg.cantidad}" />
+                  </f:facet>
+                  <f:facet name="input">
+                      <p:inputText value="#{loteReg.cantidad}" style="width:96%"/>
+                  </f:facet>
+                        </p:cellEditor>
                         </p:column>
-                         
-                         
+                      <p:column headerText="Unidad">
+           <p:cellEditor>
+               <f:facet name="output">
+                   <h:outputText value="#{loteReg.descUMedida}" />
+               </f:facet>
+               <f:facet name="input">
+                   <h:selectOneMenu value="#{loteReg.idUMedida}" valueChangeListener="#{compraMB.cargaNombreUnidad}">
+                      
+                       <f:selectItem itemLabel="Seleccione" itemValue="" />
+                       <f:selectItems value="#{compraMB.listaUnidad}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
+                   </h:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+       </p:column>   
+               <p:column headerText="Costo Unitario" >
+                            <p:cellEditor>
+                  <f:facet name="output">
+                      <h:outputText value="#{loteReg.precioUni}" />
+                  </f:facet>
+                  <f:facet name="input">
+                      <p:inputText value="#{loteReg.precioUni}" style="width:96%"/>
+                  </f:facet>
+                        </p:cellEditor>
+                        </p:column>          
                         
                 </p:dataTable>
                
-                    <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
+                    <p:commandButton id="agrNuevoCompra" value="Guardar" actionListener="#{compraMB.addNuevoCompra}" />
                 </h:form>
             </p:dialog> 
         
