@@ -1464,15 +1464,69 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
                         <p:inputText id="dirAlmacen" value="#{almacenMB.direccion}" />
                         <p:outputLabel value="Cod. Departamento:" for="depAlmacen"/>                            
-                        <p:inputText id="depAlmacen" value="#{almacenMB.cod_dept}" />
+                        <p:selectOneMenu id="depAlmacen" value="#{almacenMB.departamentoSelect}"
+                                         valueChangeListener="#{almacenMB.cargarProvincias}" >
+                        <p:ajax event="valueChange" update="formRegistrarAlmacen:provAlmacen,formRegistrarAlmacen:disAlmacen"/>
+                            <f:selectItem itemLabel="Seleccione Dpto..." itemValue="" />
+                            <f:selectItems value="#{almacenMB.listDepartamentos}" var="dpto" 
+                                           itemValue="#{dpto.codDept}" itemLabel="#{dpto.departamento}"/>
+                        </p:selectOneMenu>
                         <p:outputLabel value="Cod. Provincia:" for="provAlmacen"/>                            
-                        <p:inputText id="provAlmacen" value="#{almacenMB.cod_prov}" />
+                        <p:selectOneMenu id="provAlmacen" value="#{almacenMB.provinciaSelect}"
+                                         valueChangeListener="#{almacenMB.cargarDistritos}" >
+                        <p:ajax event="valueChange" update="formRegistrarAlmacen:disAlmacen"/>
+                            <f:selectItem itemLabel="Seleccione Prov..." itemValue="" />
+                            <f:selectItems value="#{almacenMB.listProvincia}" var="prov" 
+                                           itemValue="#{prov.codProv}" itemLabel="#{prov.provincia}"/>
+                        </p:selectOneMenu>
                         <p:outputLabel value="Cod. Distrito:" for="disAlmacen"/>                            
-                        <p:inputText id="disAlmacen" value="#{almacenMB.cod_dist}" />
+                        <p:selectOneMenu id="disAlmacen" value="#{almacenMB.distritoSelect}">                        
+                            <f:selectItem itemLabel="Seleccione dist..." itemValue="" />
+                            <f:selectItems value="#{almacenMB.listDistritos}" var="dis" 
+                                           itemValue="#{dis.codDist}" itemLabel="#{dis.distrito}"/>
+                        </p:selectOneMenu>
                         
-                    </h:panelGrid>  
-                    
-                    
+                    </h:panelGrid>
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:commandButton value="Registrar Nuevo Almacen"  actionListener="#{almacenMB.registrarNuevoAlmacen}"/>    
+                </h:form>                
+            </p:dialog>
+            
+            <p:dialog header="Modificar Almacen" widgetVar="editarAlmacen" minHeight="40" height="500" width="500" modal="true">
+                <h:form id="formEditarAlmacen">
+                    <h:panelGrid columns="2" id="panelRegisAlma1">
+                        <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
+                        <p:inputText id="nomAlmacen" value="#{almacenMB.almacenSelect.nombre}" />
+                        <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
+                        <p:inputText id="teleAlmacen" value="#{almacenMB.almacenSelect.telefono}" />
+                        <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
+                        <p:inputText id="dirAlmacen" value="#{almacenMB.almacenSelect.direccion}" />
+                        <p:outputLabel value="Cod. Departamento:" for="depAlmacen1"/>                            
+                        <p:selectOneMenu id="depAlmacen1" value="#{almacenMB.almacenSelect.codDept}"
+                                         valueChangeListener="#{almacenMB.cargarProvincias}" >
+                        <p:ajax event="valueChange" update="provAlmacen1 disAlmacen1"/>
+                            <f:selectItem itemLabel="Seleccione Dpto..." itemValue="0" />
+                            <f:selectItems value="#{almacenMB.listDepartamentos}" var="dptos" 
+                                           itemValue="#{dptos.codDept}" itemLabel="#{dptos.departamento}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Cod. Provincia:" for="provAlmacen1"/>                            
+                        <p:selectOneMenu id="provAlmacen1" value="#{almacenMB.almacenSelect.codProv}"
+                                         valueChangeListener="#{almacenMB.cargarDistritos}" >
+                        <p:ajax event="valueChange" update="disAlmacen1"/>
+                            <f:selectItem itemLabel="Seleccione Prov..." itemValue="0" />
+                            <f:selectItems value="#{almacenMB.listProvincia}" var="provi" 
+                                           itemValue="#{provi.codProv}" itemLabel="#{provi.provincia}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Cod. Distrito:" for="disAlmacen1"/>                            
+                        <p:selectOneMenu id="disAlmacen1" value="#{almacenMB.almacenSelect.codDist}">                        
+                            <f:selectItem itemLabel="Seleccione dist..." itemValue="0" />
+                            <f:selectItems value="#{almacenMB.listDistritos}" var="dist" 
+                                           itemValue="#{dist.codDist}" itemLabel="#{dist.distrito}"/>
+                        </p:selectOneMenu>
+                        
+                    </h:panelGrid> 
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <p:commandButton value="Modificar Almacen"  actionListener="#{almacenMB.modificarNuevoAlmacen}"/>    
                 </h:form>                
             </p:dialog>
                 
