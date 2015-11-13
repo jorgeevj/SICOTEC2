@@ -62,24 +62,30 @@
                              value="#{movimientoMB.listaMovimiento}" resizableColumns="true">
                     <p:ajax listener="#{movimientoMB.selectMovimiento}" event="rowSelect"/> 
                     
-                    <p:column headerText="#" style="text-align: center; background-color: #{mov.colorEstado};width: 50px">
+                    <p:column headerText="#" style="text-align: center;width: 50px">
                         <p:outputLabel value="#{var+1}" style="color: #{mov.colorLetra}"/>
                     </p:column>
-                    <p:column headerText="Fecha" style="text-align: center;background-color: #{mov.colorEstado}">
+                    <p:column headerText="Fecha" style="text-align: center;">
                         <p:outputLabel value="#{mov.fecha}" style="color: #{mov.colorLetra}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </p:outputLabel>
                     </p:column>
-                    <p:column headerText="Tipo Mov." style="text-align: center;background-color: #{mov.colorEstado}">
+                    <p:column headerText="Origen" style="text-align: center;">
+                        <p:outputLabel value="#{mov.nombreOrigen}" style="color: #{mov.colorLetra}"/>
+                    </p:column>
+                    <p:column headerText="Destino" style="text-align: center;">
+                        <p:outputLabel value="#{mov.nombreDestino}" style="color: #{mov.colorLetra}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Mov." style="text-align: center;">
                         <p:outputLabel value="#{mov.tipoMovimiento}" style="color: #{mov.colorLetra}"/>
                     </p:column>
-                    <p:column headerText="Estado" style="text-align: center;background-color: #{mov.colorEstado}">
-                        <p:outputLabel value="#{mov.estado}" style="color: #{mov.colorLetra}"/>
+                    <p:column headerText="Estado" style="text-align: center;">
+                        <p:outputLabel value="#{mov.descripcionEstado}" style="color: #{mov.colorLetra}"/>
                     </p:column>
-                    <p:column headerText="# Serie" style="text-align: center;background-color: #{mov.colorEstado}">
+                    <p:column headerText="# Serie" style="text-align: center;">
                         <p:outputLabel value="#{mov.serie}" style="color: #{mov.colorLetra}"/>
                     </p:column>
-                    <p:column headerText="Correlativo" style="text-align: center;background-color: #{mov.colorEstado}">
+                    <p:column headerText="Correlativo" style="text-align: center;">
                         <p:outputLabel value="#{mov.correlativo}" style="color: #{mov.colorLetra}"/>
                     </p:column>
                 </p:dataTable>
@@ -187,7 +193,7 @@
             </h:form>
         </p:dialog> 
         
-        <p:dialog header="Agregar Items" widgetVar="dialog_nuevo_items" resizable="false" width="1000"> 
+        <p:dialog header="Agregar Items" widgetVar="dialog_nuevo_items" resizable="false" width="1000" height="400"> 
             <p:panel>
                 <h:form id="formTabItemsDisp">
                     <p:dataTable value="#{movimientoMB.listaItemAlmacen}" scrollHeight="1000" rows="2" paginator="true" var="itemsDisp" selectionMode="single" id="tb_items_disponibles"
@@ -237,21 +243,21 @@
             </p:panel>
         </p:dialog>
         
-        <p:dialog header="Items de Movimiento" widgetVar="dialog_ver_items" resizable="false" width="1000"> 
+        <p:dialog header="Items de Movimiento" widgetVar="dialog_ver_items" resizable="false" width="1000" height="400"> 
             <h:form id="formTabItemsMovimiento">
-                <p:dataTable value="#{movimientoMB.listaItemsMovimiento}" id="tb_ver_items" var="itemsMov"
+                <p:dataTable value="#{movimientoMB.listaItemsMovimiento}" id="tb_ver_items" var="itemsMov" sortMode="multiple"
                              rowKey="#{itemsMov.iditem}" rowIndexVar="var">
-                   <p:column headerText="Codigo" style="text-align: center;">
+                   <p:column headerText="Codigo" style="text-align: center;" sortBy="#{itemsMov.iditem}">
                        <p:outputLabel value="#{itemsMov.iditem}"/>
                    </p:column>
-                    <p:column headerText="Marca" style="text-align: center;">
+                    <p:column headerText="Marca" sortable="true" sortBy="#{itemsMov.descMarca}" style="text-align: center;">
                         <p:outputLabel value="#{itemsMov.descMarca}"/>
                    </p:column>
-                     <p:column headerText="Familia" style="text-align: center;">
+                     <p:column headerText="Familia" style="text-align: center;" sortBy="#{itemsMov.descFamilia}">
                          <p:outputLabel value="#{itemsMov.descFamilia}"/>
                    </p:column>
-                     <p:column headerText="Tipo Item" style="text-align: center;">
-                         <p:outputLabel value="#{itemsMov.descTipoItem}"/>
+                     <p:column headerText="Tipo Item" style="text-align: center;" sortBy="#{itemsMov.descTipoItem}">
+                         <p:outputLabel value="#{itemsMov.descTipoItem}" />
                    </p:column>
                </p:dataTable>
             </h:form>
@@ -259,10 +265,11 @@
         
         <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_lote" resizable="false" width="500"> 
             <h:form id="formCodigoItemCompra">
+                <p:growl showDetail="true" sticky="true" id="msnCantidadLote"/>
                 <p:panel> 
                     Codigo Item
                     <p:inputText value="#{movimientoMB.codItemCompra}" style=""/>
-                    <p:commandButton value="Insertar" actionListener="#{movimientoMB.insertCodigoItemToLista}"/>
+                    <p:commandButton value="Insertar" update="msnCantidadLote" actionListener="#{movimientoMB.insertCodigoItemToLista}"/>
                     <br/>
                     <br/>
                     <p:dataTable value="#{movimientoMB.listaCodigosCompra}" var="codigosCompra" rowIndexVar="var">
@@ -279,8 +286,8 @@
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Aceptar" actionListener="#{movimientoMB.aceptarInsertCodifoItemLista}"/>
                 </p:panel>
+                <p:commandButton value="Aceptar" actionListener="#{movimientoMB.aceptarInsertCodifoItemLista}" update="msnCantidadLote"/>
             </h:form>
         </p:dialog>
         
@@ -294,10 +301,11 @@
         
         <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_item_almacen" resizable="false" width="500"> 
             <h:form id="formCodigoItemTranslado">
+                <p:growl showDetail="true" sticky="true" id="msnCantidadItemAlmacen"/>
                 <p:panel> 
                     Codigo Item
                     <p:inputText value="#{movimientoMB.codItemTransaldo}" style=""/>
-                    <p:commandButton value="Insertar" actionListener="#{movimientoMB.insertCodigoItemToLista1}"/>
+                    <p:commandButton value="Insertar" actionListener="#{movimientoMB.insertCodigoItemToLista1}" update="msnCantidadItemAlmacen"/>
                     <br/>
                     <br/>
                     <p:dataTable value="#{movimientoMB.listaCodigosTranslado}" var="codigosTranslado" rowIndexVar="var">
@@ -314,12 +322,12 @@
                         </p:column>
                     </p:dataTable>
                     <br/>
-                    <p:commandButton value="Aceptar" actionListener="#{movimientoMB.aceptarInsertCodifoItemLista1}"/>
+                    <p:commandButton value="Aceptar" actionListener="#{movimientoMB.aceptarInsertCodifoItemLista1}" update="msnCantidadItemAlmacen"/>
                 </p:panel>
             </h:form>
         </p:dialog>
         
-        <p:dialog header="Orden de Compra" widgetVar="dialog_nueva_compras" resizable="false" width="1000"> 
+        <p:dialog header="Orden de Compra" widgetVar="dialog_nueva_compras" resizable="false" width="1000" height="400"> 
             <h:form id="formTabCompras">
                 Ordenes de Compra:
                 <p:dataTable value="#{movimientoMB.listaCompras}" var="comprasSelecc" selectionMode="single" id="tb_ver_compras"
@@ -399,6 +407,7 @@
                </p:dataTable>
                 <p:commandButton value="Remover" actionListener="#{movimientoMB.removeLoteToLista}"/>
             </h:form>
+            <p:commandButton onclick="PF('dialog_nueva_compras').hide();" value="Aceptar" style="float: right"/>
         </p:dialog>
         
         
@@ -489,6 +498,8 @@
                </p:dataTable>
                 <p:commandButton value="Remover" actionListener="#{movimientoMB.removeItemToLista()}"/>
             </h:form>
+            
+            <p:commandButton onclick="PF('dialog_nueva_ventas').hide();" value="Aceptar" style="float: right"/>
         </p:dialog>
         
     </ui:define>  

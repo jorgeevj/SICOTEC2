@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../PrincipalJSF.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="body">
+
+        <p:panel id="p1" header="Gestion de Ventas" style="margin-bottom:20px">
+            <h:form id="formBusqueda">
+                <h:panelGrid columns="6">
+                    Estado
+                    <p:selectOneMenu id="estadoSelectBusqueda" styleClass="browser-default" value="#{ventaMB.selectEstadoBusqueda}"
+                                    style="width:100%"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="100" />
+                        <f:selectItems value="#{ventaMB.listaEstados}"/> 
+                   </p:selectOneMenu>
+                    Empresa
+                    <p:selectOneMenu id="empresaSelectBusqueda" styleClass="browser-default" value="#{ventaMB.selectEmpresaBusqueda}"
+                                    style="width:100%"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{ventaMB.listaEmpresas}" var="emp" 
+                                       itemLabel="#{emp.nombre}" itemValue="#{emp.idempresa}"/> 
+                   </p:selectOneMenu>
+                    Almacen
+                    <p:selectOneMenu id="almacenSelectBusqueda" styleClass="browser-default" value="#{ventaMB.selectAlmacenBusqueda}"
+                                    style="width:100%"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{ventaMB.listaAlmacenes}" var="alm" 
+                                       itemLabel="#{alm.nombre}" itemValue="#{alm.idalmacen}"/> 
+                   </p:selectOneMenu>
+                    Fecha Inicio
+                    <p:calendar value="#{ventaMB.fechaInicioBusqueda}"/>
+                    Fecha Fin
+                    <p:calendar value="#{ventaMB.fechaFinBusqueda}"/>
+                    Correlativo
+                    <p:inputText value="#{ventaMB.correlativoBusqueda}"/>
+                    Serie
+                    <p:inputText value="#{ventaMB.serieBusqueda}"/>
+                </h:panelGrid> 
+                
+                <p:commandButton value="Buscar" actionListener="#{ventaMB.buscarVenta()}"/>
+                </h:form>
+                <br/>
+                <h:form id="formBotones">
+                    <h:panelGrid columns="3">
+                        <p:commandButton value="Limpiar" actionListener="#{movimientoMB.limpiar}"/>
+                        <p:commandButton value="Editar Estado" disabled="#{movimientoMB.disableEditar}" actionListener="#{movimientoMB.abrirModalEidt()}"/>
+                        <p:commandButton value="Ver Items" disabled="#{movimientoMB.disableVerItems}" actionListener="#{movimientoMB.verItems()}"/>
+                    </h:panelGrid>
+                </h:form>
+            <br/>
+            
+            
+            <h:form id="formTabla">
+                <p:dataTable tableStyleClass="table table-hover" selectionMode="single" var="ven" id="tab_ventas" 
+                             rowKey="#{ven.idventa}" rowIndexVar="var" value="#{ventaMB.listaVentas}" sortBy="#{ven.fecha}" 
+                             scrollable="true" paginator="true" resizableColumns="true">
+                    <p:ajax listener="#{ventaMB.listaVentas}" event="rowSelect"/> 
+                    
+                    <p:column headerText="#" style="text-align: center;width: 50px">
+                        <p:outputLabel value="#{var+1}"/>
+                    </p:column>
+                    <p:column headerText="Fecha" style="text-align: center;">
+                        <p:outputLabel value="#{ven.fecha}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Empresa" style="text-align: center;">
+                        <p:outputLabel value="#{ven.nombreEmpresa}"/>
+                    </p:column>
+                    <p:column headerText="Almacen" style="text-align: center;">
+                        <p:outputLabel value="#{ven.nombreAlmacen}"/>
+                    </p:column>
+                    <p:column headerText="Total" style="text-align: center;">
+                        <p:outputLabel value="#{ven.total}"/>
+                    </p:column>
+                    <p:column headerText="Descuento" style="text-align: center;">
+                        <p:outputLabel value="#{ven.descuento}"/>
+                    </p:column>
+                    <p:column headerText="Impuesto" style="text-align: center;">
+                        <p:outputLabel value="#{ven.nombreImpuesto}"/>
+                    </p:column>
+                    <p:column headerText="Estado" style="text-align: center;">
+                        <p:outputLabel value="#{ven.estado}"/>
+                    </p:column>
+                    <p:column headerText="# Serie" style="text-align: center;">
+                        <p:outputLabel value="#{ven.serie}"/>
+                    </p:column>
+                    <p:column headerText="Correlativo" style="text-align: center;">
+                        <p:outputLabel value="#{ven.correlativo}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel> 
+        
+        <p:dialog header="Items de Venta" widgetVar="dialog_ver_items" resizable="false">
+            <h:form id="formTablaItems">
+                <p:dataTable selectionMode="single" var="it" id="tab_items_venta" 
+                             rowKey="#{it.iditem}" rowIndexVar="var" value="#{ventaMB.listaItems}" 
+                             scrollable="true" paginator="true" resizableColumns="true">
+                    
+                   <p:column headerText="Codigo" style="text-align: center;">
+                       <p:outputLabel value="#{it.iditem}"/>
+                   </p:column>
+                   <p:column headerText="Tipo Item" style="text-align: center;">
+                       <p:outputLabel value="#{it.idTipoItem}"/>
+                   </p:column>
+                   <p:column headerText="Descripción" style="text-align: center;">
+                       <p:outputLabel value="#{it.descTipoItem}"/>
+                   </p:column>
+                   <p:column headerText="N° Parte" style="text-align: center;">
+                       <p:outputLabel value="#{it.numParte}"/>
+                   </p:column>
+                   <p:column headerText="Marca" style="text-align: center;">
+                       <p:outputLabel value="#{it.descMarca}"/>
+                   </p:column>
+                   <p:column headerText="Familia" style="text-align: center;">
+                       <p:outputLabel value="#{it.descFamilia}"/>
+                   </p:column>
+                   <p:column headerText="Color" style="text-align: center;">
+                       <p:outputLabel value="#{it.descColor}"/>
+                   </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Cambiar de Estado" widgetVar="dialog_editar" resizable="false">
+            <h:form id="formEditarEstado">
+                Estado
+                <p:selectOneMenu id="estadoSelectEdit" styleClass="browser-default" value="#{ventaMB.selectEstadoEdit}"
+                                style="width:100%"> 
+                    <f:selectItem itemLabel="Seleccione" itemValue="100" />
+                    <f:selectItems value="#{ventaMB.listaEstados}"/> 
+               </p:selectOneMenu>
+               <br/>
+               <p:panel visible="#{ventaMB.panelVisibleEstadoPagada}">
+                   Medio de Pago
+                    <p:selectOneMenu id="mPagoSelectEdit" styleClass="browser-default" 
+                                     value="#{ventaMB.selectMedioPagoEdit}" style="width:100%"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                        <f:selectItems value="#{ventaMB.listaMedioPago}" var="mp" 
+                                       itemLabel="#{mp.nombre}" itemValue="#{mp.idMedioPago}"/> 
+                   </p:selectOneMenu>
+               </p:panel>
+               <br/>
+               Cantidad
+               <p:inputText value="#{ventaMB.cantidadMedioPagoEdit}"/>
+               <p:commandButton value="Agregar" actionListener="#{ventaMB.agregarMedioPago}"/>
+                <p:dataTable value="#{ventaMB.listaVentaMedioPago}" var="ventaMedio" rowIndexVar="var">
+                    <p:column headerText="#" style="text-align: center">
+                        <p:outputLabel value="#{var+1}"/>
+                    </p:column>
+                    <p:column headerText="Medio de Pago" style="text-align: center">
+                        <p:outputLabel value="#{ventaMedio.nombreMedioPago}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad" style="text-align: center">
+                        <p:outputLabel value="#{ventaMedio.monto}"/>
+                    </p:column>
+                    <p:column headerText="Acción" style="text-align: center">
+                        <p:commandButton icon="ui-icon-remove" actionListener="#{ventaMB.eliminarVentaMedioPago}">
+                            <f:attribute name="indexMp" value="#{ventaMedio.monto}" />
+                            <f:attribute name=""/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                Impuesto
+                <p:selectOneMenu styleClass="browser-default" 
+                                 value="#{ventaMB.selectImpuestoEdit}" style="width:100%"> 
+                    <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                    <f:selectItems value="#{ventaMB.listaImpuestos}" var="imp" 
+                                   itemLabel="#{imp.nombre}" itemValue="#{imp.idImpuesto}"/> 
+                </p:selectOneMenu>
+                <br/>
+                <p:commandButton value="Guardar" actionListener="#{ventaMB.editarVenta}"/>
+            </h:form>
+        </p:dialog>
+        
+    </ui:define>  
+</ui:composition>
+

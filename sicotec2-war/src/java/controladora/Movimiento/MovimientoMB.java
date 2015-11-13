@@ -383,12 +383,23 @@ public class MovimientoMB implements Serializable{
                 int idAlmacenOrigen  = getIdAlmacenOrigenSeleccRegis();
                 mov.setIdalmacenDestino(idAlmacenDestino);
                 mov.setIdalmacenOrigen(idAlmacenOrigen);
+                for(AlmacenDTO al : listaAlmacenes){
+                    if(al.getIdalmacen() == idAlmacenOrigen){
+                        mov.setNombreOrigen(al.getNombre());
+                    }
+                    if(al.getIdalmacen() == idAlmacenDestino){
+                        mov.setNombreDestino(al.getNombre());
+                    }
+                }
                 mov.setIddocumento(7); 
                 
                 listaItemsTransaction = getListaCodigosTransladoAux();
             }else if(idTipoMovimiento == getIdtipoMovimientoEntrada()){
                 mov.setNombreOrigen(getCompraSeleccionada().getNombreEmpresa());
+                mov.setNombreDestino(getCompraSeleccionada().getNombreAlmacen());
+                
                 mov.setIdalmacenDestino(getCompraSeleccionada().getIdAlmacen());
+                
                 mov.setIdCompra(getCompraSeleccionada().getIdcompra());
                 mov.setIddocumento(4); 
                 
@@ -397,6 +408,11 @@ public class MovimientoMB implements Serializable{
                 listaItemsTransaction = getListaCodigosCompraAux();
             }else if(idTipoMovimiento == getIdtipoMovimientoSalida()){
                 mov.setIdalmacenOrigen(getVentaSeleccionada().getIdalmacen());
+                for(AlmacenDTO al : listaAlmacenes){
+                    if(al.getIdalmacen() == getVentaSeleccionada().getIdalmacen()){
+                        mov.setNombreOrigen(al.getNombre());
+                    }
+                }
                 mov.setNombreDestino(getVentaSeleccionada().getNombreEmpresa());
                 mov.setIdVenta(getVentaSeleccionada().getIdventa());
                 mov.setIddocumento(3); 
@@ -620,22 +636,32 @@ public class MovimientoMB implements Serializable{
     
     public void insertCodigoItemToLista(){
         RequestContext context = RequestContext.getCurrentInstance();
-        String cod = getCodItemCompra();
-        //int cantidad = Integer.parseInt(getCantidadLote());
+        String cod = getCodItemCompra().trim();
         boolean tof = itemBO.validarCodDuplicado(cod);
         boolean t = false;
+        String sms = "";
         for(ItemDTO tf : getListaCodigosCompra()){
-            if(tf.getIditem() == cod){
+            if(tf.getIditem().equals(cod)){
                 t = true;
             }
         }
         for(ItemDTO tf : getListaCodigosCompraAux()){
-            if(tf.getIditem() == cod){
+            if(tf.getIditem().equals(cod)){
                 t = true;
             }
         }
         
-        if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux() < getLoteSeleccionado().getCantidadConvertida()
+        if((cod == null && cod.trim().equals(""))){
+            sms = "Ingrese un codigo";
+        }else if(getCantidadCodigosAux() <= getLoteSeleccionado().getCantidadConvertida()){
+            //sms = "La cantidad de items ingresados debe ser igual a la cantidad";
+        }else if(t){
+            sms = "Ya se ingreso el mismo codigo";
+        }else if(tof){
+            sms = "Ya existe el mismo codigo creado";
+        }
+        
+        if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux() <= getLoteSeleccionado().getCantidadConvertida()
             && !t && !tof){
             ItemDTO dto = new ItemDTO();
             dto.setIditem(cod);
@@ -648,11 +674,15 @@ public class MovimientoMB implements Serializable{
             setCodItemCompra("");
             context.update("formCodigoItemCompra");
         }
+        
+        if(sms != ""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
+        }
+        
     }
     
     public void aceptarInsertCodifoItemLista(){
-        //int cantidad = Integer.parseInt(getCantidadLote());
-        if(getCantidadCodigosAux() == getLoteSeleccionado().getCantidadConvertida()){
+        if(getCantidadCodigosAux() >= getLoteSeleccionado().getCantidadConvertida()){
             loteDTO l = getLoteSeleccionado();
             getListaLotesCompra().remove(l);
             getListaLotesCompraAux().add(l);
@@ -665,6 +695,8 @@ public class MovimientoMB implements Serializable{
             context.update("formTabLotesCompra");
             context.update("formTabLotesCompraSelec");
             context.execute("PF('dialog_add_cantidad_lote').hide();");
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cantida de items ingresados debe ser igual a la cantidad del Tipo de item elegida"));
         }
     }
     
@@ -682,7 +714,7 @@ public class MovimientoMB implements Serializable{
     
     public void insertCodigoItemToLista1(){
         RequestContext context = RequestContext.getCurrentInstance();
-        String cod = getCodItemTransaldo();
+        String cod = getCodItemTransaldo().trim();
         boolean t = false;
         for(ItemDTO tf : getListaCodigosTranslado()){
             if(tf.getIditem().equals(cod)){
@@ -694,8 +726,21 @@ public class MovimientoMB implements Serializable{
                 t = true;
             }
         }
+        boolean tof = itemBO.validarItemTranslado(getItemSeleccionado().getIdtipoItem(), cod);
+        
+        String sms = "";
+        if((cod == null && cod.trim().equals(""))){
+            sms = "Ingrese un codigo";
+        }else if(getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad()){
+            //sms = "";
+        }else if(t){
+            sms = "Ya se ingreso el mismo codigo";
+        }else if(tof){
+            sms = "Ingrese un codigo valido o que tenga estado disponible";
+        }
+        
         if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad()
-            && !t){
+            && !t && !tof ){
             ItemDTO dto = new ItemDTO();
             dto.setIditem(cod);
             dto.setIdTipoItem(getItemSeleccionado().getIdtipoItem());
@@ -708,10 +753,14 @@ public class MovimientoMB implements Serializable{
             setCodItemTransaldo("");
             context.update("formCodigoItemTranslado");
         }
+        
+        if(sms != ""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
+        }
     }
     
     public void aceptarInsertCodifoItemLista1(){
-        if(getCantidadCodigosAux1() == getItemSeleccionado().getCantidad() + 1){
+        if(getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad() + 1 && getCantidadCodigosAux1() > 1){
             TipoItemDTO ti = getItemSeleccionado();
             getListaItemAlmacen().remove(ti);
             getListaItemAlmacenAux().add(ti);
@@ -724,6 +773,8 @@ public class MovimientoMB implements Serializable{
             context.update("formTabItemsDisp");
             context.update("formTabItemsSelecc");
             context.execute("PF('dialog_add_cantidad_item_almacen').hide();");
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "La cantida de items ingresados debe ser igual a la cantidad del Tipo de item elegida"));
         }
     }
     
@@ -890,12 +941,9 @@ public class MovimientoMB implements Serializable{
     
     public ArrayList llenarEstados() {
         ArrayList estados = new ArrayList();
-        estados.add(new SelectItem(0,"Inactivo"));
-        estados.add(new SelectItem(1,"Activo"));
-        estados.add(new SelectItem(2,"Usado"));
-        estados.add(new SelectItem(3,"Agotado"));
-        estados.add(new SelectItem(4,"Caducado"));
-        estados.add(new SelectItem(5,"Malogrado"));
+        estados.add(new SelectItem(0,"Proceso"));
+        estados.add(new SelectItem(1,"Completado"));
+        estados.add(new SelectItem(2,"Cancelado"));
         
         return estados;
     }
