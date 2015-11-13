@@ -18,7 +18,7 @@ import javax.naming.NamingException;
  * @author rikardo308
  */
 public class LoteDTO {
-    UnidadBO unidadBO = lookupUnidadBOBean();
+    private UnidadBO unidadBO = lookupUnidadBOBean();
     private Integer idLote;
     private Integer cantidad;
     private Integer cantidadIngresar;
@@ -35,9 +35,12 @@ public class LoteDTO {
     private String idItem;
     private int idUMedida;
     private String descUMedida;
-
+    private int cantUnidad;
+    private UnidadDTO unidadDTO;
+    
     public LoteDTO() {
      requerimiento=new RequerimientoDTO();
+     unidadDTO=new UnidadDTO();
     }
 
     /**
@@ -185,7 +188,7 @@ public class LoteDTO {
      */
     public String getDescUMedida() {
        if(idUMedida!=0 ){
-        descUMedida=unidadBO.findByIdUnidad(idUMedida);
+        descUMedida=getUnidadDTO().getNombre();
        }else{
        descUMedida="Seleccione";
        }
@@ -237,6 +240,39 @@ public class LoteDTO {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
         }
+    }
+
+    public UnidadBO getUnidadBO() {
+        return unidadBO;
+    }
+
+    public void setUnidadBO(UnidadBO unidadBO) {
+        this.unidadBO = unidadBO;
+    }
+
+    public int getCantUnidad() {
+        if(getUnidadDTO().getUnidades()!=null){
+        cantUnidad=getUnidadDTO().getUnidades()*cantidad;
+        }
+        return cantUnidad;
+    }
+
+    public void setCantUnidad(int cantUnidad) {
+        this.cantUnidad = cantUnidad;
+    }
+
+    public UnidadDTO getUnidadDTO() {
+        if(unidadDTO.getIdunidades()!=null){
+        unidadDTO=unidadBO.findByIdUnidad(unidadDTO.getIdunidades());
+        }else{
+        unidadDTO.setNombre("Seleccione");
+        }
+        
+        return unidadDTO;
+    }
+
+    public void setUnidadDTO(UnidadDTO unidadDTO) {
+        this.unidadDTO = unidadDTO;
     }
 
     

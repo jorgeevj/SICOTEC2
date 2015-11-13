@@ -125,7 +125,7 @@ public class CotizacionMB {
     private void limpiarcamposCrear() {
         cotizacionSelec = new CotizacionDTO();
         camposCrear = new Cotizacion();
-        camposCrear.setEstado(0);
+        camposCrear.setEstado(1);
         camposCrear.setIdempresa(new Empresa());
         tipoItemSelect = null;
         listaCoItemSelect = new ArrayList<>();
@@ -142,7 +142,7 @@ public class CotizacionMB {
             return;
         }
 
-        camposCrear.setEstado(1);
+        
         camposCrear = cotizacionBO.guardarCrear(camposCrear);
         listaCotizacion = cotizacionBO.getAllCotizaciones();
         for (int i = 0; i < listaCotipoItem.size(); i++) {
@@ -324,10 +324,10 @@ public class CotizacionMB {
         if (cotizacionSelec.getEstado() != 1) {
             switch (cotizacionSelec.getEstado()) {
                 case 2:
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Aprobada", ""));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Enviada", ""));
                     break;
                 case 3:
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Enviada", ""));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Aprobada", ""));
                     break;
                 case 4:
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No puedes editar una Cotizacion Caducada", ""));

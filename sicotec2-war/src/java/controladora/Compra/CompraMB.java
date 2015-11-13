@@ -285,6 +285,7 @@ public class CompraMB {
             if (dto.getIdtipoitem().equals(objPealTipoItem.getIdtipoitem())) {
                 dto.getRequerimiento().getPealtipoitemList().add(objPealTipoItem);
                 dto.getRequerimiento().setCantidad(dto.getRequerimiento().getCantidad() + objPealTipoItem.getCantidad());
+                dto.setCantidad(dto.getRequerimiento().getCantidad());
                 listPealItem.remove(objPealTipoItem);
                 RequestContext context = RequestContext.getCurrentInstance();
                 context.update("formAddCompra");
@@ -297,7 +298,8 @@ public class CompraMB {
         loteDTO.setIdAlmacen(camposAdd.getIdAlmacen());
         loteDTO.setNombreTipoItem(objPealTipoItem.getNombreItems());
         loteDTO.setIdtipoitem(objPealTipoItem.getIdtipoitem());
-//        loteDTO.setDescUMedida("Seleccione");
+        loteDTO.setCantidad(loteDTO.getRequerimiento().getCantidad());
+        loteDTO.getUnidadDTO().setIdunidades(1);
         listPealItem.remove(objPealTipoItem);
         listaLoteDTO.add(loteDTO);
         RequestContext context = RequestContext.getCurrentInstance();

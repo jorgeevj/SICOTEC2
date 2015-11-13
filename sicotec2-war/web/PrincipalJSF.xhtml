@@ -611,9 +611,11 @@ jorgeevj 15.09.15 Creacion.
                      <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" 
                                       actionListener="#{compraMB.quitarPedido}"/>
                 </p:panelGrid>
+                    <p:remoteCommand name="onCellEdit3" update="tbPedidosItemsSelec" />
                      <p:dataTable  id="tbPedidosItemsSelec" value="#{compraMB.listaLoteDTO}" var="loteReg" 
                                    selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}"
                                    editable="true" editMode="cell">
+                         <p:ajax event="cellEdit" oncomplete="onCellEdit3()" />
                      <f:facet name="header">
                            Items Seleccionados 
                         </f:facet>
@@ -626,34 +628,39 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad Requerida" >
                              <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
                         </p:column>
-                        <p:column headerText="Cantidad a Comprar" >
+                         <p:column headerText="Cantidad Unitara" >
+                             <p:outputLabel value="#{loteReg.cantUnidad}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad por U. Medida" >
                             <p:cellEditor>
                   <f:facet name="output">
                       <h:outputText value="#{loteReg.cantidad}" />
                   </f:facet>
                   <f:facet name="input">
-                      <p:inputText value="#{loteReg.cantidad}" style="width:96%"/>
+                      <p:inputText value="#{loteReg.cantidad}" style="width:96%">
+                      <f:validateDoubleRange minimum="#{loteReg.requerimiento.cantidad}" maximum="10000" />
+                      </p:inputText>
                   </f:facet>
                         </p:cellEditor>
                         </p:column>
                       <p:column headerText="Unidad">
            <p:cellEditor>
                <f:facet name="output">
-                   <h:outputText value="#{loteReg.descUMedida}" />
+                   <h:outputText value="#{loteReg.unidadDTO.nombre}" />
                </f:facet>
                <f:facet name="input">
-                   <h:selectOneMenu value="#{loteReg.idUMedida}" valueChangeListener="#{compraMB.cargaNombreUnidad}">
+                   <h:selectOneMenu value="#{loteReg.unidadDTO.idunidades}" valueChangeListener="#{compraMB.cargaNombreUnidad}">
                       
-                       <f:selectItem itemLabel="Seleccione" itemValue="" />
+                       
                        <f:selectItems value="#{compraMB.listaUnidad}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
                    </h:selectOneMenu>
                </f:facet>
            </p:cellEditor>
        </p:column>   
-               <p:column headerText="Costo Unitario" >
+               <p:column headerText="Costo Unitario $" >
                             <p:cellEditor>
                   <f:facet name="output">
-                      <h:outputText value="#{loteReg.precioUni}" />
+                      <h:outputText value="$#{loteReg.precioUni}" />
                   </f:facet>
                   <f:facet name="input">
                       <p:inputText value="#{loteReg.precioUni}" style="width:96%"/>
