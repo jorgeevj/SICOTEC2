@@ -6,10 +6,12 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.DocalmacenFacade;
 import dao.DocumentoFacade;
 import dto.AlmacenDTO;
 import entidades.Almacen;
 import entidades.Docalmacen;
+import entidades.DocalmacenPK;
 import entidades.Documento;
 import entidades.Pealtipoitem;
 import java.util.ArrayList;
@@ -30,12 +32,11 @@ public class AlmacenBO {
     private AlmacenFacade almacenFacade;
     @EJB
     private DocumentoFacade documentoFacade;
+    @EJB
+    private DocalmacenFacade docalmacenFacade;
     
     
-    public List<Documento> getNombreDocumento(){
-        List<Documento> lista=documentoFacade.findAll();
-        return lista;
-    }
+    
 
     public List<Almacen> findAll() {
         List<Almacen> listaAlmacen=almacenFacade.findAll();
@@ -77,15 +78,53 @@ public class AlmacenBO {
         }
          return lista3;
     }
-    public void registrarAlmacen(AlmacenDTO t,List<Docalmacen> c){ 
-        Almacen ti=convertDTOtoEntidad(t);
-        ti.setDocalmacenList(c);
-        almacenFacade.create(ti); 
+    public void registrarAlmacen(AlmacenDTO t){ 
+        Almacen ti=convertDTOtoEntidad(t);       
+        ti=almacenFacade.getIdAlmacen(ti); 
+        List<Documento> lista=documentoFacade.findAll();
+        Docalmacen e;
+        DocalmacenPK o;
+        
+        
+        for(Documento ite: lista)
+        {
+            e=new Docalmacen();
+            o=new DocalmacenPK();
+            e.setDocumento(ite);
+            o.setIddocumento(ite.getIddocumento());
+            e.setDocalmacenPK(new DocalmacenPK(ite.getIddocumento(),ti.getIdalmacen()));
+            e.setSerie(1);
+            e.setCorrelativo(0);
+            docalmacenFacade.create(e);
+        }
+        
     } 
     
-     public void modificarAlmacen(AlmacenDTO t,List<Docalmacen> c){ 
+    public boolean buscarAlmacenNombre(AlmacenDTO t){       
+        boolean encontro=false;
+        Almacen r=convertDTOtoEntidad(t);
+        List<Almacen> lista =almacenFacade.getBusquedaDuplicadosNombre(r);
+        if(lista.isEmpty())
+        {
+            encontro=true;
+        }
+        return encontro;  
+    }
+    
+    public boolean buscarAlmacenNom(String t){       
+        boolean encontro=false;
+        
+        List<Almacen> lista =almacenFacade.findAll();
+           
+        for(Almacen ite:lista){
+            if(ite.getNombre().equalsIgnoreCase(t) )
+                encontro=true;            
+        }
+        return encontro; 
+    }
+    
+     public void modificarAlmacen(AlmacenDTO t){ 
         Almacen ti=convertDTOtoEntidad(t);
-        ti.setDocalmacenList(c);
         almacenFacade.edit(ti); 
     } 
     public List<AlmacenDTO> convertListEntityToDTO(List<Almacen> listaMovimiento){
