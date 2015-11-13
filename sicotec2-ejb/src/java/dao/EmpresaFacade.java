@@ -95,9 +95,28 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         return empresas;
      } 
 
+     
     public Empresa guardaEmpresa(Empresa e) {
         em.persist(e);
         em.flush();
         return e;
     }
+    
+     public List<Empresa> getEmpresaDuplicadoRuc(Empresa entidad){
+         List<Empresa> empresas = new ArrayList<Empresa>();
+         try{
+            String ejbQuery = "SELECT e "
+                            + "FROM Empresa e "
+                            + "WHERE e.ruc = '"+entidad.getRuc()+"'";
+            Query query = em.createQuery(ejbQuery,Empresa.class);
+            empresas = query.getResultList();
+        }catch(Exception e)
+        {
+            empresas = new ArrayList<Empresa>();;
+        }
+        
+        return empresas;
+     } 
+
+    
 }

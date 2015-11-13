@@ -283,4 +283,13 @@ public class EmpresaBO {
       t.setTipo(dto.getTipo());
         return t;
     }
+     public void guardarEditar(EmpresaDTO c) {
+        empresaFacade.edit(convertDTOByEntity(c));
+    }
+      public List<EmpresaDTO> empresaRucDuplicado(EmpresaDTO t){
+        Empresa r=convertDTOByEntity(t);
+        List<Empresa> lista=empresaFacade.getEmpresaDuplicadoRuc(r);
+        List<EmpresaDTO> lista1=convertEntityToDTOList(lista);
+        return lista1;
+    }
 }

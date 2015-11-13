@@ -1139,13 +1139,21 @@ jorgeevj 15.09.15 Creacion.
 
             <p:dialog header="REGISTRAR EMPRESA" widgetVar="dlRegEmpresa" modal="true" rendered="true" width="720" height="480">
                 <h:form id="formRegEmp">
+                    <p:growl showDetail="true" sticky="true" id="msnRegistrar"/>
                     <p:panelGrid columns="4" styleClass="hideborder">
                         <p:outputLabel value="Nombre: " for="itEmp1" />
                         <p:inputText id="itEmp1" value="#{empresaMB.consultaEmpresaDTO.nombre}" />
+                                    
                         <p:outputLabel value="RUC: " for="itEmp2"/>
-                        <p:inputText id="itEmp2" value="#{empresaMB.consultaEmpresaDTO.ruc}" />
+                        <p:inputText id="itEmp2" value="#{empresaMB.consultaEmpresaDTO.ruc}" 
+                                      validatorMessage="RUC formato 20xxxxxxxxx"> 
+                     <f:validateRegex pattern="20[0-9]{9}" />
+                        </p:inputText>
                         <p:outputLabel value="Email: " for="itEmp3"/>
-                        <p:inputText id="itEmp3" value="#{empresaMB.consultaEmpresaDTO.email}" />
+                        <p:inputText id="itEmp3" value="#{empresaMB.consultaEmpresaDTO.email}"
+                                     validatorMessage="Formato invalido Email">
+          <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /> 
+                        </p:inputText>
                         
                     </p:panelGrid>
                     <p:selectManyCheckbox id="chkTipoEmp" value="#{empresaMB.selectTipoEmp}" >
@@ -1229,7 +1237,7 @@ jorgeevj 15.09.15 Creacion.
                     
                     <p:panelGrid columns="2" styleClass="hideborder">
                     <p:commandButton id="btnGuardarEmp" value="Aceptar" 
-                                     actionListener="#{empresaMB.btnGuardarEmpresa}" />
+                                     actionListener="#{empresaMB.btnGuardarEmpresa}" update="msnRegistrar" />
                     <p:commandButton id="btnLimpiarRegEmp" value="Limpiar" 
                                      actionListener="#{empresaMB.btnLimpiarRegEmp}"/>
                     </p:panelGrid>
@@ -1240,11 +1248,11 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formEditEmp">
                     <p:panelGrid columns="4" styleClass="hideborder">
                         <p:outputLabel value="Nombre: " for="itEmp11" />
-                        <p:inputText id="itEmp11" value="#{empresaMB.consultaEmpresaDTO.nombre}" />
+                        <p:inputText id="itEmp11" value="#{empresaMB.empresaSelectDTO.nombre}" />
                         <p:outputLabel value="RUC: " for="itEmp22"/>
-                        <p:inputText id="itEmp22" value="#{empresaMB.consultaEmpresaDTO.ruc}" />
+                        <p:inputText id="itEmp22" value="#{empresaMB.empresaSelectDTO.ruc}" />
                         <p:outputLabel value="Email: " for="itEmp33"/>
-                        <p:inputText id="itEmp33" value="#{empresaMB.consultaEmpresaDTO.email}" />
+                        <p:inputText id="itEmp33" value="#{empresaMB.empresaSelectDTO.email}" />
                         
                     </p:panelGrid>
                     <p:selectManyCheckbox id="chkTipoEmp1" value="#{empresaMB.selectTipoEmp}" >
@@ -1328,16 +1336,17 @@ jorgeevj 15.09.15 Creacion.
                     
                     <p:panelGrid columns="2" styleClass="hideborder">
                     <p:commandButton id="btnGuardarEmpEdit" value="Aceptar" 
-                                     actionListener="#{empresaMB.btnGuardarEmpresa}" />
+                                     actionListener="#{empresaMB.btnEditarEmpresa}" />
                     <p:commandButton id="btnLimpiarEditEmp" value="Limpiar" 
                                      actionListener="#{empresaMB.btnLimpiarRegEmp}"/>
                     </p:panelGrid>
                 </h:form>
             </p:dialog>
             
+            
             <p:dialog header="Seleccionar Representantes" widgetVar="dlSelectPersona" modal="true" rendered="true" >
                 <h:form id="formSelectPer">
-                    
+                     <p:growl showDetail="true" sticky="true" id="msnRepresentante"/>
                     <p:commandButton id="btnBusPersonaRegEmp" value="Buscar" 
                                      actionListener="#{empresaMB.btnBusPersonaRegEmp}"/>
                     <p:inputText id="itbusper1" value="#{empresaMB.consultaPersona.nombre}" placeholder="Nombre"/>
@@ -1366,12 +1375,13 @@ jorgeevj 15.09.15 Creacion.
                 </p:column>
             </p:dataTable>   
                     <p:commandButton id="btnAceptarPersona" value="Aceptar" icon="ui-icon-check"
-                                     actionListener="#{empresaMB.btnAceptarPersona}"/>     
+                                     actionListener="#{empresaMB.btnAceptarPersona}" update="msnRepresentante" />     
                 </h:form>
             </p:dialog>
             
             <p:dialog header="Agregar Ubicacion" widgetVar="dlSelectUbicacion" modal="true" rendered="true" >
                 <h:form id="formSelectUbi">
+                    <p:growl showDetail="true" sticky="true" id="msnUbicacion"/>
                     <p:panelGrid columns="2" styleClass="hideborder">
                     <p:outputLabel value="Direccion: " for="itUb1" />    
                     <p:inputText id="itUb1" value="#{empresaMB.ubicEmpAgregar.nombre}" placeholder="Direccion"/>
@@ -1402,12 +1412,13 @@ jorgeevj 15.09.15 Creacion.
                      </p:panelGrid>
                     <p:messages id="msgUbicacion" showDetail="true" closable="true" />
                     <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"
-                                     actionListener="#{empresaMB.btnAceptarUbicacion}"/>     
+                                     actionListener="#{empresaMB.btnAceptarUbicacion}" update="msnUbicacion"/>     
                 </h:form>
             </p:dialog>
             
             <p:dialog header="Agregar Telefono" widgetVar="dlSelectTelefono" modal="true" rendered="true" >
                 <h:form id="formSelectTel">
+                     <p:growl showDetail="true" sticky="true" id="msnTelefono"/>
                     <p:panelGrid columns="2" styleClass="hideborder">
                     
                     <p:outputLabel value="Operador: " for="somOpeRegEmp" />
@@ -1429,7 +1440,7 @@ jorgeevj 15.09.15 Creacion.
                     </p:panelGrid>
                     <p:messages id="msgUbicacion" showDetail="true" closable="true" />
                     <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"
-                                     actionListener="#{empresaMB.btnAceptarTelefono}"/>     
+                                     actionListener="#{empresaMB.btnAceptarTelefono}" update="msnTelefono"/>     
                 </h:form>
             </p:dialog>
             
