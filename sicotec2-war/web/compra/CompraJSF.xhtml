@@ -24,8 +24,11 @@
                     Estado
                     <p:selectOneMenu id="estadoSelectBusquedas" styleClass="browser-default" value="#{compraMB.selectEstadoBusqueda}"
                                     style="width:100%"> 
-                        <f:selectItem itemLabel="Seleccione" itemValue="100" />
-                        <f:selectItems value="#{compraMB.listaEstados}"/> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0" />
+                         <f:selectItem itemLabel="Creada" itemValue="1" />
+                         <f:selectItem itemLabel="Enviada" itemValue="2" />
+                         <f:selectItem itemLabel="Recibida" itemValue="3" />
+                         <f:selectItem itemLabel="Rechazada" itemValue="4" />
                    </p:selectOneMenu>
                 </h:panelGrid>
                 
@@ -38,7 +41,7 @@
                 <p:commandButton value="Editar"  actionListener="#{compraMB.edit}" id="btnEditarCom" title="Editar"/>       
           
            <h:panelGrid >
-            <p:dataTable id="tabCompra"  value="#{compraMB.sessionBeanCompra.listaCompra}" var="tComp"
+            <p:dataTable id="tabCompra"  value="#{compraMB.listaCompras}" var="tComp"
                          selectionMode="single" rowKey="#{tComp.idcompra}" selection="#{compraMB.co}" >
                 
                 <p:column headerText="N°Serie">

@@ -15,6 +15,7 @@ import entidades.Requerimientos;
  * @author Cesar
  */
 public class PealtipoitemDTO {
+
     private Integer cantidad;
     private Double costoUni;
     private Integer estado;
@@ -23,17 +24,16 @@ public class PealtipoitemDTO {
     private Pedido pedido;
     private Integer idalmacen;
     private Requerimientos requerimientos;
-    
+
     private String nombreItems;
 
     //extras
-     private Integer cantidadItem;
-     private Double precioItem;
-     private String nombreEstado;
-     private Double total;
-     
-     
-     
+    private String idtipoitem;
+    private Integer cantidadItem;
+    private Double precioItem;
+    private String nombreEstado;
+    private Double total;
+
     public Integer getCantidad() {
         return cantidad;
     }
@@ -136,5 +136,13 @@ public class PealtipoitemDTO {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public String getIdtipoitem() {
+        return idtipoitem;
+    }
+
+    public void setIdtipoitem(String idtipoitem) {
+        this.idtipoitem = idtipoitem;
     }
 }

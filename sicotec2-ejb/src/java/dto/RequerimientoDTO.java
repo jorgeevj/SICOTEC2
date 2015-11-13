@@ -5,6 +5,9 @@
  */
 package dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author jc7
@@ -13,6 +16,13 @@ public class RequerimientoDTO {
     
     private Integer idrequerimientos;
     private Integer cantidad;
+    private List<LoteDTO> loteList;
+    private List<PealtipoitemDTO> pealtipoitemList;
+
+    public RequerimientoDTO() {
+        loteList=new ArrayList<>();
+        pealtipoitemList=new ArrayList<>();
+    }
 
     public Integer getIdrequerimientos() {
         return idrequerimientos;
@@ -28,6 +38,22 @@ public class RequerimientoDTO {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public List<LoteDTO> getLoteList() {
+        return loteList;
+    }
+
+    public void setLoteList(List<LoteDTO> loteList) {
+        this.loteList = loteList;
+    }
+
+    public List<PealtipoitemDTO> getPealtipoitemList() {
+        return pealtipoitemList;
+    }
+
+    public void setPealtipoitemList(List<PealtipoitemDTO> pealtipoitemList) {
+        this.pealtipoitemList = pealtipoitemList;
     }
     
     

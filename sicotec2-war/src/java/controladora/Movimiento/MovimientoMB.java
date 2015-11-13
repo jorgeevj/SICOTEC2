@@ -26,7 +26,7 @@ import dto.TipoItemDTO;
 import entidades.Movimientoitemvista;
 import dto.TipomovimientoDTO;
 import dto.VentaDTO;
-import dto.loteDTO;
+import dto.LoteDTO;
 import entidades.Movimientoitemvista;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -97,8 +97,8 @@ public class MovimientoMB implements Serializable{
         private ArrayList listaEstados = new ArrayList();
         private List<ItemDTO> listaItemsMovimiento = new ArrayList<ItemDTO>();
         private List<CompraDTO> listaCompras = new ArrayList<CompraDTO>();
-        private List<loteDTO> listaLotesCompra = new ArrayList<loteDTO>();
-        private List<loteDTO> listaLotesCompraAux = new ArrayList<loteDTO>();
+        private List<LoteDTO> listaLotesCompra = new ArrayList<LoteDTO>();
+        private List<LoteDTO> listaLotesCompraAux = new ArrayList<LoteDTO>();
         private List<VentaDTO> listaVentas = new ArrayList<VentaDTO>();
         private List<ItemDTO> listaItemsVenta = new ArrayList<ItemDTO>();
         private List<ItemDTO> listaItemsVentaAux = new ArrayList<ItemDTO>();
@@ -116,8 +116,8 @@ public class MovimientoMB implements Serializable{
         
         //COMPRA SELECCIONADA
         private CompraDTO compraSeleccionada = new CompraDTO();
-        private loteDTO loteSeleccionado = new loteDTO();
-        private loteDTO loteSeleccionadoAux = new loteDTO();
+        private LoteDTO loteSeleccionado = new LoteDTO();
+        private LoteDTO loteSeleccionadoAux = new LoteDTO();
         
         //VENTA SELECCIONADA
         private VentaDTO ventaSeleccionada = new VentaDTO();
@@ -271,8 +271,8 @@ public class MovimientoMB implements Serializable{
         
         setListaItemsVenta(new ArrayList<ItemDTO>());
         setListaItemsVentaAux(new ArrayList<ItemDTO>());
-        setListaLotesCompra(new ArrayList<loteDTO>());
-        setListaLotesCompraAux(new ArrayList<loteDTO>());
+        setListaLotesCompra(new ArrayList<LoteDTO>());
+        setListaLotesCompraAux(new ArrayList<LoteDTO>());
         
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formTabLotesCompraSelec");
@@ -321,8 +321,8 @@ public class MovimientoMB implements Serializable{
         setListaItemAlmacen(new ArrayList<TipoItemDTO>());
         setListaItemAlmacenAux(new ArrayList<TipoItemDTO>());
         setListaCompras(compraBO.getComprasByEstado(1));
-        setListaLotesCompra(new ArrayList<loteDTO>());
-        setListaLotesCompraAux(new ArrayList<loteDTO>());
+        setListaLotesCompra(new ArrayList<LoteDTO>());
+        setListaLotesCompraAux(new ArrayList<LoteDTO>());
         setListaVentas(ventasBO.getVentasByEstado(1));
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -572,7 +572,7 @@ public class MovimientoMB implements Serializable{
     
     public void selectLoteAdd(SelectEvent event){
         RequestContext context = RequestContext.getCurrentInstance();
-        setLoteSeleccionado((loteDTO)event.getObject());
+        setLoteSeleccionado((LoteDTO)event.getObject());
         
         setCantidadLote(null);
         setCantidadCodigosAux(1);
@@ -587,7 +587,7 @@ public class MovimientoMB implements Serializable{
     }
     
     public void selectLoteRemove(SelectEvent event){
-        setLoteSeleccionadoAux((loteDTO)event.getObject());
+        setLoteSeleccionadoAux((LoteDTO)event.getObject());
     }
     
     public void openModalAddCantidadLote(){
@@ -683,7 +683,7 @@ public class MovimientoMB implements Serializable{
     
     public void aceptarInsertCodifoItemLista(){
         if(getCantidadCodigosAux() >= getLoteSeleccionado().getCantidadConvertida()){
-            loteDTO l = getLoteSeleccionado();
+            LoteDTO l = getLoteSeleccionado();
             getListaLotesCompra().remove(l);
             getListaLotesCompraAux().add(l);
             
@@ -835,7 +835,7 @@ public class MovimientoMB implements Serializable{
     
     public void removeLoteToLista(){
         if(getLoteSeleccionadoAux() != null){
-            loteDTO lote = getLoteSeleccionadoAux();
+            LoteDTO lote = getLoteSeleccionadoAux();
         
             getListaLotesCompraAux().remove(lote);
             getListaLotesCompra().add(lote);
@@ -892,8 +892,8 @@ public class MovimientoMB implements Serializable{
     }
     
     public void cambiarOCompra(){
-        setListaLotesCompra(new ArrayList<loteDTO>());
-        setListaLotesCompraAux(new ArrayList<loteDTO>());
+        setListaLotesCompra(new ArrayList<LoteDTO>());
+        setListaLotesCompraAux(new ArrayList<LoteDTO>());
         setLoteSeleccionado(null);
         setLoteSeleccionadoAux(null);
         
@@ -1765,56 +1765,56 @@ public class MovimientoMB implements Serializable{
     /**
      * @return the listaLotesCompra
      */
-    public List<loteDTO> getListaLotesCompra() {
+    public List<LoteDTO> getListaLotesCompra() {
         return listaLotesCompra;
     }
 
     /**
      * @param listaLotesCompra the listaLotesCompra to set
      */
-    public void setListaLotesCompra(List<loteDTO> listaLotesCompra) {
+    public void setListaLotesCompra(List<LoteDTO> listaLotesCompra) {
         this.listaLotesCompra = listaLotesCompra;
     }
 
     /**
      * @return the listaLotesCompraAux
      */
-    public List<loteDTO> getListaLotesCompraAux() {
+    public List<LoteDTO> getListaLotesCompraAux() {
         return listaLotesCompraAux;
     }
 
     /**
      * @param listaLotesCompraAux the listaLotesCompraAux to set
      */
-    public void setListaLotesCompraAux(List<loteDTO> listaLotesCompraAux) {
+    public void setListaLotesCompraAux(List<LoteDTO> listaLotesCompraAux) {
         this.listaLotesCompraAux = listaLotesCompraAux;
     }
 
     /**
      * @return the loteSeleccionado
      */
-    public loteDTO getLoteSeleccionado() {
+    public LoteDTO getLoteSeleccionado() {
         return loteSeleccionado;
     }
 
     /**
      * @param loteSeleccionado the loteSeleccionado to set
      */
-    public void setLoteSeleccionado(loteDTO loteSeleccionado) {
+    public void setLoteSeleccionado(LoteDTO loteSeleccionado) {
         this.loteSeleccionado = loteSeleccionado;
     }
 
     /**
      * @return the loteSeleccionadoAux
      */
-    public loteDTO getLoteSeleccionadoAux() {
+    public LoteDTO getLoteSeleccionadoAux() {
         return loteSeleccionadoAux;
     }
 
     /**
      * @param loteSeleccionadoAux the loteSeleccionadoAux to set
      */
-    public void setLoteSeleccionadoAux(loteDTO loteSeleccionadoAux) {
+    public void setLoteSeleccionadoAux(LoteDTO loteSeleccionadoAux) {
         this.loteSeleccionadoAux = loteSeleccionadoAux;
     }
 

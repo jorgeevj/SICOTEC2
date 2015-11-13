@@ -174,6 +174,7 @@ public class CompraBO {
        dto.setEstado(e.getEstado());
 //       dto.setIdcompra(e.getRequerimientos().getIdcompra());
        dto.setRequerimientos(e.getIdrequerimientos());
+       dto.setIdtipoitem(e.getAltipoitem().getTipoitem().getIdtipoItem());
        dto.setNombreItems(e.getAltipoitem().getTipoitem().getNombre());
        dto.setCostoUni(e.getCostoUni());
        dto.setPedido(e.getPedido());

@@ -24,7 +24,7 @@ public class CompraDTO {
      private Double total;
      private String serie;
      private String correlativo;
-     private int idalmacen;
+//     private int idalmacen;
      private Empresa idempresa;
      
      
@@ -122,16 +122,7 @@ public class CompraDTO {
     /**
      * @return the idAlmacen
      */
-    public int getIdAlmacen() {
-        return idAlmacen;
-    }
-
-    /**
-     * @param idAlmacen the idAlmacen to set
-     */
-    public void setIdAlmacen(int idAlmacen) {
-        this.idAlmacen = idAlmacen;
-    }
+   
 
     public Integer getEstado() {
         
@@ -144,13 +135,7 @@ public class CompraDTO {
 
     
 
-    public int getIdalmacen() {
-        return idalmacen;
-    }
-
-    public void setIdalmacen(int idalmacen) {
-        this.idalmacen = idalmacen;
-    }
+    
 
     public Empresa getIdempresa() {
         return idempresa;
@@ -186,11 +171,17 @@ public class CompraDTO {
 
     public String getNombEstado() {
         
-        if(estado==0){
+        if(estado==1){
         nombEstado="CREADA";
         }
-        if(estado==1){
+        if(estado==2){
         nombEstado="ENVIADA";
+        }
+        if(estado==3){
+        nombEstado="RECIBIDA";
+        }
+        if(estado==4){
+        nombEstado="RECHAZADA";
         }
         
         return nombEstado;
@@ -198,6 +189,14 @@ public class CompraDTO {
 
     public void setNombEstado(String nombEstado) {
         this.nombEstado = nombEstado;
+    }
+
+    public int getIdAlmacen() {
+        return idAlmacen;
+    }
+
+    public void setIdAlmacen(int idAlmacen) {
+        this.idAlmacen = idAlmacen;
     }
 
  

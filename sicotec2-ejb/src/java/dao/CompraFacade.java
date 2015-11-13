@@ -77,7 +77,7 @@ public class CompraFacade extends AbstractFacade<Compra> {
             if(dto.getFechaFin()!= null){
                 sql += "and c.fecha <= '"+sdf.format(dto.getFechaFin())+"' ";
             }
-            if(dto.getEstado()!=100){
+            if(dto.getEstado()!=0){
             sql+="and c.estado = "+dto.getEstado()+" ";
             }
                 

@@ -6,7 +6,7 @@
 package bo;
 
 import dao.LoteFacade;
-import dto.loteDTO;
+import dto.LoteDTO;
 import entidades.Lote;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ public class LoteBO {
     @EJB
     LoteFacade loteFacade;
     
-    public List<loteDTO> getLotesByCompra(int idCompra){
-        List<loteDTO> lotesDTO = new ArrayList<loteDTO>();
+    public List<LoteDTO> getLotesByCompra(int idCompra){
+        List<LoteDTO> lotesDTO = new ArrayList<LoteDTO>();
         List<Lote> lotes       = loteFacade.getLotesByCompra(idCompra);
         
         lotesDTO = convertListEntityToDTO(lotes);
@@ -34,10 +34,10 @@ public class LoteBO {
         return lotesDTO;
     }
     
-        public List<loteDTO> convertListEntityToDTO(List<Lote> listaItem){
-        List<loteDTO> listaDTO = new ArrayList<loteDTO>();
+        public List<LoteDTO> convertListEntityToDTO(List<Lote> listaItem){
+        List<LoteDTO> listaDTO = new ArrayList<LoteDTO>();
         for(Lote movimiento : listaItem){
-            loteDTO DTO = new loteDTO();
+            LoteDTO DTO = new LoteDTO();
             
             DTO = convertEntityToDTO(movimiento);
             
@@ -47,8 +47,8 @@ public class LoteBO {
         return listaDTO;
     }
 
-    public loteDTO convertEntityToDTO(Lote lote){
-        loteDTO DTO = new loteDTO();
+    public LoteDTO convertEntityToDTO(Lote lote){
+        LoteDTO DTO = new LoteDTO();
             
         DTO.setCantidadConvertida((lote.getCantidad()*lote.getIdunidades().getUnidades()));
         DTO.setCantidad(lote.getCantidad());

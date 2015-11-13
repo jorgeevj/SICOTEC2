@@ -563,101 +563,83 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE COMPRAS-->
-            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="300" width="450">
+            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="580" width="800">
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
                         
-                        <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{compraMB.idempresaNuevo}" >
+                        <p:selectOneMenu id="empresasPedido" value="#{compraMB.camposAdd.idEmpresa}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
-                            <f:selectItems   value="#{compraMB.sessionBeanCompra.listaEmpresaAdd}"  var="emp" 
+                            <f:selectItems   value="#{compraMB.listaEmpresasProveedoras}"  var="emp" 
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="Almacen: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenesCompra" styleClass="browser-default" value="#{compraMB.idalmacenNuevo}" >
+                        <p:selectOneMenu id="almacenesCompra" value="#{compraMB.camposAdd.idAlmacen}" 
+                                         valueChangeListener="#{compraMB.cargarPedidosByAlmacen}">
+                        <p:ajax event="valueChange" update="tbPedidosItemsDisp"/>
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                     <br/>
-                    <p:commandButton value="Agregar Pedidos" actionListener="#{compraMB.getAlmacenForPedidoForItems}"/>
-                    <br/><br/><br/>
-                    <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
-                </h:form>
-            </p:dialog> 
-        
-        
-            <p:dialog header="Agregar Pedidos" widgetVar="addPedidosItemsModal" modal="true" height="500" width="700"> 
-                <h:form id="formAddPedidoss">
-                    <p:outputLabel value="Pedidos Disponibles "></p:outputLabel>
-                    <p:dataTable var="tPealtipoitem" value="#{compraMB.listPealItem}"  id="tbPedidosItemsDisp"
-                                 selectionMode="single" selection="#{compraMB.objPealTipoItem}" rowKey="#{tPealtipoitem.cantidad}"  >
+                    
+                    <p:dataTable id="tbPedidosItemsDisp" var="tPealtipoitem" value="#{compraMB.listPealItem}"
+                                 selectionMode="single" selection="#{compraMB.objPealTipoItem}" 
+                                 rowKey="#{tPealtipoitem.nombreItems}"  
+                                 scrollable="true" scrollHeight="75">
                         <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemAdd}" /> 
+                        <f:facet name="header">
+                           Pedidos Disponibles 
+                        </f:facet>
                         <p:column headerText="Item" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.cantidad}"/>
                         </p:column>
-                        <p:column headerText="Costo Unitario" style="text-align: center">
+                        <p:column headerText="Precio Venta U." style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.costoUni}"/>
                         </p:column>
                        
                     </p:dataTable>
-                    <br/>
 
-                
-                    <p:commandButton id="btnAceptarPedido"  value="Agregar Pedido"  actionListener="#{compraMB.agregarTipoItems}" />
-                <br/><br/><br/><br/>
-                <p:outputLabel value="Compra Seleccionados "></p:outputLabel>
-                <p:dataTable tableStyleClass="table table-hover" var="pealtipoitem" id="tbPedidosItemsSelec" value="#{compraMB.listaPealTipoItemSelct}" editable="true"
-                             editMode="cell" selection="#{compraMB.objPealTipoItemQuitar}" selectionMode="single"  rowKey="#{pealtipoitem.cantidad}">
-                     <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}" /> 
-                        <p:column headerText="Item" style="text-align: center">
-                        <p:outputLabel value="#{pealtipoitem.nombreItems}"/>
-                        </p:column>
-                        <p:column headerText="Cantidad Pedida" style="text-align: center">
-                            <p:outputLabel value="#{pealtipoitem.cantidad}"/>
-                        </p:column>
-                        <p:column headerText="Costo Unitario" style="text-align: center">
-                        <p:outputLabel value="#{pealtipoitem.costoUni}"/>
-                        </p:column>
-                     <p:column headerText="Cantidad" >
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{pealtipoitem.cantidad}" /></f:facet>
-                                <f:facet name="input"><p:inputText id="modelInput" value="#{pealtipoitem.cantidad}" style="width:96%" >
-                                        <f:validateDoubleRange minimum="1" maximum="1000" />
-                                    </p:inputText>
-                                </f:facet>
-                            </p:cellEditor>
-                        </p:column>
+                    <p:panelGrid columns="2">
+                    <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido"  
+                                     actionListener="#{compraMB.agregarTipoItems}" />
+                     <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" 
+                                      actionListener="#{compraMB.quitarPedido}"/>
+                </p:panelGrid>
+                     <p:dataTable  id="tbPedidosItemsSelec" value="#{compraMB.listaLoteDTO}" var="loteReg" 
+                                   selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}">
                      
-                     <p:column headerText="Unidad Medida">
-                       <p:cellEditor>
-                           <f:facet name="output"><h:outputText value="#{compraMB.loteSelec.idunidades}" /></f:facet>
-                           <f:facet name="input">
-                               <h:selectOneMenu value="#{compraMB.loteSelec}" style="width:100%">
-                                   <f:selectItems value="#{compraMB.listaUnidad}" var="uni" 
-                                                  itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
-                               </h:selectOneMenu>
-                           </f:facet>
-                       </p:cellEditor>
-                   </p:column>
-                     
-                     
-                        <p:column headerText="Total" style="text-align: center">
-                            <p:outputLabel value="#{pealtipoitem.total}"/>
+                     <f:facet name="header">
+                           Items Seleccionados 
+                        </f:facet>
+                         <p:column headerText="Cod. Producto" >
+                             <p:outputLabel value="#{loteReg.idtipoitem}"/>
                         </p:column>
-
+                        <p:column headerText="Nombre" >
+                            <p:outputLabel value="#{loteReg.nombreTipoItem}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad Requerida" >
+                             <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad a Comprar" >
+                             <p:outputLabel value="#{loteReg.cantidad}"/>
+                        </p:column>
+                         
+                         
+                        
                 </p:dataTable>
-                <br/>
-                <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" actionListener="#{compraMB.quitarPedido}"/>
-                <br/><br/><br/>
-                <p:commandButton value="Aceptar" onclick="PF('addPedidosItemsModal').hide();"/>
-            </h:form>
-        </p:dialog>
+               
+                    <p:commandButton id="agrNuevoCompra" value="Agregar" actionListener="#{compraMB.addNuevoCompra}" />
+                </h:form>
+            </p:dialog> 
+        
+        
+           
             <!-- FIN DIALOG DE COMPRAS-->
 
 

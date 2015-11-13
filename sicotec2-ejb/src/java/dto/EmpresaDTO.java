@@ -51,6 +51,10 @@ public class EmpresaDTO {
         
     }
 
+    public EmpresaDTO(Integer tipo) {
+        this.tipo = tipo;
+    }
+
     public EmpresaDTO(Integer idempresa, String nombre, String ruc, String email) {
         this.idempresa = idempresa;
         this.nombre = nombre;
