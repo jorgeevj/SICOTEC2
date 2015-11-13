@@ -6,15 +6,22 @@
 package controladora.Almacen;
 
 import bo.AlmacenBO;
+import bo.UbigeoBO;
 import dto.AlmacenDTO;
 import entidades.Docalmacen;
 import entidades.Documento;
+import entidades.Ubigeo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -25,6 +32,8 @@ import javax.faces.event.ActionEvent;
 public class almacenMB {
     @EJB//falto esta notacion
     private AlmacenBO almacenBO;
+    @EJB
+    private UbigeoBO ubigeoBO;
     private String idAlmancen;
     private String nombre;
     private String telefono;
@@ -37,21 +46,51 @@ public class almacenMB {
     private int serie;
     private int correlativo;
     
-    private String documentoSelect;
+    private String departamentoSelect;
+    private String provinciaSelect;
+    private String distritoSelect;
     
-    private List<AlmacenDTO> lista;
+    private boolean btnEditarEstado;
+    
+    private List<AlmacenDTO> lista=new ArrayList<AlmacenDTO>();
     private AlmacenDTO almacenSelect;
-    private List<Documento> listaDocumento;
-    private List<Docalmacen> lista2;
+    private List<Ubigeo> listDepartamentos=new ArrayList<Ubigeo>();
+    private List<Ubigeo> listProvincia=new ArrayList<Ubigeo>();
+    private List<Ubigeo> listDistritos=new ArrayList<Ubigeo>();
+   
     public almacenMB() {
     }
     
     @PostConstruct
     public void init(){
-        lista=almacenBO.getAllAlmaces();
-        listarDocumento();
+        lista=almacenBO.getAllAlmaces(); 
+        listDepartamentos = ubigeoBO.getAllDepartamentos();       
         almacenSelect=new AlmacenDTO();
-        almacenSelect.setDocumento(new Documento());
+        btnEditarEstado=true;
+        
+    }
+    
+    public void onRowSelectAlmacen(){
+        btnEditarEstado=false;
+    }
+    public void registrarAlmacen(){
+        RequestContext context = RequestContext.getCurrentInstance();    
+        context.execute("PF('registroAlmacen').show();");
+    }
+    
+    public void editarAlmacen(){
+        RequestContext context = RequestContext.getCurrentInstance();    
+        context.execute("PF('editarAlmacen').show();");
+    }
+    
+    public void limpiar(){
+        setNombre("");
+        setDireccion("");
+        setTelefono("");
+        setDireccion("");
+        setDepartamentoSelect("");
+        setProvinciaSelect("");
+        setDistritoSelect("");
     }
     public void buscarAlmacen(ActionEvent actionEvent){
         AlmacenDTO lis= new AlmacenDTO();
@@ -64,64 +103,104 @@ public class almacenMB {
     }
     
     public void registrarNuevoAlmacen(){
-        AlmacenDTO objAlmacen=new AlmacenDTO();
-        objAlmacen.setNombre(nombre);
-        objAlmacen.setTelefono(telefono);
-        objAlmacen.setDireccion(direccion);
-        objAlmacen.setCodDept(cod_dept);
-        objAlmacen.setCodProv(cod_prov);
-        objAlmacen.setCodDist(cod_dist);
-        almacenBO.registrarAlmacen(objAlmacen, lista2);
+        String sms="";
+        sms=validarRegistroAlmacen();
+        if(sms!=""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
+        }else{
+            AlmacenDTO objAlmacen=new AlmacenDTO();
+            objAlmacen.setNombre(nombre);
+            objAlmacen.setTelefono(telefono);
+            objAlmacen.setDireccion(direccion);
+            objAlmacen.setCodDept(departamentoSelect);
+            objAlmacen.setCodProv(provinciaSelect);
+            objAlmacen.setCodDist(distritoSelect);
+            almacenBO.registrarAlmacen(objAlmacen);
+            lista=almacenBO.getAllAlmaces();
+            RequestContext context = RequestContext.getCurrentInstance();    
+            context.update("panelA");
+            context.execute("PF('registroAlmacen').hide();");
+            limpiar();
+        }
     }
     
-    public void modificarAlmacen(){
-        AlmacenDTO objAlmacen=new AlmacenDTO();
-        objAlmacen.setNombre(almacenSelect.getNombre());
-        objAlmacen.setTelefono(almacenSelect.getTelefono());
-        objAlmacen.setDireccion(almacenSelect.getDireccion());
-        objAlmacen.setCodDept(almacenSelect.getCodDept());
-        objAlmacen.setCodProv(almacenSelect.getCodProv());
-        objAlmacen.setCodDist(almacenSelect.getCodDist());
-        almacenBO.modificarAlmacen(objAlmacen, lista2);
-    }
-    
-    public void registrarDocAlmacen(){
+    public void modificarNuevoAlmacen(){
+        String sms="";
+        sms=validarModificarAlmacen();
+        if(sms!=""){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, sms, "!!!"));
+        }else{
+            AlmacenDTO objAlmacen=new AlmacenDTO();
+            objAlmacen.setNombre(almacenSelect.getNombre());
+            objAlmacen.setTelefono(almacenSelect.getTelefono());
+            objAlmacen.setDireccion(almacenSelect.getDireccion());
+            objAlmacen.setCodDept(almacenSelect.getCodDept());
+            objAlmacen.setCodProv(almacenSelect.getCodProv());
+            objAlmacen.setCodDist(almacenSelect.getCodDist());
+            almacenBO.modificarAlmacen(objAlmacen);
+            lista=almacenBO.getAllAlmaces();
+            RequestContext context = RequestContext.getCurrentInstance();    
+            context.update("panelA");
+            context.execute("PF('editarAlmacen').hide();");
+            limpiar();
+        }
         
     }
+    
+    
     public String validarRegistroAlmacen(){
         String msjError="";
+        
+        if(getNombre().equals(""))
+            msjError="Ingrese un nombre";
+        else if(buscarPorNom())
+            msjError="El nombre ya existe";
+        else if(getTelefono().equals("") )
+            msjError="Ingrese un telefono";
+        else if(getDireccion().equals(""))
+            msjError="Ingrese una direccion";
+        else if(Integer.parseInt(getDepartamentoSelect())==0)
+            msjError="Seleccione un departamento";
+        else if(Integer.parseInt(getProvinciaSelect())==0)
+            msjError="Seleccione una provincia";
+        else if(Integer.parseInt(getDistritoSelect())==0)
+            msjError="Seleccione un distrito";
         return msjError;
+    }
+    public boolean buscarPorNom(){
+        
+        boolean encontro=almacenBO.buscarAlmacenNom(nombre.trim());
+        return encontro;
     }
     
     public String validarModificarAlmacen(){
         String msjError="";
+        if(almacenSelect.getNombre().equals(""))
+            msjError="Ingrese un nombre para almacen";
+        else if(buscarPorNom())
+            msjError="El nombre ya existe";
+        else if(almacenSelect.getTelefono().equals("") )
+            msjError="Ingrese un telefono";
+        else if(almacenSelect.getDireccion().equals(""))
+            msjError="Ingrese una direccion";
+        else if(Integer.parseInt(almacenSelect.getCodDept())==0)
+            msjError="Seleccione un departamento";
+        else if(Integer.parseInt(almacenSelect.getCodProv())==0)
+            msjError="Seleccione una provincia";
+        else if(Integer.parseInt(almacenSelect.getCodDist())==0)
+            msjError="Seleccione un distrito";
         return msjError;
     }
-    public void listarDocumento(){
-        listaDocumento=almacenBO.getNombreDocumento();
+    public void cargarProvincias(ValueChangeEvent event) {
+        listProvincia = ubigeoBO.getAllProvincias(event.getNewValue().toString());
+        listDistritos = new ArrayList<Ubigeo>();
+        provinciaSelect="";
+    }
+    public void cargarDistritos(ValueChangeEvent event) {
+        listDistritos = ubigeoBO.getAllDistritos(departamentoSelect, event.getNewValue().toString());
     }
     
-   /* public List<Documento> listarTablaDocumentos(ActionEvent actionEvent){
-        
-        Documento obj1=new Documento();
-        Docalmacen obj2=new Docalmacen();
-        obj1=almacenBO.getDocumentoXID(Integer.parseInt(documentoSelect));
-        obj2.setSerie(serie);
-        obj2.setCorrelativo(correlativo);
-        lista2.add(obj);
-        
-        for(Caracteristica ite: listaCaracteristicas){
-            if(ite.getIdcaracteristica()==obj.getIdcaracteristica())
-            {
-                listaCaracteristicas.remove(ite);
-                break;
-            }
-        }
-        
-       return lista2;
-    }*/
-   //////
-   
+    //////////////////////////////////////////////////
     public String getIdAlmancen() {
         return idAlmancen;
     }
@@ -218,28 +297,76 @@ public class almacenMB {
         this.almacenSelect = almacenSelect;
     }
 
-    public List<Documento> getListaDocumento() {
-        return listaDocumento;
+    public AlmacenBO getAlmacenBO() {
+        return almacenBO;
     }
 
-    public void setListaDocumento(List<Documento> listaDocumento) {
-        this.listaDocumento = listaDocumento;
+    public void setAlmacenBO(AlmacenBO almacenBO) {
+        this.almacenBO = almacenBO;
     }
 
-    public List<Docalmacen> getLista2() {
-        return lista2;
+    public List<Ubigeo> getListDepartamentos() {
+        return listDepartamentos;
     }
 
-    public void setLista2(List<Docalmacen> lista2) {
-        this.lista2 = lista2;
+    public void setListDepartamentos(List<Ubigeo> listDepartamentos) {
+        this.listDepartamentos = listDepartamentos;
     }
 
-    public String getDocumentoSelect() {
-        return documentoSelect;
+    public List<Ubigeo> getListProvincia() {
+        return listProvincia;
     }
 
-    public void setDocumentoSelect(String documentoSelect) {
-        this.documentoSelect = documentoSelect;
+    public void setListProvincia(List<Ubigeo> listProvincia) {
+        this.listProvincia = listProvincia;
+    }
+
+    public List<Ubigeo> getListDistritos() {
+        return listDistritos;
+    }
+
+    public void setListDistritos(List<Ubigeo> listDistritos) {
+        this.listDistritos = listDistritos;
+    }
+
+    public UbigeoBO getUbigeoBO() {
+        return ubigeoBO;
+    }
+
+    public void setUbigeoBO(UbigeoBO ubigeoBO) {
+        this.ubigeoBO = ubigeoBO;
+    }
+
+    public String getDepartamentoSelect() {
+        return departamentoSelect;
+    }
+
+    public void setDepartamentoSelect(String departamentoSelect) {
+        this.departamentoSelect = departamentoSelect;
+    }
+
+    public String getProvinciaSelect() {
+        return provinciaSelect;
+    }
+
+    public void setProvinciaSelect(String provinciaSelect) {
+        this.provinciaSelect = provinciaSelect;
+    }
+
+    public String getDistritoSelect() {
+        return distritoSelect;
+    }
+
+    public void setDistritoSelect(String distritoSelect) {
+        this.distritoSelect = distritoSelect;
+    }
+
+    public boolean isBtnEditarEstado() {
+        return btnEditarEstado;
+    }
+
+    public void setBtnEditarEstado(boolean btnEditarEstado) {
+        this.btnEditarEstado = btnEditarEstado;
     }
     
 }
