@@ -1527,7 +1527,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:selectOneMenu id="depAlmacen1" value="#{almacenMB.almacenSelect.codDept}"
                                          valueChangeListener="#{almacenMB.cargarProvincias}" >
                         <p:ajax event="valueChange" update="provAlmacen1 disAlmacen1"/>
-                            <f:selectItem itemLabel="Seleccione Dpto..." itemValue="0" />
+                            <f:selectItem itemLabel="Seleccione Dpto..." itemValue="" />
                             <f:selectItems value="#{almacenMB.listDepartamentos}" var="dptos" 
                                            itemValue="#{dptos.codDept}" itemLabel="#{dptos.departamento}"/>
                         </p:selectOneMenu>
@@ -1535,13 +1535,13 @@ jorgeevj 15.09.15 Creacion.
                         <p:selectOneMenu id="provAlmacen1" value="#{almacenMB.almacenSelect.codProv}"
                                          valueChangeListener="#{almacenMB.cargarDistritos}" >
                         <p:ajax event="valueChange" update="disAlmacen1"/>
-                            <f:selectItem itemLabel="Seleccione Prov..." itemValue="0" />
+                            <f:selectItem itemLabel="Seleccione Prov..." itemValue="" />
                             <f:selectItems value="#{almacenMB.listProvincia}" var="provi" 
                                            itemValue="#{provi.codProv}" itemLabel="#{provi.provincia}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Cod. Distrito:" for="disAlmacen1"/>                            
                         <p:selectOneMenu id="disAlmacen1" value="#{almacenMB.almacenSelect.codDist}">                        
-                            <f:selectItem itemLabel="Seleccione dist..." itemValue="0" />
+                            <f:selectItem itemLabel="Seleccione dist..." itemValue="" />
                             <f:selectItems value="#{almacenMB.listDistritos}" var="dist" 
                                            itemValue="#{dist.codDist}" itemLabel="#{dist.distrito}"/>
                         </p:selectOneMenu>
