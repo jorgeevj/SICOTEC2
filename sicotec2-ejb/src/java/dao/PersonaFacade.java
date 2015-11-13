@@ -48,4 +48,9 @@ public class PersonaFacade extends AbstractFacade<Persona> {
     
     }
     
+    public Persona insertarPersona(Persona entidad){
+        getEntityManager().persist(entidad);
+        getEntityManager().flush();
+        return entidad;
+    }
 }

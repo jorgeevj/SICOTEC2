@@ -1604,18 +1604,63 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE USUARIOS-->
             
             <!-- DIALOG DE PERSONAS -->
-                <p:dialog header="Agregar Persona" widgetVar="addPersona" modal="true" resizable="false">
+            <p:dialog header="Agregar Persona" widgetVar="addPersona" modal="true" resizable="false" width="500" height="400">
                 <h:form id="formAddPersona">
-                    <p:growl showDetail="true" sticky="true" id="msnEditar"/>
+                    <p:growl showDetail="true" sticky="true" id="msnAgregarPersona"/>
                     <h:panelGrid columns="2">
-                        
-                        <p:outputLabel value="Nombre "></p:outputLabel>
-                        <p:inputText   value="#{personasMB.nombreAdd}" disabled="false"/>
-                        <p:outputLabel value="Clave "></p:outputLabel>
-                        <p:inputText   value="#{personasMB.apellidoAdd}" disabled="f"/>
-                        
+                        <p:outputLabel value="Nombre: "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.nombreAdd}"/>
+                        <p:outputLabel value="Apellido: "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.apellidoAdd}"/>
+                        <p:outputLabel value="DNI: "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.dniAdd}"/>
+                        <p:outputLabel value="Email "></p:outputLabel>
+                        <p:inputText   value="#{personasMB.emailAdd}"/>
                     </h:panelGrid>
-                    <p:commandButton value="Editar" update="msnEditar"/>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Agregar" actionListener="#{personasMB.abrirModalAddTelfPers}"></p:commandButton>
+                        <p:commandButton value="Quitar" ></p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:dataTable id="tabTelefPers" var="telfPers" value="#{personasMB.listaTelefPersDTO}"
+                                     selectionMode="single" rowKey="#{telfPers.numero}">
+                            <p:ajax event="rowSelect" listener="#{personasMB.selectTelefPersAdd}"></p:ajax>
+                            <p:column headerText="Numero">
+                                <h:outputText value="#{telfPers.numero}" />
+                            </p:column>
+                            <p:column headerText="Operador">
+                                <h:outputText value="#{telfPers.operador}" />
+                            </p:column>
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{telfPers.tipo}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" update="msnAgregarPersona"/>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Agregar Teléfono Persona" widgetVar="addTelfPers" modal="true">
+                <h:form id="formTelefPers">
+                    <p:growl showDetail="true" sticky="true" id="msjAgregarTelefPers"/>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Número: "></p:outputLabel>
+                        <p:inputText value="#{personasMB.numeroAdd}"/>
+                        <p:outputLabel value="Tipo: "></p:outputLabel>
+                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.tipoAdd}" >
+                            <f:selectItem itemLabel="Seleccione un Tipo" itemValue="0"></f:selectItem>
+                            <f:selectItem itemLabel="Fijo" itemValue="Fijo"></f:selectItem>
+                            <f:selectItem itemLabel="Movil" itemValue="Movil"></f:selectItem>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Operador: "></p:outputLabel>
+                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.operadorAdd}" >
+                            <f:selectItem itemLabel="Seleccione un Operador" itemValue="0"></f:selectItem>
+                            <f:selectItem itemLabel="Claro" itemValue="Claro"></f:selectItem>
+                            <f:selectItem itemLabel="Entel" itemValue="Entel"></f:selectItem>
+                            <f:selectItem itemLabel="Movistar" itemValue="Movistar"></f:selectItem>
+                        </p:selectOneMenu>
+                        <p:commandButton value="Agregar" actionListener="#{personasMB.addTelefPers}"></p:commandButton>
+                    </h:panelGrid>
                 </h:form>
             </p:dialog>
             <!--FIN DIALOG DE PERSONAS-->

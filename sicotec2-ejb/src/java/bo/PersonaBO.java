@@ -7,7 +7,9 @@ package bo;
 
 import dao.PersonaFacade;
 import dto.PersonaDTO;
+import dto.TelefpersDTO;
 import entidades.Persona;
+import entidades.Telefpersona;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -23,6 +25,8 @@ import javax.ejb.LocalBean;
 public class PersonaBO {
     @EJB
     private PersonaFacade personaFacade;
+    /*@EJB
+    private TelefpersonaFacade;*/
 
     public List<Persona> getAllPresonas() {
         
@@ -73,6 +77,31 @@ public class PersonaBO {
         List<PersonaDTO> listaDTO = new ArrayList<PersonaDTO>();
         return listaDTO;
     }
-
     
+    public Persona insertNuevaPersona(PersonaDTO dto){
+        Persona entidad = this.convertDtoToEntity(dto, 1);
+        entidad = personaFacade.insertarPersona(entidad);
+        return entidad;
+    }
+    
+    public void insertTelefNuevaPers(List<TelefpersDTO> listaDTO){
+        List<Telefpersona> listaEntidad = this.convertListDtoToEntityTelefPers(listaDTO);
+        for(Telefpersona entidad : listaEntidad){
+            
+        }
+    }
+    
+    public List<Telefpersona> convertListDtoToEntityTelefPers(List<TelefpersDTO> listaDto){
+        List<Telefpersona> listaEntidad = new ArrayList<Telefpersona>();
+        for(TelefpersDTO dto : listaDto){
+            Telefpersona entidad = new Telefpersona();
+            entidad.setIdpersona(dto.getIdpersona());
+            entidad.setNumero(dto.getNumero());
+            entidad.setOperador(dto.getOperador());
+            entidad.setPrincipal(dto.getPrincipal());
+            entidad.setTipo(dto.getTipo());
+            listaEntidad.add(entidad);
+        }
+        return listaEntidad;
+    }
 }

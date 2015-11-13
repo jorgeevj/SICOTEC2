@@ -8,7 +8,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="body">
         
-        <p:panel id="pCotizacion" header="Gestion de Personas" footer="Personas Details" style="margin-bottom:20px">
+        <p:panel id="pPersonas" header="Gestion de Personas" footer="Personas Details" style="margin-bottom:20px">
             <h:form id="formPersonas">
                 <p:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="Nombre:" for="itp0" />
@@ -28,6 +28,7 @@
             <h:form id="formTabPersonas">
                 <p:dataTable id="tabPersonas" var="per" value="#{personasMB.listaAllPersonas}" 
                              selectionMode="single" rowKey="#{per.idpersona}">
+                    <p:ajax event="rowSelect" listener="#{personasMB.selectPersona}"></p:ajax>
                         <p:column headerText="Nombre">
                             <h:outputText value="#{per.nombre}" />
                         </p:column>
@@ -42,7 +43,6 @@
                         </p:column>      
                     </p:dataTable>
             </h:form>
-
         </p:panel> 
     </ui:define>  
 </ui:composition>
