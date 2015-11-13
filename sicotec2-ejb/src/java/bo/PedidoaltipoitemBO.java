@@ -63,7 +63,7 @@ public class PedidoaltipoitemBO {
             } else{
                 estado = "EN COMPRA";
             }
-            DTO.setNombreEstado(estado);
+            //DTO.setNombreEstado(estado);
             DTO.setTotal(pealtipoitem.getCostoUni()*pealtipoitem.getCantidad());
             System.out.println("nombre: " + nombreItems);
             DTO.setNombreItems(nombreItems);
@@ -117,9 +117,9 @@ public class PedidoaltipoitemBO {
 //    }
      
       public List<PealtipoitemDTO> getAllItemsByPedido(PealtipoitemDTO dto){
-          Pealtipoitem entidad = this.convertDTOtoEntity(dto);
-          List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAllPealtipoitemsByPedido(entidad);
-          List<PealtipoitemDTO> listaDto = this.convertListEntityToDTO(listaEntidad);
+          /*Pealtipoitem entidad = this.convertDTOtoEntity(dto);
+          List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAllPealtipoitemsByPedido(entidad);*/
+          List<PealtipoitemDTO> listaDto = null;//this.convertListEntityToDTO(listaEntidad);
           return listaDto;
       }
 }

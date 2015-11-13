@@ -196,8 +196,10 @@ public class MovimientoBO {
             int idAlmacenDestino = mov.getIdalmacenDestino();
             
             for(ItemDTO DTO : itemsReg){
-                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOringe,1,2);
-                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenDestino,1,1);
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(),idAlmacenOringe,1,2);
+                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(),idAlmacenDestino,1,1);
+                
+                itemFacade.cambiarAlmacenItem(DTO.getIditem(), idAlmacenDestino);
                 /*if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
@@ -294,11 +296,11 @@ public class MovimientoBO {
         
         DTO.setEstado(movimiento.getEstado());
         if(movimiento.getEstado() == 0){
-            //DTO.setColorEstado("#F44236");//rojo
-            //DTO.setColorLetra("white");
-        }else{
-            //DTO.setColorEstado("#2095F2");//azul
-            //DTO.setColorLetra("white");
+            DTO.setDescripcionEstado("PROCESO");
+        }else if(movimiento.getEstado() == 1){
+            DTO.setDescripcionEstado("COMPLETADO");
+        }else if(movimiento.getEstado() == 2){
+            DTO.setDescripcionEstado("CANCELADO");
         }
         return DTO;
     }

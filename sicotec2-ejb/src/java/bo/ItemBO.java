@@ -48,6 +48,11 @@ public class ItemBO {
         
         return listaDTO;
     }
+    
+    public boolean validarItemTranslado(String idTipoItem, String idItem){
+        boolean tof = itemFacade.validateCodTranslado(idTipoItem, idItem);
+        return tof;
+    }
 
     public ItemDTO convertEntityToDTO(Item item){
         ItemDTO DTO = new ItemDTO();

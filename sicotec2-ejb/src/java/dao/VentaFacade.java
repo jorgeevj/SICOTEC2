@@ -5,8 +5,10 @@
  */
 package dao;
 
+import dto.VentaDTO;
 import entidades.Item;
 import entidades.Venta;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -96,4 +98,61 @@ public class VentaFacade extends AbstractFacade<Venta> {
         
         return tof;
      }
+    
+    public List<Venta> getVentasByBusqueda(VentaDTO ven){
+        List<Venta> listaVenta = new ArrayList<Venta>();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            String jpa = "SELECT v "
+                       + "FROM Venta v "
+                       + "WHERE 1 = 1 ";
+            
+            if(ven.getEstado()!= "100" && !ven.getEstado().equals("100")){
+                jpa += "AND v.estado = :estado ";
+            }
+            if(ven.getIdalmacen() !=  0){
+                jpa += "AND v.idalmacen = :idAlmacen ";
+            }
+            if(ven.getIdEmpresa() != 0){
+                jpa += "AND v.idempresa.idempresa = :idEmpresa ";
+            }
+            if(ven.getSerie() != null && !ven.getSerie().equals("")){
+                jpa += "AND v.serie = :serie ";
+            }
+            if(ven.getFechaInicio() != null){
+                jpa += "AND v.fecha >= '"+sdf.format(ven.getFechaInicio())+"' ";
+            }
+            if(ven.getFechaFin()!= null){
+                jpa += "AND v.fecha <= '"+sdf.format(ven.getFechaFin())+"' ";
+            }
+            if(ven.getCorrelativo()!= null && !ven.getCorrelativo().equals("")){
+                jpa += "AND v.correlativo = :correlativo ";
+            }
+
+            Query query = em.createQuery(jpa);
+            
+            if(ven.getEstado()!= "100" && !ven.getEstado().equals("100")){
+                query.setParameter("estado", ven.getEstado());
+            }
+            if(ven.getIdalmacen() !=  0){
+                query.setParameter("idAlmacen", ven.getIdalmacen());
+            }
+            if(ven.getIdEmpresa() != 0){
+                query.setParameter("idEmpresa", ven.getIdEmpresa());
+            }
+            if(ven.getSerie() != null && !ven.getSerie().equals("")){
+                query.setParameter("serie", ven.getSerie());
+            }
+            if(ven.getCorrelativo()!= null && !ven.getCorrelativo().equals("")){
+                query.setParameter("correlativo", ven.getCorrelativo());
+            }
+  
+            listaVenta = query.getResultList();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            listaVenta = new ArrayList<Venta>();
+        }
+        
+        return listaVenta;
+    }
 }

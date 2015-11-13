@@ -21,12 +21,18 @@ public class VentaDTO {
     private String serie;
     private String correlativo;
     private Integer idalmacen;
+    private Integer idUsuario;
+    private String nombreUsuario;
     
     //AGREGADOS
     private Integer idEmpresa;
+    private Integer idImpuesto;
     private String nombreEmpresa;
     private String nombreImpuesto;
     private String porcentajeImpuesto;
+    private String nombreAlmacen;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     /**
      * @return the idventa
@@ -208,6 +214,90 @@ public class VentaDTO {
      */
     public void setPorcentajeImpuesto(String porcentajeImpuesto) {
         this.porcentajeImpuesto = porcentajeImpuesto;
+    }
+
+    /**
+     * @return the nombreAlmacen
+     */
+    public String getNombreAlmacen() {
+        return nombreAlmacen;
+    }
+
+    /**
+     * @param nombreAlmacen the nombreAlmacen to set
+     */
+    public void setNombreAlmacen(String nombreAlmacen) {
+        this.nombreAlmacen = nombreAlmacen;
+    }
+
+    /**
+     * @return the fechaInicio
+     */
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    /**
+     * @param fechaInicio the fechaInicio to set
+     */
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    /**
+     * @return the fechaFin
+     */
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    /**
+     * @param fechaFin the fechaFin to set
+     */
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    /**
+     * @return the idImpuesto
+     */
+    public Integer getIdImpuesto() {
+        return idImpuesto;
+    }
+
+    /**
+     * @param idImpuesto the idImpuesto to set
+     */
+    public void setIdImpuesto(Integer idImpuesto) {
+        this.idImpuesto = idImpuesto;
+    }
+
+    /**
+     * @return the idUsuario
+     */
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    /**
+     * @param idUsuario the idUsuario to set
+     */
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    /**
+     * @return the nombreUsuario
+     */
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    /**
+     * @param nombreUsuario the nombreUsuario to set
+     */
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     

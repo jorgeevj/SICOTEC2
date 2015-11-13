@@ -6,11 +6,20 @@
 package bo;
 
 import dao.AlmacenFacade;
+import dao.AltipoitemFacade;
+import dao.ItemFacade;
 import dao.VentaFacade;
 import dto.ItemDTO;
+import dto.VeMedioPagoDTO;
 import dto.VentaDTO;
+import entidades.Altipoitem;
+import entidades.Empresa;
+import entidades.Impuesto;
 import entidades.Item;
+import entidades.Vemediopago;
+import entidades.VemediopagoPK;
 import entidades.Venta;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -26,6 +35,14 @@ import javax.ejb.Stateless;
 public class VentasBO {
     @EJB
     private VentaFacade ventaFacade;
+    @EJB
+    private AlmacenFacade almacenFacade;
+    @EJB
+    private ItemFacade itemFacade;
+    @EJB
+    private AltipoitemFacade altipoitemFacade;
+    /*@EJB
+    private VemediopagoFacade altipoitemFacade;*/
     
     ItemBO item;
     
@@ -43,6 +60,44 @@ public class VentasBO {
         return listaItems;
     }
     
+    public List<VentaDTO>getVentasByBusqueda(VentaDTO params){
+        List<VentaDTO> listaVentas = new ArrayList<VentaDTO>();
+        listaVentas = convertListEntityToDTO(ventaFacade.getVentasByBusqueda(params));
+        return listaVentas;
+    }
+    
+    public void editVenta(VentaDTO venta, List<VeMedioPagoDTO> veMedioPago, int estado){
+        if(estado == 0){
+            List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
+            for(VeMedioPagoDTO vDTO : veMedioPago){
+                Vemediopago vem = new Vemediopago();
+                VemediopagoPK pk = new VemediopagoPK();
+                pk.setIdmedioPago(vDTO.getIdMedioPago());
+                pk.setIdventa(vDTO.getIdVenta());
+                vem.setVemediopagoPK(pk);
+                vem.setMonto(vDTO.getMonto());
+            }
+            Venta ventaE = this.ConvertDTOtoEntity(venta);
+            ventaE.setVemediopagoList(listaEnt);
+            ventaFacade.edit(ventaE);
+            List<Item> items = ventaFacade.getItemsxVenta(venta.getIdventa());
+
+            for(Item i : items){
+                //RESTARLE LA CANTIDAD DE RESERVADO EN ALTIPOITEM
+                altipoitemFacade.updateCantidadReservadoAltipoItem(i.getAltipoitem().getTipoitem().getIdtipoItem(), venta.getIdalmacen(), 1, 2);
+                
+                //CAMBIAR EL ESTADO AL ITEM
+                i.setEstado("0");
+                itemFacade.edit(i);
+            }
+            
+        }else if(estado == 1){
+            Venta ventaE = this.ConvertDTOtoEntity(venta);
+            ventaFacade.edit(ventaE);
+            
+            
+        }
+    }
     
     public List<VentaDTO> convertListEntityToDTO(List<Venta> listaVentas){
         List<VentaDTO> listaDTO = new ArrayList<VentaDTO>();
@@ -72,6 +127,12 @@ public class VentasBO {
         DTO.setIdalmacen(venta.getIdalmacen());
         DTO.setNombreImpuesto(venta.getIdimpuesto().getNombre());
         DTO.setPorcentajeImpuesto(venta.getIdimpuesto().getProcentaje()+"");
+        DTO.setNombreAlmacen(almacenFacade.getAlmacenById(venta.getIdalmacen()).getNombre());
+        DTO.setIdUsuario(venta.getIdusuario());
+        DTO.setNombreUsuario(venta.getNombreusuario());
+        //PUEDE SER QUE SE CAIGA
+        DTO.setIdImpuesto(venta.getIdimpuesto().getIdimpuesto());
+        
         
         return DTO;
     }
@@ -104,6 +165,35 @@ public class VentasBO {
         DTO.setDescFamilia(item.getLote().getAltipoitem().getTipoitem().getIdfamilia().getNombre());
         DTO.setDescMarca(item.getLote().getAltipoitem().getTipoitem().getIdmarca().getNombre());
         return DTO;
+    }
+    
+    public Venta ConvertDTOtoEntity(VentaDTO dto){
+        Venta entidad = new Venta();
+        Empresa empresa = new Empresa();
+        Impuesto impuesto = new Impuesto();
+        
+        entidad.setIdventa(dto.getIdventa());
+        entidad.setFecha(dto.getFecha());
+        entidad.setDescuento(dto.getDescuento());
+        entidad.setTotal(dto.getTotal());
+        
+        //EMPRESA
+        empresa.setIdempresa(dto.getIdEmpresa());
+        entidad.setIdempresa(empresa);
+        
+        //IMPUESTO
+        impuesto.setIdimpuesto(dto.getIdImpuesto());
+        entidad.setIdimpuesto(impuesto);
+        
+        entidad.setEstado(dto.getEstado());
+        entidad.setIddocumento(dto.getIddocumento());
+        entidad.setSerie(dto.getSerie());
+        entidad.setCorrelativo(dto.getCorrelativo());
+        entidad.setIdalmacen(dto.getIdalmacen());
+        entidad.setIdusuario(dto.getIdUsuario());
+        entidad.setNombreusuario(dto.getNombreUsuario());
+        
+        return entidad;
     }
     
 }

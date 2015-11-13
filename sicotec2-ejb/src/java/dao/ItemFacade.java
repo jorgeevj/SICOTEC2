@@ -114,7 +114,32 @@ public class ItemFacade extends AbstractFacade<Item> {
                 tof = true;
             }
         }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return tof;
+    }
+    
+    public boolean validateCodTranslado(String idTipoItem, String cod){
+        boolean tof = true;
+        try{
+            String sql = "SELECT i "
+                       + "FROM Item i "
+                       + "WHERE i.iditem = :idItem";
+            Query query = em.createQuery(sql);
+            query.setParameter("idItem", cod);
             
+            Item i = (Item)query.getSingleResult();
+            if(i != null){
+                if(i.getAltipoitem().getAltipoitemPK().getIdtipoItem().equals(idTipoItem)){
+                    if(i.getEstado().equals("0")){
+                        tof = false;
+                    }
+                }
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            tof = true;
         }
         
         return tof;
@@ -126,6 +151,26 @@ public class ItemFacade extends AbstractFacade<Item> {
             String sql = "UPDATE item "
                        + "SET    estado = "+idEstado+" "
                        + "WHERE  iditem = "+idItem;
+                    
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+     }
+    
+    public boolean cambiarAlmacenItem(String idItem, int idAlmacen){
+         boolean tof = false;
+        try{
+            String sql = "UPDATE item "
+                       + "SET    idalmacen = "+idAlmacen+" "
+                       + "WHERE  iditem = '"+idItem+"'";
                     
             Query query = em.createNativeQuery(sql);
             

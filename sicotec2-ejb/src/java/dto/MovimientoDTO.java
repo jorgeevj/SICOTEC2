@@ -26,7 +26,7 @@ public class MovimientoDTO {
     private String correlativo;
     
     //AGREGADOS
-    private String colorEstado;
+    private String descripcionEstado;
     private String colorLetra;
     private Integer idTipoDocumento;
     private String TipoDocumento;
@@ -194,19 +194,6 @@ public class MovimientoDTO {
         this.correlativo = correlativo;
     }
 
-    /**
-     * @return the colorEstado
-     */
-    public String getColorEstado() {
-        return colorEstado;
-    }
-
-    /**
-     * @param colorEstado the colorEstado to set
-     */
-    public void setColorEstado(String colorEstado) {
-        this.colorEstado = colorEstado;
-    }
 
     /**
      * @return the colorLetra
@@ -340,6 +327,20 @@ public class MovimientoDTO {
      */
     public void setIdVenta(Integer idVenta) {
         this.idVenta = idVenta;
+    }
+
+    /**
+     * @return the descripcionEstado
+     */
+    public String getDescripcionEstado() {
+        return descripcionEstado;
+    }
+
+    /**
+     * @param descripcionEstado the descripcionEstado to set
+     */
+    public void setDescripcionEstado(String descripcionEstado) {
+        this.descripcionEstado = descripcionEstado;
     }
     
     

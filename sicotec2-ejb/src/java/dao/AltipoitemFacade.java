@@ -50,6 +50,33 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
                        + "WHERE idtipoitem = '"+idTipoItem+"' "
                        + "AND idalmacen = "+idAlmacen;
                     
+            System.out.println(sql);
+            Query query = em.createNativeQuery(sql);
+            
+            int i = query.executeUpdate();
+            if(i == 1){
+                tof = true;
+            }
+        }catch(Exception e){
+           System.out.println(e.getMessage());
+        }
+        
+        return tof;
+    }
+    
+    public boolean updateCantidadReservadoAltipoItem(String idTipoItem, int idAlmacen, int cantidad, int opc){
+        boolean tof = false;
+        try{
+            String p = "SET reservado = reservado + "+cantidad+" ";
+            if(opc == 2){
+                p = "SET reservado = reservado - "+cantidad+" ";
+            }
+            String sql = "UPDATE altipoitem "
+                       +p
+                       + "WHERE idtipoitem = '"+idTipoItem+"' "
+                       + "AND idalmacen = "+idAlmacen;
+                    
+            System.out.println(sql);
             Query query = em.createNativeQuery(sql);
             
             int i = query.executeUpdate();
