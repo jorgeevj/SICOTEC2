@@ -9,6 +9,7 @@ import entidades.Almacen;
 import entidades.Documento;
 import entidades.Empresa;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -42,6 +43,7 @@ public class CompraDTO {
      
      private Date fechaInicio;
     private Date fechaFin;
+    private List<LoteDTO> listaLoteDTO;
     
     
 
@@ -197,6 +199,14 @@ public class CompraDTO {
 
     public void setIdAlmacen(int idAlmacen) {
         this.idAlmacen = idAlmacen;
+    }
+
+    public List<LoteDTO> getListaLoteDTO() {
+        return listaLoteDTO;
+    }
+
+    public void setListaLoteDTO(List<LoteDTO> listaLoteDTO) {
+        this.listaLoteDTO = listaLoteDTO;
     }
 
  

@@ -29,8 +29,8 @@ public class RequerimientosFacade extends AbstractFacade<Requerimientos> {
     }
     
     public Requerimientos agregarRequerimiento(Requerimientos entidadRequerimiento) {
-        getEntityManager().persist(entidadRequerimiento);
-        getEntityManager().flush();
+        em.persist(entidadRequerimiento);
+        em.flush();
         return entidadRequerimiento;
     }
     

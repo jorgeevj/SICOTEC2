@@ -201,23 +201,11 @@ public class CompraMB {
     }
 
     public void addNuevoCompra(ActionEvent actionEvent) {
-        CompraDTO dto = new CompraDTO();
-        dto.setIdAlmacen(idalmacenNuevo);
-        dto.setEstado(0);
-//           dto.setCorrelativo(getCorrelativoNuevo());
-        dto.setFecha(new Date());
-//           dto.setSerie(getSerieNuevo());
-
-        //Insert Update PealTipoitem
-        //   List<PealtipoitemDTO> listAux = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), 0);
-        dto.setTotal(getTotalNuevo());
-        dto.setIdEmpresa(getIdempresaNuevo());
-        System.out.println("data: " + dto.getCorrelativo());
-
-        Compra entidad = compraBO.insertarNuevoCompra(dto);
-        /*List<PealtipoitemDTO> listaPealDTO = this.getListaPealtipoItemCompra(getListaPealTipoItemSelct(), entidad.getIdcompra());
-         pedidoBO.updatePedidosItems(listaPealDTO);*/
-
+        
+        camposAdd.setListaLoteDTO(listaLoteDTO);
+        camposAdd.setEstado(2);
+        compraBO.insertarNuevoCompra(camposAdd);
+       
         listaCompras = compraBO.getAllCompras();
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formCompra");
@@ -307,10 +295,7 @@ public class CompraMB {
 
     }
     
-     public void cargaNombreUnidad(ValueChangeEvent changeEvent){
-         
     
-    }
 
     public void quitarPedido(ActionEvent actionEvent) {
         if (listaLoteDTO.isEmpty()) {

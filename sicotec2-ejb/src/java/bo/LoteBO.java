@@ -7,7 +7,13 @@ package bo;
 
 import dao.LoteFacade;
 import dto.LoteDTO;
+import entidades.Altipoitem;
+import entidades.AltipoitemPK;
+import entidades.Compra;
 import entidades.Lote;
+import entidades.LotePK;
+import entidades.Requerimientos;
+import entidades.Unidades;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -63,5 +69,14 @@ public class LoteBO {
         DTO.setDescUMedida(lote.getIdunidades().getNombre());
         
         return DTO;
+    }
+
+    public Lote convertDTObyEntity(LoteDTO dto) {
+        Lote l=new Lote();
+        l.setAltipoitem(new Altipoitem(new AltipoitemPK(dto.getIdAlmacen(), dto.getIdtipoitem())));
+        l.setCantidad(dto.getCantidad());
+        l.setPrecioUni(dto.getPrecioUni());
+        l.setIdunidades(new Unidades(dto.getUnidadDTO().getIdunidades()));
+    return l;
     }
 }

@@ -649,10 +649,8 @@ jorgeevj 15.09.15 Creacion.
                    <h:outputText value="#{loteReg.unidadDTO.nombre}" />
                </f:facet>
                <f:facet name="input">
-                   <h:selectOneMenu value="#{loteReg.unidadDTO.idunidades}" valueChangeListener="#{compraMB.cargaNombreUnidad}">
-                      
-                       
-                       <f:selectItems value="#{compraMB.listaUnidad}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
+                   <h:selectOneMenu value="#{loteReg.unidadDTO.idunidades}">
+                      <f:selectItems value="#{compraMB.listaUnidad}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
                    </h:selectOneMenu>
                </f:facet>
            </p:cellEditor>
@@ -670,7 +668,7 @@ jorgeevj 15.09.15 Creacion.
                         
                 </p:dataTable>
                
-                    <p:commandButton id="agrNuevoCompra" value="Guardar" actionListener="#{compraMB.addNuevoCompra}" />
+                    <p:commandButton id="guardarCompraNueva" value="Enviar" actionListener="#{compraMB.addNuevoCompra}" />
                 </h:form>
             </p:dialog> 
         
