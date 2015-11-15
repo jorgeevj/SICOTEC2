@@ -10,6 +10,7 @@ import dto.ImpuestoDTO;
 import entidades.Impuesto;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
@@ -20,6 +21,7 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class ImpuestoBO {
+    @EJB
     ImpuestoFacade impuestoFacade;
     public List<ImpuestoDTO> getAllImpuestos(){
         List<ImpuestoDTO> listaDTO = new ArrayList<ImpuestoDTO>();
