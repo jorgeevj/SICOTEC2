@@ -116,13 +116,13 @@
                             <f:selectItem itemLabel="Seleccione Almacen Origen" itemValue="0" />
                             <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
                                            itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/> 
-                            <p:ajax listener="#{movimientoMB.selectAlmacen}" update="btnItemsAlmacenAdd"/> 
+                            <p:ajax listener="#{movimientoMB.selectAlmacen}" update="btnItemsAlmacenAdd msnRegistrar"/> 
                         </p:selectOneMenu>
                         <p:selectOneMenu id="AlmacenDestinoSelectNuevo" value="#{movimientoMB.idAlmacenDestinoNuevo}">
                             <f:selectItem itemLabel="Seleccione Almacen Destino" itemValue="0" />
                             <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al" 
                                            itemLabel="#{al.nombre}" itemValue="#{al.idalmacen}"/>  
-                            <p:ajax listener="#{movimientoMB.selectAlmacen}" update="btnItemsAlmacenAdd"/> 
+                            <p:ajax listener="#{movimientoMB.selectAlmacen}" update="btnItemsAlmacenAdd msnRegistrar"/> 
                         </p:selectOneMenu>
                         <p:commandButton id="btnItemsAlmacenAdd" value="Items Almacen" style="#{movimientoMB.styleBTNItemsAlmacen}" actionListener="#{movimientoMB.itemsByAlmacen}"/>
                     </h:panelGrid>
@@ -170,20 +170,13 @@
         <p:dialog header="Editar Movimiento" widgetVar="dialog_edit_mov" resizable="false">
             <h:form id="formEdit">
                 <p:growl showDetail="true" sticky="true" id="msnEditar"/>
-                <h:panelGrid columns="4">
-                    <!--<p:outputLabel value="Documento"/>
-                    <p:selectOneMenu id="documentoSelectEdit" value="#{movimientoMB.idDocumentoEdit}">
-                        <f:selectItem itemLabel="Seleccione Documento" itemValue="0" />
-                        <f:selectItems value="#{movimientoMB.listaDocumento}" var="doc" 
-                                       itemLabel="#{doc.nombre}" itemValue="#{doc.iddocumento}"/>  
-
-                    </p:selectOneMenu>-->
+                <h:panelGrid columns="3">
                     <p:outputLabel value="Estado"/>
                     <p:selectOneMenu id="estadoSelectEdit" value="#{movimientoMB.estadoEdit}">
                         <f:selectItem itemLabel="Seleccione Estado" itemValue="0" />
                         <f:selectItems value="#{movimientoMB.listaEstados}"/>  
                     </p:selectOneMenu>
-                    <p:outputLabel value="Movimiento"/>
+                    <p:outputLabel value="Motivo"/>
                     <p:inputTextarea id="motivoNuevo" value="#{movimientoMB.motivoEdit}"/>
                     <p:outputLabel value="Comentario"/>
                     <p:inputTextarea id="comentarioNuevo" value="#{movimientoMB.comentarioEdit}"/>
@@ -263,13 +256,13 @@
             </h:form>
         </p:dialog>
         
-        <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_lote" resizable="false" width="500"> 
+        <p:dialog header="Items de Compra" widgetVar="dialog_add_cantidad_lote" resizable="false" width="500"> 
             <h:form id="formCodigoItemCompra">
                 <p:growl showDetail="true" sticky="true" id="msnCantidadLote"/>
                 <p:panel> 
                     Codigo Item
                     <p:inputText value="#{movimientoMB.codItemCompra}" style=""/>
-                    <p:commandButton value="Insertar" update="msnCantidadLote" actionListener="#{movimientoMB.insertCodigoItemToLista}"/>
+                    <p:commandButton value="Insertar" update="formCodigoItemCompra:msnCantidadLote" actionListener="#{movimientoMB.insertCodigoItemToLista}"/>
                     <br/>
                     <br/>
                     <p:dataTable value="#{movimientoMB.listaCodigosCompra}" var="codigosCompra" rowIndexVar="var">
@@ -299,7 +292,7 @@
             </h:form>
         </p:dialog>
         
-        <p:dialog header="Cantidad Item" widgetVar="dialog_add_cantidad_item_almacen" resizable="false" width="500"> 
+        <p:dialog header="Items de Almacen" widgetVar="dialog_add_cantidad_item_almacen" resizable="false" width="500"> 
             <h:form id="formCodigoItemTranslado">
                 <p:growl showDetail="true" sticky="true" id="msnCantidadItemAlmacen"/>
                 <p:panel> 
@@ -411,7 +404,7 @@
         </p:dialog>
         
         
-        <p:dialog header="Orden de Ventas" widgetVar="dialog_nueva_ventas" resizable="false" width="1000"> 
+        <p:dialog header="Orden de Ventas" widgetVar="dialog_nueva_ventas" resizable="false" width="1000" height="400"> 
             <h:form id="formTabVentas">
                 Ordenes de Venta
                 <p:dataTable value="#{movimientoMB.listaVentas}" var="ventaSelecc" selectionMode="single" id="tb_ver_ventas"
@@ -440,6 +433,7 @@
             </h:form>
             <br/>
             <h:form id="formTabItemsVenta">
+                <p:growl showDetail="true" sticky="true" id="msnAddItemVenta"/>
                 Items de la orden de Ventas:
                 <p:dataTable value="#{movimientoMB.listaItemsVenta}" var="itemsDispVenta" selectionMode="single" id="tb_ver_items_desp_ventas"
                              rowKey="#{itemsDispVenta.iditem}" rowIndexVar="var" selection="#{movimientoMB.itemSeleccionadoVenta}">
@@ -466,10 +460,11 @@
                        <p:outputLabel value="#{itemsDispVenta.descColor}"/>
                    </p:column>
                </p:dataTable>
-                <p:commandButton value="Agregar" actionListener="#{movimientoMB.addCantidadToItemLista}"/>
+                <p:commandButton value="Agregar" update="msnAddItemVenta" actionListener="#{movimientoMB.addCantidadToItemLista}"/>
             </h:form>
             <br/>
             <h:form id="formTabItemsVentasSelec">
+                <p:growl showDetail="true" sticky="true" id="msnRemoveItemVenta"/>
                 Items Seleccionados
                 <p:dataTable value="#{movimientoMB.listaItemsVentaAux}" var="itemsSeleccVenta" selectionMode="single" id="tb_ver_items_selec_ventas"
                              rowKey="#{itemsSeleccVenta.iditem}" rowIndexVar="var" selection="#{movimientoMB.itemSeleccionadoVentaAux}">
@@ -496,7 +491,7 @@
                        <p:outputLabel value="#{itemsSeleccVenta.descColor}"/>
                    </p:column>
                </p:dataTable>
-                <p:commandButton value="Remover" actionListener="#{movimientoMB.removeItemToLista()}"/>
+                <p:commandButton value="Remover" update="msnRemoveItemVenta" actionListener="#{movimientoMB.removeItemToLista()}"/>
             </h:form>
             
             <p:commandButton onclick="PF('dialog_nueva_ventas').hide();" value="Aceptar" style="float: right"/>

@@ -296,6 +296,7 @@ public class MovimientoMB implements Serializable{
             
         }else{
             setStyleBTNItemsAlmacen("display:none");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "","Seleccione un almacen distinto"));
         }
     }
     
@@ -432,6 +433,7 @@ public class MovimientoMB implements Serializable{
             setDisableVerItems(true);
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('dialog_nuevo_mov').hide();");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro", "Re registró correctamente el movimiento"));
             context.update("formTabla");
             context.update("formBotones");
         }   
@@ -443,7 +445,12 @@ public class MovimientoMB implements Serializable{
     
     public void selectMovimiento(SelectEvent event){
         setMovimientoSeleccionado((MovimientoDTO)event.getObject());
-        setDisableEditar(false);
+        if(getMovimientoSeleccionado().getEstado() == 0){
+            setDisableEditar(false);
+        }else{
+            setDisableEditar(true);
+        }
+        
         setDisableVerItems(false);
         
         RequestContext context = RequestContext.getCurrentInstance();
@@ -482,6 +489,7 @@ public class MovimientoMB implements Serializable{
             mov.setEstado(getEstadoEdit());
 
             RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se editó correctamente", sms));
             context.execute("PF('dialog_edit_mov').hide();");
 
             getMovimientoBO().updateMovimiento(mov);
@@ -636,10 +644,11 @@ public class MovimientoMB implements Serializable{
     
     public void insertCodigoItemToLista(){
         RequestContext context = RequestContext.getCurrentInstance();
-        String cod = getCodItemCompra().trim();
-        boolean tof = itemBO.validarCodDuplicado(cod);
-        boolean t = false;
-        String sms = "";
+        String cod  = getCodItemCompra().trim();
+        boolean tof = false;
+        tof = itemBO.validarCodDuplicado(cod);
+        boolean t   = false;
+        String sms  = "";
         for(ItemDTO tf : getListaCodigosCompra()){
             if(tf.getIditem().equals(cod)){
                 t = true;
@@ -651,20 +660,24 @@ public class MovimientoMB implements Serializable{
             }
         }
         
-        if((cod == null && cod.trim().equals(""))){
+        if(getCantidadCodigosAux() <= getLoteSeleccionado().getCantidadConvertida()){
+            sms = "La cantidad de items ingresados debe ser igual a la cantidad";
+        }if((cod.trim().equals(""))){
             sms = "Ingrese un codigo";
-        }else if(getCantidadCodigosAux() <= getLoteSeleccionado().getCantidadConvertida()){
-            //sms = "La cantidad de items ingresados debe ser igual a la cantidad";
-        }else if(t){
+        }if(t){
             sms = "Ya se ingreso el mismo codigo";
-        }else if(tof){
+        }if(tof){
             sms = "Ya existe el mismo codigo creado";
+        }if(getCantidadCodigosAux() == getLoteSeleccionado().getCantidadConvertida()){
+            
         }
         
         if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux() <= getLoteSeleccionado().getCantidadConvertida()
             && !t && !tof){
             ItemDTO dto = new ItemDTO();
-            dto.setIditem(cod);
+            dto.setIditem(cod.trim());
+            dto.setEstado("0");
+            dto.setOperatividad("0");
             dto.setIdTipoItem(getLoteSeleccionado().getIdtipoitem());
             dto.setIdLote(getLoteSeleccionado().getIdLote());
             getListaCodigosCompra().add(dto);
@@ -672,13 +685,11 @@ public class MovimientoMB implements Serializable{
             setCantidadCodigosAux(getCantidadCodigosAux() + 1);
             
             setCodItemCompra("");
+            sms = "Item agregado";
             context.update("formCodigoItemCompra");
         }
         
-        if(sms != ""){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
-        }
-        
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
     }
     
     public void aceptarInsertCodifoItemLista(){
@@ -708,6 +719,7 @@ public class MovimientoMB implements Serializable{
             setCantidadCodigosAux(getCantidadCodigosAux() - 1);
 
             RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Item eliminado"));
             context.update("formCodigoItemCompra");
         }
     }
@@ -726,23 +738,21 @@ public class MovimientoMB implements Serializable{
                 t = true;
             }
         }
-        boolean tof = itemBO.validarItemTranslado(getItemSeleccionado().getIdtipoItem(), cod);
+        boolean tof = itemBO.validarItemTranslado(getItemSeleccionado().getIdtipoItem(), cod, getIdAlmacenOrigenSeleccRegis());
         
         String sms = "";
         if((cod == null && cod.trim().equals(""))){
             sms = "Ingrese un codigo";
-        }else if(getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad()){
-            //sms = "";
-        }else if(t){
+        }if(t){
             sms = "Ya se ingreso el mismo codigo";
-        }else if(tof){
+        }if(tof){
             sms = "Ingrese un codigo valido o que tenga estado disponible";
         }
         
         if((cod != null && !cod.trim().equals("")) && getCantidadCodigosAux1() <= getItemSeleccionado().getCantidad()
             && !t && !tof ){
             ItemDTO dto = new ItemDTO();
-            dto.setIditem(cod);
+            dto.setIditem(cod.trim());
             dto.setIdTipoItem(getItemSeleccionado().getIdtipoItem());
             //ARREGLAR!!!
             //dto.setIdLote(getItemSeleccionado().g());
@@ -751,12 +761,11 @@ public class MovimientoMB implements Serializable{
             setCantidadCodigosAux1(getCantidadCodigosAux1() + 1);
             
             setCodItemTransaldo("");
+            sms = "Item ingresdo";
             context.update("formCodigoItemTranslado");
         }
         
-        if(sms != ""){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
-        }
     }
     
     public void aceptarInsertCodifoItemLista1(){
@@ -786,6 +795,7 @@ public class MovimientoMB implements Serializable{
             setCantidadCodigosAux1(getCantidadCodigosAux1() - 1);
 
             RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Item eliminado"));
             context.update("formCodigoItemTranslado");
         }
     }
@@ -799,6 +809,7 @@ public class MovimientoMB implements Serializable{
             getListaItemsVentaAux().add(item);
 
             RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Item Agregado"));
             context.update("formTabItemsVentasSelec");
             context.update("formTabItemsVenta");
 
@@ -828,6 +839,7 @@ public class MovimientoMB implements Serializable{
             getListaItemsVenta().add(item);
             
             RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Item Eliminado"));
             context.update("formTabItemsVentasSelec");
             context.update("formTabItemsVenta");
         }
