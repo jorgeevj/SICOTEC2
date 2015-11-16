@@ -1481,7 +1481,7 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE EMPRESAS-->
             
             <!-- INICIO DIALOG DE ALMACENES-->
-            <p:dialog header="Registrar Almacen" widgetVar="registroAlmacen" minHeight="40" height="500" width="500" modal="true">
+            <p:dialog header="Registrar Almacen" widgetVar="registroAlmacen" minHeight="40" height="300" width="500" modal="true">
                 <h:form id="formRegistrarAlmacen">
                     <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
@@ -1515,11 +1515,14 @@ jorgeevj 15.09.15 Creacion.
                         
                     </h:panelGrid>
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <p:commandButton value="Registrar Nuevo Almacen"  actionListener="#{almacenMB.registrarNuevoAlmacen}"/>    
+                    <br/>
+                    <br/>
+                    <p:commandButton value="Registrar Nuevo Almacen"  actionListener="#{almacenMB.registrarNuevoAlmacen}"/> 
+                    <p:commandButton value="Cancelar"  actionListener="#{almacenMB.cancelarRegistro}"/> 
                 </h:form>                
             </p:dialog>
             
-            <p:dialog header="Modificar Almacen" widgetVar="editarAlmacen" minHeight="40" height="500" width="500" modal="true">
+            <p:dialog header="Modificar Almacen" widgetVar="editarAlmacen" minHeight="40" height="300" width="500" modal="true">
                 <h:form id="formEditarAlmacen">
                     <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
@@ -1553,7 +1556,10 @@ jorgeevj 15.09.15 Creacion.
                         
                     </h:panelGrid> 
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <p:commandButton value="Modificar Almacen"  actionListener="#{almacenMB.modificarNuevoAlmacen}"/>    
+                    <br/>
+                    <br/>
+                    <p:commandButton value="Modificar Almacen"  actionListener="#{almacenMB.modificarNuevoAlmacen}" /> 
+                    <p:commandButton value="Cancelar"  actionListener="#{almacenMB.cancelarModificacion}"/> 
                 </h:form>                
             </p:dialog>
                 
