@@ -85,6 +85,18 @@ public class almacenMB {
         listDistritos=ubigeoBO.getAllDistritos(almacenSelect.getCodDept(), almacenSelect.getCodProv());
     }
     
+    public void cancelarRegistro(){
+        RequestContext context = RequestContext.getCurrentInstance();    
+        context.execute("PF('registroAlmacen').hide();");
+        limpiar();
+    }
+    
+    public void cancelarModificacion(){
+        RequestContext context = RequestContext.getCurrentInstance();    
+        context.execute("PF('editarAlmacen').hide();");
+        limpiar();
+    }
+    
     public void limpiar(){
         setNombre("");
         setDireccion("");
