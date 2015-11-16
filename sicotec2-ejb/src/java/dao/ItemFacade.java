@@ -79,7 +79,7 @@ public class ItemFacade extends AbstractFacade<Item> {
                 TipoItemDTO dto = new TipoItemDTO();
                 dto.setIdtipoItem(al.getTipoitem().getIdtipoItem());
                 dto.setDescipcion(al.getTipoitem().getDescripcion());
-                dto.setCantidad(al.getCantidad() - al.getReservado() - al.getComprados());
+                dto.setCantidad(al.getCantidad());//PREGUNTAR
                 dto.setNumParte(al.getTipoitem().getNumParte());
                 
                 String ejbQuery1 = "SELECT idlote "
@@ -114,20 +114,23 @@ public class ItemFacade extends AbstractFacade<Item> {
                 tof = true;
             }
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + " - " + tof);
+            return false;
         }
         
         return tof;
     }
     
-    public boolean validateCodTranslado(String idTipoItem, String cod){
+    public boolean validateCodTranslado(String idTipoItem, String cod, int idAlmacen){
         boolean tof = true;
         try{
             String sql = "SELECT i "
                        + "FROM Item i "
-                       + "WHERE i.iditem = :idItem";
+                       + "WHERE i.iditem = :idItem "
+                       + "AND i.altipoitem.almacen.idalmacen = :idAlmacen";
             Query query = em.createQuery(sql);
             query.setParameter("idItem", cod);
+            query.setParameter("idAlmacen", idAlmacen);
             
             Item i = (Item)query.getSingleResult();
             if(i != null){
@@ -150,7 +153,7 @@ public class ItemFacade extends AbstractFacade<Item> {
         try{
             String sql = "UPDATE item "
                        + "SET    estado = "+idEstado+" "
-                       + "WHERE  iditem = "+idItem;
+                       + "WHERE  iditem = '"+idItem+"'";
                     
             Query query = em.createNativeQuery(sql);
             

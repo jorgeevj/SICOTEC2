@@ -49,8 +49,8 @@ public class ItemBO {
         return listaDTO;
     }
     
-    public boolean validarItemTranslado(String idTipoItem, String idItem){
-        boolean tof = itemFacade.validateCodTranslado(idTipoItem, idItem);
+    public boolean validarItemTranslado(String idTipoItem, String idItem, int idAlmacen){
+        boolean tof = itemFacade.validateCodTranslado(idTipoItem, idItem, idAlmacen);
         return tof;
     }
 
