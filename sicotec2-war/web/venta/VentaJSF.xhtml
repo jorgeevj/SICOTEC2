@@ -16,6 +16,7 @@
                                     style="width:100%"> 
                         <f:selectItem itemLabel="Seleccione" itemValue="100" />
                         <f:selectItems value="#{ventaMB.listaEstados}"/> 
+                        <f:selectItem itemLabel="Incompleta" itemValue="2" />
                    </p:selectOneMenu>
                     Empresa
                     <p:selectOneMenu id="empresaSelectBusqueda" styleClass="browser-default" value="#{ventaMB.selectEmpresaBusqueda}"
@@ -46,9 +47,9 @@
                 <br/>
                 <h:form id="formBotones">
                     <h:panelGrid columns="3">
-                        <p:commandButton value="Limpiar" actionListener="#{movimientoMB.limpiar}"/>
-                        <p:commandButton value="Editar Estado" disabled="#{movimientoMB.disableEditar}" actionListener="#{movimientoMB.abrirModalEidt()}"/>
-                        <p:commandButton value="Ver Items" disabled="#{movimientoMB.disableVerItems}" actionListener="#{movimientoMB.verItems()}"/>
+                        <p:commandButton value="Limpiar" actionListener="#{ventaMB.limpiar}"/>
+                        <p:commandButton value="Editar Estado" disabled="#{ventaMB.disableEditar}" actionListener="#{ventaMB.abrirCambiarEstado}"/>
+                        <p:commandButton value="Ver Items" disabled="#{ventaMB.disableVerItems}" actionListener="#{ventaMB.verItems}"/>
                     </h:panelGrid>
                 </h:form>
             <br/>
@@ -58,7 +59,7 @@
                 <p:dataTable tableStyleClass="table table-hover" selectionMode="single" var="ven" id="tab_ventas" 
                              rowKey="#{ven.idventa}" rowIndexVar="var" value="#{ventaMB.listaVentas}" sortBy="#{ven.fecha}" 
                              scrollable="true" paginator="true" resizableColumns="true">
-                    <p:ajax listener="#{ventaMB.listaVentas}" event="rowSelect"/> 
+                    <p:ajax listener="#{ventaMB.selectventa}" event="rowSelect"/> 
                     
                     <p:column headerText="#" style="text-align: center;width: 50px">
                         <p:outputLabel value="#{var+1}"/>
@@ -84,7 +85,7 @@
                         <p:outputLabel value="#{ven.nombreImpuesto}"/>
                     </p:column>
                     <p:column headerText="Estado" style="text-align: center;">
-                        <p:outputLabel value="#{ven.estado}"/>
+                        <p:outputLabel value="#{ven.nombreEstado}"/>
                     </p:column>
                     <p:column headerText="# Serie" style="text-align: center;">
                         <p:outputLabel value="#{ven.serie}"/>
@@ -127,25 +128,26 @@
             </h:form>
         </p:dialog>
         
-        <p:dialog header="Cambiar de Estado" widgetVar="dialog_editar" resizable="false">
+        <p:dialog header="Cambiar de Estado" widgetVar="dialog_editar" resizable="false" height="400">
             <h:form id="formEditarEstado">
                 Estado
-                <p:selectOneMenu id="estadoSelectEdit" styleClass="browser-default" value="#{ventaMB.selectEstadoEdit}"
-                                style="width:100%"> 
+                <p:selectOneMenu id="estadoSelectEdit" value="#{ventaMB.selectEstadoEdit}"> 
                     <f:selectItem itemLabel="Seleccione" itemValue="100" />
                     <f:selectItems value="#{ventaMB.listaEstados}"/> 
+                    <p:ajax listener="#{ventaMB.selectEstado}"/> 
                </p:selectOneMenu>
+               <br/>
                <br/>
                <p:panel visible="#{ventaMB.panelVisibleEstadoPagada}">
                    Medio de Pago
-                    <p:selectOneMenu id="mPagoSelectEdit" styleClass="browser-default" 
-                                     value="#{ventaMB.selectMedioPagoEdit}" style="width:100%"> 
+                    <p:selectOneMenu id="mPagoSelectEdit"
+                                     value="#{ventaMB.selectMedioPagoEdit}"> 
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
                         <f:selectItems value="#{ventaMB.listaMedioPago}" var="mp" 
                                        itemLabel="#{mp.nombre}" itemValue="#{mp.idMedioPago}"/> 
                    </p:selectOneMenu>
-               </p:panel>
-               <br/>
+                   <br/>
+                   <br/>
                Cantidad
                <p:inputText value="#{ventaMB.cantidadMedioPagoEdit}"/>
                <p:commandButton value="Agregar" actionListener="#{ventaMB.agregarMedioPago}"/>
@@ -166,13 +168,16 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
+               </p:panel>
+               <br/>
+               <br/>
                 Impuesto
-                <p:selectOneMenu styleClass="browser-default" 
-                                 value="#{ventaMB.selectImpuestoEdit}" style="width:100%"> 
+                <p:selectOneMenu value="#{ventaMB.selectImpuestoEdit}"> 
                     <f:selectItem itemLabel="Seleccione" itemValue="0" />
                     <f:selectItems value="#{ventaMB.listaImpuestos}" var="imp" 
                                    itemLabel="#{imp.nombre}" itemValue="#{imp.idImpuesto}"/> 
                 </p:selectOneMenu>
+                <br/>
                 <br/>
                 <p:commandButton value="Guardar" actionListener="#{ventaMB.editarVenta}"/>
             </h:form>

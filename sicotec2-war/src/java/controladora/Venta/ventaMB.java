@@ -71,19 +71,21 @@ public class ventaMB {
     private String correlativoBusqueda;
     private int selectEmpresaBusqueda = 0;
     private int selectAlmacenBusqueda = 0;
+    private boolean disableVerItems = true;
+    private boolean disableEditar = true;
     
     //EDITAR ESTADO
     private int selectEstadoEdit = 100;
     private boolean panelVisibleEstadoPagada = false;
     private int selectMedioPagoEdit = 0;
     private String cantidadMedioPagoEdit;
-    private Double cantidadMedioPagoAcu;
+    private Double cantidadMedioPagoAcu = 0.0;
     private int selectImpuestoEdit = 0;
     
     @PostConstruct
     public void init(){
         setListaEstados(this.llenarEstados());
-        setListaVentas(ventasBO.getVentasByEstado(1));
+        setListaVentas(ventasBO.getVentasByEstado(0));
         setListaAlmacenes(almacenBO.getAllAlmaces());
         setListaEmpresas(empresaBO.getAllEmpresas());
         setListaMedioPago(medioPagoBO.allMedioPago());
@@ -99,12 +101,41 @@ public class ventaMB {
         dto.setCorrelativo(getCorrelativoBusqueda());
         dto.setIdEmpresa(getSelectEmpresaBusqueda());
         dto.setIdalmacen(getSelectAlmacenBusqueda());
+        setDisableEditar(true);
+        setDisableVerItems(true);
         
         setListaVentas(ventasBO.getVentasByBusqueda(dto));
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTabla");
+        context.update("formBotones");
+    }
+    
+    public void limpiar(){
+        setSelectEstadoBusqueda(100);
+        setSerieBusqueda(null);
+        setFechaFinBusqueda(null);
+        setFechaInicioBusqueda(null);
+        setCorrelativoBusqueda(null);
+        setSelectEmpresaBusqueda(0);
+        setSelectAlmacenBusqueda(0);
+        
+        setDisableEditar(true);
+        setDisableVerItems(true);
+        setListaVentas(ventasBO.getVentasByEstado(0));
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formBusqueda");
+        context.update("formBotones");
+        context.update("formTabla");
+
     }
     
     public void selectventa(SelectEvent event){
         setVentaSeleccionada((VentaDTO)event.getObject());
+        setDisableEditar(false);
+        setDisableVerItems(false);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formBotones");
     }
     
     public void verItems(){
@@ -112,13 +143,51 @@ public class ventaMB {
         
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formTablaItems");
+        context.execute("PF('dialog_ver_items').show();");
+    }
+    
+    public void abrirCambiarEstado(){
+        RequestContext context = RequestContext.getCurrentInstance();
+        int estado = Integer.parseInt(getVentaSeleccionada().getEstado());
+        System.out.println(estado);
+        if(estado == 0){//CANCELADA
+            setPanelVisibleEstadoPagada(false);
+            setSelectEstadoEdit(0);
+        }else if(estado == 1){//PAGADA
+            setPanelVisibleEstadoPagada(true);
+            setSelectEstadoEdit(1);
+        }else if(estado == 2){
+            setSelectEstadoEdit(1);
+            setPanelVisibleEstadoPagada(false);
+        }
+        context.update("formEditarEstado");
+        context.execute("PF('dialog_editar').show();");  
+    }
+    
+    public void selectEstado(){
+        if(getSelectEstadoEdit() == 0){
+            setPanelVisibleEstadoPagada(false);
+        }else if(getSelectEstadoEdit() == 1){
+            if(Integer.parseInt(getVentaSeleccionada().getEstado()) == 1){
+                setPanelVisibleEstadoPagada(false);
+            }else{
+                setPanelVisibleEstadoPagada(true);
+            }
+        }/*else if(getSelectEstadoEdit() == 2){
+            setPanelVisibleEstadoPagada(true);
+        }*/
+        else if(getSelectEstadoEdit() == 100){
+            setPanelVisibleEstadoPagada(false);
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formEditarEstado");
     }
     
     public void agregarMedioPago(){
         Double monto = Double.parseDouble(getCantidadMedioPagoEdit());
         monto = monto + getCantidadMedioPagoAcu();
         
-        if(getCantidadMedioPagoEdit() != null && !getCantidadMedioPagoEdit().equals("")
+        if(getCantidadMedioPagoEdit() != null && !getCantidadMedioPagoEdit().equals("") && Double.parseDouble(getCantidadMedioPagoEdit()) > 0 
            && getSelectMedioPagoEdit() != 0 && monto <= getVentaSeleccionada().getTotal()){
              VeMedioPagoDTO dto = new VeMedioPagoDTO();
              
@@ -130,9 +199,11 @@ public class ventaMB {
                      dto.setNombreMedioPago(mp.getNombre());
                  }
              }
+             
              setCantidadMedioPagoAcu(getCantidadMedioPagoAcu() + Double.parseDouble(getCantidadMedioPagoEdit()));
              getListaVentaMedioPago().add(dto);
              RequestContext context = RequestContext.getCurrentInstance();
+             setCantidadMedioPagoEdit("");
              context.update("formEditarEstado");
         }
     }
@@ -140,7 +211,7 @@ public class ventaMB {
     public void eliminarVentaMedioPago(ActionEvent actionEvent){
         if(getListaVentaMedioPago().size() > 0){
             int index = (int)actionEvent.getComponent().getAttributes().get("indexMp");
-            Double monto = (Double)actionEvent.getComponent().getAttributes().get("indexMp");
+            Double monto = (Double)actionEvent.getComponent().getAttributes().get("montoMP");
             getListaVentaMedioPago().remove(index);
             
             setCantidadMedioPagoAcu(getCantidadMedioPagoAcu() - monto);
@@ -153,35 +224,47 @@ public class ventaMB {
     public String validateEdit(){
         int estado = getSelectEstadoEdit();
         String sms = "";
-        VentaDTO venta = new VentaDTO();
-        if(estado == 0){
-            venta = getVentaSeleccionada();
-            venta.setEstado("0");//CANCELADA(ELIMINADA)
-        }else if(estado == 1){
-            venta = getVentaSeleccionada();
-            if((venta.getTotal() - getCantidadMedioPagoAcu()) == 0.0){//SE PAGO TODO
-                venta.setEstado("1");//PAGADA
-                venta.setIdImpuesto(getSelectImpuestoEdit());
-            }else{
-                venta.setEstado("2");//INCOMPLETA
-            }
+        if(estado == 100){
+            sms = "Seleccione un estado";
+            return sms;
+        }
+        else if(getSelectImpuestoEdit() == 0){
+            sms = "Seleccione un impuesto";
+            return sms;
         }
         
-        ventasBO.editVenta(venta, getListaVentaMedioPago(), estado);
-        
+        if(estado == 0){
+            
+        }else if(estado == 1){
+            if(getCantidadMedioPagoAcu() == 0.0){
+                sms = "Ingrese minimo un medio de pago con su cantidad";
+            }
+        }
         return sms;
     }
     
     public void editarVenta(){
         String sms = this.validateEdit();
+        VentaDTO venta = new VentaDTO();
+        int estado = getSelectEstadoEdit();
         if(!sms.equals("")){//FALTA
-            
+            System.out.println(sms);
         }else{
-            if(getSelectEstadoEdit() == 0){
-
-            }else if(getSelectEstadoEdit() == 1){
-                
+            if(estado == 0){
+                venta = getVentaSeleccionada();
+                venta.setEstado("0");//CANCELADA(ELIMINADA)
+                venta.setIdImpuesto(getSelectImpuestoEdit());
+            }else if(estado == 1){
+                    venta = getVentaSeleccionada();
+                if((venta.getTotal() - getCantidadMedioPagoAcu()) == 0.0){//SE PAGO TODO
+                    venta.setEstado("1");//PAGADA
+                    venta.setIdImpuesto(getSelectImpuestoEdit());
+                }else{
+                    venta.setEstado("2");//INCOMPLETA
+                    venta.setIdImpuesto(getSelectImpuestoEdit());
+                }
             }
+             ventasBO.editVenta(venta, getListaVentaMedioPago(), estado);
         }
     }
     
@@ -190,7 +273,7 @@ public class ventaMB {
         ArrayList estados = new ArrayList();
         estados.add(new SelectItem(0,"Cancelada"));
         estados.add(new SelectItem(1,"Pagada"));
-        estados.add(new SelectItem(2,"Incompleta"));
+        //estados.add(new SelectItem(2,"Incompleta"));
         
         return estados;
     }
@@ -502,4 +585,33 @@ public class ventaMB {
     public void setListaImpuestos(List<ImpuestoDTO> listaImpuestos) {
         this.listaImpuestos = listaImpuestos;
     }
+
+    /**
+     * @return the disableVerItems
+     */
+    public boolean isDisableVerItems() {
+        return disableVerItems;
+    }
+
+    /**
+     * @param disableVerItems the disableVerItems to set
+     */
+    public void setDisableVerItems(boolean disableVerItems) {
+        this.disableVerItems = disableVerItems;
+    }
+
+    /**
+     * @return the disableEditar
+     */
+    public boolean isDisableEditar() {
+        return disableEditar;
+    }
+
+    /**
+     * @param disableEditar the disableEditar to set
+     */
+    public void setDisableEditar(boolean disableEditar) {
+        this.disableEditar = disableEditar;
+    }
+    
 }
