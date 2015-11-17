@@ -566,7 +566,7 @@ jorgeevj 15.09.15 Creacion.
             <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="500" width="800">
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
-                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:outputLabel value="Proveedor: "></p:outputLabel>
                         
                         <p:selectOneMenu id="empresasPedido" value="#{compraMB.camposAdd.idEmpresa}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -607,17 +607,18 @@ jorgeevj 15.09.15 Creacion.
                     </p:dataTable>
                     <p:messages id="msgRegCompra" showDetail="true" closable="true" />
                     <p:panelGrid columns="2" styleClass="hideborder">
-                    <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido"  
+                        <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido" disabled="#{compraMB.estadoBtnAgregar}"
                                      actionListener="#{compraMB.agregarTipoItems}" update="formAddCompra"/>
-                     <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" 
+                        <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" disabled="#{compraMB.estadoBtnQuitar}"
                                       actionListener="#{compraMB.quitarPedido}" update="formAddCompra"/>
                 </p:panelGrid>
-                    <p:remoteCommand name="onCellEdit3" update="tbPedidosItemsSelec" />
+                    <p:remoteCommand name="onCellEdit3" update="tbPedidosItemsSelec"  />
                      <p:dataTable  id="tbPedidosItemsSelec" value="#{compraMB.listaLoteDTO}" var="loteReg" 
                                    selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}"
                                    editable="true" editMode="cell">
                          <p:ajax event="cellEdit" oncomplete="onCellEdit3()" />
-                     <f:facet name="header">
+                     <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}"/>
+                         <f:facet name="header">
                            Items Seleccionados 
                         </f:facet>
                          <p:column headerText="Cod. Producto" >
@@ -662,15 +663,17 @@ jorgeevj 15.09.15 Creacion.
                       <h:outputText value="$#{loteReg.precioUni}" />
                   </f:facet>
                   <f:facet name="input">
-                      <p:inputText value="#{loteReg.precioUni}" style="width:96%"/>
+                      <p:inputText value="#{loteReg.precioUni}" style="width:96%">
+                      <f:validateDoubleRange minimum="0" maximum="10000" />
+                      </p:inputText>
                   </f:facet>
                         </p:cellEditor>
                         </p:column>          
                         
                 </p:dataTable>
                
-                <p:commandButton id="guardarCompraNueva" value="Guardar" actionListener="#{compraMB.guardarCompra}" />
-                <p:commandButton id="enviarCompraNueva" value="Guardar y Enviar" actionListener="#{compraMB.addNuevoCompra}" />
+                    <p:commandButton id="guardarCompraNueva" value="Guardar" actionListener="#{compraMB.guardarCompra}" update="msgRegCompra"/>
+                    <p:commandButton id="enviarCompraNueva" value="Guardar y Enviar" actionListener="#{compraMB.addNuevoCompra}" update="msgRegCompra"/>
                                 
                 </h:form>
             </p:dialog> 
@@ -687,7 +690,7 @@ jorgeevj 15.09.15 Creacion.
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="Almacen: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenesCompraedit" value="#{compraMB.compraSelect.idAlmacen}" 
+                        <p:selectOneMenu id="almacenesCompraedit" value="#{compraMB.compraSelect.idAlmacen}" disabled="#{compraMB.estadoChoiceAlmacen}"
                                          valueChangeListener="#{compraMB.cargarPedidosByAlmacen}">
                         <p:ajax event="valueChange" update="tbPedidosItemsDispedit"/>
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -716,11 +719,11 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>
                        
                     </p:dataTable>
-
+                        <p:messages id="msgEditCompra" showDetail="true" closable="true" />
                     <p:panelGrid columns="2" styleClass="hideborder">
-                    <p:commandButton id="btnAgregarPedidoEdit"  value="Agregar Pedido"  
+                        <p:commandButton id="btnAgregarPedidoEdit"  value="Agregar Pedido" disabled="#{compraMB.estadoBtnAgregarEdit}"
                                      actionListener="#{compraMB.agregarTipoItems}" update="formEditCompra"/>
-                     <p:commandButton id="btnQuitarPedidoEdit"  value="Quitar Pedido" 
+                        <p:commandButton id="btnQuitarPedidoEdit"  value="Quitar Pedido" disabled="#{compraMB.estadoBtnQuitarEdit}"
                                       actionListener="#{compraMB.quitarPedido}" update="formEditCompra"/>
                 </p:panelGrid>
                     <p:remoteCommand name="onCellEdit4" update="tbPedidosItemsSelecedit" />
@@ -728,6 +731,7 @@ jorgeevj 15.09.15 Creacion.
                                    selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}"
                                    editable="true" editMode="cell">
                          <p:ajax event="cellEdit" oncomplete="onCellEdit4()" />
+                         <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemQuitar}"/>
                      <f:facet name="header">
                            Items Seleccionados 
                         </f:facet>
@@ -773,7 +777,9 @@ jorgeevj 15.09.15 Creacion.
                       <h:outputText value="$#{loteReg.precioUni}" />
                   </f:facet>
                   <f:facet name="input">
-                      <p:inputText value="#{loteReg.precioUni}" style="width:96%"/>
+                      <p:inputText value="#{loteReg.precioUni}" style="width:96%">
+                      <f:validateDoubleRange minimum="0" maximum="10000" />
+                      </p:inputText>
                   </f:facet>
                         </p:cellEditor>
                         </p:column>          

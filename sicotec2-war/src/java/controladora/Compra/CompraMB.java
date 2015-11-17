@@ -115,6 +115,10 @@ public class CompraMB {
     private SessionBeanCompra sessionBeanCompra = new SessionBeanCompra();
     private boolean estadoEdit;
     private boolean estadoChoiceAlmacen;
+    private boolean estadoBtnAgregar;
+    private boolean estadoBtnQuitar;
+    private boolean estadoBtnAgregarEdit;
+    private boolean estadoBtnQuitarEdit;
 
     Utils ut = new Utils();
 
@@ -158,15 +162,20 @@ public class CompraMB {
     }
 
     public void cargarPedidosByAlmacen(ValueChangeEvent event) {
+        if(event.getNewValue()==null){
+             mostrarMensaje("Debes Seleccionar un Almacen", "msgRegCompra");
+        return;
+        }
         camposAdd.setIdAlmacen((int) event.getNewValue());
         listPealItem = compraBO.getPedidosbyAlmacen(camposAdd);
     }
 
     public void crear(ActionEvent actionEvent) {
-        estadoChoiceAlmacen=false;
+        
         limpiaCrearCompra();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('addComprasModal').show();");
+        context.update("formCompra:tabCompra");
     }
 
     private void limpiaCrearCompra() {
@@ -174,6 +183,9 @@ public class CompraMB {
         camposAdd = new CompraDTO();
         listPealItem = new ArrayList<>();
         listaLoteDTO = new ArrayList<>();
+        estadoChoiceAlmacen=false;
+        estadoBtnAgregar=true;
+        estadoBtnQuitar=true;
     }
 
     public List<EmpresaDTO> comboEmpresas() {
@@ -192,27 +204,68 @@ public class CompraMB {
     }
 
     public void selectTipoItemAdd(SelectEvent event) {
+        estadoBtnAgregar=false;
+        estadoBtnAgregarEdit=false; 
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formAddCompra:btnAgregarPedido");
+         context.update("formEditCompra");
 //        setObjPealTipoItem((PealtipoitemDTO) event.getObject());
 
     }
 
     public void selectTipoItemQuitar(SelectEvent event) {
-        // aqui colocar el control del Boton quitar
+        estadoBtnQuitar=false;
+        estadoBtnQuitarEdit=false;
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formAddCompra:btnQuitarPedido");
+        context.update("formEditCompra:btnQuitarPedidoEdit");
+// aqui colocar el control del Boton quitar
 
     }
 
     public void addNuevoCompra(ActionEvent actionEvent) {
+        if(camposAdd.getIdEmpresa()==0){
+            mostrarMensaje("Debes seleccionar un Proveedor", "msgRegCompra");
+        return;
+        }
+        if(listaLoteDTO.isEmpty()){
+            mostrarMensaje("Debes seleccionar al menos un pedido", "msgRegCompra");
+        return;
+        }
+        for(LoteDTO ldto:listaLoteDTO){
+            if(ldto.getCantidad()*ldto.getUnidadDTO().getUnidades()<ldto.getRequerimiento().getCantidad()){
+            mostrarMensaje("Las cantidad a Comprar de "+ldto.getNombreTipoItem()+" debe ser mayor a la requerida", "msgRegCompra");
+            return;
+            }
+        }
         camposAdd.setListaLoteDTO(listaLoteDTO);
         camposAdd.setEstado(2);
         compraBO.insertarNuevoCompra(camposAdd);
 
         listaCompras = compraBO.getAllCompras();
+        mostrarMensaje("Se Envio la Compra", "formCompra;growlCompra");
         refreshCompras();
         this.cerrar();
 
     }
 
     public void guardarCompra(ActionEvent actionEvent) {
+        if(camposAdd.getIdEmpresa()==0){
+            mostrarMensaje("Debes seleccionar un Proveedor", "msgRegCompra");
+        return;
+        }
+        if(listaLoteDTO.isEmpty()){
+            mostrarMensaje("Debes seleccionar al menos un pedido", "msgRegCompra");
+        return;
+        }
+        
+        for(LoteDTO ldto:listaLoteDTO){
+            if(ldto.getCantidad()*ldto.getUnidadDTO().getUnidades()<ldto.getRequerimiento().getCantidad()){
+            mostrarMensaje("Las cantidad a Comprar de "+ldto.getNombreTipoItem()+" debe ser mayor a la requerida", "msgRegCompra");
+            return;
+            }
+        }
+        
         camposAdd.setListaLoteDTO(listaLoteDTO);
         camposAdd.setEstado(1);
         //persistimos a compra
@@ -220,11 +273,13 @@ public class CompraMB {
         compraBO.guardarCompra(camposAdd);
 
         listaCompras = compraBO.getAllCompras();
+//        mostrarMensaje("Se Guardo correctamente la Compra", "formCompra;growlCompra");
         refreshCompras();
         this.cerrar();
     }
 
     private void refreshCompras() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Guardo Correctamente La Compra", ""));
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formCompra");
     }
@@ -273,12 +328,17 @@ public class CompraMB {
             mostrarMensaje("No puedes Editar una Compra Enviada","formCompra:growlCompra");
             return;
         }
+        estadoChoiceAlmacen=true;
         estadoEdit = true;
+        estadoBtnAgregarEdit=true;
+        estadoBtnQuitarEdit=true;
         listPealItem = compraBO.getPedidosbyAlmacen(compraSelect);
         listaLoteDTO = compraBO.getLoteByCompra(compraSelect);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formEditCompra");
+        context.update("formCompra");
         context.execute("PF('editComprasModal').show();");
+        
 
     }
 
@@ -289,12 +349,25 @@ public class CompraMB {
     }
 
     public void guardarEditar(ActionEvent actionEvent) {
-
+        if(compraSelect.getIdEmpresa()==0){
+            mostrarMensaje("Debes seleccionar un Proveedor", "msgEditCompra");
+        return;
+        }
+        if(listaLoteDTO.isEmpty()){
+            mostrarMensaje("Debes seleccionar al menos un pedido", "msgEditCompra");
+        return;
+        }
+        for(LoteDTO ldto:listaLoteDTO){
+            if(ldto.getCantidad()*ldto.getUnidadDTO().getUnidades()<ldto.getRequerimiento().getCantidad()){
+            mostrarMensaje("La cantidad a Comprar "+ldto.getNombreTipoItem()+" debe ser mayor a la requerida", "msgEditCompra");
+            return;
+            }
+        }
         guardarEditarCompra();
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formCompra");
         context.execute("PF('editComprasModal').hide();");
-
+        
     }
 
     private void guardarEditarCompra() {
@@ -309,6 +382,7 @@ public class CompraMB {
         //guardamos los nuevos  requerimientos editando su id de requerimiento y estado , guardamos los lotes editados
         compraSelect.setEstado(1);
         compraBO.guardarEdit(compraSelect);
+        mostrarMensaje("Se Edito correctamente la Compra", "formCompra;growlCompra");
     }
 
     public void agregarTipoItems(ActionEvent actionEvent) {
@@ -322,6 +396,8 @@ public class CompraMB {
             return;
         }
         estadoChoiceAlmacen=true;
+        estadoBtnAgregar=true;
+        estadoBtnAgregarEdit=true;
         for (LoteDTO dto : listaLoteDTO) {
             if (dto.getIdtipoitem().equals(objPealTipoItem.getIdtipoitem())) {
                 dto.getRequerimiento().getPealtipoitemList().add(objPealTipoItem);
@@ -339,6 +415,7 @@ public class CompraMB {
         loteDTO.setIdtipoitem(objPealTipoItem.getIdtipoitem());
         loteDTO.setCantidad(loteDTO.getRequerimiento().getCantidad());
         loteDTO.getUnidadDTO().setIdunidades(1);
+        loteDTO.setPrecioUni(0.0);
         listPealItem.remove(objPealTipoItem);
         listaLoteDTO.add(loteDTO);
     }
@@ -351,6 +428,8 @@ public class CompraMB {
             
             return;
         }
+        estadoBtnQuitar=true;
+        estadoBtnQuitarEdit=true;
         for (PealtipoitemDTO pa : loteSelect.getRequerimiento().getPealtipoitemList()) {
             listPealItem.add(pa);
         }
@@ -381,11 +460,26 @@ public class CompraMB {
     }
 
     public void enviarEditar(ActionEvent actionEvent) {
+        if(compraSelect.getIdEmpresa()==0){
+            mostrarMensaje("Debes seleccionar un Proveedor", "msgEditCompra");
+        return;
+        }
+        if(listaLoteDTO.isEmpty()){
+            mostrarMensaje("Debes seleccionar al menos un pedido", "msgEditCompra");
+        return;
+        }
+        for(LoteDTO ldto:listaLoteDTO){
+            if(ldto.getCantidad()*ldto.getUnidadDTO().getUnidades()<ldto.getRequerimiento().getCantidad()){
+            mostrarMensaje("Las cantidad a Comprar de "+ldto.getNombreTipoItem()+" debe ser mayor a la requerida", "msgEditCompra");
+            return;
+            }
+        }
         //guardar la edicion usaremos el metodo para guardar
         guardarEditarCompra();
         //cambiamos el estado de la compra a enviada
         compraSelect.setEstado(2);
         compraBO.updateCompraAndAlmacen(compraSelect);
+        mostrarMensaje("Se Envio correctamente la Compra", "formCompra;growlCompra");
         cerrarEdit();
         refreshCompras();
 
@@ -397,8 +491,14 @@ public class CompraMB {
     }
     
     public void ver(ActionEvent actionEvent){
+        if(compraSelect==null){
+            mostrarMensaje("Debes seleccionar una Compra", "formCompra:growlCompra");
+        return;
+        }
+        estadoEdit=true;
         listaLoteDTO=compraBO.getLoteByCompra(compraSelect);
         RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formCompra");
         context.execute("PF('verComprasModal').show();");
         context.update("formVerCompra");
     }
@@ -804,6 +904,38 @@ public class CompraMB {
 
     public void setEstadoChoiceAlmacen(boolean estadoChoiceAlmacen) {
         this.estadoChoiceAlmacen = estadoChoiceAlmacen;
+    }
+
+    public boolean isEstadoBtnAgregar() {
+        return estadoBtnAgregar;
+    }
+
+    public void setEstadoBtnAgregar(boolean estadoBtnAgregar) {
+        this.estadoBtnAgregar = estadoBtnAgregar;
+    }
+
+    public boolean isEstadoBtnQuitar() {
+        return estadoBtnQuitar;
+    }
+
+    public void setEstadoBtnQuitar(boolean estadoBtnQuitar) {
+        this.estadoBtnQuitar = estadoBtnQuitar;
+    }
+
+    public boolean isEstadoBtnAgregarEdit() {
+        return estadoBtnAgregarEdit;
+    }
+
+    public void setEstadoBtnAgregarEdit(boolean estadoBtnAgregarEdit) {
+        this.estadoBtnAgregarEdit = estadoBtnAgregarEdit;
+    }
+
+    public boolean isEstadoBtnQuitarEdit() {
+        return estadoBtnQuitarEdit;
+    }
+
+    public void setEstadoBtnQuitarEdit(boolean estadoBtnQuitarEdit) {
+        this.estadoBtnQuitarEdit = estadoBtnQuitarEdit;
     }
 
 }

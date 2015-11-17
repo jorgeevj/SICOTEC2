@@ -6,7 +6,6 @@
 package dto;
 
 import bo.UnidadBO;
-import entidades.Requerimientos;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -20,10 +19,10 @@ import javax.naming.NamingException;
 public class LoteDTO {
     private UnidadBO unidadBO = lookupUnidadBOBean();
     private Integer idLote;
-    private Integer cantidad;
+    private int cantidad;
     private Integer cantidadIngresar;
     private Integer cantidadConvertida;
-    private Double precioUni;
+    private double precioUni;
     private String idtipoitem;
     private RequerimientoDTO requerimiento;
     private Integer idAlmacen;
@@ -60,28 +59,28 @@ public class LoteDTO {
     /**
      * @return the cantidad
      */
-    public Integer getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
     /**
      * @return the precioUni
      */
-    public Double getPrecioUni() {
+    public double getPrecioUni() {
         return precioUni;
     }
 
     /**
      * @param precioUni the precioUni to set
      */
-    public void setPrecioUni(Double precioUni) {
+    public void setPrecioUni(double precioUni) {
         this.precioUni = precioUni;
     }
 
