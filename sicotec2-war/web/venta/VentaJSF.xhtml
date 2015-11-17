@@ -163,8 +163,10 @@
                     </p:column>
                     <p:column headerText="Acción" style="text-align: center">
                         <p:commandButton icon="ui-icon-remove" actionListener="#{ventaMB.eliminarVentaMedioPago}">
-                            <f:attribute name="indexMp" value="#{var}" />
+                            <f:attribute name="indexMP" value="#{var}" />
                             <f:attribute name="montoMP" value="#{ventaMedio.monto}"/>
+                            <f:attribute name="idMP" value="#{ventaMedio.idMedioPago}"/>
+                            <f:attribute name="nombreMP" value="#{ventaMedio.nombreMedioPago}"/>
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>

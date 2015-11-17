@@ -154,17 +154,21 @@ public class ventaMB {
             setPanelVisibleEstadoPagada(false);
             setSelectEstadoEdit(0);
         }else if(estado == 1){//PAGADA
-            setPanelVisibleEstadoPagada(true);
+            setPanelVisibleEstadoPagada(false);
             setSelectEstadoEdit(1);
         }else if(estado == 2){
             setSelectEstadoEdit(1);
-            setPanelVisibleEstadoPagada(false);
+            setPanelVisibleEstadoPagada(true);
         }
+        setListaMedioPago(medioPagoBO.allMedioPago());
+        
         context.update("formEditarEstado");
+        context.update("mPagoSelectEdit");
         context.execute("PF('dialog_editar').show();");  
     }
     
     public void selectEstado(){
+        setListaMedioPago(medioPagoBO.allMedioPago());
         if(getSelectEstadoEdit() == 0){
             setPanelVisibleEstadoPagada(false);
         }else if(getSelectEstadoEdit() == 1){
@@ -181,6 +185,7 @@ public class ventaMB {
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formEditarEstado");
+        context.update("mPagoSelectEdit");
     }
     
     public void agregarMedioPago(){
@@ -200,24 +205,42 @@ public class ventaMB {
                  }
              }
              
+             int i = 0;
+             for(int j = 0; j<getListaMedioPago().size(); j++){
+                 if(getSelectMedioPagoEdit() == getListaMedioPago().get(j).getIdMedioPago()){
+                     i = j;
+                 }
+             }
+             
+             getListaMedioPago().remove(i);
+             
              setCantidadMedioPagoAcu(getCantidadMedioPagoAcu() + Double.parseDouble(getCantidadMedioPagoEdit()));
              getListaVentaMedioPago().add(dto);
              RequestContext context = RequestContext.getCurrentInstance();
              setCantidadMedioPagoEdit("");
              context.update("formEditarEstado");
+             context.update("mPagoSelectEdit");
         }
     }
     
     public void eliminarVentaMedioPago(ActionEvent actionEvent){
         if(getListaVentaMedioPago().size() > 0){
-            int index = (int)actionEvent.getComponent().getAttributes().get("indexMp");
+            int idMedioPago = (int)actionEvent.getComponent().getAttributes().get("idMP");
+            String nombreMedioPago = (String)actionEvent.getComponent().getAttributes().get("nombreMP");
+            int index = (int)actionEvent.getComponent().getAttributes().get("indexMP");
             Double monto = (Double)actionEvent.getComponent().getAttributes().get("montoMP");
             getListaVentaMedioPago().remove(index);
             
             setCantidadMedioPagoAcu(getCantidadMedioPagoAcu() - monto);
             
+            MedioPagoDTO d = new MedioPagoDTO();
+            d.setIdMedioPago(idMedioPago);
+            d.setNombre(nombreMedioPago);
+            getListaMedioPago().add(d);
+            
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("formEditarEstado");
+            context.update("mPagoSelectEdit");
         }
     }
     
