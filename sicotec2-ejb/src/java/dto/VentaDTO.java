@@ -17,6 +17,7 @@ public class VentaDTO {
     private Double descuento;
     private Double total;
     private String estado;
+    private String nombreEstado;
     private Integer iddocumento;
     private String serie;
     private String correlativo;
@@ -298,6 +299,20 @@ public class VentaDTO {
      */
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
+    }
+
+    /**
+     * @return the nombreEstado
+     */
+    public String getNombreEstado() {
+        return nombreEstado;
+    }
+
+    /**
+     * @param nombreEstado the nombreEstado to set
+     */
+    public void setNombreEstado(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
     }
 
     

@@ -67,7 +67,7 @@ public class VentasBO {
     }
     
     public void editVenta(VentaDTO venta, List<VeMedioPagoDTO> veMedioPago, int estado){
-        if(estado == 0){
+        if(estado == 1){
             List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
             for(VeMedioPagoDTO vDTO : veMedioPago){
                 Vemediopago vem = new Vemediopago();
@@ -91,11 +91,9 @@ public class VentasBO {
                 itemFacade.edit(i);
             }
             
-        }else if(estado == 1){
+        }else if(estado == 0){
             Venta ventaE = this.ConvertDTOtoEntity(venta);
-            ventaFacade.edit(ventaE);
-            
-            
+            ventaFacade.edit(ventaE);  
         }
     }
     
@@ -133,7 +131,15 @@ public class VentasBO {
         //PUEDE SER QUE SE CAIGA
         DTO.setIdImpuesto(venta.getIdimpuesto().getIdimpuesto());
         
-        
+        int estado = Integer.parseInt(venta.getEstado());
+        if(estado == 0){
+            DTO.setNombreEstado("CANCELADA");
+        }else if(estado == 1){
+            DTO.setNombreEstado("PAGADA");
+        }else if(estado == 2){
+            DTO.setNombreEstado("INCOMPLETA");
+        }
+
         return DTO;
     }
     

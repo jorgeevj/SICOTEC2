@@ -45,12 +45,18 @@ public class VentaFacade extends AbstractFacade<Venta> {
          List<Venta> compras = new ArrayList<Venta>();
          try{
              String sql = "SELECT v "
-                        + "FROM Venta v "
-                        + "WHERE v.estado = :estado";
+                        + "FROM Venta v ";
+             
+             if(idEstado != 0){
+                 sql+= "WHERE v.estado = :estado";
+             }
+                        
              
              Query query = em.createQuery(sql);
-             query.setParameter("estado", idEstado+"");
-             
+             if(idEstado != 0){
+                 query.setParameter("estado", idEstado+"");
+             }
+
              compras = query.getResultList();
          }catch(Exception e){
              System.out.println(e.getMessage());
