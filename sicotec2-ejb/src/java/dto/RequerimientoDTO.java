@@ -19,6 +19,19 @@ public class RequerimientoDTO {
     private List<LoteDTO> loteList;
     private List<PealtipoitemDTO> pealtipoitemList;
 
+    public RequerimientoDTO(Integer idrequerimientos) {
+        this.idrequerimientos = idrequerimientos;
+        loteList=new ArrayList<>();
+        pealtipoitemList=new ArrayList<>();
+    }
+
+    public RequerimientoDTO(Integer idrequerimientos, Integer cantidad) {
+        this.idrequerimientos = idrequerimientos;
+        this.cantidad = cantidad;
+        loteList=new ArrayList<>();
+        pealtipoitemList=new ArrayList<>();
+    }
+
     public RequerimientoDTO() {
         loteList=new ArrayList<>();
         pealtipoitemList=new ArrayList<>();

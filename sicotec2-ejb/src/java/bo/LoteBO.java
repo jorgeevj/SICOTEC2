@@ -7,6 +7,8 @@ package bo;
 
 import dao.LoteFacade;
 import dto.LoteDTO;
+import dto.RequerimientoDTO;
+import dto.UnidadDTO;
 import entidades.Altipoitem;
 import entidades.AltipoitemPK;
 import entidades.Compra;
@@ -27,6 +29,8 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class LoteBO {
+    @EJB
+    private PedidoaltipoitemBO pedidoaltipoitemBO;
     
     @EJB
     LoteFacade loteFacade;
@@ -67,7 +71,9 @@ public class LoteBO {
         DTO.setNombreTipoItem(lote.getAltipoitem().getTipoitem().getNombre());
         DTO.setIdUMedida(lote.getIdunidades().getIdunidades());
         DTO.setDescUMedida(lote.getIdunidades().getNombre());
-        
+        DTO.setUnidadDTO(new UnidadDTO(lote.getIdunidades().getIdunidades(),lote.getIdunidades().getNombre(),lote.getIdunidades().getUnidades()));
+        DTO.setRequerimiento(new RequerimientoDTO(lote.getIdrequerimientos().getIdrequerimientos(), lote.getIdrequerimientos().getCantidad()));
+        DTO.getRequerimiento().setPealtipoitemList(pedidoaltipoitemBO.getPealtipoitemByRequerimiento(DTO.getRequerimiento()));
         return DTO;
     }
 

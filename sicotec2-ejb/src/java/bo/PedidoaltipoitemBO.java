@@ -8,8 +8,11 @@ package bo;
 import dao.PealtipoitemFacade;
 import dao.TipoitemFacade;
 import dto.PealtipoitemDTO;
+import dto.RequerimientoDTO;
 import entidades.Pealtipoitem;
 import entidades.PealtipoitemPK;
+import entidades.Pedido;
+import entidades.Requerimientos;
 import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +56,11 @@ public class PedidoaltipoitemBO {
             DTO.setCantidad(pealtipoitem.getCantidad());
             DTO.setCostoUni(pealtipoitem.getCostoUni());
             DTO.setEstado(pealtipoitem.getEstado());
-//            DTO.setIdcompra(pealtipoitem.getIdcompra());//ya no hay id de compra en el los pedidos ahora es requerimiento
+            DTO.setIdalmacen(pealtipoitem.getAltipoitem().getAlmacen().getIdalmacen());
+            DTO.setIdtipoitem(pealtipoitem.getAltipoitem().getTipoitem().getIdtipoItem());
             DTO.setRequerimientos(pealtipoitem.getIdrequerimientos());
-            DTO.setPedido(pealtipoitem.getPedido());
+            DTO.setPedido(new Pedido(pealtipoitem.getPealtipoitemPK().getIdpedido()));
+            DTO.setIdPedido(pealtipoitem.getPealtipoitemPK().getIdpedido());
             String idTipoItem = DTO.getAltipoitem().getAltipoitemPK().getIdtipoItem();
             String nombreItems=tipoitemFacade.getTipoItemsNombre(idTipoItem).getNombre();
             if(pealtipoitem.getEstado() == 0){
@@ -121,5 +126,9 @@ public class PedidoaltipoitemBO {
           List<Pealtipoitem> listaEntidad = pealtipoitemFacade.getAllPealtipoitemsByPedido(entidad);*/
           List<PealtipoitemDTO> listaDto = null;//this.convertListEntityToDTO(listaEntidad);
           return listaDto;
+      }
+      
+      public List<PealtipoitemDTO> getPealtipoitemByRequerimiento(RequerimientoDTO r){
+      return convertListEntityToDTO(pealtipoitemFacade.getPedidosbyRequerimiento(r));
       }
 }

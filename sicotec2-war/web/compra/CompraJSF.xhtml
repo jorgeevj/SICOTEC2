@@ -10,6 +10,7 @@
 
         <p:panel id="p1" header="Gestion de Ordenes de Compra" style="margin-bottom:30px">
             <h:form id="formCompra">
+                <p:growl id="growlCompra" showDetail="true"/>
                 <h:panelGrid columns="4" styleClass="hideborder">
                     <p:outputLabel value="Empresa:" for="it1" />
                     <p:inputText id="it1" value="#{compraMB.campos.idempresa.nombre}"/>
@@ -31,19 +32,24 @@
                          <f:selectItem itemLabel="Rechazada" itemValue="4" />
                    </p:selectOneMenu>
                 </h:panelGrid>
-                
+                <h:panelGrid columns="5" styleClass="hideborder">
                  <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
                                  actionListener="#{compraMB.limpiar}" update="formCompra"/>
                 <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
                                  actionListener="#{compraMB.consultar}" update="tabCompra"/>     
                 
                  <p:commandButton value="Agregar" actionListener="#{compraMB.crear}" id="btnAgregarCom" title="Agregar" update="formAddCompra"/>
-                <p:commandButton value="Editar"  actionListener="#{compraMB.edit}" id="btnEditarCom" title="Editar"/>       
-          
+                 <p:commandButton value="Editar"  actionListener="#{compraMB.edit}" id="btnEditarCom" title="Editar"  disabled="#{compraMB.estadoEdit}"/> 
+                 <p:commandButton value="Ver"  actionListener="#{compraMB.ver}" id="btnVerCom" title="Ver" disabled="#{compraMB.estadoEdit}"/>
+          </h:panelGrid>
            <h:panelGrid >
             <p:dataTable id="tabCompra"  value="#{compraMB.listaCompras}" var="tComp"
-                         selectionMode="single" rowKey="#{tComp.idcompra}" selection="#{compraMB.co}" >
-                
+                         selectionMode="single" rowKey="#{tComp.idcompra}" selection="#{compraMB.compraSelect}" 
+                         scrollable="true" scrollHeight="200">
+                <p:ajax event="rowSelect" listener="#{compraMB.onRowSelectCot}" update="formCompra:btnEditarCom,formCompra:btnVerCom" />
+                <f:facet name="header">
+                    Lista de Ordenes de Compra
+                </f:facet>
                 <p:column headerText="N°Serie">
                     <h:outputText value="#{tComp.serie}" />
                 </p:column>

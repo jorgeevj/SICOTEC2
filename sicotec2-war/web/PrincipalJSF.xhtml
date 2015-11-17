@@ -563,7 +563,7 @@ jorgeevj 15.09.15 Creacion.
 
 
             <!-- DIALOG DE COMPRAS-->
-            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="570" width="800">
+            <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="500" width="800">
                 <h:form id="formAddCompra">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Empresa: "></p:outputLabel>
@@ -576,7 +576,8 @@ jorgeevj 15.09.15 Creacion.
                         
                         <p:outputLabel value="Almacen: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesCompra" value="#{compraMB.camposAdd.idAlmacen}" 
-                                         valueChangeListener="#{compraMB.cargarPedidosByAlmacen}">
+                                         valueChangeListener="#{compraMB.cargarPedidosByAlmacen}"
+                                         disabled="#{compraMB.estadoChoiceAlmacen}">
                         <p:ajax event="valueChange" update="tbPedidosItemsDisp"/>
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
@@ -604,12 +605,12 @@ jorgeevj 15.09.15 Creacion.
                         </p:column>
                        
                     </p:dataTable>
-
+                    <p:messages id="msgRegCompra" showDetail="true" closable="true" />
                     <p:panelGrid columns="2" styleClass="hideborder">
                     <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido"  
-                                     actionListener="#{compraMB.agregarTipoItems}" />
+                                     actionListener="#{compraMB.agregarTipoItems}" update="formAddCompra"/>
                      <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" 
-                                      actionListener="#{compraMB.quitarPedido}"/>
+                                      actionListener="#{compraMB.quitarPedido}" update="formAddCompra"/>
                 </p:panelGrid>
                     <p:remoteCommand name="onCellEdit3" update="tbPedidosItemsSelec" />
                      <p:dataTable  id="tbPedidosItemsSelec" value="#{compraMB.listaLoteDTO}" var="loteReg" 
@@ -668,12 +669,167 @@ jorgeevj 15.09.15 Creacion.
                         
                 </p:dataTable>
                
-                    <p:commandButton id="guardarCompraNueva" value="Enviar" actionListener="#{compraMB.addNuevoCompra}" />
+                <p:commandButton id="guardarCompraNueva" value="Guardar" actionListener="#{compraMB.guardarCompra}" />
+                <p:commandButton id="enviarCompraNueva" value="Guardar y Enviar" actionListener="#{compraMB.addNuevoCompra}" />
+                                
                 </h:form>
             </p:dialog> 
         
+                <p:dialog header="Editar Compras" widgetVar="editComprasModal" modal="true" height="500" width="800">
+                <h:form id="formEditCompra">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        
+                        <p:selectOneMenu id="empresasPedidoedit" value="#{compraMB.compraSelect.idEmpresa}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems   value="#{compraMB.listaEmpresasProveedoras}"  var="emp" 
+                                             itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:selectOneMenu id="almacenesCompraedit" value="#{compraMB.compraSelect.idAlmacen}" 
+                                         valueChangeListener="#{compraMB.cargarPedidosByAlmacen}">
+                        <p:ajax event="valueChange" update="tbPedidosItemsDispedit"/>
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
+                                           itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <br/>
+                    
+                    <p:dataTable id="tbPedidosItemsDispedit" var="tPealtipoitem" value="#{compraMB.listPealItem}"
+                                 selectionMode="single" selection="#{compraMB.objPealTipoItem}" 
+                                 rowKey="#{tPealtipoitem.nombreItems}"  
+                                 scrollable="true" scrollHeight="150">
+                        <p:ajax event="rowSelect" listener="#{compraMB.selectTipoItemAdd}" /> 
+                        <f:facet name="header">
+                           Pedidos Disponibles 
+                        </f:facet>
+                        <p:column headerText="Item" style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.cantidad}"/>
+                        </p:column>
+                        <p:column headerText="Precio Venta U." style="text-align: center">
+                            <p:outputLabel value="#{tPealtipoitem.costoUni}"/>
+                        </p:column>
+                       
+                    </p:dataTable>
+
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                    <p:commandButton id="btnAgregarPedidoEdit"  value="Agregar Pedido"  
+                                     actionListener="#{compraMB.agregarTipoItems}" update="formEditCompra"/>
+                     <p:commandButton id="btnQuitarPedidoEdit"  value="Quitar Pedido" 
+                                      actionListener="#{compraMB.quitarPedido}" update="formEditCompra"/>
+                </p:panelGrid>
+                    <p:remoteCommand name="onCellEdit4" update="tbPedidosItemsSelecedit" />
+                     <p:dataTable  id="tbPedidosItemsSelecedit" value="#{compraMB.listaLoteDTO}" var="loteReg" 
+                                   selectionMode="single" selection="#{compraMB.loteSelect}" rowKey="#{loteReg.idtipoitem}"
+                                   editable="true" editMode="cell">
+                         <p:ajax event="cellEdit" oncomplete="onCellEdit4()" />
+                     <f:facet name="header">
+                           Items Seleccionados 
+                        </f:facet>
+                         <p:column headerText="Cod. Producto" >
+                             <p:outputLabel value="#{loteReg.idtipoitem}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" >
+                            <p:outputLabel value="#{loteReg.nombreTipoItem}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad Requerida" >
+                             <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
+                        </p:column>
+                         <p:column headerText="Cantidad Unitara" >
+                             <p:outputLabel value="#{loteReg.cantUnidad}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad por U. Medida" >
+                            <p:cellEditor>
+                  <f:facet name="output">
+                      <h:outputText value="#{loteReg.cantidad}" />
+                  </f:facet>
+                  <f:facet name="input">
+                      <p:inputText value="#{loteReg.cantidad}" style="width:96%">
+                      <f:validateDoubleRange minimum="#{loteReg.requerimiento.cantidad}" maximum="10000" />
+                      </p:inputText>
+                  </f:facet>
+                        </p:cellEditor>
+                        </p:column>
+                      <p:column headerText="Unidad">
+           <p:cellEditor>
+               <f:facet name="output">
+                   <h:outputText value="#{loteReg.unidadDTO.nombre}" />
+               </f:facet>
+               <f:facet name="input">
+                   <h:selectOneMenu value="#{loteReg.unidadDTO.idunidades}">
+                      <f:selectItems value="#{compraMB.listaUnidad}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.idunidades}" />
+                   </h:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+       </p:column>   
+               <p:column headerText="Costo Unitario $" >
+                            <p:cellEditor>
+                  <f:facet name="output">
+                      <h:outputText value="$#{loteReg.precioUni}" />
+                  </f:facet>
+                  <f:facet name="input">
+                      <p:inputText value="#{loteReg.precioUni}" style="width:96%"/>
+                  </f:facet>
+                        </p:cellEditor>
+                        </p:column>          
+                        
+                </p:dataTable>
+               
+                    <p:commandButton id="enviarCompraEdit" value="Guardar y Enviar" actionListener="#{compraMB.enviarEditar}" />
+                    <p:commandButton id="guardarCompraEdit" value="Guardar" actionListener="#{compraMB.guardarEditar}" />
+                </h:form>
+            </p:dialog> 
         
-           
+            <p:dialog header="Ver Compras" widgetVar="verComprasModal" modal="true" height="500" width="800">
+                <h:form id="formVerCompra">
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                    <p:outputLabel value="Empresa: "/>
+                    <p:outputLabel value="#{compraMB.compraSelect.nombreEmpresa}"/>
+                    <p:outputLabel value="N Serie: " />
+                    <p:outputLabel value="#{compraMB.compraSelect.serie}" />
+                    <p:outputLabel value="Correlativo: "/>
+                    <p:outputLabel value="#{compraMB.compraSelect.correlativo}"/>
+                    <p:outputLabel value="Almacen: "/>
+                    <p:outputLabel value="#{compraMB.compraSelect.nombreAlmacen}"/>
+                    </p:panelGrid>
+                    
+                    <p:dataTable  id="tbLotesCompra" value="#{compraMB.listaLoteDTO}" var="loteReg" >
+                     <f:facet name="header">
+                           Items de la Compra 
+                        </f:facet> 
+                        <p:column headerText="Cod. Producto" >
+                             <p:outputLabel value="#{loteReg.idtipoitem}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" >
+                            <p:outputLabel value="#{loteReg.nombreTipoItem}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad Requerida" >
+                             <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
+                        </p:column>
+                         <p:column headerText="Cantidad Unitara" >
+                             <p:outputLabel value="#{loteReg.cantUnidad}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad por U. Medida" >
+                            <p:outputLabel value="#{loteReg.cantidad}"/>
+                        </p:column>
+                      <p:column headerText="Unidad">
+                   <p:outputLabel value="#{loteReg.unidadDTO.nombre}" />
+                    </p:column>
+                    <p:column headerText="Costo Unitario $" >
+                      <p:outputLabel value="$#{loteReg.precioUni}" />
+                    </p:column>
+                   </p:dataTable>
+                    <p:panelGrid columns="1" styleClass="hideborder">
+                    <p:commandButton id="verAceptar" value="Aceptar" onclick="PF('verComprasModal').hide();" />
+                </p:panelGrid>
+                </h:form>
+           </p:dialog>
+            
             <!-- FIN DIALOG DE COMPRAS-->
 
 

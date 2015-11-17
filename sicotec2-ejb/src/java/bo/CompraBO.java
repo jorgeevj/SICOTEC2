@@ -12,7 +12,6 @@ import dao.DocalmacenFacade;
 import dao.LoteFacade;
 import dao.PealtipoitemFacade;
 import dao.RequerimientosFacade;
-import dao.TipoitemFacade;
 import dto.CompraDTO;
 import dto.LoteDTO;
 import dto.PealtipoitemDTO;
@@ -29,7 +28,6 @@ import entidades.Pealtipoitem;
 import entidades.PealtipoitemPK;
 import entidades.Requerimientos;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -43,6 +41,9 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class CompraBO {
+
+    @EJB
+    private PedidoaltipoitemBO pedidoaltipoitemBO;
     @EJB
     private AltipoitemFacade altipoitemFacade;
     @EJB
@@ -114,7 +115,7 @@ public class CompraBO {
         DTO.setIdcompra(compra.getIdcompra());
         DTO.setCorrelativo(compra.getCorrelativo());
         DTO.setFecha(compra.getFecha());
-            //DTO.setIdalmacen(compra.getIdalmacen());
+        //DTO.setIdalmacen(compra.getIdalmacen());
         //DTO.setIdempresa(compra.getIdempresa());
         DTO.setTotal(compra.getTotal());
         DTO.setSerie(compra.getSerie());
@@ -129,13 +130,15 @@ public class CompraBO {
         Compra entidad = new Compra();
         if (tipo == 0) {
             entidad.setIdcompra(dto.getIdcompra());
+            entidad.setSerie(dto.getSerie());
+            entidad.setCorrelativo(dto.getCorrelativo());
         }
         entidad.setFecha(new Date());
         entidad.setIdempresa(new Empresa(dto.getIdEmpresa()));
         entidad.setIdalmacen(dto.getIdAlmacen());
         entidad.setEstado(dto.getEstado());
-        for(LoteDTO l:dto.getListaLoteDTO()){
-        dto.setTotal(dto.getTotal()+l.getPrecioUni());
+        for (LoteDTO l : dto.getListaLoteDTO()) {
+            dto.setTotal(dto.getTotal() + l.getPrecioUni());
         }
         entidad.setTotal(dto.getTotal());
         return entidad;
@@ -153,29 +156,28 @@ public class CompraBO {
         entidad.setSerie(String.format("%03d", da.getSerie()));
         entidad.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         entidad = compraFacade.agregarCompra(entidad);
-        for(LoteDTO ll:dto.getListaLoteDTO()){
-        Lote e=loteBO.convertDTObyEntity(ll);
-        Requerimientos r=requerimientosFacade.agregarRequerimiento(convertRequerimientoDTOByEntidad(ll.getRequerimiento()));
-        
-        for(PealtipoitemDTO pa:ll.getRequerimiento().getPealtipoitemList()){
-            Pealtipoitem pal=pealtipoitemFacade.find(new PealtipoitemPK(pa.getPedido().getIdpedido(), pa.getIdalmacen(), pa.getIdtipoitem()));
-            pal.setEstado(1);
-            pal.setIdrequerimientos(r);
-        pealtipoitemFacade.edit(pal);
+        for (LoteDTO ll : dto.getListaLoteDTO()) {
+            Lote e = loteBO.convertDTObyEntity(ll);
+            Requerimientos r = requerimientosFacade.agregarRequerimiento(convertRequerimientoDTOByEntidad(ll.getRequerimiento()));
+
+            for (PealtipoitemDTO pa : ll.getRequerimiento().getPealtipoitemList()) {
+                Pealtipoitem pal = pealtipoitemFacade.find(new PealtipoitemPK(pa.getPedido().getIdpedido(), pa.getIdalmacen(), pa.getIdtipoitem()));
+                pal.setEstado(1);
+                pal.setIdrequerimientos(r);
+                pealtipoitemFacade.edit(pal);
+            }
+
+            e.setIdrequerimientos(r);
+            e.setCompra(entidad);
+            LotePK lpk = new LotePK();
+            lpk.setIdcompra(entidad.getIdcompra());
+            e.setLotePK(lpk);
+            loteFacade.create(e);
+            Altipoitem al = altipoitemFacade.find(new AltipoitemPK(dto.getIdAlmacen(), ll.getIdtipoitem()));
+            al.setComprados(al.getComprados() + ll.getCantidad());
+            altipoitemFacade.edit(al);
         }
-        
-        e.setIdrequerimientos(r);
-        e.setCompra(entidad);
-        LotePK lpk=new LotePK();
-        lpk.setIdcompra(entidad.getIdcompra());
-        e.setLotePK(lpk);
-        loteFacade.create(e);
-        Altipoitem al=altipoitemFacade.find(new AltipoitemPK(dto.getIdAlmacen(), ll.getIdtipoitem()));
-        al.setComprados(al.getComprados()+ll.getCantidad());
-        altipoitemFacade.edit(al);
-        }
-        
-        
+
         return entidad;
     }
 
@@ -214,8 +216,8 @@ public class CompraBO {
 
     }
 
-    public List<Lote> getLoteByCompra(CompraDTO co) {
-        return loteFacade.getLotesByCompra(co.getIdcompra());
+    public List<LoteDTO> getLoteByCompra(CompraDTO co) {
+        return convertListLoteByListDTO(loteFacade.getLotesByCompra(co.getIdcompra()));
     }
 
     public List<PealtipoitemDTO> getPedidosByCompraAndItem(CompraDTO co, Lote loteSelec) {
@@ -230,19 +232,110 @@ public class CompraBO {
 //    }
 
     private Requerimientos convertRequerimientoDTOByEntidad(RequerimientoDTO requerimiento) {
-    Requerimientos r=new  Requerimientos();
-    r.setCantidad(requerimiento.getCantidad());
-    return r;
+        Requerimientos r = new Requerimientos();
+        r.setCantidad(requerimiento.getCantidad());
+        return r;
     }
 
     private Pealtipoitem convertPealtipoitemDTObyEntidad(PealtipoitemDTO dto) {
-        Pealtipoitem p=new Pealtipoitem();
+        Pealtipoitem p = new Pealtipoitem();
         p.setAltipoitem(dto.getAltipoitem());
         p.setCantidad(dto.getCantidad());
         p.setCostoUni(dto.getCostoUni());
         p.setEstado(dto.getEstado());
         p.setPealtipoitemPK(new PealtipoitemPK(dto.getPedido().getIdpedido(), dto.getAltipoitem().getAlmacen().getIdalmacen(), dto.getAltipoitem().getTipoitem().getIdtipoItem()));
-    return p;
+        return p;
     }
 
+    private List<LoteDTO> convertListLoteByListDTO(List<Lote> lotesByCompra) {
+        return loteBO.convertListEntityToDTO(lotesByCompra);
+    }
+
+    public void clearCompra(CompraDTO compraSelect) {
+
+        for (Lote l : loteFacade.getLotesByCompra(compraSelect.getIdcompra())) {
+            loteFacade.remove(l);//borrao el lote
+            for (Pealtipoitem pa : pealtipoitemFacade.getPedidosbyRequerimiento(new RequerimientoDTO(l.getIdrequerimientos().getIdrequerimientos()))) {
+                pa.setEstado(0);
+                pa.setIdrequerimientos(null);
+                pealtipoitemFacade.edit(pa);//edito pedidos
+            }
+            requerimientosFacade.remove(new Requerimientos(l.getIdrequerimientos().getIdrequerimientos()));//borro requerimientos
+        }
+    }
+
+    public void guardarEdit(CompraDTO compraSelect) {
+        //editando la compra
+        compraSelect.setTotal(0d);
+        compraFacade.edit(convertDTOtoEntity(compraSelect, 0));
+        //creando los requerimientos , edito los pedidos, guardo los lotes
+        for (LoteDTO l : compraSelect.getListaLoteDTO()) {
+            Requerimientos r = convertRequerimientoDTOByEntidad(l.getRequerimiento());
+//            r.setIdrequerimientos(l.getRequerimiento().getIdrequerimientos());
+            r = requerimientosFacade.agregarRequerimiento(r);//guardo requerimientos
+            for (PealtipoitemDTO pa : l.getRequerimiento().getPealtipoitemList()) {
+                Pealtipoitem pat = convertPealtipoitemDTObyEntidad(pa);
+                pat.setEstado(1);
+                pat.setIdrequerimientos(r);
+                pealtipoitemFacade.edit(pat);//edito pedidos
+            }
+            l.setIdAlmacen(compraSelect.getIdAlmacen());
+            Lote lote = loteBO.convertDTObyEntity(l);
+            LotePK lpk = new LotePK();
+            lpk.setIdcompra(compraSelect.getIdcompra());
+            lote.setLotePK(lpk);
+            lote.setIdrequerimientos(r);
+            loteFacade.create(lote);//guardo lotes
+        }
+
+    }
+
+    public void guardarCompra(CompraDTO camposAdd) {
+        //guardar compra nueva y retorna la entidad
+        Compra c = persistCompra(camposAdd);
+        //guardar requerimiento, lotes y updatea pealtipoitem
+        camposAdd.setIdcompra(c.getIdcompra());
+        llenarCompra(camposAdd, c);
+
+    }
+
+    private Compra persistCompra(CompraDTO dto) {
+        dto.setTotal(0d);
+        Compra c = convertDTOtoEntity(dto, 1);
+        Docalmacen da = getNewSerieAndCorrelativo(c.getIdalmacen());
+        c.setSerie(String.format("%03d", da.getSerie()));
+        c.setCorrelativo(String.format("%06d", da.getCorrelativo()));
+        c = compraFacade.agregarCompra(c);
+        return c;
+    }
+
+    private void llenarCompra(CompraDTO dto, Compra c) {
+        for (LoteDTO ldto : dto.getListaLoteDTO()) {
+            Requerimientos r = requerimientosFacade.agregarRequerimiento(convertRequerimientoDTOByEntidad(ldto.getRequerimiento()));
+            for (PealtipoitemDTO pdto : ldto.getRequerimiento().getPealtipoitemList()) {
+                Pealtipoitem p = convertPealtipoitemDTObyEntidad(pdto);
+                p.setEstado(1);
+                p.setIdrequerimientos(r);
+                pealtipoitemFacade.edit(p);
+            }
+            Lote l = loteBO.convertDTObyEntity(ldto);
+            LotePK lpk = new LotePK();
+            lpk.setIdcompra(c.getIdcompra());
+            l.setIdrequerimientos(r);
+            l.setCompra(c);
+            l.setLotePK(lpk);
+            loteFacade.create(l);
+        }
+    }
+
+    public void updateCompraAndAlmacen(CompraDTO compraSelect) {
+       compraSelect.setTotal(0d);
+        compraFacade.edit(convertDTOtoEntity(compraSelect, 0));
+        for(LoteDTO ldto:compraSelect.getListaLoteDTO()){
+        Altipoitem at=altipoitemFacade.find(new AltipoitemPK(compraSelect.getIdAlmacen(), ldto.getIdtipoitem()));
+            at.setComprados(at.getComprados()+(ldto.getCantidad()*ldto.getUnidadDTO().getUnidades()));
+         altipoitemFacade.edit(at);
+        }
+    
+    }
 }

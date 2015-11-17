@@ -7,9 +7,11 @@ package dao;
 
 import dto.CompraDTO;
 import dto.PealtipoitemDTO;
+import dto.RequerimientoDTO;
 import dto.TipoItemDTO;
 import entidades.Lote;
 import entidades.Pealtipoitem;
+import entidades.Requerimientos;
 import entidades.Tipoitem;
 import java.util.ArrayList;
 import java.util.List;
@@ -181,5 +183,14 @@ public class PealtipoitemFacade extends AbstractFacade<Pealtipoitem> {
             listaEntidad = new ArrayList<Pealtipoitem>();
         }
         return listaEntidad;
+    }
+
+    public List<Pealtipoitem> getPedidosbyRequerimiento(RequerimientoDTO r) {
+        List<Pealtipoitem> lpa;
+        String jpa = "  SELECT p " +
+                         "    FROM Pealtipoitem p " +
+                         "   WHERE p.idrequerimientos.idrequerimientos = " + r.getIdrequerimientos();
+            lpa= em.createQuery(jpa, Pealtipoitem.class).getResultList();
+            return lpa;
     }
 }

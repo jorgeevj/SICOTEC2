@@ -33,6 +33,7 @@ public class PealtipoitemDTO {
     private Double precioItem;
     private String nombreEstado;
     private Double total;
+    private Integer idPedido;
 
     public Integer getCantidad() {
         return cantidad;
@@ -144,5 +145,13 @@ public class PealtipoitemDTO {
 
     public void setIdtipoitem(String idtipoitem) {
         this.idtipoitem = idtipoitem;
+    }
+
+    public Integer getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(Integer idPedido) {
+        this.idPedido = idPedido;
     }
 }

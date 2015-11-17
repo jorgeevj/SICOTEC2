@@ -49,6 +49,7 @@ public class CompraDTO {
 
     public CompraDTO() {
     idempresa=new Empresa();
+    nombEstado="";
     }    
      
     public Integer getIdcompra() {

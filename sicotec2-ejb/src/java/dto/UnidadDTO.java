@@ -10,10 +10,19 @@ package dto;
  * @author jc7
  */
 public class UnidadDTO {
-    
+
     private Integer idunidades;
     private String nombre;
     private Integer unidades;
+
+    public UnidadDTO() {
+    }
+
+    public UnidadDTO(Integer idunidades, String nombre, Integer unidades) {
+        this.idunidades = idunidades;
+        this.nombre = nombre;
+        this.unidades = unidades;
+    }
 
     public Integer getIdunidades() {
         return idunidades;
@@ -38,8 +47,5 @@ public class UnidadDTO {
     public void setUnidades(Integer unidades) {
         this.unidades = unidades;
     }
-    
-    
-    
-    
+
 }
