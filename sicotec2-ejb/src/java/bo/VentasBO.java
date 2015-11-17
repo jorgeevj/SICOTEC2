@@ -8,6 +8,7 @@ package bo;
 import dao.AlmacenFacade;
 import dao.AltipoitemFacade;
 import dao.ItemFacade;
+import dao.VemediopagoFacade;
 import dao.VentaFacade;
 import dto.ItemDTO;
 import dto.VeMedioPagoDTO;
@@ -41,6 +42,8 @@ public class VentasBO {
     private ItemFacade itemFacade;
     @EJB
     private AltipoitemFacade altipoitemFacade;
+    @EJB
+    private VemediopagoFacade vemediopagoFacade;
     /*@EJB
     private VemediopagoFacade altipoitemFacade;*/
     
@@ -68,7 +71,7 @@ public class VentasBO {
     
     public void editVenta(VentaDTO venta, List<VeMedioPagoDTO> veMedioPago, int estado){
         if(estado == 1){
-            List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
+            //List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
             for(VeMedioPagoDTO vDTO : veMedioPago){
                 Vemediopago vem = new Vemediopago();
                 VemediopagoPK pk = new VemediopagoPK();
@@ -76,9 +79,11 @@ public class VentasBO {
                 pk.setIdventa(vDTO.getIdVenta());
                 vem.setVemediopagoPK(pk);
                 vem.setMonto(vDTO.getMonto());
+                
+                vemediopagoFacade.create(vem);
             }
             Venta ventaE = this.ConvertDTOtoEntity(venta);
-            ventaE.setVemediopagoList(listaEnt);
+            //ventaE.setVemediopagoList(listaEnt);
             ventaFacade.edit(ventaE);
             List<Item> items = ventaFacade.getItemsxVenta(venta.getIdventa());
 
