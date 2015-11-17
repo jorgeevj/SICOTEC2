@@ -717,7 +717,6 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Precio Venta U." style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.costoUni}"/>
                         </p:column>
-                       
                     </p:dataTable>
                         <p:messages id="msgEditCompra" showDetail="true" closable="true" />
                     <p:panelGrid columns="2" styleClass="hideborder">
@@ -786,8 +785,8 @@ jorgeevj 15.09.15 Creacion.
                         
                 </p:dataTable>
                
-                    <p:commandButton id="enviarCompraEdit" value="Guardar y Enviar" actionListener="#{compraMB.enviarEditar}" />
-                    <p:commandButton id="guardarCompraEdit" value="Guardar" actionListener="#{compraMB.guardarEditar}" />
+                    <p:commandButton id="enviarCompraEdit" value="Guardar y Enviar" actionListener="#{compraMB.enviarEditar}" update="msgEditCompra"/>
+                    <p:commandButton id="guardarCompraEdit" value="Guardar" actionListener="#{compraMB.guardarEditar}" update="msgEditCompra"/>
                 </h:form>
             </p:dialog> 
         
