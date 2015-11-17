@@ -170,6 +170,7 @@ public class CompraMB {
     }
 
     private void limpiaCrearCompra() {
+        compraSelect= new CompraDTO();
         camposAdd = new CompraDTO();
         listPealItem = new ArrayList<>();
         listaLoteDTO = new ArrayList<>();
