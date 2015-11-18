@@ -87,6 +87,8 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
         return entidad;
     }
     
+    
+    
     public void insertarTipoItem(){
         
     }
