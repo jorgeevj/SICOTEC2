@@ -323,7 +323,7 @@
         <p:dialog header="Orden de Compra" widgetVar="dialog_nueva_compras" resizable="false" width="1000" height="400"> 
             <h:form id="formTabCompras">
                 Ordenes de Compra:
-                <p:dataTable value="#{movimientoMB.listaCompras}" var="comprasSelecc" selectionMode="single" id="tb_ver_compras"
+                <p:dataTable value="#{movimientoMB.listaCompras}" var="comprasSelecc" selectionMode="single" id="tb_ver_compras" widgetVar="tab_compras"
                              rowKey="#{comprasSelecc.idcompra}" rowIndexVar="var" disabledSelection="#{movimientoMB.disableTablaCompras}" selection="#{movimientoMB.compraSeleccionada}">
                     <p:ajax listener="#{movimientoMB.selectCompra}" event="rowSelect"/>
                    <p:column headerText="Fecha" style="text-align: center;">
@@ -341,6 +341,13 @@
                         <p:outputLabel value="#{comprasSelecc.nombreEmpresa}"/>
                    </p:column>
                     <p:column headerText="Almacen" style="text-align: center;">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('tab_compras').filter()" style="width:100%">
+                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{movimientoMB.listaAlmacenes}" var="al"
+                                               itemLabel="#{al.nombre}" itemValue="#{al.nombre}" />
+                            </p:selectOneMenu>
+                        </f:facet>
                         <p:outputLabel value="#{comprasSelecc.nombreAlmacen}"/>
                    </p:column>
                     <!--<p:column headerText="Total" style="text-align: center;">

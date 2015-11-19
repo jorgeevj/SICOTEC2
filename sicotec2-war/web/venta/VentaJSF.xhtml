@@ -46,10 +46,11 @@
                 </h:form>
                 <br/>
                 <h:form id="formBotones">
-                    <h:panelGrid columns="3">
+                    <h:panelGrid columns="4">
                         <p:commandButton value="Limpiar" actionListener="#{ventaMB.limpiar}"/>
                         <p:commandButton value="Editar Estado" disabled="#{ventaMB.disableEditar}" actionListener="#{ventaMB.abrirCambiarEstado}"/>
                         <p:commandButton value="Ver Items" disabled="#{ventaMB.disableVerItems}" actionListener="#{ventaMB.verItems}"/>
+                        <p:commandButton value="Ver Medio de Pago" disabled="#{ventaMB.disableVerMPago}" actionListener="#{ventaMB.verMedioPago}"/>
                     </h:panelGrid>
                 </h:form>
             <br/>
@@ -75,10 +76,10 @@
                     <p:column headerText="Almacen" style="text-align: center;">
                         <p:outputLabel value="#{ven.nombreAlmacen}"/>
                     </p:column>
-                    <p:column headerText="Total" style="text-align: center;">
+                    <p:column headerText="Monto Total($/.)" style="text-align: center;">
                         <p:outputLabel value="#{ven.total}"/>
                     </p:column>
-                    <p:column headerText="Descuento" style="text-align: center;">
+                    <p:column headerText="Desc." style="text-align: center;">
                         <p:outputLabel value="#{ven.descuento}"/>
                     </p:column>
                     <p:column headerText="Impuesto" style="text-align: center;">
@@ -128,8 +129,28 @@
             </h:form>
         </p:dialog>
         
+        <p:dialog header="Medio de pago" widgetVar="dialog_ver_medio_pago" resizable="false">
+            <h:form id="formTablaMedioPago">
+                <p:dataTable selectionMode="single" var="it" 
+                             rowIndexVar="var" rowKey="#{it.idVenta}" value="#{ventaMB.listaVentaMedioPagoConsulta}" 
+                             scrollable="true" paginator="true" resizableColumns="true">
+                    
+                   <p:column headerText="#" style="text-align: center;">
+                       <p:outputLabel value="#{var+1}"/>
+                   </p:column>
+                   <p:column headerText="Medio Pago" style="text-align: center;">
+                       <p:outputLabel value="#{it.nombreMedioPago}"/>
+                   </p:column>
+                   <p:column headerText="Monto($/.)" style="text-align: center;">
+                       <p:outputLabel value="#{it.monto}"/>
+                   </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
         <p:dialog header="Cambiar de Estado" widgetVar="dialog_editar" resizable="false" height="400">
             <h:form id="formEditarEstado">
+                <p:growl showDetail="true" sticky="true" id="msnEditarEstado"/>
                 Estado
                 <p:selectOneMenu id="estadoSelectEdit" value="#{ventaMB.selectEstadoEdit}"> 
                     <f:selectItem itemLabel="Seleccione" itemValue="100" />
@@ -139,6 +160,7 @@
                <br/>
                <br/>
                <p:panel visible="#{ventaMB.panelVisibleEstadoPagada}">
+                   <p:growl showDetail="true" sticky="true" id="msnMedioPago"/>
                    Medio de Pago
                     <p:selectOneMenu id="mPagoSelectEdit"
                                      value="#{ventaMB.selectMedioPagoEdit}"> 
@@ -148,9 +170,9 @@
                    </p:selectOneMenu>
                    <br/>
                    <br/>
-               Cantidad
+               Monto($/.)
                <p:inputText value="#{ventaMB.cantidadMedioPagoEdit}"/>
-               <p:commandButton value="Agregar" actionListener="#{ventaMB.agregarMedioPago}"/>
+               <p:commandButton value="Agregar" actionListener="#{ventaMB.agregarMedioPago}" update="msnMedioPago"/>
                 <p:dataTable value="#{ventaMB.listaVentaMedioPago}" var="ventaMedio" rowIndexVar="var">
                     <p:column headerText="#" style="text-align: center">
                         <p:outputLabel value="#{var+1}"/>
@@ -158,11 +180,11 @@
                     <p:column headerText="Medio de Pago" style="text-align: center">
                         <p:outputLabel value="#{ventaMedio.nombreMedioPago}"/>
                     </p:column>
-                    <p:column headerText="Cantidad" style="text-align: center">
+                    <p:column headerText="Monto($/.)" style="text-align: center">
                         <p:outputLabel value="#{ventaMedio.monto}"/>
                     </p:column>
                     <p:column headerText="Acción" style="text-align: center">
-                        <p:commandButton icon="ui-icon-remove" actionListener="#{ventaMB.eliminarVentaMedioPago}">
+                        <p:commandButton icon="ui-icon-remove" actionListener="#{ventaMB.eliminarVentaMedioPago}" disabled="#{ventaMedio.disableDelete}">
                             <f:attribute name="indexMP" value="#{var}" />
                             <f:attribute name="montoMP" value="#{ventaMedio.monto}"/>
                             <f:attribute name="idMP" value="#{ventaMedio.idMedioPago}"/>
@@ -181,7 +203,7 @@
                 </p:selectOneMenu>
                 <br/>
                 <br/>
-                <p:commandButton value="Guardar" actionListener="#{ventaMB.editarVenta}"/>
+                <p:commandButton value="Guardar" actionListener="#{ventaMB.editarVenta}" update="msnEditarEstado"/>
             </h:form>
         </p:dialog>
         

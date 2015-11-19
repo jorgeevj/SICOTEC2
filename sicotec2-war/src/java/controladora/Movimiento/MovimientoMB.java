@@ -423,7 +423,7 @@ public class MovimientoMB implements Serializable{
 
             mov.setComentario(comentario);
             mov.setFecha(fecha);
-            mov.setEstado(estado);
+            mov.setEstado(1);
             mov.setMotivo(motivo);
             mov.setIdTipoMovimiento(idTipoMovimiento);
             

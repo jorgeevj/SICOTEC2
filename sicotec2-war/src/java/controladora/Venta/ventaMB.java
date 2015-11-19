@@ -25,8 +25,10 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
@@ -60,6 +62,8 @@ public class ventaMB {
     private ArrayList listaEstados = new ArrayList();
     private List<VeMedioPagoDTO> listaVentaMedioPago = new ArrayList<VeMedioPagoDTO>();
     
+    private List<VeMedioPagoDTO> listaVentaMedioPagoConsulta = new ArrayList<VeMedioPagoDTO>();
+    
     //DTOS SELECC
     private VentaDTO ventaSeleccionada = new VentaDTO();
     
@@ -73,6 +77,7 @@ public class ventaMB {
     private int selectAlmacenBusqueda = 0;
     private boolean disableVerItems = true;
     private boolean disableEditar = true;
+    private boolean disableVerMPago = true;
     
     //EDITAR ESTADO
     private int selectEstadoEdit = 100;
@@ -103,6 +108,7 @@ public class ventaMB {
         dto.setIdalmacen(getSelectAlmacenBusqueda());
         setDisableEditar(true);
         setDisableVerItems(true);
+        setDisableVerMPago(true);
         
         setListaVentas(ventasBO.getVentasByBusqueda(dto));
         RequestContext context = RequestContext.getCurrentInstance();
@@ -132,10 +138,25 @@ public class ventaMB {
     
     public void selectventa(SelectEvent event){
         setVentaSeleccionada((VentaDTO)event.getObject());
-        setDisableEditar(false);
+        if(getVentaSeleccionada().getEstado().equals("0")){
+            setDisableEditar(true);
+        }else{
+            setDisableEditar(false);
+        }
+        
         setDisableVerItems(false);
+        setDisableVerMPago(false);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formBotones");
+    }
+    
+    public void verMedioPago(){
+        int idVenta = getVentaSeleccionada().getIdventa();
+        setListaVentaMedioPagoConsulta(ventasBO.getListaVMedioPago(idVenta));
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formTablaMedioPago");
+        context.execute("PF('dialog_ver_medio_pago').show();");
     }
     
     public void verItems(){
@@ -153,15 +174,35 @@ public class ventaMB {
         if(estado == 0){//CANCELADA
             setPanelVisibleEstadoPagada(false);
             setSelectEstadoEdit(0);
+            
+            setListaMedioPago(medioPagoBO.allMedioPago());
         }else if(estado == 1){//PAGADA
             setPanelVisibleEstadoPagada(false);
             setSelectEstadoEdit(1);
-        }else if(estado == 2){
+            
+            setListaMedioPago(medioPagoBO.allMedioPago());
+        }else if(estado == 2){//INCOMPLETA
             setSelectEstadoEdit(1);
+            setListaVentaMedioPago(ventasBO.getListaVMedioPago(getVentaSeleccionada().getIdventa()));
+            Double cantidad = 0.0;
+            for(VeMedioPagoDTO dto : getListaVentaMedioPago()){
+                cantidad = cantidad + dto.getMonto();
+                
+                int h = 0;
+                for(int i = 0; i<getListaMedioPago().size();i++){
+                    if(getListaMedioPago().get(i).getIdMedioPago() == dto.getIdMedioPago()){
+                        h = i;
+                    }
+                }
+                
+                getListaMedioPago().remove(h);
+            }
+            
+            setCantidadMedioPagoAcu(cantidad);
             setPanelVisibleEstadoPagada(true);
         }
-        setListaMedioPago(medioPagoBO.allMedioPago());
         
+        setSelectImpuestoEdit(getVentaSeleccionada().getIdImpuesto());
         context.update("formEditarEstado");
         context.update("mPagoSelectEdit");
         context.execute("PF('dialog_editar').show();");  
@@ -220,6 +261,9 @@ public class ventaMB {
              setCantidadMedioPagoEdit("");
              context.update("formEditarEstado");
              context.update("mPagoSelectEdit");
+             
+             
+             //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Agregado"));
         }
     }
     
@@ -239,6 +283,7 @@ public class ventaMB {
             getListaMedioPago().add(d);
             
             RequestContext context = RequestContext.getCurrentInstance();
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Eliminado"));
             context.update("formEditarEstado");
             context.update("mPagoSelectEdit");
         }
@@ -271,7 +316,9 @@ public class ventaMB {
         VentaDTO venta = new VentaDTO();
         int estado = getSelectEstadoEdit();
         if(!sms.equals("")){//FALTA
-            System.out.println(sms);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", sms));
+            RequestContext context = RequestContext.getCurrentInstance(); 
+            context.update("formTabla");
         }else{
             if(estado == 0){
                 venta = getVentaSeleccionada();
@@ -288,6 +335,12 @@ public class ventaMB {
                 }
             }
              ventasBO.editVenta(venta, getListaVentaMedioPago(), estado);
+             setListaVentas(ventasBO.getVentasByEstado(0));
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Edición Completa"));
+        
+             RequestContext context = RequestContext.getCurrentInstance();
+             context.execute("PF('dialog_editar').hide();");  
+             context.update("formTabla");
         }
     }
     
@@ -635,6 +688,34 @@ public class ventaMB {
      */
     public void setDisableEditar(boolean disableEditar) {
         this.disableEditar = disableEditar;
+    }
+
+    /**
+     * @return the disableVerMPago
+     */
+    public boolean isDisableVerMPago() {
+        return disableVerMPago;
+    }
+
+    /**
+     * @param disableVerMPago the disableVerMPago to set
+     */
+    public void setDisableVerMPago(boolean disableVerMPago) {
+        this.disableVerMPago = disableVerMPago;
+    }
+
+    /**
+     * @return the listaVentaMedioPagoConsulta
+     */
+    public List<VeMedioPagoDTO> getListaVentaMedioPagoConsulta() {
+        return listaVentaMedioPagoConsulta;
+    }
+
+    /**
+     * @param listaVentaMedioPagoConsulta the listaVentaMedioPagoConsulta to set
+     */
+    public void setListaVentaMedioPagoConsulta(List<VeMedioPagoDTO> listaVentaMedioPagoConsulta) {
+        this.listaVentaMedioPagoConsulta = listaVentaMedioPagoConsulta;
     }
     
 }
