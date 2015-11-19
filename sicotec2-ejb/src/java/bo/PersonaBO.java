@@ -6,10 +6,14 @@
 package bo;
 
 import dao.PersonaFacade;
+import dao.TelefpersonaFacade;
+import dao.UbipersFacade;
 import dto.PersonaDTO;
 import dto.TelefpersDTO;
+import dto.UbipersDTO;
 import entidades.Persona;
 import entidades.Telefpersona;
+import entidades.Ubipers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -25,8 +29,10 @@ import javax.ejb.LocalBean;
 public class PersonaBO {
     @EJB
     private PersonaFacade personaFacade;
-    /*@EJB
-    private TelefpersonaFacade;*/
+    @EJB
+    private TelefpersonaFacade telefPersFacade;
+    @EJB
+    private UbipersFacade ubipersFacade;
 
     public List<Persona> getAllPresonas() {
         
@@ -87,7 +93,7 @@ public class PersonaBO {
     public void insertTelefNuevaPers(List<TelefpersDTO> listaDTO){
         List<Telefpersona> listaEntidad = this.convertListDtoToEntityTelefPers(listaDTO);
         for(Telefpersona entidad : listaEntidad){
-            
+            telefPersFacade.create(entidad);
         }
     }
     
@@ -103,5 +109,28 @@ public class PersonaBO {
             listaEntidad.add(entidad);
         }
         return listaEntidad;
+    }
+    
+    public List<Ubipers> convertListDtoToEntityUbiPers(List<UbipersDTO> listaDto){
+        List<Ubipers> listaEntidad = new ArrayList<Ubipers>();
+        for(UbipersDTO dto : listaDto){
+            Ubipers entidad = new Ubipers();
+            entidad.setCodDept(dto.getCodDept());
+            entidad.setCodDist(dto.getCodDist());
+            entidad.setCodProv(dto.getCodDept());
+            entidad.setIdpersona(dto.getIdpersona());
+            entidad.setNombre(dto.getNombre());
+            entidad.setNumero(dto.getNumero());
+            entidad.setPrincipal(dto.getPrincipal());
+            listaEntidad.add(entidad);
+        }
+        return listaEntidad;
+    }
+    
+    public void insertarUbicacionPersona(List<UbipersDTO> listaDto){
+        List<Ubipers> listaEntidad = this.convertListDtoToEntityUbiPers(listaDto);
+        for(Ubipers entidad : listaEntidad){
+            ubipersFacade.create(entidad);
+        }
     }
 }

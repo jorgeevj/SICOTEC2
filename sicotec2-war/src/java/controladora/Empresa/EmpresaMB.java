@@ -112,10 +112,7 @@ public class EmpresaMB {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
-//            EmpresaDTO dto = new EmpresaDTO();
-//            dto.setRuc(getConsultaEmpresaDTO().getRuc());
-//          List<EmpresaDTO> listEmpresa =empresaBO.empresaRucDuplicado(dto);
-//          if(listEmpresa.size()==0){
+            
            consultaEmpresaDTO.setEmppersonaListDTO(listaEmpPersona);
        consultaEmpresaDTO.setUbicacionList(listaUbicEmp);
        consultaEmpresaDTO.setTipoArray(selectTipoEmp);
@@ -128,12 +125,6 @@ public class EmpresaMB {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", "Se registraron los datos");
         FacesContext.getCurrentInstance().addMessage(null, msg);
               
-//          }
-//          else{
-//          
-//         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "ERROR", "RUC duplicado");
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//          }
     }
     }
     public void btnAgreReprReg(ActionEvent actionEvent) {
@@ -309,7 +300,14 @@ public class EmpresaMB {
          else if(listaTelEmp.isEmpty()){
             sms = "Agregar Telefono";
         }
-        
+        EmpresaDTO dto = new EmpresaDTO();
+        dto.setRuc(getConsultaEmpresaDTO().getRuc());
+        String [] aux = null;
+        dto.setTipoArray(aux);
+        List<EmpresaDTO> listEmpresa =empresaBO.empresaRucDuplicado(dto);
+        if(listEmpresa.size() != 0){
+            sms = "Ruc duplicado";
+        }
         return sms;
     }
       public String validarbtnAceptarUbicacion(){
@@ -534,4 +532,29 @@ public class EmpresaMB {
     public void setTelEmpAgregaDTO(TelefonoDTO TelEmpAgregaDTO) {
         this.TelEmpAgregaDTO = TelEmpAgregaDTO;
     }
+
+    public UbigeoBO getUbigeoBO() {
+        return ubigeoBO;
+    }
+
+    public void setUbigeoBO(UbigeoBO ubigeoBO) {
+        this.ubigeoBO = ubigeoBO;
+    }
+
+    public PersonaBO getPersonaBO() {
+        return personaBO;
+    }
+
+    public void setPersonaBO(PersonaBO personaBO) {
+        this.personaBO = personaBO;
+    }
+
+    public EmpresaBO getEmpresaBO() {
+        return empresaBO;
+    }
+
+    public void setEmpresaBO(EmpresaBO empresaBO) {
+        this.empresaBO = empresaBO;
+    }
+    
 }

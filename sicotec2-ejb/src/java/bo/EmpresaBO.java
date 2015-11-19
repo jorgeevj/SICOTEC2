@@ -217,11 +217,13 @@ public class EmpresaBO {
         entidad.setEmail(e.getEmail());
         entidad.setRuc(e.getRuc());
         List<Tipo> lt = new ArrayList<>();
-        Tipo t;
-        for (String et : e.getTipoArray()) {
-            t = new Tipo();
-            t.setIdtipo(Integer.parseInt(et));
-            lt.add(t);
+        Tipo t = new Tipo();
+        if(e.getTipoArray() != null){
+            for (String et : e.getTipoArray()) {
+                t = new Tipo();
+                t.setIdtipo(Integer.parseInt(et));
+                lt.add(t);
+            }
         }
         entidad.setTipoList(lt);
         return entidad;

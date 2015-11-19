@@ -869,11 +869,11 @@ jorgeevj 15.09.15 Creacion.
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsAdd" value="#{pedidoMB.listaItemsDisponibles}" var="tItemsDisp" 
                                  selectionMode="single" selection="#{pedidoMB.objTipoItem}" rowKey="#{tItemsDisp.nombre}">
                         <p:ajax event="rowSelect" listener="#{pedidoMB.selectTipoItemAdd}" /> 
+                        <p:column headerText="Código" style="text-align: center">
+                            <p:outputLabel value="#{tItemsDisp.idtipoItem}"/>
+                        </p:column>
                         <p:column headerText="Nombre" style="text-align: center">
                             <p:outputLabel value="#{tItemsDisp.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Tipo" style="text-align: center">
-                            <p:outputLabel value="#{tItemsDisp.tipo}"/>
                         </p:column>
                         <p:column headerText="Precio Lista" style="text-align: center">
                             <p:outputLabel value="#{tItemsDisp.precioLista}"/>
@@ -887,11 +887,11 @@ jorgeevj 15.09.15 Creacion.
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsSelected" value="#{pedidoMB.listaItemsSeleccionado}" var="tItemsSelec" 
                                  selectionMode="single" selection="#{pedidoMB.objTipoItemQuitar}" rowKey="#{tItemsSelec.nombre}">
                         <p:ajax event="rowSelect" listener="#{pedidoMB.selectTipoItemQuitar}"/> 
+                        <p:column headerText="Código" style="text-align: center">
+                            <p:outputLabel value="#{tItemsSelec.idtipoItem}"/>
+                        </p:column>
                         <p:column headerText="Nombre" style="text-align: center">
                             <p:outputLabel value="#{tItemsSelec.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Tipo" style="text-align: center">
-                            <p:outputLabel value="#{tItemsSelec.tipo}"/>
                         </p:column>
                         <p:column headerText="Precio Lista" style="text-align: center">
                             <p:outputLabel value="#{tItemsSelec.precioLista}"/>
@@ -1585,7 +1585,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:outputLabel value="Departamento: " for="somDptoRegEmp" />
                     <p:selectOneMenu id="somDptoRegEmp" value="#{empresaMB.ubicEmpAgregar.codDept}"
                                      valueChangeListener="#{empresaMB.cargarProvincias}" >
-                        <p:ajax event="valueChange" update="formSelectUbi:somProvRegEmp,formSelectUbi:somDistRegEmp"/>
+                       formSelectUbiPers <p:ajax event="valueChange" update="formSelectUbi:somProvRegEmp,formSelectUbi:somDistRegEmp"/>
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItems value="#{empresaMB.listDepartamentos}" var="dpto" 
                                            itemValue="#{dpto.codDept}" itemLabel="#{dpto.departamento}"/>
@@ -1798,7 +1798,7 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE USUARIOS-->
             
             <!-- DIALOG DE PERSONAS -->
-            <p:dialog header="Agregar Persona" widgetVar="addPersona" modal="true" resizable="false" width="500" height="400">
+            <p:dialog header="Agregar Persona" widgetVar="addPersona" modal="true" resizable="false" width="550" height="400">
                 <h:form id="formAddPersona">
                     <p:growl showDetail="true" sticky="true" id="msnAgregarPersona"/>
                     <h:panelGrid columns="2">
@@ -1807,16 +1807,18 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Apellido: "></p:outputLabel>
                         <p:inputText   value="#{personasMB.apellidoAdd}"/>
                         <p:outputLabel value="DNI: "></p:outputLabel>
-                        <p:inputText   value="#{personasMB.dniAdd}"/>
+                        <p:inputText   value="#{personasMB.dniAdd}" maxlength="8"/>
                         <p:outputLabel value="Email "></p:outputLabel>
-                        <p:inputText   value="#{personasMB.emailAdd}"/>
+                        <p:inputText value="#{personasMB.emailAdd}" validatorMessage="El formato ingresado en email no es valido">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /> 
+                        </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:commandButton value="Agregar" actionListener="#{personasMB.abrirModalAddTelfPers}"></p:commandButton>
-                        <p:commandButton value="Quitar" ></p:commandButton>
+                        <p:commandButton value="Quitar" actionListener="#{personasMB.quitarTelefPers}" ></p:commandButton>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:dataTable id="tabTelefPers" var="telfPers" value="#{personasMB.listaTelefPersDTO}"
+                        <p:dataTable id="tabTelefPersAdd" var="telfPers" value="#{personasMB.listaTelefPersAdd}"
                                      selectionMode="single" rowKey="#{telfPers.numero}">
                             <p:ajax event="rowSelect" listener="#{personasMB.selectTelefPersAdd}"></p:ajax>
                             <p:column headerText="Numero">
@@ -1830,7 +1832,32 @@ jorgeevj 15.09.15 Creacion.
                             </p:column>
                         </p:dataTable>
                     </h:panelGrid>
-                    <p:commandButton value="Aceptar" update="msnAgregarPersona"/>
+                    <p:commandButton value="Agregar" icon="ui-icon-plusthick"
+                                     actionListener="#{personasMB.abrirModalAddUbiPers}" />
+                    <p:commandButton value="Quitar" icon="ui-icon-minusthick"
+                                     actionListener="#{personasMB.removeListaUbiPersAdd}" />
+                    <h:panelGrid columns="2">
+                        <p:dataTable id="tabUbigeoPersAdd" var="ubigeoAdd" value="#{personasMB.listaUbiPersAdd}"
+                                     selectionMode="single" rowKey="#{ubigeoAdd.codDept}">
+                            <p:ajax event="rowSelect" listener="#{personasMB.selectUbiPersAdd}"></p:ajax>
+                            <p:column headerText="Direccion">
+                                <h:outputText value="#{ubigeoAdd.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Número">
+                                <h:outputText value="#{ubigeoAdd.numero}"/>
+                            </p:column>
+                            <p:column headerText="Distrito">
+                                <h:outputText value="#{ubigeoAdd.nombreDistrito}"/>
+                            </p:column>
+                            <p:column headerText="Provincia">
+                                <h:outputText value="#{ubigeoAdd.nombreProvincia}"/>
+                            </p:column>
+                            <p:column headerText="Departamento">
+                                <h:outputText value="#{ubigeoAdd.nombreDepartamento}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" actionListener="#{personasMB.agregarNuevaPersona}" update="msnAgregarPersona"/>
                 </h:form>
             </p:dialog>
             
@@ -1839,22 +1866,58 @@ jorgeevj 15.09.15 Creacion.
                     <p:growl showDetail="true" sticky="true" id="msjAgregarTelefPers"/>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Número: "></p:outputLabel>
-                        <p:inputText value="#{personasMB.numeroAdd}"/>
+                        <p:inputText value="#{personasMB.numeroTelefAdd}"/>
                         <p:outputLabel value="Tipo: "></p:outputLabel>
-                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.tipoAdd}" >
-                            <f:selectItem itemLabel="Seleccione un Tipo" itemValue="0"></f:selectItem>
+                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.tipoTelefAdd}" >
+                            <f:selectItem itemLabel="Seleccione un Tipo" itemValue=""></f:selectItem>
                             <f:selectItem itemLabel="Fijo" itemValue="Fijo"></f:selectItem>
                             <f:selectItem itemLabel="Movil" itemValue="Movil"></f:selectItem>
                         </p:selectOneMenu>
                         <p:outputLabel value="Operador: "></p:outputLabel>
-                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.operadorAdd}" >
-                            <f:selectItem itemLabel="Seleccione un Operador" itemValue="0"></f:selectItem>
+                        <p:selectOneMenu styleClass="browser-default" value="#{personasMB.operadorTelefAdd}" >
+                            <f:selectItem itemLabel="Seleccione un Operador" itemValue=""></f:selectItem>
                             <f:selectItem itemLabel="Claro" itemValue="Claro"></f:selectItem>
                             <f:selectItem itemLabel="Entel" itemValue="Entel"></f:selectItem>
                             <f:selectItem itemLabel="Movistar" itemValue="Movistar"></f:selectItem>
                         </p:selectOneMenu>
-                        <p:commandButton value="Agregar" actionListener="#{personasMB.addTelefPers}"></p:commandButton>
+                        <p:commandButton value="Agregar" actionListener="#{personasMB.addTelefPers}" update="msjAgregarTelefPers"></p:commandButton>
                     </h:panelGrid>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog header="Agregar Ubicacion" widgetVar="dialogUbicacionPers" modal="true" rendered="true" >
+                <h:form id="formSelectUbiPers">
+                    <p:growl showDetail="true" sticky="true" id="msjaddUbicacionPers"/>
+                    <p:panelGrid columns="2" styleClass="hideborder">
+                        <p:outputLabel value="Nombre "></p:outputLabel>
+                        <p:inputText value="#{personasMB.nombreUbicAdd}" />
+                        <p:outputLabel value="Número: "></p:outputLabel>
+                        <p:inputText value="#{personasMB.numeroUbicAdd}"/>
+                        <p:outputLabel value="Departamento: "/>
+                        <p:selectOneMenu value="#{personasMB.codDepartamentoAdd}"
+                                         valueChangeListener="#{personasMB.cargarProvincias}" >
+                            <p:ajax event="valueChange"/>
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{personasMB.listDepartamentosAdd}" var="dpto" 
+                                               itemValue="#{dpto.codDept}" itemLabel="#{dpto.departamento}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Provincia: "/>
+                        <p:selectOneMenu id="choiceProvinciaAdd" value="#{personasMB.codProvinciaAdd}" 
+                                         valueChangeListener="#{personasMB.cargarDistritos}">
+                            <p:ajax event="valueChange" />
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{personasMB.listProvinciaAdd}" var="prov" 
+                                               itemValue="#{prov.codProv}" itemLabel="#{prov.provincia}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Distrito: " />
+                        <p:selectOneMenu id="choiceDistritoAdd" value="#{personasMB.codDistritoAdd}" >
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{personasMB.listDistritosAdd}" var="dist" 
+                                               itemValue="#{dist.codDist}" itemLabel="#{dist.distrito}"/>
+                        </p:selectOneMenu>
+                     </p:panelGrid>
+                    <p:commandButton value="Aceptar" icon="ui-icon-check"
+                                     actionListener="#{personasMB.addListaUbiPersAdd}" update="msjaddUbicacionPers"/>     
                 </h:form>
             </p:dialog>
             <!--FIN DIALOG DE PERSONAS-->
