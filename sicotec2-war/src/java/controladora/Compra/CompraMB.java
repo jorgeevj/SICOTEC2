@@ -186,6 +186,7 @@ public class CompraMB {
         estadoChoiceAlmacen=false;
         estadoBtnAgregar=true;
         estadoBtnQuitar=true;
+        listaAlmacenes=almacenBO.getAllAlmaces();
     }
 
     public List<EmpresaDTO> comboEmpresas() {
