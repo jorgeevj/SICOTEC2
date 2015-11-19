@@ -8,17 +8,18 @@
 
     <ui:define name="body" id="iuEmpresa">
         <h:form id="formEmpresa">
+            <p:growl id="growlEmpresa" />
             <p:panelGrid columns="4" styleClass="hideborder">
                 <p:outputLabel value="Nombre:" for="itemp1" />
                 <p:inputText id="itemp1" value="#{empresaMB.consultaEmpresaDTO.nombre}">
                 </p:inputText>
                 <p:outputLabel value="RUC:" for="itemp2" />
-                <p:inputText id="itemp2" value="#{empresaMB.consultaEmpresaDTO.ruc}">
+                <p:inputText id="itemp2" value="#{empresaMB.consultaEmpresaDTO.ruc}" maxlength="11">
                 </p:inputText>
                 <p:outputLabel value="Email" for="itemp3" />
                 <p:inputText id="itemp3" value="#{empresaMB.consultaEmpresaDTO.email}">
-                </p:inputText>
-                <p:outputLabel value="Email" for="somemp1" />
+                    </p:inputText>
+                <p:outputLabel value="Tipo" for="somemp1" />
                 <p:selectOneMenu id="somemp1" value="#{empresaMB.consultaEmpresaDTO.tipo}" style="width: 100%">
                     <f:selectItem itemLabel="Seleccione" itemValue="" />
                     <f:selectItem itemLabel="Cliente" itemValue="1" />
@@ -33,13 +34,14 @@
                                  actionListener="#{empresaMB.btnConsultarEmp}" update="formEmpresa"/>
                 <p:commandButton value="Registrar" id="btnRegistrarEmp" icon="ui-icon-document"
                                  actionListener="#{empresaMB.btnRegistrarEmp}" />
-                <p:commandButton value="Editar" id="btnEditarEmp" icon="ui-icon-pencil"
+                <p:commandButton value="Editar" id="btnEditarEmp" icon="ui-icon-pencil" disabled="#{empresaMB.estadoBtnEditar}"
                                  actionListener="#{empresaMB.btnEditEmp}" />
             </p:panelGrid>
             <p:dataTable id="tabEmpresas" var="emp" value="#{empresaMB.listaEmpresa}"
                          selectionMode="single" rowKey="#{emp.idempresa}" 
                          selection="#{empresaMB.empresaSelectDTO}"
                          scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="250">
+                <p:ajax event="rowSelect" listener="#{empresaMB.onRowSelectEmpresa}" update="formEmpresa:btnEditarEmp"/>
                 <f:facet name="header">
                     Lista de Empresas
                 </f:facet>

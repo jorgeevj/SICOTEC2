@@ -18,6 +18,8 @@ import entidades.Empresa;
 import entidades.Ubigeo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -27,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -59,7 +62,7 @@ public class EmpresaMB {
     private List<TelefonoDTO> listaTelEmp;
     private TelefonoDTO TelEmpSelectDTO;
     private TelefonoDTO TelEmpAgregaDTO;
-    
+
     private List<PersonaDTO> listaPersonas;
     private List<PersonaDTO> filtroPersonas;
     private PersonaDTO consultaPersona;
@@ -69,6 +72,7 @@ public class EmpresaMB {
     private List<Ubigeo> listProvincia;
     private List<Ubigeo> listDistritos;
 
+    private boolean estadoBtnEditar;
     /**
      * Creates a new instance of EmpresaMB
      */
@@ -78,7 +82,7 @@ public class EmpresaMB {
     @PostConstruct
     public void init() {
         tipoEmp = empresaBO.getALLTipos();
-        
+        estadoBtnEditar=true;
         listDepartamentos = ubigeoBO.getAllDepartamentos();
         limpiarSelectPersonas();
         limpiarEmpresas();
@@ -104,30 +108,35 @@ public class EmpresaMB {
         context.execute("PF('dlRegEmpresa').show();");
         context.update("formRegEmp");
     }
-    
+
     //REGISTRAR
     public void btnGuardarEmpresa(ActionEvent actionEvent) {
-        String sms = this.validarCamposRegistro();
-        if(!sms.equals("") ){
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-            
-           consultaEmpresaDTO.setEmppersonaListDTO(listaEmpPersona);
-       consultaEmpresaDTO.setUbicacionList(listaUbicEmp);
-       consultaEmpresaDTO.setTipoArray(selectTipoEmp);
-       consultaEmpresaDTO.setTelefonoList(listaTelEmp);
-       empresaBO.guardarEmpresa(consultaEmpresaDTO);
+
+        if (validarCamposReg(consultaEmpresaDTO)) {
+            return;
+        }
+        if (listaEmpPersona.isEmpty()) {
+            mensajeValidacion("Agregar Representante");
+            return;
+        }
+        consultaEmpresaDTO.setEmppersonaListDTO(listaEmpPersona);
+        consultaEmpresaDTO.setUbicacionList(listaUbicEmp);
+        consultaEmpresaDTO.setTipoArray(selectTipoEmp);
+        consultaEmpresaDTO.setTelefonoList(listaTelEmp);
+        empresaBO.guardarEmpresa(consultaEmpresaDTO);
+
         limpiarEmpresas();
+        mensajeValidacion("Se Registro Corectamente la Empresa");
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlRegEmpresa').hide();");
         context.update("formEmpresa");
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "EXITO", "Se registraron los datos");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-              
+
     }
-    }
+
     public void btnAgreReprReg(ActionEvent actionEvent) {
+//        if (validarCamposReg(consultaEmpresaDTO)) {
+//            return;
+//        }
         limpiarSelectPersonas();
         cargarPersonas();
         RequestContext context = RequestContext.getCurrentInstance();
@@ -143,7 +152,7 @@ public class EmpresaMB {
     public void btnQuitReprReg(ActionEvent actionEvent) {
         listaEmpPersona.remove(EmpPersonaSelectDTO);
         RequestContext context = RequestContext.getCurrentInstance();
-        context.update("formRegEmp");
+//        context.update(":formRegEmp,:formEditEmp");
     }
 
     public void btnLimpiarRegEmp(ActionEvent actionEvent) {
@@ -157,8 +166,8 @@ public class EmpresaMB {
         consultaEmpresaDTO = new EmpresaDTO();
         listaEmpPersona = new ArrayList<>();
         listaUbicEmp = new ArrayList<>();
-        listaTelEmp=new ArrayList<>();
-        selectTipoEmp=new String[]{};
+        listaTelEmp = new ArrayList<>();
+        selectTipoEmp = new String[]{};
     }
 
     public void btnBusPersonaRegEmp(ActionEvent actionEvent) {
@@ -167,14 +176,15 @@ public class EmpresaMB {
         context.execute("PF('dlSelectPersona').show();");
         context.update("formSelectPer");
     }
-    
-    private void cargarPersonas(){
-    listaPersonas = personaBO.findPersona(consultaPersona);
+
+    private void cargarPersonas() {
+        listaPersonas = personaBO.findPersona(consultaPersona);
         int l = listaPersonas.size();
         for (int i = l - 1; i >= 0; i--) {
             for (EmppersonaDTO ep : listaEmpPersona) {
                 if (listaPersonas.get(i).getIdpersona() == ep.getIdpersona()) {
                     listaPersonas.remove(i);
+                    break;
                 }
             }
         }
@@ -186,24 +196,23 @@ public class EmpresaMB {
 
     public void btnAceptarPersona(ActionEvent actionEvent) {
         String sms = this.validarbtnAceptarPersona();
-        if(!sms.equals("") ){
+        if (!sms.equals("")) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-        
-        listaEmpPersona.add(new EmppersonaDTO(personaSelected, null, personaSelected.getIdpersona()));
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlSelectPersona').hide();");
-        context.update("formRegEmp");
+        } else {
+
+            listaEmpPersona.add(new EmppersonaDTO(personaSelected, null, personaSelected.getIdpersona()));
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('dlSelectPersona').hide();");
+        }
     }
-    }
+
     public void btnAgreUbiReg(ActionEvent actionEvent) {
         UbicEmpAgregar = new UbicacionDTO();
         listProvincia = new ArrayList<>();
         listDistritos = new ArrayList<>();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlSelectUbicacion').show();");
-        context.update("formSelectUbi");
     }
 
     public void cargarProvincias(ValueChangeEvent event) {
@@ -226,153 +235,186 @@ public class EmpresaMB {
     public void btnAceptarUbicacion(ActionEvent actionEvent) {
         String sms = this.validarbtnAceptarUbicacion();
         System.out.println("smsUbigueo2" + sms);
-        if(!sms.equals("") ){
+        if (!sms.equals("")) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-        
-        for(UbicacionDTO ub:listaUbicEmp){
-        if(UbicEmpAgregar.getNombre().equals(ub.getNombre())&& UbicEmpAgregar.getNumero().equals(ub.getNumero())){
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La Direccion y numero ya Existe", ""));
-        RequestContext context = RequestContext.getCurrentInstance();
-           context.update("formSelectUbi");
-        return;
+        } else {
+
+            for (UbicacionDTO ub : listaUbicEmp) {
+                if (UbicEmpAgregar.getNombre().equals(ub.getNombre()) && UbicEmpAgregar.getNumero().equals(ub.getNumero())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La Direccion y numero ya Existe", ""));
+                    RequestContext context = RequestContext.getCurrentInstance();
+                    context.update("formSelectUbi");
+                    return;
+                }
+            }
+            Ubigeo u = ubigeoBO.getUbigeo(UbicEmpAgregar.getCodDept(), UbicEmpAgregar.getCodProv(), UbicEmpAgregar.getCodDist());
+            UbicEmpAgregar.setDept(u.getDepartamento());
+            UbicEmpAgregar.setProv(u.getProvincia());
+            UbicEmpAgregar.setDist(u.getDistrito());
+            listaUbicEmp.add(UbicEmpAgregar);
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('dlSelectUbicacion').hide();");
+            context.update("formRegEmp");
         }
-        }
-        Ubigeo u = ubigeoBO.getUbigeo(UbicEmpAgregar.getCodDept(), UbicEmpAgregar.getCodProv(), UbicEmpAgregar.getCodDist());
-        UbicEmpAgregar.setDept(u.getDepartamento());
-        UbicEmpAgregar.setProv(u.getProvincia());
-        UbicEmpAgregar.setDist(u.getDistrito());
-        listaUbicEmp.add(UbicEmpAgregar);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlSelectUbicacion').hide();");
-        context.update("formRegEmp");
     }
-    }
+
     public void btnAgreTelReg(ActionEvent actionEvent) {
         limpiarAgregarTelefonos();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlSelectTelefono').show();");
         context.update("formSelectTel");
     }
-    
+
     private void limpiarAgregarTelefonos() {
-       TelEmpAgregaDTO=new TelefonoDTO();
+        TelEmpAgregaDTO = new TelefonoDTO();
     }
-    
+
     public void btnAceptarTelefono(ActionEvent actionEvent) {
-       String sms = this.validarbtnAceptarTelefono();
-        if(!sms.equals("") ){
+        String sms = this.validarbtnAceptarTelefono();
+        if (!sms.equals("")) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Faltan Algunos Campos", sms);
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else{
-        listaTelEmp.add(TelEmpAgregaDTO);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlSelectTelefono').hide();");
-        context.update("formRegEmp");
+        } else {
+            listaTelEmp.add(TelEmpAgregaDTO);
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('dlSelectTelefono').hide();");
+            context.update("formRegEmp");
+        }
     }
-    }
+
     public void btnQuitTelReg(ActionEvent actionEvent) {
         listaTelEmp.remove(TelEmpSelectDTO);
         RequestContext context = RequestContext.getCurrentInstance();
         context.update("formRegEmp");
     }
-     public String validarCamposRegistro(){
+
+
+    public String validarbtnAceptarUbicacion() {
+
         String sms = "";
-        if(consultaEmpresaDTO.getNombre().equals("")){
-            sms = "Ingrese un Nombre";
-        }      
-        else if(consultaEmpresaDTO.getRuc().equals("")){
-            sms = "Ingrese el RUC";
-        }
-        else if(consultaEmpresaDTO.getEmail().equals("")){
-            sms = "Ingrese un Email";
-        }
-        else if(selectTipoEmp.length==0){
-            sms = "Seleccione un Tipo";
-        }
-        else if(listaEmpPersona.isEmpty()){
-            sms = "Agregar Representante";
-        }
-        else if(listaUbicEmp.isEmpty()){
-            sms = "Agregar Ubicacion";
-        }
-         else if(listaTelEmp.isEmpty()){
-            sms = "Agregar Telefono";
-        }
-        EmpresaDTO dto = new EmpresaDTO();
-        dto.setRuc(getConsultaEmpresaDTO().getRuc());
-        String [] aux = null;
-        dto.setTipoArray(aux);
-        List<EmpresaDTO> listEmpresa =empresaBO.empresaRucDuplicado(dto);
-        if(listEmpresa.size() != 0){
-            sms = "Ruc duplicado";
-        }
-        return sms;
-    }
-      public String validarbtnAceptarUbicacion(){
-        String sms = "";
-          System.out.println("cod dep"+getUbicEmpAgregar().getCodDept());
-           if(getUbicEmpAgregar().getNombre().equals("")){
+        System.out.println("cod dep" + getUbicEmpAgregar().getCodDept());
+        if (getUbicEmpAgregar().getNombre().equals("")) {
             sms = "Escribir Nombre";
-        } 
-           else if(getUbicEmpAgregar().getNumero().equals("")){
+        } else if (getUbicEmpAgregar().getNumero().equals("")) {
             sms = "Escribir Numero";
-        } 
-           else if(getUbicEmpAgregar().getCodDept()==null){
+        } else if (getUbicEmpAgregar().getCodDept() == null) {
             sms = "Seleccione Departamento";
-        } 
-           else if(getUbicEmpAgregar().getCodProv()==null){
+        } else if (getUbicEmpAgregar().getCodProv() == null) {
             sms = "Seleccione Provincia";
-        }    
-           else if(getUbicEmpAgregar().getCodDist()==null){
+        } else if (getUbicEmpAgregar().getCodDist() == null) {
             sms = "Seleccione Distrito";
-        } 
-       
-        return sms;
-    }
-      public String validarbtnAceptarPersona(){
-        String sms = "";
-        if(getPersonaSelected() == null){
-            sms = "Seleccione una Persona";
-        }      
-        return sms;
-    }
-      public String validarbtnAceptarTelefono(){
-        String sms = "";
-        if(TelEmpAgregaDTO.getOperador()==null){
-            sms = "Seleccione Operador";
-        } 
-        else if(TelEmpAgregaDTO.getTipo()==null){
-            sms = "Seleccione Tipo";
         }
-         else if(TelEmpAgregaDTO.getNumero().equals("")){
+
+        return sms;
+    }
+
+    public String validarbtnAceptarPersona() {
+        String sms = "";
+        if (getPersonaSelected() == null) {
+            sms = "Seleccione una Persona";
+        }
+        return sms;
+    }
+
+    public String validarbtnAceptarTelefono() {
+        String sms = "";
+        if (TelEmpAgregaDTO.getOperador() == null) {
+            sms = "Seleccione Operador";
+        } else if (TelEmpAgregaDTO.getTipo() == null) {
+            sms = "Seleccione Tipo";
+        } else if (TelEmpAgregaDTO.getNumero().equals("")) {
             sms = "Escribir Numero";
         }
         return sms;
     }
+
+    public boolean validarCamposReg(EmpresaDTO camposDTO) {
+        String sms;
+        if (camposDTO.getNombre().equals("")) {
+            sms = "Ingrese un Nombre";
+            mensajeValidacion(sms);
+            return true;
+        } else if (camposDTO.getRuc().equals("")) {
+            sms = "Ingrese el RUC";
+            mensajeValidacion(sms);
+            return true;
+        } else if (camposDTO.getEmail().equals("")) {
+            sms = "Ingrese un Email";
+            mensajeValidacion(sms);
+            return true;
+        } else if (selectTipoEmp.length == 0) {
+            sms = "Seleccione un Tipo";
+            mensajeValidacion(sms);
+            return true;
+        }
+        if(camposDTO.getRuc().length()!=11){
+        mensajeValidacion("El RUC debe tener 11 digitos");
+            return true;
+        }
+        for (EmpresaDTO dto : empresaBO.getAllEmpresas()) {
+            if (camposDTO.getNombre().equalsIgnoreCase(dto.getNombre())) {
+                mensajeValidacion("ya Existe La Razon Social");
+                return true;
+            }
+            if (camposDTO.getRuc().equalsIgnoreCase(dto.getRuc())) {
+                mensajeValidacion("El Ruc ingresado ya existe");
+                return true;
+            }
+        }
+        Pattern p ;
+        Matcher m ;
+        p = Pattern.compile("[0-9]{11}");
+        m = p.matcher(camposDTO.getRuc());
+        if (!m.find()) {
+        mensajeValidacion("RUC debe contener solo numeros");
+        return true;
+        }
+        p = Pattern.compile("20[0-9]{9}|10[0-9]{9}");
+        m = p.matcher(camposDTO.getRuc());
+        if (!m.find()) {
+        mensajeValidacion("RUC debe comenzar por 20 o 10");
+        return true;
+        }
+        
+            return false;
+        
+    }
+
+    private void mensajeValidacion(String msg) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, ""));
+       
+    }
+
     //EDITAR
     public void btnEditarEmpresa(ActionEvent actionEvent) {
-       EmpresaSelectDTO.setEmppersonaListDTO(listaEmpPersona);
-       EmpresaSelectDTO.setUbicacionList(listaUbicEmp);
-       EmpresaSelectDTO.setTipoArray(selectTipoEmp);
-       EmpresaSelectDTO.setTelefonoList(listaTelEmp);
-       empresaBO.guardarEditar(EmpresaSelectDTO);
-       //limpiarEmpresas();
+        EmpresaSelectDTO.setEmppersonaListDTO(listaEmpPersona);
+        EmpresaSelectDTO.setUbicacionList(listaUbicEmp);
+        EmpresaSelectDTO.setTipoArray(selectTipoEmp);
+        EmpresaSelectDTO.setTelefonoList(listaTelEmp);
+        empresaBO.guardarEditar(EmpresaSelectDTO);
+        //limpiarEmpresas();
+        mensajeValidacion("Se Edito Corectamente la Empresa "+EmpresaSelectDTO.getNombre());
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlEditEmpresa').hide();");
         context.update("formEmpresa");
     }
-     public void btnEditEmp(ActionEvent actionEvent) {
-       
-        
-        
-//        setEmpresasEdit(getObjPedidoEditar().getEmpresaId());
-//        setAlmacenEdit(getObjPedidoEditar().getIdalmacen());
-     RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("PF('dlEditEmpresa').show();");
-        context.update("formRegEmp");
+    public void onRowSelectEmpresa(SelectEvent event){
+    estadoBtnEditar=false;
     }
+    public void btnEditEmp(ActionEvent actionEvent) {
+        listaEmpPersona=empresaBO.getPersonaByEmpresa(EmpresaSelectDTO);
+        listaUbicEmp=empresaBO.getUbicacioByEpresa(EmpresaSelectDTO);
+        listaTelEmp=empresaBO.getTelefonoByEmpresa(EmpresaSelectDTO);
+        selectTipoEmp=new String[EmpresaSelectDTO.getTipoListDTO().size()];
+        for(int i=0;i<selectTipoEmp.length;i++){
+           selectTipoEmp[i]= EmpresaSelectDTO.getTipoListDTO().get(i).getIdtipo()+"";
+        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('dlEditEmpresa').show();");
+        context.update("formEditEmp");
+    }
+
     public EmpresaDTO getConsultaEmpresaDTO() {
         return consultaEmpresaDTO;
     }
@@ -533,28 +575,12 @@ public class EmpresaMB {
         this.TelEmpAgregaDTO = TelEmpAgregaDTO;
     }
 
-    public UbigeoBO getUbigeoBO() {
-        return ubigeoBO;
+    public boolean isEstadoBtnEditar() {
+        return estadoBtnEditar;
     }
 
-    public void setUbigeoBO(UbigeoBO ubigeoBO) {
-        this.ubigeoBO = ubigeoBO;
+    public void setEstadoBtnEditar(boolean estadoBtnEditar) {
+        this.estadoBtnEditar = estadoBtnEditar;
     }
 
-    public PersonaBO getPersonaBO() {
-        return personaBO;
-    }
-
-    public void setPersonaBO(PersonaBO personaBO) {
-        this.personaBO = personaBO;
-    }
-
-    public EmpresaBO getEmpresaBO() {
-        return empresaBO;
-    }
-
-    public void setEmpresaBO(EmpresaBO empresaBO) {
-        this.empresaBO = empresaBO;
-    }
-    
 }

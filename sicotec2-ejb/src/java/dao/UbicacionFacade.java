@@ -5,6 +5,7 @@
  */
 package dao;
 
+import dto.EmpresaDTO;
 import entidades.Ubicacion;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -33,5 +34,7 @@ public class UbicacionFacade extends AbstractFacade<Ubicacion> {
        String jpa="select u from Ubicacion u where u.idempresa.idempresa="+idempresa;
     return em.createQuery(jpa, Ubicacion.class).getResultList();
     }
+
+    
     
 }

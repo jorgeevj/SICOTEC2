@@ -5,7 +5,9 @@
  */
 package dao;
 
+import dto.EmpresaDTO;
 import entidades.Emppersona;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +28,12 @@ public class EmppersonaFacade extends AbstractFacade<Emppersona> {
 
     public EmppersonaFacade() {
         super(Emppersona.class);
+    }
+
+    public List<Emppersona> getPersonaByEmpresa(EmpresaDTO dto) {
+        String jpa="select p from Emppersona p "
+                + "where p.empresa.idempresa="+dto.getIdempresa();
+    return em.createQuery(jpa,Emppersona.class).getResultList();
     }
     
 }

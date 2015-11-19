@@ -7,6 +7,7 @@ package bo;
 
 import dao.EmppersonaFacade;
 import dao.EmpresaFacade;
+import dao.PersonaFacade;
 import dao.TelefonoFacade;
 import dao.TipoFacade;
 import dao.UbicacionFacade;
@@ -19,6 +20,7 @@ import dto.UbicacionDTO;
 import entidades.Emppersona;
 import entidades.EmppersonaPK;
 import entidades.Empresa;
+import entidades.Persona;
 import entidades.Telefono;
 import entidades.Tipo;
 import entidades.Ubicacion;
@@ -34,6 +36,8 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 public class EmpresaBO {
+    @EJB
+    private PersonaFacade personaFacade;
     @EJB
     private TelefonoFacade telefonoFacade;
     @EJB
@@ -88,7 +92,7 @@ public class EmpresaBO {
         empresaDTO.setRuc(empresa.getRuc());
         empresaDTO.setEmail(empresa.getEmail());
         empresaDTO.setUbicacionList(comverListUbicacionByListDTO(ubicacionFacade.findByIdEmpresa(empresa.getIdempresa())));
-        empresaDTO.setEmppersonaListDTO(convertListEmpresapersonaByListDTO(empresa.getEmppersonaList()));
+        empresaDTO.setEmppersonaListDTO(convertListEmpresapersonaByListDTO(emppersonaFacade.getPersonaByEmpresa(empresaDTO)));
         empresaDTO.setTelefonoList(convertListTelefonoByDTO(telefonoFacade.findByIdEmpresa(empresa.getIdempresa())));
         empresaDTO.setTipoListDTO(convertListTipoByListDTO(empresa.getTipoList()));
         empresaDTO.setCantidadDirecciones(empresaDTO.getUbicacionList().size());
@@ -136,10 +140,11 @@ public class EmpresaBO {
 
     private EmppersonaDTO convetEmppersonaByDTO(Emppersona ep) {
         EmppersonaDTO dto = new EmppersonaDTO();
-        dto.setIdempresa(ep.getEmpresa().getIdempresa());
-        dto.setIdpersona(ep.getPersona().getIdpersona());
-        dto.setEmpresa(new EmpresaDTO(ep.getEmpresa().getIdempresa(), ep.getEmpresa().getNombre(), ep.getEmpresa().getRuc(), ep.getEmpresa().getEmail()));
-        dto.setPersona(new PersonaDTO(ep.getPersona().getIdpersona(), ep.getPersona().getNombre(), ep.getPersona().getApellido(), ep.getPersona().getDni(), ep.getPersona().getEmail()));
+        dto.setIdempresa(ep.getEmppersonaPK().getIdempresa());
+        dto.setIdpersona(ep.getEmppersonaPK().getIdpersona());
+//        dto.setEmpresa(new EmpresaDTO(ep.getEmpresa().getIdempresa(), ep.getEmpresa().getNombre(), ep.getEmpresa().getRuc(), ep.getEmpresa().getEmail()));
+        dto.setPersona(personaBO.converEntityPersonaByDTO(personaFacade.find(ep.getEmppersonaPK().getIdpersona())));
+        
         return dto;
 
     }
@@ -195,7 +200,12 @@ public class EmpresaBO {
         Empresa entidad=convertDTOByEntity(e);
         entidad = empresaFacade.guardaEmpresa(entidad);
         e.setIdempresa(entidad.getIdempresa());
-        List<Emppersona> lep=convetListEmpPerDTOByListEntidad(e.getEmppersonaListDTO(),e.getIdempresa());
+        guardarDatosEmpresa(e);
+        return entidad;
+    }
+    
+    private void guardarDatosEmpresa(EmpresaDTO e){
+    List<Emppersona> lep=convetListEmpPerDTOByListEntidad(e.getEmppersonaListDTO(),e.getIdempresa());
         for(Emppersona ep:lep){
         emppersonaFacade.create(ep);
         }
@@ -207,8 +217,6 @@ public class EmpresaBO {
         for(Telefono t:tel){
         telefonoFacade.create(t);
         }
-        
-        return entidad;
     }
 
     public Empresa convertDTOByEntity(EmpresaDTO e) {
@@ -286,12 +294,43 @@ public class EmpresaBO {
         return t;
     }
      public void guardarEditar(EmpresaDTO c) {
-        empresaFacade.edit(convertDTOByEntity(c));
+        Empresa entidad=convertDTOByEntity(c);
+        entidad.setIdempresa(c.getIdempresa());
+         empresaFacade.edit(entidad);
+         //eliminamos las listas
+         for(Emppersona ep:emppersonaFacade.getPersonaByEmpresa(c)){
+             emppersonaFacade.remove(ep);
+         }
+         for(Ubicacion u:ubicacionFacade.findByIdEmpresa(c.getIdempresa())){
+             ubicacionFacade.remove(u);
+         }
+         for(Telefono t:telefonoFacade.findByIdEmpresa(c.getIdempresa())){
+             telefonoFacade.remove(t);
+         }
+         //guardamos las nuevas listas
+         guardarDatosEmpresa(c);
+        
     }
       public List<EmpresaDTO> empresaRucDuplicado(EmpresaDTO t){
         Empresa r=convertDTOByEntity(t);
         List<Empresa> lista=empresaFacade.getEmpresaDuplicadoRuc(r);
         List<EmpresaDTO> lista1=convertEntityToDTOList(lista);
         return lista1;
+    }
+
+    public List<EmppersonaDTO> getPersonaByEmpresa(EmpresaDTO EmpresaSelectDTO) {
+    return convertListEmpresapersonaByListDTO(emppersonaFacade.getPersonaByEmpresa(EmpresaSelectDTO));
+    }
+
+    public List<UbicacionDTO> getUbicacioByEpresa(EmpresaDTO EmpresaSelectDTO) {
+      return comverListUbicacionByListDTO(ubicacionFacade.findByIdEmpresa(EmpresaSelectDTO.getIdempresa()));
+    }
+
+    public List<TelefonoDTO> getTelefonoByEmpresa(EmpresaDTO EmpresaSelectDTO) {
+       return convertListTelefonoByDTO(telefonoFacade.findByIdEmpresa(EmpresaSelectDTO.getIdempresa())); 
+    }
+
+    public List<TipoDTO> getTipoEmpresaByEmpresa(EmpresaDTO EmpresaSelectDTO) {
+       return convertListTipoByListDTO(null);
     }
 }
