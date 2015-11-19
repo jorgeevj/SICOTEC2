@@ -69,18 +69,30 @@ public class VentasBO {
         return listaVentas;
     }
     
+    public List<VeMedioPagoDTO>getListaVMedioPago(int idVenta){
+        List<VeMedioPagoDTO> listavMedioPago = new ArrayList<VeMedioPagoDTO>();
+        List<Vemediopago> listaent = ventaFacade.getListavMedioPago(idVenta);
+        for(Vemediopago v : listaent){
+            VeMedioPagoDTO dto = ConvertDTOtoEntityMedioPago(v);
+            listavMedioPago.add(dto);
+        }
+        return listavMedioPago;
+    }
+    
     public void editVenta(VentaDTO venta, List<VeMedioPagoDTO> veMedioPago, int estado){
         if(estado == 1){
             //List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
             for(VeMedioPagoDTO vDTO : veMedioPago){
-                Vemediopago vem = new Vemediopago();
-                VemediopagoPK pk = new VemediopagoPK();
-                pk.setIdmedioPago(vDTO.getIdMedioPago());
-                pk.setIdventa(vDTO.getIdVenta());
-                vem.setVemediopagoPK(pk);
-                vem.setMonto(vDTO.getMonto());
-                
-                vemediopagoFacade.create(vem);
+                if(!vDTO.isDisableDelete()){
+                    Vemediopago vem = new Vemediopago();
+                    VemediopagoPK pk = new VemediopagoPK();
+                    pk.setIdmedioPago(vDTO.getIdMedioPago());
+                    pk.setIdventa(vDTO.getIdVenta());
+                    vem.setVemediopagoPK(pk);
+                    vem.setMonto(vDTO.getMonto());
+
+                    vemediopagoFacade.create(vem);
+                }
             }
             Venta ventaE = this.ConvertDTOtoEntity(venta);
             //ventaE.setVemediopagoList(listaEnt);
@@ -205,6 +217,18 @@ public class VentasBO {
         entidad.setNombreusuario(dto.getNombreUsuario());
         
         return entidad;
+    }
+    
+    public VeMedioPagoDTO ConvertDTOtoEntityMedioPago(Vemediopago v){
+        VeMedioPagoDTO vm = new VeMedioPagoDTO();
+        
+        vm.setIdVenta(v.getVenta().getIdventa());
+        vm.setIdMedioPago(v.getMediopago().getIdmedioPago());
+        vm.setMonto(v.getMonto());
+        vm.setNombreMedioPago(v.getMediopago().getNombre());
+        vm.setDisableDelete(true);
+        
+        return vm;
     }
     
 }

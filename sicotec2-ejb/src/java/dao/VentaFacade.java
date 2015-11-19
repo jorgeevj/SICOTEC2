@@ -7,6 +7,7 @@ package dao;
 
 import dto.VentaDTO;
 import entidades.Item;
+import entidades.Vemediopago;
 import entidades.Venta;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,6 +105,24 @@ public class VentaFacade extends AbstractFacade<Venta> {
         
         return tof;
      }
+    
+    public List<Vemediopago>getListavMedioPago(int idVenta){
+        List<Vemediopago> listaVenta = new ArrayList<Vemediopago>();
+        try{
+            String jpa = "SELECT v "
+                       + "FROM Vemediopago v "
+                       + "WHERE v.venta.idventa = :idVenta ";
+            
+            Query query = em.createQuery(jpa);
+            query.setParameter("idVenta", idVenta);
+            
+            listaVenta = query.getResultList();
+        }catch(Exception e){
+            listaVenta = new ArrayList<Vemediopago>();
+        }
+        
+        return listaVenta;
+    }
     
     public List<Venta> getVentasByBusqueda(VentaDTO ven){
         List<Venta> listaVenta = new ArrayList<Venta>();

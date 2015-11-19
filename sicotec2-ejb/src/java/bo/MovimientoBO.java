@@ -197,10 +197,9 @@ public class MovimientoBO {
             
             for(ItemDTO DTO : itemsReg){
                 alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(),idAlmacenOringe,1,2);
-                alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(),idAlmacenDestino,1,1);
+                boolean tof = alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(),idAlmacenDestino,1,1);
                 
-                itemFacade.cambiarAlmacenItem(DTO.getIditem(), idAlmacenDestino);
-                /*if(!tof){//EN CASO NO EXISTA EL ITEM
+                if(!tof){//EN CASO NO EXISTA EL ITEM
                     //INSERTAR NUEVO ITEM EN ALMACEN
                     Altipoitem al = new Altipoitem();
                     Almacen alm = new Almacen();
@@ -209,8 +208,9 @@ public class MovimientoBO {
                     al.setAlmacen(alm);
                     ti.setIdtipoItem(DTO.getIdTipoItem());
                     al.setTipoitem(ti);
-                    al.setCantidad(DTO.getCantidad());
+                    al.setCantidad(1);
                     al.setEstado(1);
+                    al.setComprados(0);
                     al.setReservado(0);
                     
                     AltipoitemPK pk = new AltipoitemPK();
@@ -221,7 +221,9 @@ public class MovimientoBO {
                     
                     alltipoitemFacede.create(al);
                 }
-                */
+                
+                
+                itemFacade.cambiarAlmacenItem(DTO.getIditem(), idAlmacenDestino);
                 
                 //INSERTAR EL MOV-ITEM
                 Item i = new Item();

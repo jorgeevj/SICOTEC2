@@ -14,6 +14,8 @@ public class VeMedioPagoDTO {
     private int idMedioPago;
     private Double monto;
     
+    private boolean disableDelete;
+    
     //AGREGADOS
     private String nombreMedioPago;
 
@@ -71,6 +73,20 @@ public class VeMedioPagoDTO {
      */
     public void setNombreMedioPago(String nombreMedioPago) {
         this.nombreMedioPago = nombreMedioPago;
+    }
+
+    /**
+     * @return the disableDelete
+     */
+    public boolean isDisableDelete() {
+        return disableDelete;
+    }
+
+    /**
+     * @param disableDelete the disableDelete to set
+     */
+    public void setDisableDelete(boolean disableDelete) {
+        this.disableDelete = disableDelete;
     }
     
     

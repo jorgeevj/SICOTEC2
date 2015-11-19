@@ -50,7 +50,6 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
                        + "WHERE idtipoitem = '"+idTipoItem+"' "
                        + "AND idalmacen = "+idAlmacen;
                     
-            System.out.println(sql);
             Query query = em.createNativeQuery(sql);
             
             int i = query.executeUpdate();
@@ -59,6 +58,8 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
             }
         }catch(Exception e){
            System.out.println(e.getMessage());
+           tof = false;
+           return tof;
         }
         
         return tof;
