@@ -329,6 +329,10 @@ public class MovimientoBO {
                 Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
+            }else if(movimiento.getIdTipoMovimiento() == 3){
+                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Ent.setSerie(String.format("%03d", da.getSerie()));
+                Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }
         }
         
