@@ -166,7 +166,7 @@ public class MovimientoBO {
                 }*/
             }
             //CAMBIAR DE ESTADO A LA COMPRA
-            boolean tof1 = compraFacade.cambiarEstadoCompra(2, mov.getIdCompra());
+            boolean tof1 = compraFacade.cambiarEstadoCompra(3, mov.getIdCompra());
             
         }else if(idTipoMovimiento == 2){
             int idAlmacenOring = mov.getIdalmacenOrigen();
@@ -189,7 +189,7 @@ public class MovimientoBO {
                 
                 itemFacade.cambiarEstadoItem(2, DTO.getIditem());
                 alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOring, 1,2);
-                ventaFacade.cambiarEstadoVenta(2, mov.getIdVenta());
+                ventaFacade.cambiarEstadoVenta(3, mov.getIdVenta());
             }
         }else if(idTipoMovimiento == 3){
             int idAlmacenOringe  = mov.getIdalmacenOrigen();
