@@ -321,10 +321,10 @@ public class MovimientoMB implements Serializable{
         
         setListaItemAlmacen(new ArrayList<TipoItemDTO>());
         setListaItemAlmacenAux(new ArrayList<TipoItemDTO>());
-        setListaCompras(compraBO.getComprasByEstado(1));
+        setListaCompras(compraBO.getComprasByEstado(2));
         setListaLotesCompra(new ArrayList<LoteDTO>());
         setListaLotesCompraAux(new ArrayList<LoteDTO>());
-        setListaVentas(ventasBO.getVentasByEstado(1));
+        setListaVentas(ventasBO.getVentasByEstado(2));
 
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dialog_nuevo_mov').show();");
