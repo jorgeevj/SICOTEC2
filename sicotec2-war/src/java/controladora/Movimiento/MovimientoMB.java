@@ -676,7 +676,7 @@ public class MovimientoMB implements Serializable{
             && !t && !tof){
             ItemDTO dto = new ItemDTO();
             dto.setIditem(cod.trim());
-            dto.setEstado("0");
+            dto.setEstado("2");
             dto.setOperatividad("0");
             dto.setIdTipoItem(getLoteSeleccionado().getIdtipoitem());
             dto.setIdLote(getLoteSeleccionado().getIdLote());

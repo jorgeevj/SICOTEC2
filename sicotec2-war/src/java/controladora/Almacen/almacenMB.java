@@ -151,6 +151,8 @@ public class almacenMB {
             objAlmacen.setCodDept(almacenSelect.getCodDept());
             objAlmacen.setCodProv(almacenSelect.getCodProv());
             objAlmacen.setCodDist(almacenSelect.getCodDist());
+            objAlmacen.setIdalmacen(almacenSelect.getIdalmacen());
+            System.out.println("ID: "+almacenSelect.getIdalmacen());
             almacenBO.modificarAlmacen(objAlmacen);
             lista=almacenBO.getAllAlmaces();
             RequestContext context = RequestContext.getCurrentInstance();    
