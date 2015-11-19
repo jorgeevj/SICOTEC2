@@ -37,6 +37,10 @@ public class AlmacenDTO {
     private Pealtipoitem pealtipoitem;
     private Altipoitem altipoitem;
     private Tipoitem tipoItem;
+    private String nombreDPTO;
+    private String nombrePROV;
+    private String nombreDIST;
+    
 
     public AlmacenDTO() {
     }
@@ -127,6 +131,30 @@ public class AlmacenDTO {
 
     public void setDocumento(Documento documento) {
         this.documento = documento;
+    }
+
+    public String getNombreDPTO() {
+        return nombreDPTO;
+    }
+
+    public void setNombreDPTO(String nombreDPTO) {
+        this.nombreDPTO = nombreDPTO;
+    }
+
+    public String getNombrePROV() {
+        return nombrePROV;
+    }
+
+    public void setNombrePROV(String nombrePROV) {
+        this.nombrePROV = nombrePROV;
+    }
+
+    public String getNombreDIST() {
+        return nombreDIST;
+    }
+
+    public void setNombreDIST(String nombreDIST) {
+        this.nombreDIST = nombreDIST;
     }
    
    

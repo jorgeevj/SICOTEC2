@@ -8,12 +8,14 @@ package bo;
 import dao.AlmacenFacade;
 import dao.DocalmacenFacade;
 import dao.DocumentoFacade;
+import dao.UbigeoFacade;
 import dto.AlmacenDTO;
 import entidades.Almacen;
 import entidades.Docalmacen;
 import entidades.DocalmacenPK;
 import entidades.Documento;
 import entidades.Pealtipoitem;
+import entidades.Ubigeo;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -28,6 +30,8 @@ import javax.faces.model.SelectItem;
     @Stateless
 @LocalBean
 public class AlmacenBO {
+    @EJB
+    private UbigeoFacade ubigeoFacade;
     @EJB
     private AlmacenFacade almacenFacade;
     @EJB
@@ -161,8 +165,12 @@ public class AlmacenBO {
           e.setNombre(a.getNombre());
           e.setCodDist(a.getCodDist());
           e.setCodDept(a.getCodDept());
-          e.setCodProv(a.getCodProv());  
-        return e;
+          e.setCodProv(a.getCodProv());
+          Ubigeo u=ubigeoFacade.findUbigeos(a.getCodDept(), a.getCodProv(), a.getCodDist()).get(0);
+          e.setNombreDPTO(u.getDepartamento());
+          e.setNombrePROV(u.getProvincia());
+          e.setNombreDIST(u.getDistrito()); ;
+          return e;
     }
  
     public AlmacenDTO convertEntityToDTO(Almacen almacen){

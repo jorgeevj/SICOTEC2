@@ -221,7 +221,7 @@ public class CotizacionBO {
         Altipoitem ati;
         double total = 0, descuento = 0;
         Venta v = new Venta();
-        v.setEstado("Generada");
+        v.setEstado("1");
         v.setFecha(new Date());
         v.setIdempresa(c.getIdempresa());
         v.setIdimpuesto(new Impuesto(1));
