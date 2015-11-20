@@ -260,7 +260,7 @@ public class PedidoMB{
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "Debe ingresar un numero");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else{
-            if(Integer.parseInt(getCantidadAdd()) < 0){
+            if(Integer.parseInt(getCantidadAdd()) <= 0){
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "Debe ingresar una cantidad mayor a 0");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else{
