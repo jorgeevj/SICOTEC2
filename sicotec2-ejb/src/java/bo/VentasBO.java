@@ -103,8 +103,12 @@ public class VentasBO {
                 //RESTARLE LA CANTIDAD DE RESERVADO EN ALTIPOITEM
                 altipoitemFacade.updateCantidadReservadoAltipoItem(i.getAltipoitem().getTipoitem().getIdtipoItem(), venta.getIdalmacen(), 1, 2);
                 
+                Venta v = new Venta();
+                v.setIdventa(venta.getIdventa());
                 //CAMBIAR EL ESTADO AL ITEM
                 i.setEstado("2");
+                i.setIdventa(ventaE);
+                
                 itemFacade.edit(i);
             }
             
