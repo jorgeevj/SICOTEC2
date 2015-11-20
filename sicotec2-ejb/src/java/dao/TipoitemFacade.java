@@ -59,7 +59,7 @@ public class TipoitemFacade extends AbstractFacade<Tipoitem> {
     
     public List<Tipoitem> getBusquedaDuplicados(Tipoitem e){
         List<Tipoitem> lista= new ArrayList<Tipoitem>();
-        String sql="SELECT t FROM Tipoitem t where t.idtipoItem="+e.getIdtipoItem();
+        String sql="SELECT t FROM Tipoitem t where t.idtipoItem='"+e.getIdtipoItem()+"'";
         Query q=em.createQuery(sql,Tipoitem.class);
         lista=q.getResultList();       
         return lista;     
