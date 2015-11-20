@@ -138,7 +138,7 @@ public class ventaMB {
     
     public void selectventa(SelectEvent event){
         setVentaSeleccionada((VentaDTO)event.getObject());
-        if(getVentaSeleccionada().getEstado().equals("0")){
+        if(getVentaSeleccionada().getEstado().equals("4")){
             setDisableEditar(true);
         }else{
             setDisableEditar(false);
@@ -171,18 +171,18 @@ public class ventaMB {
         RequestContext context = RequestContext.getCurrentInstance();
         int estado = Integer.parseInt(getVentaSeleccionada().getEstado());
         System.out.println(estado);
-        if(estado == 0){//CANCELADA
+        if(estado == 4){//CANCELADA
             setPanelVisibleEstadoPagada(false);
-            setSelectEstadoEdit(0);
+            setSelectEstadoEdit(4);
             
             setListaMedioPago(medioPagoBO.allMedioPago());
-        }else if(estado == 1){//PAGADA
+        }else if(estado == 2){//PAGADA
             setPanelVisibleEstadoPagada(false);
-            setSelectEstadoEdit(1);
+            setSelectEstadoEdit(2);
             
             setListaMedioPago(medioPagoBO.allMedioPago());
-        }else if(estado == 2){//INCOMPLETA
-            setSelectEstadoEdit(1);
+        }else if(estado == 5){//INCOMPLETA
+            setSelectEstadoEdit(2);
             setListaVentaMedioPago(ventasBO.getListaVMedioPago(getVentaSeleccionada().getIdventa()));
             Double cantidad = 0.0;
             for(VeMedioPagoDTO dto : getListaVentaMedioPago()){
@@ -210,10 +210,10 @@ public class ventaMB {
     
     public void selectEstado(){
         setListaMedioPago(medioPagoBO.allMedioPago());
-        if(getSelectEstadoEdit() == 0){
+        if(getSelectEstadoEdit() == 4){
             setPanelVisibleEstadoPagada(false);
-        }else if(getSelectEstadoEdit() == 1){
-            if(Integer.parseInt(getVentaSeleccionada().getEstado()) == 1){
+        }else if(getSelectEstadoEdit() == 2){
+            if(Integer.parseInt(getVentaSeleccionada().getEstado()) == 2){
                 setPanelVisibleEstadoPagada(false);
             }else{
                 setPanelVisibleEstadoPagada(true);
@@ -301,9 +301,9 @@ public class ventaMB {
             return sms;
         }
         
-        if(estado == 0){
+        if(estado == 4){
             
-        }else if(estado == 1){
+        }else if(estado == 2){
             if(getCantidadMedioPagoAcu() == 0.0){
                 sms = "Ingrese minimo un medio de pago con su cantidad";
             }
@@ -320,17 +320,18 @@ public class ventaMB {
             RequestContext context = RequestContext.getCurrentInstance(); 
             context.update("formTabla");
         }else{
-            if(estado == 0){
+            System.out.println(estado);
+            if(estado == 4){
                 venta = getVentaSeleccionada();
-                venta.setEstado("0");//CANCELADA(ELIMINADA)
+                venta.setEstado("4");//CANCELADA(ELIMINADA)
                 venta.setIdImpuesto(getSelectImpuestoEdit());
-            }else if(estado == 1){
+            }else if(estado == 2){
                     venta = getVentaSeleccionada();
                 if((venta.getTotal() - getCantidadMedioPagoAcu()) == 0.0){//SE PAGO TODO
-                    venta.setEstado("1");//PAGADA
+                    venta.setEstado("2");//PAGADA
                     venta.setIdImpuesto(getSelectImpuestoEdit());
                 }else{
-                    venta.setEstado("2");//INCOMPLETA
+                    venta.setEstado("5");//INCOMPLETA
                     venta.setIdImpuesto(getSelectImpuestoEdit());
                 }
             }
@@ -347,8 +348,8 @@ public class ventaMB {
     
     public ArrayList llenarEstados() {
         ArrayList estados = new ArrayList();
-        estados.add(new SelectItem(0,"Cancelada"));
-        estados.add(new SelectItem(1,"Pagada"));
+        estados.add(new SelectItem(4,"Cancelada"));
+        estados.add(new SelectItem(2,"Pagada"));
         //estados.add(new SelectItem(2,"Incompleta"));
         
         return estados;
