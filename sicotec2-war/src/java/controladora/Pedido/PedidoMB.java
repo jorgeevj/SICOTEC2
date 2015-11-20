@@ -225,7 +225,7 @@ public class PedidoMB{
             altioiitemDTO.setAlmacen(almacen);
             altioiitemDTO.setCantidad(0);
             altioiitemDTO.setComprados(0);
-            altioiitemDTO.setEstado(0);
+            altioiitemDTO.setEstado(1);
             altioiitemDTO.setReservado(dtoTipo.getCantidad());
             listALTI.add(altioiitemDTO);
         }
