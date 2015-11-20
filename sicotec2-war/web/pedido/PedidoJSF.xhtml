@@ -11,7 +11,7 @@
         <p:panel id="p1" header="Gestion de Orden de Pedido" footer="Pedido Details" style="margin-bottom:20px">
             <h:form id="formPedido">
                 <h:panelGrid columns="2">
-                    <p:outputLabel value="Empresa: "></p:outputLabel>
+                    <p:outputLabel value="Cliente: "></p:outputLabel>
                     <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaBusqueda}" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaEmpresaBusqueda}" var="emp" 
@@ -42,7 +42,7 @@
                         <p:column headerText="ID" style="text-align: center">
                             <p:outputLabel value="#{tPedido.idpedido}"/>
                         </p:column>
-                        <p:column headerText="Empresa" style="text-align: center">
+                        <p:column headerText="Cliente" style="text-align: center">
                             <p:outputLabel value="#{tPedido.nombreEmpresa}"/>
                         </p:column>
                         <p:column headerText="Fecha" style="text-align: center">

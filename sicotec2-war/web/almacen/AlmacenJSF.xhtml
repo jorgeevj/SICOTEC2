@@ -13,13 +13,14 @@
                     <p:inputText id="nomAlm" value="#{almacenMB.nombre}" style="width:50%"/> 
                     <p:outputLabel for="dirAlm" value="Direccion"/>
                     <p:inputText id="dirAlm" value="#{almacenMB.direccion}" style="width:50%"/> 
-                    <p:outputLabel for="dtoAlm" value="Cod. Dpto"/>
+                   <!-- 
+                   <p:outputLabel for="dtoAlm" value="Cod. Dpto"/>
                     <p:inputText id="dtoAlm" value="#{almacenMB.cod_dept}" style="width:50%"/> 
                     <p:outputLabel for="provAlm" value="Cod. Provincia"/>
                     <p:inputText id="provAlm" value="#{almacenMB.cod_prov}" style="width:50%"/> 
                     <p:outputLabel for="disAlm" value="Cod. Distrito"/>
                     <p:inputText id="disAlm" value="#{almacenMB.cod_dist}" style="width:50%"/> 
-                    
+                    -->
                 </h:panelGrid>
                 <p:commandButton value="Buscar" actionListener="#{almacenMB.buscarAlmacen}" update="tablaAlmacenes"/>                
                 <p:commandButton value="Registrar"  actionListener="#{almacenMB.registrarAlmacen}"/>            

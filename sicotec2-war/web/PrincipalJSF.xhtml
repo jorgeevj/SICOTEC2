@@ -843,7 +843,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formAddPedido">
                     <p:growl showDetail="true" sticky="true" id="msnRegistrar"/>
                     <h:panelGrid columns="2">
-                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:outputLabel value="Cliente: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresaAdd}">
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaEmpresaAdd}" var="emp" 
@@ -921,7 +921,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:form id="formEditPedido">
                     <p:growl showDetail="true" sticky="true" id="msnEditar"/>
                     <h:panelGrid columns="2">
-                        <p:outputLabel value="Empresa: "></p:outputLabel>
+                        <p:outputLabel value="Cliente: "></p:outputLabel>
                         <p:selectOneMenu id="empresasPedido" styleClass="browser-default" value="#{pedidoMB.empresasEdit}" disabled="false" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaEmpresaEdit}" var="emp" 
@@ -1812,8 +1812,8 @@ jorgeevj 15.09.15 Creacion.
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:commandButton value="Agregar" actionListener="#{personasMB.abrirModalAddTelfPers}"></p:commandButton>
-                        <p:commandButton value="Quitar" actionListener="#{personasMB.quitarTelefPers}" ></p:commandButton>
+                        <p:commandButton value="Agregar" actionListener="#{personasMB.abrirModalAddTelfPers}" update="msnAgregarPersona"></p:commandButton>
+                        <p:commandButton value="Quitar" actionListener="#{personasMB.quitarTelefPers}" update="msnAgregarPersona" ></p:commandButton>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:dataTable id="tabTelefPersAdd" var="telfPers" value="#{personasMB.listaTelefPersAdd}"
@@ -1831,9 +1831,9 @@ jorgeevj 15.09.15 Creacion.
                         </p:dataTable>
                     </h:panelGrid>
                     <p:commandButton value="Agregar" icon="ui-icon-plusthick"
-                                     actionListener="#{personasMB.abrirModalAddUbiPers}" />
+                                     actionListener="#{personasMB.abrirModalAddUbiPers}" update="msnAgregarPersona"/>
                     <p:commandButton value="Quitar" icon="ui-icon-minusthick"
-                                     actionListener="#{personasMB.removeListaUbiPersAdd}" />
+                                     actionListener="#{personasMB.removeListaUbiPersAdd}" update="msnAgregarPersona"/>
                     <h:panelGrid columns="2">
                         <p:dataTable id="tabUbigeoPersAdd" var="ubigeoAdd" value="#{personasMB.listaUbiPersAdd}"
                                      selectionMode="single" rowKey="#{ubigeoAdd.codDept}">

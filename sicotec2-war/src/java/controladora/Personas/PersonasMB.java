@@ -302,7 +302,19 @@ public class PersonasMB {
    
     public void cargarProvincias(ValueChangeEvent event) {
         System.out.println("valpr " + getCodDepartamentoAdd());
-        if(getCodDepartamentoAdd() != null && !getCodDepartamentoAdd().equals("") ){
+        
+        if(event.getNewValue() == null){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "DEBE SELECCIONAR UN ELEMENTO");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            listProvinciaAdd = ubigeoBO.getAllProvincias(event.getNewValue().toString());
+            listDistritosAdd = new ArrayList<>();
+            getUbiPersDTOADD().setCodDept(event.getNewValue().toString());
+            getUbiPersDTOADD().setCodProv("");
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formSelectUbiPers");
+        }
+        /*if(getCodDepartamentoAdd() != null && !getCodDepartamentoAdd().equals("") ){
             listProvinciaAdd = ubigeoBO.getAllProvincias(event.getNewValue().toString());
             listDistritosAdd = new ArrayList<>();
             getUbiPersDTOADD().setCodDept(event.getNewValue().toString());
@@ -313,11 +325,20 @@ public class PersonasMB {
             listProvinciaAdd = new ArrayList<>();
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "DEBE SELECCIONAR UN DEPARTAMENTO");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+        }*/
     }
 
     public void cargarDistritos(ValueChangeEvent event) {
-        if(getCodProvinciaAdd() != null && !getCodProvinciaAdd().equals("")){
+        if(event.getNewValue() == null){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "DEBE SELECCIONAR UN ELEMENTO");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else{
+            listDistritosAdd = ubigeoBO.getAllDistritos(getUbiPersDTOADD().getCodDept(), event.getNewValue().toString());
+            getUbiPersDTOADD().setCodDist("");
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formSelectUbiPers");
+        }
+        /*if(getCodProvinciaAdd() != null && !getCodProvinciaAdd().equals("")){
             listDistritosAdd = ubigeoBO.getAllDistritos(getUbiPersDTOADD().getCodDept(), event.getNewValue().toString());
             getUbiPersDTOADD().setCodDist("");
             RequestContext context = RequestContext.getCurrentInstance();
@@ -326,7 +347,7 @@ public class PersonasMB {
             listDistritosAdd = new ArrayList<>();
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OJO", "DEBE SELECCIONAR UNA PROVINCIA");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+        }*/
     }
     
     private static boolean isNumeric(String cadena){
