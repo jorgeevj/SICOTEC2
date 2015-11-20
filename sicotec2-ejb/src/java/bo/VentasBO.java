@@ -80,7 +80,7 @@ public class VentasBO {
     }
     
     public void editVenta(VentaDTO venta, List<VeMedioPagoDTO> veMedioPago, int estado){
-        if(estado == 1){
+        if(estado == 2){
             //List<Vemediopago> listaEnt = new ArrayList<Vemediopago>();
             for(VeMedioPagoDTO vDTO : veMedioPago){
                 if(!vDTO.isDisableDelete()){
@@ -104,11 +104,11 @@ public class VentasBO {
                 altipoitemFacade.updateCantidadReservadoAltipoItem(i.getAltipoitem().getTipoitem().getIdtipoItem(), venta.getIdalmacen(), 1, 2);
                 
                 //CAMBIAR EL ESTADO AL ITEM
-                i.setEstado("0");
+                i.setEstado("2");
                 itemFacade.edit(i);
             }
             
-        }else if(estado == 0){
+        }else if(estado == 4){
             Venta ventaE = this.ConvertDTOtoEntity(venta);
             ventaFacade.edit(ventaE);  
         }
@@ -149,12 +149,16 @@ public class VentasBO {
         DTO.setIdImpuesto(venta.getIdimpuesto().getIdimpuesto());
         
         int estado = Integer.parseInt(venta.getEstado());
-        if(estado == 0){
+        if(estado == 4){
             DTO.setNombreEstado("CANCELADA");
-        }else if(estado == 1){
-            DTO.setNombreEstado("PAGADA");
         }else if(estado == 2){
+            DTO.setNombreEstado("PAGADA");
+        }else if(estado == 5){
             DTO.setNombreEstado("INCOMPLETA");
+        }else if(estado == 1){
+            DTO.setNombreEstado("PENDIENTE");
+        }else if(estado == 3){
+            DTO.setNombreEstado("ENTREGADA");
         }
 
         return DTO;
