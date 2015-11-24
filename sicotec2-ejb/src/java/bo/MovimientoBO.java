@@ -99,7 +99,7 @@ public class MovimientoBO {
         Movimiento m = new Movimiento();
         m.setIdmovimiento(idMovimiento);
         
-        if(idTipoMovimiento == 1){
+        if(idTipoMovimiento == 1){//COMPRA
             int idAlmacenDestino = mov.getIdalmacenDestino();
             for(ItemDTO DTO : itemsReg){
                 //INSERTAR EL NUEVO ITEM
@@ -168,7 +168,7 @@ public class MovimientoBO {
             //CAMBIAR DE ESTADO A LA COMPRA
             boolean tof1 = compraFacade.cambiarEstadoCompra(3, mov.getIdCompra());
             
-        }else if(idTipoMovimiento == 2){
+        }else if(idTipoMovimiento == 2){//VENTAS
             int idAlmacenOring = mov.getIdalmacenOrigen();
             for(ItemDTO DTO : itemsReg){
                 //INSERTAR EL MOV-ITEM
@@ -191,7 +191,7 @@ public class MovimientoBO {
                 alltipoitemFacede.updateCantidadAltipoItem(DTO.getIdTipoItem(), idAlmacenOring, 1,2);
                 ventaFacade.cambiarEstadoVenta(3, mov.getIdVenta());
             }
-        }else if(idTipoMovimiento == 3){
+        }else if(idTipoMovimiento == 3){//MOV. ALMACENES
             int idAlmacenOringe  = mov.getIdalmacenOrigen();
             int idAlmacenDestino = mov.getIdalmacenDestino();
             
@@ -322,15 +322,15 @@ public class MovimientoBO {
             
         }else{
             if(movimiento.getIdTipoMovimiento() == 1){
-                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenDestino());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenDestino());
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }else if(movimiento.getIdTipoMovimiento() == 2){
-                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }else if(movimiento.getIdTipoMovimiento() == 3){
-                Docalmacen da=getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }
