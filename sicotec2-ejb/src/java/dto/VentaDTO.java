@@ -34,6 +34,8 @@ public class VentaDTO {
     private String nombreAlmacen;
     private Date fechaInicio;
     private Date fechaFin;
+    
+    private Double subTotal;
 
     /**
      * @return the idventa
@@ -313,6 +315,20 @@ public class VentaDTO {
      */
     public void setNombreEstado(String nombreEstado) {
         this.nombreEstado = nombreEstado;
+    }
+
+    /**
+     * @return the subTotal
+     */
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    /**
+     * @param subTotal the subTotal to set
+     */
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
     }
 
     

@@ -322,15 +322,15 @@ public class MovimientoBO {
             
         }else{
             if(movimiento.getIdTipoMovimiento() == 1){
-                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenDestino());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenDestino(),4);
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }else if(movimiento.getIdTipoMovimiento() == 2){
-                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen(),5);
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }else if(movimiento.getIdTipoMovimiento() == 3){
-                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen());
+                Docalmacen da = getNewSerieAndCorrelativo(movimiento.getIdalmacenOrigen(),6);
                 Ent.setSerie(String.format("%03d", da.getSerie()));
                 Ent.setCorrelativo(String.format("%06d", da.getCorrelativo()));
             }
@@ -349,10 +349,11 @@ public class MovimientoBO {
         
         return Ent;
     }
-    public Docalmacen getNewSerieAndCorrelativo(Integer idalmacen){
-   Docalmacen da = docalmacenFacade.findBy2key(idalmacen, 4);
+    public Docalmacen getNewSerieAndCorrelativo(Integer idalmacen, int idDoc){
+        Docalmacen da = docalmacenFacade.findBy2key(idalmacen, idDoc);
         da = cotizacionBO.updateDocAlm(da);
-       return da;
+        
+        return da;
    }
     
 }

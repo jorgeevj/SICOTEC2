@@ -135,7 +135,7 @@ public class ItemFacade extends AbstractFacade<Item> {
             Item i = (Item)query.getSingleResult();
             if(i != null){
                 if(i.getAltipoitem().getAltipoitemPK().getIdtipoItem().equals(idTipoItem)){
-                    if(i.getEstado().equals("0")){
+                    if(i.getEstado().equals("2")){
                         tof = false;
                     }
                 }
