@@ -320,11 +320,17 @@ public class ventaMB {
             RequestContext context = RequestContext.getCurrentInstance(); 
             context.update("formTabla");
         }else{
-            System.out.println(estado);
             if(estado == 4){
                 venta = getVentaSeleccionada();
                 venta.setEstado("4");//CANCELADA(ELIMINADA)
                 venta.setIdImpuesto(getSelectImpuestoEdit());
+                Double porcent = 0.0;
+                for(ImpuestoDTO im : getListaImpuestos()){
+                    if(im.getIdImpuesto() == getSelectImpuestoEdit()){
+                        porcent = im.getPorcentaje();
+                    }
+                }
+                venta.setSubTotal(venta.getTotal() - (venta.getTotal() * porcent));
             }else if(estado == 2){
                     venta = getVentaSeleccionada();
                 if((venta.getTotal() - getCantidadMedioPagoAcu()) == 0.0){//SE PAGO TODO
