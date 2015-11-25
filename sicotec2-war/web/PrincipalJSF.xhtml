@@ -1629,7 +1629,8 @@ jorgeevj 15.09.15 Creacion.
                               <f:selectItem itemLabel="Movil" itemValue="Movil" />
                     </p:selectOneMenu>
                    <p:outputLabel value="Numero: " for="itTel1" />    
-                    <p:inputText id="itTel1" value="#{empresaMB.telEmpAgregaDTO.numero}" placeholder="Ejm. 4467463"/>
+                   <p:inputText id="itTel1" value="#{empresaMB.telEmpAgregaDTO.numero}" placeholder="Ejm. 4467463" maxlength="9">
+                   </p:inputText>
                     </p:panelGrid>
                     <p:messages id="msgUbicacion" showDetail="true" closable="true" />
                     <p:commandButton id="btnAceptarUbicacion" value="Aceptar" icon="ui-icon-check"

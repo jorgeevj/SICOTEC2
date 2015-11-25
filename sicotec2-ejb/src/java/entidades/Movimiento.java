@@ -47,8 +47,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Movimiento.findByEstado", query = "SELECT m FROM Movimiento m WHERE m.estado = :estado"),
     @NamedQuery(name = "Movimiento.findByIddocumento", query = "SELECT m FROM Movimiento m WHERE m.iddocumento = :iddocumento"),
     @NamedQuery(name = "Movimiento.findBySerie", query = "SELECT m FROM Movimiento m WHERE m.serie = :serie"),
-    @NamedQuery(name = "Movimiento.findByCorrelativo", query = "SELECT m FROM Movimiento m WHERE m.correlativo = :correlativo")})
+    @NamedQuery(name = "Movimiento.findByCorrelativo", query = "SELECT m FROM Movimiento m WHERE m.correlativo = :correlativo"),
+    @NamedQuery(name = "Movimiento.findByIdusuario", query = "SELECT m FROM Movimiento m WHERE m.idusuario = :idusuario"),
+    @NamedQuery(name = "Movimiento.findByNombreusuario", query = "SELECT m FROM Movimiento m WHERE m.nombreusuario = :nombreusuario")})
 public class Movimiento implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movimiento")
+    private List<Movimientoitem> movimientoitemList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,8 +88,12 @@ public class Movimiento implements Serializable {
     @Size(max = 45)
     @Column(name = "correlativo")
     private String correlativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movimiento")
-    private List<Movimientoitem> movimientoitemList;
+    @Size(max = 45)
+    @Column(name = "idusuario")
+    private String idusuario;
+    @Size(max = 45)
+    @Column(name = "nombreusuario")
+    private String nombreusuario;
     @JoinColumn(name = "idtipoMovimiento", referencedColumnName = "idtipoMovimiento")
     @ManyToOne(optional = false)
     private Tipomovimiento idtipoMovimiento;
@@ -193,13 +201,20 @@ public class Movimiento implements Serializable {
         this.correlativo = correlativo;
     }
 
-    @XmlTransient
-    public List<Movimientoitem> getMovimientoitemList() {
-        return movimientoitemList;
+    public String getIdusuario() {
+        return idusuario;
     }
 
-    public void setMovimientoitemList(List<Movimientoitem> movimientoitemList) {
-        this.movimientoitemList = movimientoitemList;
+    public void setIdusuario(String idusuario) {
+        this.idusuario = idusuario;
+    }
+
+    public String getNombreusuario() {
+        return nombreusuario;
+    }
+
+    public void setNombreusuario(String nombreusuario) {
+        this.nombreusuario = nombreusuario;
     }
 
     public Tipomovimiento getIdtipoMovimiento() {
@@ -233,6 +248,15 @@ public class Movimiento implements Serializable {
     @Override
     public String toString() {
         return "entidades.Movimiento[ idmovimiento=" + idmovimiento + " ]";
+    }
+
+    @XmlTransient
+    public List<Movimientoitem> getMovimientoitemList() {
+        return movimientoitemList;
+    }
+
+    public void setMovimientoitemList(List<Movimientoitem> movimientoitemList) {
+        this.movimientoitemList = movimientoitemList;
     }
     
 }

@@ -48,6 +48,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Venta.findByIdusuario", query = "SELECT v FROM Venta v WHERE v.idusuario = :idusuario"),
     @NamedQuery(name = "Venta.findByNombreusuario", query = "SELECT v FROM Venta v WHERE v.nombreusuario = :nombreusuario")})
 public class Venta implements Serializable {
+    @Column(name = "subtotal")
+    private Double subtotal;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -243,6 +245,14 @@ public class Venta implements Serializable {
     @Override
     public String toString() {
         return "entidades.Venta[ idventa=" + idventa + " ]";
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
     
 }
