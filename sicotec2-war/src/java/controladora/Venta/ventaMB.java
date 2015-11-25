@@ -138,7 +138,7 @@ public class ventaMB {
     
     public void selectventa(SelectEvent event){
         setVentaSeleccionada((VentaDTO)event.getObject());
-        if(getVentaSeleccionada().getEstado().equals("4")){
+        if(getVentaSeleccionada().getEstado().equals("4") || getVentaSeleccionada().getEstado().equals("2")){
             setDisableEditar(true);
         }else{
             setDisableEditar(false);
@@ -176,6 +176,9 @@ public class ventaMB {
             setSelectEstadoEdit(4);
             
             setListaMedioPago(medioPagoBO.allMedioPago());
+        }else if(estado == 1){//PENDIENTE
+            setSelectEstadoEdit(100);
+            setPanelVisibleEstadoPagada(true);
         }else if(estado == 2){//PAGADA
             setPanelVisibleEstadoPagada(false);
             setSelectEstadoEdit(2);
