@@ -65,6 +65,8 @@ public class UsuarioMB implements Serializable{
      private String claveNuevo;
      private int idpersonaNuevo;
      private int idrolNuevo;
+     private PersonaDTO personaTablaSelect;
+     private boolean btnRegistrarEstado;
      
     //EDITAR
      private UsuarioDTO objUsuarioEditar;
@@ -86,6 +88,12 @@ public class UsuarioMB implements Serializable{
         setListaRolAdd(this.comboRoles());
         setListaPersonaAdd(this.comboPersonas());
         setDisableEditar(true);
+        setBtnRegistrarEstado(true);
+    }
+    
+    public void onRowSelectPersona(){
+        btnRegistrarEstado=false;
+        
     }
      public List<UsuarioDTO> consultar(ActionEvent actionEvent) {
        
@@ -130,7 +138,7 @@ public class UsuarioMB implements Serializable{
     public void addNuevoUsuario(ActionEvent actionEvent){
           UsuarioDTO dto=new UsuarioDTO();
           Persona entidadPers = new Persona();
-          entidadPers.setIdpersona(getIdpersonaNuevo());
+          entidadPers.setIdpersona(personaTablaSelect.getIdpersona());
            dto.setIdpersona(entidadPers);
            
            Rol entidadRol=new Rol();
@@ -149,6 +157,7 @@ public class UsuarioMB implements Serializable{
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.update("formUsuario");
         this.cerrar();
+        setPersonaTablaSelect(null);
         
     }
     public void crear(ActionEvent actionEvent){
@@ -204,7 +213,10 @@ public class UsuarioMB implements Serializable{
              dto.setFecha(getFechaEdit());
              
              Persona entidadPersona = new Persona();
+             if(personaTablaSelect==null){
              entidadPersona.setIdpersona(getPersonasEdit());
+             }else
+                 entidadPersona.setIdpersona(personaTablaSelect.getIdpersona());
              dto.setIdpersona(entidadPersona);
              
               Rol entidadRol = new Rol();
@@ -218,6 +230,7 @@ public class UsuarioMB implements Serializable{
             RequestContext context = RequestContext.getCurrentInstance(); 
             context.update("formUsuario");
             context.execute("PF('editUsuarioModal').hide();");
+            setPersonaTablaSelect(null);
            
         }
     
@@ -467,6 +480,22 @@ public class UsuarioMB implements Serializable{
 
     public void setListaPersonaEdit(List<PersonaDTO> listaPersonaEdit) {
         this.listaPersonaEdit = listaPersonaEdit;
+    }
+
+    public PersonaDTO getPersonaTablaSelect() {
+        return personaTablaSelect;
+    }
+
+    public void setPersonaTablaSelect(PersonaDTO personaTablaSelect) {
+        this.personaTablaSelect = personaTablaSelect;
+    }
+
+    public boolean isBtnRegistrarEstado() {
+        return btnRegistrarEstado;
+    }
+
+    public void setBtnRegistrarEstado(boolean btnRegistrarEstado) {
+        this.btnRegistrarEstado = btnRegistrarEstado;
     }
     
     
