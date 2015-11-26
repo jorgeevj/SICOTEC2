@@ -46,6 +46,8 @@ public class VentasBO {
     private VemediopagoFacade vemediopagoFacade;
     /*@EJB
     private VemediopagoFacade altipoitemFacade;*/
+    @EJB
+    private AltipoitemFacade alltipoitemFacede;
     
     ItemBO item;
     
@@ -101,7 +103,7 @@ public class VentasBO {
 
             for(Item i : items){
                 //RESTARLE LA CANTIDAD DE RESERVADO EN ALTIPOITEM
-                altipoitemFacade.updateCantidadReservadoAltipoItem(i.getAltipoitem().getTipoitem().getIdtipoItem(), venta.getIdalmacen(), 1, 2);
+                this.updateAlTipoItem(venta.getIdalmacen(), i.getAltipoitem().getTipoitem().getIdtipoItem(), 1, 1);
                 
                 Venta v = new Venta();
                 v.setIdventa(venta.getIdventa());
@@ -116,6 +118,19 @@ public class VentasBO {
             Venta ventaE = this.ConvertDTOtoEntity(venta);
             ventaFacade.edit(ventaE);  
         }
+    }
+    
+    //0 = SUMAR, 1 = RESTAS
+    public void updateAlTipoItem(int idAlmacen, String idTipoItem, int tipo, int cantidad){
+        Altipoitem al1 = alltipoitemFacede.getAlTipoItemByFiltros(idAlmacen,idTipoItem);
+        
+        if(tipo == 0){
+            al1.setCantidad(al1.getCantidad() + 1);
+        }else{
+            al1.setCantidad(al1.getCantidad() - 1);
+        }
+        
+        alltipoitemFacede.edit(al1);
     }
     
     public List<VentaDTO> convertListEntityToDTO(List<Venta> listaVentas){
@@ -150,6 +165,7 @@ public class VentasBO {
         DTO.setIdUsuario(venta.getIdusuario());
         DTO.setNombreUsuario(venta.getNombreusuario());
         DTO.setSubTotal(venta.getSubtotal());
+        DTO.setIddocumento(venta.getIddocumento());
         //PUEDE SER QUE SE CAIGA
         DTO.setIdImpuesto(venta.getIdimpuesto().getIdimpuesto());
         
