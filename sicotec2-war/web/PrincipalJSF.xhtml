@@ -53,12 +53,12 @@ jorgeevj 15.09.15 Creacion.
 
             
             <!-- DIALOG DE COTIZACIONES-->
-            <p:dialog header="REGISTRAR COTIZACION" widgetVar="regCot" modal="true" rendered="true" height="450">
+            <p:dialog header="REGISTRAR COTIZACIÓN" widgetVar="regCot" modal="true" rendered="true" height="450">
 
                 <h:form id="formRegCot" >
                     
                     <p:panelGrid id="pGridRegCot" columns="4" styleClass="hideborder">
-                        <p:outputLabel value="Duracion/Dias:" for="itrc2" />
+                        <p:outputLabel value="Duración/Días:" for="itrc2" />
                         <p:inputText id="itrc2" value="#{cotizacionMB.camposCrear.duracion}" maxlength="2"
                                      onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;">
                             <f:validateDoubleRange minimum="0" maximum="15" />
@@ -104,7 +104,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Nombre" filterBy="#{titem.nombre}">
                             <h:outputText value="#{titem.nombre}" />
                         </p:column>
-                        <p:column headerText="Categoria" filterBy="#{titem.idfamilia.idcategoria.nombre}">
+                        <p:column headerText="Categoría" filterBy="#{titem.idfamilia.idcategoria.nombre}">
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('tTipoitem').filter()" style="width:100%">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
@@ -117,7 +117,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Familia" filterBy="#{titem.idfamilia.nombre}">
                             <h:outputText value="#{titem.idfamilia.nombre}" />
                         </p:column>
-                        <p:column headerText="Descripcion" filterBy="#{titem.descripcion}">
+                        <p:column headerText="Descripción" filterBy="#{titem.descripcion}">
                             <h:outputText value="#{titem.descripcion}" />
                         </p:column>
                         <p:column headerText="N° Parte" filterBy="#{titem.numParte}">
@@ -282,11 +282,11 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
 
-            <p:dialog header="EDITAR COTIZACION" widgetVar="editCot" modal="true" rendered="true" height="500">
+            <p:dialog header="EDITAR COTIZACIÓN" widgetVar="editCot" modal="true" rendered="true" height="500">
 
                 <h:form id="formEditCot" >
                     <p:panelGrid id="pGridEditCot2" columns="4" styleClass="hideborder">
-                        <p:outputLabel value="Duracion/Dias:" for="itec2" />
+                        <p:outputLabel value="Duración/Días:" for="itec2" />
                         <p:inputText id="itec2" value="#{cotizacionMB.cotizacionSelec.duracion}" required="true"
                                      onkeypress="if((event.which &gt; 57)^(event.which &lt; 49))return false;"/>
 
@@ -294,7 +294,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:selectOneMenu id="itec3" value="#{cotizacionMB.cotizacionSelec.entrega}" required="true">
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
                             <f:selectItem itemLabel="Domicilio" itemValue="0" />
-                            <f:selectItem itemLabel="Almacen" itemValue="1" />
+                            <f:selectItem itemLabel="Almacén" itemValue="1" />
                         </p:selectOneMenu>
 
                         <p:outputLabel for="choiceEmpEC" value="Empresa: "/>
@@ -305,7 +305,7 @@ jorgeevj 15.09.15 Creacion.
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel for="almacenesEC" value="Almacen:" />
+                        <p:outputLabel for="almacenesEC" value="Almacén:" />
                         <p:selectOneMenu id="almacenesEC" value="#{cotizacionMB.cotizacionSelec.idalm}" 
                                          valueChangeListener="#{cotizacionMB.almacenSelect}" required="true">
                             <p:ajax update="TipoitemSelectEdit" />
@@ -330,7 +330,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Nombre" filterBy="#{titem.nombre}">
                             <h:outputText value="#{titem.nombre}" />
                         </p:column>
-                        <p:column headerText="Categoria" filterBy="#{titem.idfamilia.idcategoria.nombre}">
+                        <p:column headerText="Categoría" filterBy="#{titem.idfamilia.idcategoria.nombre}">
                             <f:facet name="filter">
                                 <p:selectOneMenu onchange="PF('tTipoitemEdit').filter()" style="width:100%">
                                     <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
@@ -343,7 +343,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Familia" filterBy="#{titem.idfamilia.nombre}">
                             <h:outputText value="#{titem.idfamilia.nombre}" />
                         </p:column>
-                        <p:column headerText="Descripcion" filterBy="#{titem.descripcion}">
+                        <p:column headerText="Descripción" filterBy="#{titem.descripcion}">
                             <h:outputText value="#{titem.descripcion}" />
                         </p:column>
                         <p:column headerText="N° Parte" filterBy="#{titem.numParte}">
@@ -499,9 +499,9 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
 
-            <p:dialog header="VER COTIZACION" widgetVar="verCotizacion" modal="true" rendered="true" >
+            <p:dialog header="VER COTIZACIÓN" widgetVar="verCotizacion" modal="true" rendered="true" >
                 <h:form id="formVerCot">
-                    <p:outputLabel value="Duracion/Dias:" for="itvc2" />
+                    <p:outputLabel value="Duración/Días:" for="itvc2" />
                     <p:inputText id="itvc2" value="#{cotizacionMB.cotizacionSelec.duracion}" 
                                  disabled="true"/>
 
@@ -509,7 +509,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:selectOneMenu id="itvc3" value="#{cotizacionMB.cotizacionSelec.entrega}" disabled="true">
                         <f:selectItem itemLabel="Seleccione" itemValue="" />
                         <f:selectItem itemLabel="Domicilio" itemValue="0" />
-                        <f:selectItem itemLabel="Almacen" itemValue="1" />
+                        <f:selectItem itemLabel="Almacén" itemValue="1" />
                     </p:selectOneMenu>
 
                     <p:outputLabel for="choiceEmpVC" value="Empresa: "/>
@@ -520,7 +520,7 @@ jorgeevj 15.09.15 Creacion.
                                        itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="almacenesVC" value="Almacen:" />
+                    <p:outputLabel for="almacenesVC" value="Almacén:" />
                     <p:selectOneMenu id="almacenesVC" value="#{cotizacionMB.cotizacionSelec.idalm}" 
                                      valueChangeListener="#{cotizacionMB.almacenSelect}" disabled="true">
                         <f:selectItem itemLabel="Seleccione" itemValue="" />
@@ -594,7 +594,7 @@ jorgeevj 15.09.15 Creacion.
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
                         </p:selectOneMenu>
                         
-                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:outputLabel value="Almacén: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesCompra" value="#{compraMB.camposAdd.idAlmacen}" 
                                          valueChangeListener="#{compraMB.cargarPedidosByAlmacen}"
                                          disabled="#{compraMB.estadoChoiceAlmacen}">
@@ -614,7 +614,7 @@ jorgeevj 15.09.15 Creacion.
                         <f:facet name="header">
                            Pedidos Disponibles 
                         </f:facet>
-                        <p:column headerText="Item" style="text-align: center">
+                        <p:column headerText="Ítem" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: center">
@@ -650,7 +650,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad Requerida" >
                              <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
                         </p:column>
-                         <p:column headerText="Cantidad Unitara" >
+                         <p:column headerText="Cantidad Unitaria" >
                              <p:outputLabel value="#{loteReg.cantUnidad}"/>
                         </p:column>
                         <p:column headerText="Cantidad por U. Medida" >
@@ -709,7 +709,7 @@ jorgeevj 15.09.15 Creacion.
                                              itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>    
                         </p:selectOneMenu>
                         
-                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:outputLabel value="Almacén: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesCompraedit" value="#{compraMB.compraSelect.idAlmacen}" disabled="#{compraMB.estadoChoiceAlmacen}"
                                          valueChangeListener="#{compraMB.cargarPedidosByAlmacen}">
                         <p:ajax event="valueChange" update="tbPedidosItemsDispedit"/>
@@ -728,7 +728,7 @@ jorgeevj 15.09.15 Creacion.
                         <f:facet name="header">
                            Pedidos Disponibles 
                         </f:facet>
-                        <p:column headerText="Item" style="text-align: center">
+                        <p:column headerText="Ítem" style="text-align: center">
                             <p:outputLabel value="#{tPealtipoitem.nombreItems}"/>
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: center">
@@ -763,7 +763,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Cantidad Requerida" >
                              <p:outputLabel value="#{loteReg.requerimiento.cantidad}"/>
                         </p:column>
-                         <p:column headerText="Cantidad Unitara" >
+                         <p:column headerText="Cantidad Unitaria" >
                              <p:outputLabel value="#{loteReg.cantUnidad}"/>
                         </p:column>
                         <p:column headerText="Cantidad por U. Medida" >
@@ -819,7 +819,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:outputLabel value="#{compraMB.compraSelect.serie}" />
                     <p:outputLabel value="Correlativo: "/>
                     <p:outputLabel value="#{compraMB.compraSelect.correlativo}"/>
-                    <p:outputLabel value="Almacen: "/>
+                    <p:outputLabel value="Almacén: "/>
                     <p:outputLabel value="#{compraMB.compraSelect.nombreAlmacen}"/>
                     </p:panelGrid>
                     
@@ -869,7 +869,7 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{pedidoMB.listaEmpresaAdd}" var="emp" 
                                            itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:outputLabel value="Almacén: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenAdd}">
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaAlmacenesAdd}" var="alm" 
@@ -899,9 +899,9 @@ jorgeevj 15.09.15 Creacion.
                             <p:outputLabel value="#{tItemsDisp.precioLista}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Agregar Item" actionListener="#{pedidoMB.agregarTipoItem}" disabled="#{pedidoMB.disableAgregarItemAdd}" update="msjAgregar"/>
+                    <p:commandButton value="Agregar Ítem" actionListener="#{pedidoMB.agregarTipoItem}" disabled="#{pedidoMB.disableAgregarItemAdd}" update="msjAgregar"/>
                 </h:form>
-                <p:outputLabel value="Items Seleccionados "></p:outputLabel>
+                <p:outputLabel value="Ítems Seleccionados "></p:outputLabel>
                 <h:form id="formTbSelec">
                     <p:growl showDetail="true" sticky="true" id="msjQuitar"></p:growl>
                     <p:dataTable tableStyleClass="table table-hover"  id="tabItemsSelected" value="#{pedidoMB.listaItemsSeleccionado}" var="tItemsSelec" 
@@ -920,7 +920,7 @@ jorgeevj 15.09.15 Creacion.
                             <p:outputLabel value="#{tItemsSelec.cantidad}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarTipoItem}" disabled="#{pedidoMB.disableQuitarItemAdd}" update="msjQuitar"/>
+                    <p:commandButton value="Quitar Ítem" actionListener="#{pedidoMB.quitarTipoItem}" disabled="#{pedidoMB.disableQuitarItemAdd}" update="msjQuitar"/>
                 </h:form>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('addItemsPedidosModal').hide();"/>
@@ -951,7 +951,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:inputText   value="#{pedidoMB.serieEdit}" disabled="true"/>
                         <p:outputLabel value="Correlativo: "></p:outputLabel>
                         <p:inputText   value="#{pedidoMB.correlativEdit}" disabled="true"/>
-                        <p:outputLabel value="Almacen: "></p:outputLabel>
+                        <p:outputLabel value="Almacén: "></p:outputLabel>
                         <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenEdit}" disabled="true" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaAlmacenesEdit}" var="alm" 
@@ -994,7 +994,7 @@ jorgeevj 15.09.15 Creacion.
                             </p:cellEditor>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Quitar Item" actionListener="#{pedidoMB.quitarPealTipoItem}" disabled="#{pedidoMB.disableQuitarItemEdit}"/>
+                    <p:commandButton value="Quitar Ítem" actionListener="#{pedidoMB.quitarPealTipoItem}" disabled="#{pedidoMB.disableQuitarItemEdit}"/>
                 </h:form>
                 <br/><br/><br/>
                 <p:commandButton value="Aceptar" onclick="PF('verItemsEdit').hide();"/>
@@ -1006,7 +1006,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:dataTable tableStyleClass="table table-hover"  id="tabAllItemsPedido" value="#{pedidoMB.listaAllItemsPedido}" var="tItemsPedido" 
                                  editable="true" editMode="cell"
                                  selectionMode="single" selection="#{pedidoMB.objPealTipoEdit}" rowKey="#{tItemsPedido.cantidad}">
-                        <p:column headerText="Item" style="text-align: center">
+                        <p:column headerText="Ítem" style="text-align: center">
                             <p:outputLabel value="#{tItemsPedido.nombreItems}"/>
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: center">
@@ -1029,17 +1029,17 @@ jorgeevj 15.09.15 Creacion.
 
 
         <!-- DIALOG DE TIPOITEM-->
-        <p:dialog header="Registrar Item" widgetVar="registrarItem" minHeight="40" height="500" width="880" modal="true">
+        <p:dialog header="Registrar Ítem" widgetVar="registrarItem" minHeight="40" height="500" width="880" modal="true">
 
 
                 <h:form id="formRegistrar">
 
                     <h:panelGrid columns="4"  id="panelRegistrarItem">
 
-                        <p:outputLabel value="Cod. Item:" for="codigoItem"/>                            
+                        <p:outputLabel value="Cod. Ítem:" for="codigoItem"/>                            
                         <p:inputText id="codigoItem" value="#{tipoitemMB.codigoItem}"/>
 
-                        <p:outputLabel value="Nombre Item:" for="nombreItem"/>                            
+                        <p:outputLabel value="Nombre Ítem:" for="nombreItem"/>                            
                         <p:inputText id="nombreItem" value="#{tipoitemMB.nombre}"/>
 
                         <p:outputLabel value="Num. Parte:" for="numParteItem"/>                            
@@ -1080,13 +1080,17 @@ jorgeevj 15.09.15 Creacion.
                         <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
                                        itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
                     </p:selectOneMenu>
+                    <p:commandButton value="Crear marca"  actionListener="#{tipoitemMB.registrarMarca}" />
+                    
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" >
                     <p:outputLabel value="Color:" for="colorItem"/>                            
-                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" style="width:96%" >
+                    <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.colorSelect}" style="width:100%" >
                         <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
                                        itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
                     </p:selectOneMenu>
-
                     </h:panelGrid>
                     <br/>
                     <br/>
@@ -1099,6 +1103,7 @@ jorgeevj 15.09.15 Creacion.
                         <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
                                        itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
                     </p:selectOneMenu>
+                    <p:commandButton value="Crear característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
                 
                 <p:commandButton value="Agregar" actionListener="#{tipoitemMB.listarTablaCaracteristicas}" update="formRegistrar:panel2,tabla2"/> 
                 <p:commandButton value="Quitar" id="btnQuitarCaracteristicaR" actionListener="#{tipoitemMB.quitarElementosTablaCaracteristicas}" 
@@ -1114,15 +1119,15 @@ jorgeevj 15.09.15 Creacion.
                     <p:column headerText="Nombre">
                         <h:outputText value="#{tite.nombre}" />
                     </p:column> 
-                    <p:column headerText="Descripcion">
+                    <p:column headerText="Descripción">
                         <h:outputText value="#{tite.descripcion}" />
                     </p:column> 
                 </p:dataTable>
 
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 
-                <p:commandButton value="Crear una característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
-                <p:commandButton value="Crear una marca"  actionListener="#{tipoitemMB.registrarMarca}" />
+                
+                
 
                 
                 <br/>
@@ -1130,7 +1135,7 @@ jorgeevj 15.09.15 Creacion.
                 <h:panelGrid columns="2"  >
 
 
-                    <p:commandButton  value="Registrar nuevo Item" actionListener="#{tipoitemMB.registrarNuevoTipoItem}" />
+                    <p:commandButton  value="Registrar nuevo Ítem" actionListener="#{tipoitemMB.registrarNuevoTipoItem}" />
                 <p:commandButton  value="Cancelar" update="formRegistrar:panelRegistrarItem" onclick="PF('registrarItem').hide();" />
                 </h:panelGrid>
 
@@ -1225,7 +1230,7 @@ jorgeevj 15.09.15 Creacion.
             <!-- MODIFICAR TIPOITEM -->
 
 
-            <p:dialog header="Modificar Item" widgetVar="modificarItem" minHeight="40" height="500" width="1300" modal="true">
+            <p:dialog header="Modificar Ítem" widgetVar="modificarItem" minHeight="40" height="500" width="1300" modal="true">
 
 
 
@@ -1248,7 +1253,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:inputText id="descripcionItem" value="#{tipoitemMB.tipoItemSelect.descipcion}"/>
 
                         <p:outputLabel value="Tipo" for="tipoItem"/>                            
-                        <p:inputText id="tipoItem" value="#{tipoitemMB.tipoItemSelect.tipo}"/>
+                        <p:inputText id="tipoItem" value="#{tipoitemMB.tipoItemSelect.tipo}" disabled="true"/>
 
                         <p:outputLabel value="Precio:" for="precioItem"/>                            
                         <p:inputText id="precioItem" value="#{tipoitemMB.tipoItemSelect.precioLista}"/>
@@ -1264,12 +1269,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:inputText id="dsctDistribuidorItem" value="#{tipoitemMB.tipoItemSelect.desDistribuidor}"/>
 
 
-                    <p:outputLabel value="Marca:" for="marcaItem"/>                            
-                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.marca.idmarca}" >
-                        <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
-                        <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
-                                       itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
-                    </p:selectOneMenu>
+                    
                     
                         <p:outputLabel value="Familia:" for="familiaItem"/>                            
                     <p:selectOneMenu id="familiaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.familia.idfamilia}" style="width:90%" >
@@ -1288,12 +1288,21 @@ jorgeevj 15.09.15 Creacion.
 
 
                     
+                    
                     <p:outputLabel value="Color:" for="colorItem"/>                            
                     <p:selectOneMenu id="colorItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.color.idcolor}" >
                         <f:selectItem itemLabel="Seleccione color..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaColor}" var="nomColor" 
                                        itemValue="#{nomColor.idcolor}" itemLabel="#{nomColor.nombre}"/>
                     </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Marca:" for="marcaItem"/>                            
+                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.tipoItemSelect.marca.idmarca}" >
+                        <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
+                        <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
+                                       itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="Crear marca"  actionListener="#{tipoitemMB.registrarMarcaMod}" />
 
                     <br/>
                     <br/>
@@ -1305,6 +1314,7 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{tipoitemMB.listaCaracteristicas}" var="nomCaracteristica" 
                                            itemValue="#{nomCaracteristica.idcaracteristica}" itemLabel="#{nomCaracteristica.nombre}"/>
                         </p:selectOneMenu>
+                        <p:commandButton value="Crear característica"  actionListener="#{tipoitemMB.registrarCaracteristicaMod}" />
 
 
                     
@@ -1331,8 +1341,8 @@ jorgeevj 15.09.15 Creacion.
 
                    
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <p:commandButton value="Crear una característica"  actionListener="#{tipoitemMB.registrarCaracteristicaMod}" />
-                    <p:commandButton value="Crear una marca"  actionListener="#{tipoitemMB.registrarMarcaMod}" />
+                    
+                    
                     <br/>
                     <br/>
                     <h:panelGrid columns="2" >
@@ -1539,7 +1549,7 @@ jorgeevj 15.09.15 Creacion.
                 <p:column headerText="Operador" >
                     <h:outputText value="#{tel.operador}" />
                 </p:column>
-                <p:column headerText="Numero">
+                <p:column headerText="Número">
                     <h:outputText value="#{tel.numero}" />
                 </p:column>
                 <p:column headerText="Tipo">
@@ -1627,7 +1637,7 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Agregar Telefono" widgetVar="dlSelectTelefono" modal="true" rendered="true" >
+            <p:dialog header="Agregar Teléfono" widgetVar="dlSelectTelefono" modal="true" rendered="true" >
                 <h:form id="formSelectTel">
                      <p:growl showDetail="true" sticky="true" id="msnTelefono"/>
                     <p:panelGrid columns="2" styleClass="hideborder">
@@ -1664,7 +1674,7 @@ jorgeevj 15.09.15 Creacion.
                     <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
                         <p:inputText id="nomAlmacen" value="#{almacenMB.nombre}" />
-                        <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
+                        <p:outputLabel value="Teléfono:" for="teleAlmacen"/>                            
                         <p:inputText id="teleAlmacen" value="#{almacenMB.telefono}" />
                         <p:outputLabel value="Dirección:" for="dirAlmacen"/>                            
                         <p:inputText id="dirAlmacen" value="#{almacenMB.direccion}" />
@@ -1866,7 +1876,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:dataTable id="tabTelefPersAdd" var="telfPers" value="#{personasMB.listaTelefPersAdd}"
                                      selectionMode="single" rowKey="#{telfPers.numero}">
                             <p:ajax event="rowSelect" listener="#{personasMB.selectTelefPersAdd}"></p:ajax>
-                            <p:column headerText="Numero">
+                            <p:column headerText="Número">
                                 <h:outputText value="#{telfPers.numero}" />
                             </p:column>
                             <p:column headerText="Operador">
