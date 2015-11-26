@@ -34,6 +34,7 @@ public class almacenMB {
     private AlmacenBO almacenBO;
     @EJB
     private UbigeoBO ubigeoBO;
+    
     private String idAlmancen;
     private String nombre;
     private String telefono;
