@@ -382,6 +382,7 @@ public class tipoitemMB {
             //comentamos este metodo---> registrarTipoItemXCaracteristica();
             RequestContext context = RequestContext.getCurrentInstance();   
             context.execute("PF('registrarItem').hide();");
+            setLista(tipoItemBO.getAllTipoItem());
             
             btnQuitarEstado = true;
         }
@@ -466,6 +467,7 @@ public class tipoitemMB {
         RequestContext context = RequestContext.getCurrentInstance();   
         context.execute("PF('modificarItem').hide();");
         btnQuitarEstado = true;
+        setLista(tipoItemBO.getAllTipoItem());
         }
     }
     
