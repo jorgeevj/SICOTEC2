@@ -1025,11 +1025,9 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Num. Parte:" for="numParteItem"/>                            
                         <p:inputText id="numParteItem" value="#{tipoitemMB.numParte}"/>
 
-                        <p:outputLabel value="Descripcion:" for="descripcionItem"/>                            
+                        <p:outputLabel value="Descripción:" for="descripcionItem"/>                            
                         <p:inputText id="descripcionItem" value="#{tipoitemMB.descripcion}"/>
 
-                        <p:outputLabel value="Tipo" for="tipoItem"/>                            
-                        <p:inputText id="tipoItem" value="#{tipoitemMB.tipo}"/>
 
                         <p:outputLabel value="Precio:" for="precioItem"/>                            
                         <p:inputText id="precioItem" value="#{tipoitemMB.precio}"/>
@@ -1103,8 +1101,8 @@ jorgeevj 15.09.15 Creacion.
 
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 
-                <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
-                <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarca}" />
+                <p:commandButton value="Crear una característica"  actionListener="#{tipoitemMB.registrarCaracteristica}"/>
+                <p:commandButton value="Crear una marca"  actionListener="#{tipoitemMB.registrarMarca}" />
 
                 
                 <br/>
@@ -1129,7 +1127,7 @@ jorgeevj 15.09.15 Creacion.
 
                         <p:outputLabel value="Nombre:" for="nombreCaracteristica"/>                            
                         <p:inputText id="nombreCaracteristica" value="#{tipoitemMB.nombreCaracteristica}"/>  
-                        <p:outputLabel value="Descripcion:" for="descripCaracteristica"/>                            
+                        <p:outputLabel value="Descripción:" for="descripCaracteristica"/>                            
                         <p:inputText id="descripCaracteristica" value="#{tipoitemMB.descripcionCaracteristica}"/>  
                     <p:messages id="messages2" showDetail="true" autoUpdate="true" closable="true" />
 
@@ -1226,7 +1224,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Num. Parte:" for="numParteItem"/>                            
                         <p:inputText id="numParteItem" value="#{tipoitemMB.tipoItemSelect.numParte}"/>
 
-                        <p:outputLabel value="Descripcion:" for="descripcionItem"/>                            
+                        <p:outputLabel value="Descripción:" for="descripcionItem"/>                            
                         <p:inputText id="descripcionItem" value="#{tipoitemMB.tipoItemSelect.descipcion}"/>
 
                         <p:outputLabel value="Tipo" for="tipoItem"/>                            
@@ -1305,7 +1303,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Nombre">
                             <h:outputText value="#{titee.nombre}"/>
                         </p:column>
-                        <p:column headerText="Descripcion">
+                        <p:column headerText="Descripción">
                             <h:outputText value="#{titee.descripcion}"/>
                         </p:column>
                         
@@ -1313,8 +1311,8 @@ jorgeevj 15.09.15 Creacion.
 
                    
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <p:commandButton value="Crear una nueva característica"  actionListener="#{tipoitemMB.registrarCaracteristicaMod}" />
-                    <p:commandButton value="Crear una nueva marca"  actionListener="#{tipoitemMB.registrarMarcaMod}" />
+                    <p:commandButton value="Crear una característica"  actionListener="#{tipoitemMB.registrarCaracteristicaMod}" />
+                    <p:commandButton value="Crear una marca"  actionListener="#{tipoitemMB.registrarMarcaMod}" />
                     <br/>
                     <br/>
                     <h:panelGrid columns="2" >
@@ -1386,10 +1384,10 @@ jorgeevj 15.09.15 Creacion.
                 <f:facet name="header">
                     Lista de Ubicaciones
                 </f:facet>
-                <p:column headerText="Direccion" >
+                <p:column headerText="Dirección" >
                     <h:outputText value="#{ub.nombre}" />
                 </p:column>
-                <p:column headerText="Numero">
+                <p:column headerText="Número">
                     <h:outputText value="#{ub.numero}" />
                 </p:column>
                 <p:column headerText="Distrito">
@@ -1408,7 +1406,7 @@ jorgeevj 15.09.15 Creacion.
                                      actionListener="#{empresaMB.btnQuitTelReg}" />
                     <p:dataTable id="tabTelEmp" var="tel" value="#{empresaMB.listaTelEmp}"
                                  selectionMode="single" rowKey="#{tel.idtelefono}" 
-                                 selection="#{empresaMB.telEmpSelectDTO}" emptyMessage="Agrege Telefonos"
+                                 selection="#{empresaMB.telEmpSelectDTO}" emptyMessage="Agrege Teléfonos"
                          scrollable="true" scrollHeight="75">
                 <f:facet name="header">
                     Lista de Telefonos
@@ -1416,7 +1414,7 @@ jorgeevj 15.09.15 Creacion.
                 <p:column headerText="Operador" >
                     <h:outputText value="#{tel.operador}" />
                 </p:column>
-                <p:column headerText="Numero">
+                <p:column headerText="Número">
                     <h:outputText value="#{tel.numero}" />
                 </p:column>
                 <p:column headerText="Tipo">
@@ -1490,10 +1488,10 @@ jorgeevj 15.09.15 Creacion.
                 <f:facet name="header">
                     Lista de Ubicaciones
                 </f:facet>
-                <p:column headerText="Direccion" >
+                <p:column headerText="Dirección" >
                     <h:outputText value="#{ub.nombre}" />
                 </p:column>
-                <p:column headerText="Numero">
+                <p:column headerText="Número">
                     <h:outputText value="#{ub.numero}" />
                 </p:column>
                 <p:column headerText="Distrito">
@@ -1572,13 +1570,13 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Agregar Ubicacion" widgetVar="dlSelectUbicacion" modal="true" rendered="true" >
+            <p:dialog header="Agregar Ubicación" widgetVar="dlSelectUbicacion" modal="true" rendered="true" >
                 <h:form id="formSelectUbi">
                     <p:growl showDetail="true" sticky="true" id="msnUbicacion"/>
                     <p:panelGrid columns="2" styleClass="hideborder">
-                    <p:outputLabel value="Direccion: " for="itUb1" />    
+                    <p:outputLabel value="Dirección: " for="itUb1" />    
                     <p:inputText id="itUb1" value="#{empresaMB.ubicEmpAgregar.nombre}" placeholder="Direccion"/>
-                    <p:outputLabel value="Numero: " for="itUb2" />
+                    <p:outputLabel value="Número: " for="itUb2" />
                     <p:inputText id="itUb2" value="#{empresaMB.ubicEmpAgregar.numero}" placeholder="Numero"/>
                     <p:outputLabel value="Departamento: " for="somDptoRegEmp" />
                     <p:selectOneMenu id="somDptoRegEmp" value="#{empresaMB.ubicEmpAgregar.codDept}"
@@ -1628,7 +1626,7 @@ jorgeevj 15.09.15 Creacion.
                              <f:selectItem itemLabel="Fijo" itemValue="Fijo" />
                               <f:selectItem itemLabel="Movil" itemValue="Movil" />
                     </p:selectOneMenu>
-                   <p:outputLabel value="Numero: " for="itTel1" />    
+                   <p:outputLabel value="Número: " for="itTel1" />    
                    <p:inputText id="itTel1" value="#{empresaMB.telEmpAgregaDTO.numero}" placeholder="Ejm. 4467463" maxlength="9">
                    </p:inputText>
                     </p:panelGrid>
@@ -1641,14 +1639,14 @@ jorgeevj 15.09.15 Creacion.
             <!-- FIN DIALOG DE EMPRESAS-->
             
             <!-- INICIO DIALOG DE ALMACENES-->
-            <p:dialog header="Registrar Almacen" widgetVar="registroAlmacen" minHeight="40" height="300" width="500" modal="true">
+            <p:dialog header="Registrar Almacén" widgetVar="registroAlmacen" minHeight="40" height="300" width="500" modal="true">
                 <h:form id="formRegistrarAlmacen">
                     <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
                         <p:inputText id="nomAlmacen" value="#{almacenMB.nombre}" />
                         <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
                         <p:inputText id="teleAlmacen" value="#{almacenMB.telefono}" />
-                        <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
+                        <p:outputLabel value="Dirección:" for="dirAlmacen"/>                            
                         <p:inputText id="dirAlmacen" value="#{almacenMB.direccion}" />
                         <p:outputLabel value="Cod. Departamento:" for="depAlmacen"/>                            
                         <p:selectOneMenu id="depAlmacen" value="#{almacenMB.departamentoSelect}"
@@ -1677,19 +1675,19 @@ jorgeevj 15.09.15 Creacion.
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <br/>
                     <br/>
-                    <p:commandButton value="Registrar Nuevo Almacen"  actionListener="#{almacenMB.registrarNuevoAlmacen}"/> 
+                    <p:commandButton value="Registrar Nuevo Almacén"  actionListener="#{almacenMB.registrarNuevoAlmacen}"/> 
                     <p:commandButton value="Cancelar"  actionListener="#{almacenMB.cancelarRegistro}"/> 
                 </h:form>                
             </p:dialog>
             
-            <p:dialog header="Modificar Almacen" widgetVar="editarAlmacen" minHeight="40" height="300" width="500" modal="true">
+            <p:dialog header="Modificar Almacén" widgetVar="editarAlmacen" minHeight="40" height="300" width="500" modal="true">
                 <h:form id="formEditarAlmacen">
                     <h:panelGrid columns="2" id="panelRegisAlma1">
                         <p:outputLabel value="Nombre:" for="nomAlmacen"/>                            
                         <p:inputText id="nomAlmacen" value="#{almacenMB.almacenSelect.nombre}" />
-                        <p:outputLabel value="Telefono:" for="teleAlmacen"/>                            
+                        <p:outputLabel value="Teléfono:" for="teleAlmacen"/>                            
                         <p:inputText id="teleAlmacen" value="#{almacenMB.almacenSelect.telefono}" />
-                        <p:outputLabel value="Direccion:" for="dirAlmacen"/>                            
+                        <p:outputLabel value="Dirección:" for="dirAlmacen"/>                            
                         <p:inputText id="dirAlmacen" value="#{almacenMB.almacenSelect.direccion}" />
                         <p:outputLabel value="Cod. Departamento:" for="depAlmacen1"/>                            
                         <p:selectOneMenu id="depAlmacen1" value="#{almacenMB.almacenSelect.codDept}"
@@ -1718,7 +1716,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                     <br/>
                     <br/>
-                    <p:commandButton value="Modificar Almacen"  actionListener="#{almacenMB.modificarNuevoAlmacen}" /> 
+                    <p:commandButton value="Modificar Almacén"  actionListener="#{almacenMB.modificarNuevoAlmacen}" /> 
                     <p:commandButton value="Cancelar"  actionListener="#{almacenMB.cancelarModificacion}"/> 
                 </h:form>                
             </p:dialog>
@@ -1839,7 +1837,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:dataTable id="tabUbigeoPersAdd" var="ubigeoAdd" value="#{personasMB.listaUbiPersAdd}"
                                      selectionMode="single" rowKey="#{ubigeoAdd.codDept}">
                             <p:ajax event="rowSelect" listener="#{personasMB.selectUbiPersAdd}"></p:ajax>
-                            <p:column headerText="Direccion">
+                            <p:column headerText="Dirección">
                                 <h:outputText value="#{ubigeoAdd.nombre}"/>
                             </p:column>
                             <p:column headerText="Número">
@@ -1884,7 +1882,7 @@ jorgeevj 15.09.15 Creacion.
                 </h:form>
             </p:dialog>
             
-            <p:dialog header="Agregar Ubicacion" widgetVar="dialogUbicacionPers" modal="true" rendered="true" >
+            <p:dialog header="Agregar Ubicación" widgetVar="dialogUbicacionPers" modal="true" rendered="true" >
                 <h:form id="formSelectUbiPers">
                     <p:growl showDetail="true" sticky="true" id="msjaddUbicacionPers"/>
                     <p:panelGrid columns="2" styleClass="hideborder">
