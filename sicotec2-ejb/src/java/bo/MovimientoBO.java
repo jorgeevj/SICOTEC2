@@ -260,11 +260,7 @@ public class MovimientoBO {
     
     //0 = SUMAR, 1 = RESTAS
     public void updateAlTipoItem(int idAlmacen, String idTipoItem, int tipo, int cantidad){
-        Altipoitem al = new Altipoitem();
-        AltipoitemPK pk = new AltipoitemPK();
-        pk.setIdalmacen(idAlmacen);
-        pk.setIdtipoItem(idTipoItem);
-        Altipoitem al1 = alltipoitemFacede.getAllByTipoItemIdAlmacen(al);
+        Altipoitem al1 = alltipoitemFacede.getAlTipoItemByFiltros(idAlmacen,idTipoItem);
         
         if(tipo == 0){
             al1.setCantidad(al1.getCantidad() + 1);

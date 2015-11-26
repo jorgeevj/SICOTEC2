@@ -100,8 +100,24 @@ public class AltipoitemFacade extends AbstractFacade<Altipoitem> {
                        + "AND   a.altipoitemPK.idtipoItem = '"+ entidadAl.getTipoitem().getIdtipoItem()+"'" ;
             entidad = em.createQuery(jpa,Altipoitem.class).getSingleResult();
         } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return entidad;
+    }
+    
+    public Altipoitem getAlTipoItemByFiltros(int idAlmacen, String idTipoItem){
+        Altipoitem entidad = new Altipoitem();
+        try{
+            String jpa = "SELECT a.* "
+                       + "FROM altipoitem a "
+                       + "WHERE a.idalmacen  = "+ idAlmacen+ " "
+                       + "AND   a.idtipoItem = '"+ idTipoItem+"'" ;
+            
+            entidad = (Altipoitem) em.createNativeQuery(jpa,Altipoitem.class).getSingleResult();
+        }catch(Exception e){
             
         }
+        
         return entidad;
     }
     
