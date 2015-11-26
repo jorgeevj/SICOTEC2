@@ -84,18 +84,17 @@ public class indexMB {
         usuario=usuarioBO.validateLogin(usuario);
       if(usuario.getNombre().equals("")){
             mostrarMensaje("no ha iniciado sesion");
-            
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("msgBienvenida");
           try {
               FacesContext.getCurrentInstance().getExternalContext().redirect("faces/index.xhtml");
-              RequestContext context = RequestContext.getCurrentInstance();
-                context.update("msgBienvenida");
+             
           } catch (IOException ex) {
               Logger.getLogger(indexMB.class.getName()).log(Level.SEVERE, null, ex);
           }
         }    
-            mostrarMensaje(usuario.getIdrol().getNombre()+": " + usuario.getNombre());
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.update("msgBienvenida");
+            
+            
             
     }
     

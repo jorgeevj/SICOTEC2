@@ -28,6 +28,8 @@ jorgeevj 15.09.15 Creacion.
 
                 <p:layoutUnit position="north" size="142" resizable="true" closable="true" collapsible="true">
                     <img src="../imagenes/barralogotiposervacom.png" alt=""/>
+                    <p:outputLabel value="#{indexMB.usuario.idrol.nombre}" />:
+                    <p:outputLabel value="#{indexMB.usuario.nombre}" />
                 </p:layoutUnit>
 
                 <p:layoutUnit position="west" size="175" header="SICOTEC" collapsible="true" >
@@ -42,7 +44,6 @@ jorgeevj 15.09.15 Creacion.
                 <p:layoutUnit position="center">
                     <ui:insert name="body" >
                         Bienvenido a SICOTEC
-                        <p:growl showDetail="true" id="msgBienvenida" sticky="true"/>
                     </ui:insert>
                         
                 </p:layoutUnit>
