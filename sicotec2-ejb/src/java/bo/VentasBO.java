@@ -149,6 +149,7 @@ public class VentasBO {
         DTO.setNombreAlmacen(almacenFacade.getAlmacenById(venta.getIdalmacen()).getNombre());
         DTO.setIdUsuario(venta.getIdusuario());
         DTO.setNombreUsuario(venta.getNombreusuario());
+        DTO.setSubTotal(venta.getSubtotal());
         //PUEDE SER QUE SE CAIGA
         DTO.setIdImpuesto(venta.getIdimpuesto().getIdimpuesto());
         
@@ -223,6 +224,7 @@ public class VentasBO {
         entidad.setIdalmacen(dto.getIdalmacen());
         entidad.setIdusuario(dto.getIdUsuario());
         entidad.setNombreusuario(dto.getNombreUsuario());
+        entidad.setSubtotal(dto.getSubTotal());
         
         return entidad;
     }
