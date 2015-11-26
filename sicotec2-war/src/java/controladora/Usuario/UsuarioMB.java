@@ -200,7 +200,12 @@ public class UsuarioMB implements Serializable{
          setNombreEdit(getObjUsuarioEditar().getNombre());
          setClaveEdit(getObjUsuarioEditar().getClave());
          setFechaEdit(getObjUsuarioEditar().getFecha());
-        
+         for(PersonaDTO dto:listaPersonaEdit){
+             if((int)dto.getIdpersona()==objUsuarioEditar.getIdpersona().getIdpersona()){
+             personaTablaSelect=dto;
+             break;
+             }
+         }
         RequestContext context = RequestContext.getCurrentInstance(); 
         context.update("formEditUsuario");
         context.execute("PF('editUsuarioModal').show();");
