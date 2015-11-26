@@ -1770,17 +1770,31 @@ jorgeevj 15.09.15 Creacion.
                                              itemValue="#{usu.idrol}" itemLabel="#{usu.nombre}"/>    
                         </p:selectOneMenu>
                         
-                        <p:outputLabel value="Persona "></p:outputLabel>
-                        <p:selectOneMenu id="personaUsuario" styleClass="browser-default" value="#{usuarioMB.idpersonaNuevo}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
-                            <f:selectItems   value="#{usuarioMB.listaPersonaAdd}"  var="usu" 
-                                             itemValue="#{usu.idpersona}" itemLabel="#{usu.nombre}"/>    
-                        </p:selectOneMenu>
+                        <p:outputLabel value="Seleccione una persona: "></p:outputLabel>
+                        
+                        <p:dataTable id="tablaPersonas" value="#{usuarioMB.listaPersonaAdd}" var="per" selectionMode="single" 
+                                     rowKey="#{per.idpersona}" 
+                             scrollable="true" rows="5" selection="#{usuarioMB.personaTablaSelect}"> 
+                            <p:ajax event="rowSelect" listener="#{usuarioMB.onRowSelectPersona}" update="formAddUsuario:regisPersona" />
+                        <f:facet name="header">
+                            Lista de Personas
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{per.nombre}" />
+                        </p:column> 
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{per.apellido}" />
+                        </p:column> 
+                        <p:column headerText="DNI">
+                            <h:outputText value="#{per.dni}" />
+                        </p:column>
+                        </p:dataTable>
+                        
                
                     </p:panelGrid>
                     
                     <br/><br/>
-                    <p:commandButton value="Agregar" actionListener="#{usuarioMB.addNuevoUsuario}" update="msnRegistrar"/>
+                    <p:commandButton value="Agregar" id="regisPersona" actionListener="#{usuarioMB.addNuevoUsuario}" disabled="#{usuarioMB.btnRegistrarEstado}" update="msnRegistrar"/>
                 </h:form>
             </p:dialog> 
             
@@ -1801,12 +1815,26 @@ jorgeevj 15.09.15 Creacion.
                                              itemValue="#{usu.idrol}" itemLabel="#{usu.nombre}"/>    
                         </p:selectOneMenu>
                         
-                        <p:outputLabel value="Persona "></p:outputLabel>
-                        <p:selectOneMenu id="personaUsuario" styleClass="browser-default" value="#{usuarioMB.personasEdit}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="0" />
-                            <f:selectItems   value="#{usuarioMB.listaPersonaEdit}"  var="usu" 
-                                             itemValue="#{usu.idpersona}" itemLabel="#{usu.nombre}"/>    
-                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Seleccione una persona: "></p:outputLabel>
+                        
+                        <p:dataTable id="tablaPersonas" value="#{usuarioMB.listaPersonaEdit}" var="per1" selectionMode="single" 
+                                     rowKey="#{per1.idpersona}" 
+                                     scrollable="true" rows="5" selection="#{usuarioMB.personaTablaSelect}"> 
+                            <p:ajax event="rowSelect" listener="#{usuarioMB.onRowSelectPersona}" />
+                        <f:facet name="header">
+                            Lista de Personas
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{per1.nombre}" />
+                        </p:column> 
+                        <p:column headerText="Apellido">
+                            <h:outputText value="#{per1.apellido}" />
+                        </p:column> 
+                        <p:column headerText="DNI">
+                            <h:outputText value="#{per1.dni}" />
+                        </p:column>
+                        </p:dataTable>
                         
                     </h:panelGrid>
                     <p:commandButton value="Editar" actionListener="#{usuarioMB.editarUsuario}" update="msnEditar"/>
