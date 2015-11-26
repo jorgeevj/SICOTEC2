@@ -182,8 +182,7 @@ public class tipoitemMB {
         
         else if(getDsctoDistribuidor() < 0.0)
             msjError="el dscto Distribuidor no puede ser negativo";
-        else if(getTipo().equals("") || getTipo()==null)
-            msjError="Ingrese un Tipo";
+        
         
                                  
           return msjError;  
@@ -217,9 +216,6 @@ public class tipoitemMB {
             msjError="Ingrese un dscto Distribuidor";
         else if(tipoItemSelect.getDesDistribuidor() < 0.0 )
             msjError="El dscto Distribuidor no puede ser negativo";
-        
-        else if(tipoItemSelect.getTipo().equals("") || tipoItemSelect.getTipo().equals(null))
-            msjError="Ingrese un Tipo";
         else
         {
             try{ double precio=tipoItemSelect.getPrecioLista(); }catch(Exception e){ msjError="Precio debe ser numerico";}
@@ -367,7 +363,7 @@ public class tipoitemMB {
             objTipoItem.setNumParte(numParte);
             objTipoItem.setNombre(nombre);
             objTipoItem.setDescipcion(descripcion);
-            objTipoItem.setTipo(tipo);
+            objTipoItem.setTipo("0");
             objTipoItem.setPrecioLista(Double.parseDouble(precio));
             objTipoItem.setDesCliente(dsctoCliente);
             objTipoItem.setDesDistribuidor(dsctoDistribuidor);
