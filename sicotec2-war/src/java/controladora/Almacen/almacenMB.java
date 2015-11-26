@@ -111,9 +111,9 @@ public class almacenMB {
         AlmacenDTO lis= new AlmacenDTO();
         lis.setNombre(nombre);
         lis.setDireccion(direccion);
-        lis.setCodDept(cod_dept);
-        lis.setCodDist(cod_dist);
-        lis.setCodProv(cod_prov);
+        lis.setCodDept(departamentoSelect);
+        lis.setCodDist(distritoSelect);
+        lis.setCodProv(provinciaSelect);
         lista=almacenBO.buscarAlmacen(lis);
     }
     
