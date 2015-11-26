@@ -5,12 +5,23 @@
  */
 package controladora.inicio;
 
+import bo.PermisoBO;
+import bo.UsuarioBO;
+import dto.PermisoDTO;
+import dto.UsuarioDTO;
 import entidades.Permiso;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -19,87 +30,100 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class indexMB {
+    @EJB
+    private PermisoBO permisoBO;
+    @EJB
+    private UsuarioBO usuarioBO;
 
+    private UsuarioDTO usuario;
     /**
      * Creates a new instance of indexMB
      */
     public indexMB() {
     }
-    @PostConstruct
-     public void init(){
-       permisos=listaPermiso();  
-     }
-     private List<Permiso> permisos;
-    public List<Permiso> listaPermiso(){
-        permisos=new ArrayList<>();
-        Permiso p=new Permiso();
-        p.setIdpermiso(1);
-        p.setNombre("Cotizaciones");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/cotizacion/CotizacionJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(2);
-        p.setNombre("Compra");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/compra/CompraJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(3);
-        p.setNombre("Movimientos");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/movimiento/MovimientoJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(4);
-        p.setNombre("Pedidos");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/pedido/PedidoJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(5);
-        p.setNombre("Items");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/tipoItem/TipoItemJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(6);
-        p.setNombre("Personas");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/personas/PersonasJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(7);
-        p.setNombre("Usuarios");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/usuario/UsuarioJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(8);
-        p.setNombre("Empresas");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/empresa/EmpresaJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(9);
-        p.setNombre("Almacen");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/almacen/AlmacenJSF.xhtml");
-        permisos.add(p);
-        
-        p=new Permiso();
-        p.setIdpermiso(10);
-        p.setNombre("Ventas");
-        p.setUrl("http://localhost:8080/sicotec2-war/faces/venta/VentaJSF.xhtml");
-        permisos.add(p);
-   return permisos;
-   }
 
-    public List<Permiso> getPermisos() {
+    @PostConstruct
+    public void init() {
+        usuario=new UsuarioDTO();
+        permisos=new ArrayList<>();
+    }
+    private List<PermisoDTO> permisos;
+
+    public void validarUsuario() {
+        
+        if(usuario.getNombre().isEmpty()||usuario.getNombre()==null){
+            mostrarMensaje("Debes ingresar un nombre de usuario");
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formsesion:messagesSession");
+            return;
+        }
+        if(usuario.getClave().isEmpty()||usuario.getClave()==null){
+            mostrarMensaje("Debes ingresar una Clave");
+            RequestContext context = RequestContext.getCurrentInstance();
+                context.update("formsesion:messagesSession");
+            return;
+        }
+        if(usuarioBO.validateLogin(usuario).getNombre()==null){
+            mostrarMensaje("El usuario no existe");
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("formsesion:messagesSession");
+            return;
+        }
+        try {
+            usuario=usuarioBO.validateLogin(usuario);
+            permisos=permisoBO.getPermisosByRol(usuario.getIdRol());
+            FacesContext.getCurrentInstance().getExternalContext().redirect("faces/PrincipalJSF.xhtml");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(indexMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void verificaSession(){
+        usuario=usuarioBO.validateLogin(usuario);
+      if(usuario.getNombre().equals("")){
+            mostrarMensaje("no ha iniciado sesion");
+            
+          try {
+              FacesContext.getCurrentInstance().getExternalContext().redirect("faces/index.xhtml");
+              RequestContext context = RequestContext.getCurrentInstance();
+                context.update("msgBienvenida");
+          } catch (IOException ex) {
+              Logger.getLogger(indexMB.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }    
+            mostrarMensaje(usuario.getIdrol().getNombre()+": " + usuario.getNombre());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.update("msgBienvenida");
+            
+    }
+    
+    public void mostrarMensaje(String msg){
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, msg, ""));
+    }
+    
+    public void salir(){
+        usuario=new UsuarioDTO();
+    RequestContext context = RequestContext.getCurrentInstance();
+    context.update("formsesion");
+    }
+    
+
+    public UsuarioDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<PermisoDTO> getPermisos() {
         return permisos;
     }
 
-    public void setPermisos(List<Permiso> permisos) {
+    public void setPermisos(List<PermisoDTO> permisos) {
         this.permisos = permisos;
     }
-    
+
 }

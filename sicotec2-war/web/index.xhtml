@@ -1,15 +1,32 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="PrincipalJSF" value="ir a principal" />
-        
+        <div align="center" > 
+        <p:panel header="Login" style="width:400px">
+            <h:form id="formsesion">
+                    
+                <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="username" value="Username:" />
+                <p:inputText id="username" value="#{indexMB.usuario.nombre}" required="true" label="username" />
+
+                <h:outputLabel for="password" value="Password:" />
+                <p:password id="password" value="#{indexMB.usuario.clave}" required="true" label="password" />
+                  
+                <f:facet name="footer">
+                    <p:commandButton value="Login"  update="messagesSession" actionListener="#{indexMB.validarUsuario}"/>
+                </f:facet>  
+            </h:panelGrid>
+                <p:messages id="messagesSession" showDetail="true"/>
+            </h:form>
+        </p:panel>
+       </div> 
     </h:body>
 </html>
 

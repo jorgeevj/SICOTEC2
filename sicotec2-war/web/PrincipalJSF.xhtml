@@ -22,7 +22,8 @@ jorgeevj 15.09.15 Creacion.
         </h:head>
 
         <h:body>
-
+            #{indexMB.verificaSession()}
+           
             <p:layout fullPage="true" >
 
                 <p:layoutUnit position="north" size="142" resizable="true" closable="true" collapsible="true">
@@ -34,25 +35,27 @@ jorgeevj 15.09.15 Creacion.
                         <c:forEach var="permiso" items="#{indexMB.permisos}">
                             <p:menuitem value="#{permiso.nombre}" url="#{permiso.url}" style="background-color: background"/>
                         </c:forEach>
+                        <p:menuitem value="Salir" url="faces/index.xhtml" actionListener="#{indexMB.salir}" style="background-color: background"/>
                     </p:menu>
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
                     <ui:insert name="body" >
                         Bienvenido a SICOTEC
-
+                        <p:growl showDetail="true" id="msgBienvenida" sticky="true"/>
                     </ui:insert>
-
+                        
                 </p:layoutUnit>
 
                 
             </p:layout>
 
-
+            
             <!-- DIALOG DE COTIZACIONES-->
             <p:dialog header="REGISTRAR COTIZACION" widgetVar="regCot" modal="true" rendered="true" height="450">
 
                 <h:form id="formRegCot" >
+                    
                     <p:panelGrid id="pGridRegCot" columns="4" styleClass="hideborder">
                         <p:outputLabel value="Duracion/Dias:" for="itrc2" />
                         <p:inputText id="itrc2" value="#{cotizacionMB.camposCrear.duracion}" maxlength="2"
@@ -549,8 +552,24 @@ jorgeevj 15.09.15 Creacion.
                         <p:column headerText="Sub. Total" >
                             <h:outputText value="#{coitem.cantidad*coitem.precio}" />
                         </p:column>
+                        <f:facet name="footer" >
+                            <p:panelGrid>
+                                <p:row>
+                                    <p:column style="text-align: right" >
+                                        Total $ 
+                                    </p:column>
+                                    <p:column style="width:161px;text-align: center">
+                                        #{cotizacionMB.totalAprovado()}
+                                    </p:column>   
+                                </p:row>
 
+                            </p:panelGrid>
+                        </f:facet>
                     </p:dataTable>  
+                    <p:messages id="messagesVer" showDetail="true" closable="true" />
+                    <p:commandButton id="btnAprobadaver" value="Aprobada" 
+                                         actionListener="#{cotizacionMB.aprobarEdit}" 
+                                         update="formAproEdit:AproEdit,messagesVer"/> 
                 </h:form>
             </p:dialog>   
 

@@ -367,6 +367,9 @@ public class CotizacionMB {
     }
 
     public void aprobarEdit(ActionEvent actionEvent) {
+        if(cotizacionSelec.getEstado()==2){
+        listaCoItemSelect=listaCotipoItem;
+        }
         if (listaCoItemSelect.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha Seleccionado ningun Item", ""));
             return;
@@ -434,7 +437,9 @@ public class CotizacionMB {
 
     public void ver(ActionEvent actionEvent) {
         listaCotipoItem = cotizacionBO.getListCotipoitemByidCot(cotizacionSelec.getIdcotizacion());
-
+        if(cotizacionSelec.getEstado()==2){
+        listaCoItemSelect=listaCotipoItem;
+        }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('verCotizacion').show();");
 //        context.update("formVerCot");
