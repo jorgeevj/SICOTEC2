@@ -5,7 +5,10 @@
  */
 package dto;
 
+import entidades.Telefpersona;
+import entidades.Ubipers;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -17,6 +20,9 @@ public class PersonaDTO {
      private String apellido;
      private String dni;
      private String email;
+     
+     private List<Ubipers> ubipersList;
+     private List<Telefpersona> telefpersonaList;
 
     public PersonaDTO() {
     }
@@ -68,7 +74,20 @@ public class PersonaDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-     
-     
-    
+
+    public List<Ubipers> getUbipersList() {
+        return ubipersList;
+    }
+
+    public void setUbipersList(List<Ubipers> ubipersList) {
+        this.ubipersList = ubipersList;
+    }
+
+    public List<Telefpersona> getTelefpersonaList() {
+        return telefpersonaList;
+    }
+
+    public void setTelefpersonaList(List<Telefpersona> telefpersonaList) {
+        this.telefpersonaList = telefpersonaList;
+    }
 }

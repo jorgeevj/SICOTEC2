@@ -50,6 +50,13 @@ public class PersonasMB {
     private List<Ubigeo> listProvinciaAdd;
     private List<Ubigeo> listDistritosAdd;
     
+    //EDIT
+    private List<TelefpersDTO> listaTelefPersEdit;
+    private List<UbipersDTO> listaUbiPersEdit;
+    private List<Ubigeo> listDepartamentosEdit;
+    private List<Ubigeo> listProvinciaEdit;
+    private List<Ubigeo> listDistritosEdit;
+    
     //BUSCAR
     private String nombreBuscar;
     private String apellidoBuscar;
@@ -71,6 +78,23 @@ public class PersonasMB {
     private String numeroTelefAdd;
     private String tipoTelefAdd;
     private String operadorTelefAdd;
+    
+    //EDIT
+    private String nombreEdit;
+    private String apellidoEdit;
+    private String dniEdit;
+    private String emailEdit;
+    //UBICACION EDIT
+    private String codProvinciaEdit;
+    private String codDepartamentoEdit;
+    private String codDistritoEdit;
+    private String numeroUbicEdit;
+    private String nombreUbicEdit;
+    private UbipersDTO ubiPersDTOEDIT;
+    //TELEFONO EDIT
+    private String numeroTelefEdit;
+    private String tipoTelefEdit;
+    private String operadorTelefEdit;
     
     @PostConstruct
     public void init(){
@@ -288,7 +312,7 @@ public class PersonasMB {
                 msj = "Debe ingresar un numero";
             }
         }
-        if(getCodDistritoAdd() == null || getCodDistritoAdd().equals("")){
+        if(getCodDistritoAdd() == null || getCodDistritoAdd().equals( "")){
             msj = "Debe seleccionar un distrito";
         }
         if(getCodProvinciaAdd() == null || getCodProvinciaAdd().equals("")){
@@ -367,6 +391,19 @@ public class PersonasMB {
             }
         }
         return true;
+    }
+    
+    public void abrirModalEditPedido(ActionEvent actionEvent){
+        setNombreEdit(getPersonaDTOSelect().getNombre());
+        setApellidoEdit(getPersonaDTOSelect().getApellido());
+        setDniEdit(getPersonaDTOSelect().getDni());
+        setEmailEdit(getPersonaDTOSelect().getEmail());
+        setListaTelefPersEdit((List<TelefpersDTO>)(TelefpersDTO)getPersonaDTOSelect().getTelefpersonaList());
+        setListaUbiPersEdit((List<UbipersDTO>)(UbipersDTO)getPersonaDTOSelect().getUbipersList());
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("formEditPersona");
+        context.execute("PF('dialogUbicacionPers').hide();");
+        context.execute("PF('dialogEditPersona').show();");
     }
     
     public List<PersonaDTO> getListaAllPersonas() {
@@ -592,5 +629,150 @@ public class PersonasMB {
     public void setUbiPersDTOADD(UbipersDTO ubiPersDTOADD) {
         this.ubiPersDTOADD = ubiPersDTOADD;
     }
+
+    public List<TelefpersDTO> getListaTelefPersEdit() {
+        return listaTelefPersEdit;
+    }
+
+    public void setListaTelefPersEdit(List<TelefpersDTO> listaTelefPersEdit) {
+        this.listaTelefPersEdit = listaTelefPersEdit;
+    }
+
+    public List<UbipersDTO> getListaUbiPersEdit() {
+        return listaUbiPersEdit;
+    }
+
+    public void setListaUbiPersEdit(List<UbipersDTO> listaUbiPersEdit) {
+        this.listaUbiPersEdit = listaUbiPersEdit;
+    }
+
+    public List<Ubigeo> getListDepartamentosEdit() {
+        return listDepartamentosEdit;
+    }
+
+    public void setListDepartamentosEdit(List<Ubigeo> listDepartamentosEdit) {
+        this.listDepartamentosEdit = listDepartamentosEdit;
+    }
+
+    public List<Ubigeo> getListProvinciaEdit() {
+        return listProvinciaEdit;
+    }
+
+    public void setListProvinciaEdit(List<Ubigeo> listProvinciaEdit) {
+        this.listProvinciaEdit = listProvinciaEdit;
+    }
+
+    public List<Ubigeo> getListDistritosEdit() {
+        return listDistritosEdit;
+    }
+
+    public void setListDistritosEdit(List<Ubigeo> listDistritosEdit) {
+        this.listDistritosEdit = listDistritosEdit;
+    }
+
+    public String getNombreEdit() {
+        return nombreEdit;
+    }
+
+    public void setNombreEdit(String nombreEdit) {
+        this.nombreEdit = nombreEdit;
+    }
+
+    public String getApellidoEdit() {
+        return apellidoEdit;
+    }
+
+    public void setApellidoEdit(String apellidoEdit) {
+        this.apellidoEdit = apellidoEdit;
+    }
+
+    public String getDniEdit() {
+        return dniEdit;
+    }
+
+    public void setDniEdit(String dniEdit) {
+        this.dniEdit = dniEdit;
+    }
+
+    public String getEmailEdit() {
+        return emailEdit;
+    }
+
+    public void setEmailEdit(String emailEdit) {
+        this.emailEdit = emailEdit;
+    }
+
+    public String getCodProvinciaEdit() {
+        return codProvinciaEdit;
+    }
+
+    public void setCodProvinciaEdit(String codProvinciaEdit) {
+        this.codProvinciaEdit = codProvinciaEdit;
+    }
+
+    public String getCodDepartamentoEdit() {
+        return codDepartamentoEdit;
+    }
+
+    public void setCodDepartamentoEdit(String codDepartamentoEdit) {
+        this.codDepartamentoEdit = codDepartamentoEdit;
+    }
+
+    public String getCodDistritoEdit() {
+        return codDistritoEdit;
+    }
+
+    public void setCodDistritoEdit(String codDistritoEdit) {
+        this.codDistritoEdit = codDistritoEdit;
+    }
+
+    public String getNumeroUbicEdit() {
+        return numeroUbicEdit;
+    }
+
+    public void setNumeroUbicEdit(String numeroUbicEdit) {
+        this.numeroUbicEdit = numeroUbicEdit;
+    }
+
+    public String getNombreUbicEdit() {
+        return nombreUbicEdit;
+    }
+
+    public void setNombreUbicEdit(String nombreUbicEdit) {
+        this.nombreUbicEdit = nombreUbicEdit;
+    }
+
+    public UbipersDTO getUbiPersDTOEDIT() {
+        return ubiPersDTOEDIT;
+    }
+
+    public void setUbiPersDTOEDIT(UbipersDTO ubiPersDTOEDIT) {
+        this.ubiPersDTOEDIT = ubiPersDTOEDIT;
+    }
+
+    public String getNumeroTelefEdit() {
+        return numeroTelefEdit;
+    }
+
+    public void setNumeroTelefEdit(String numeroTelefEdit) {
+        this.numeroTelefEdit = numeroTelefEdit;
+    }
+
+    public String getTipoTelefEdit() {
+        return tipoTelefEdit;
+    }
+
+    public void setTipoTelefEdit(String tipoTelefEdit) {
+        this.tipoTelefEdit = tipoTelefEdit;
+    }
+
+    public String getOperadorTelefEdit() {
+        return operadorTelefEdit;
+    }
+
+    public void setOperadorTelefEdit(String operadorTelefEdit) {
+        this.operadorTelefEdit = operadorTelefEdit;
+    }
+    
     
 }

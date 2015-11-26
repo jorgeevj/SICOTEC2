@@ -932,7 +932,7 @@ jorgeevj 15.09.15 Creacion.
                         <p:outputLabel value="Correlativo: "></p:outputLabel>
                         <p:inputText   value="#{pedidoMB.correlativEdit}" disabled="true"/>
                         <p:outputLabel value="Almacen: "></p:outputLabel>
-                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenEdit}" >
+                        <p:selectOneMenu id="almacenesPedido" styleClass="browser-default" value="#{pedidoMB.almacenEdit}" disabled="true" >
                             <f:selectItem itemLabel="Seleccione" itemValue="0" />
                             <f:selectItems value="#{pedidoMB.listaAlmacenesEdit}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>

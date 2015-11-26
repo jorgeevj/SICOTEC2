@@ -95,7 +95,7 @@ public class PedidoBO {
             entidad.setFecha(new Date());
             Docalmacen da = this.getNewSerieAndCorrelativo(dto.getIdalmacen());
             entidad.setSerie(String.format("%03d", da.getSerie()));
-            entidad.setCorrelativo(String.format("%06d", da.getSerie()));
+            entidad.setCorrelativo(String.format("%06d", da.getCorrelativo()));
         }
         entidad.setIdempresa(dto.getIdEmpresa());
         entidad.setIdalmacen(dto.getIdalmacen());
@@ -172,12 +172,16 @@ public class PedidoBO {
         entidad.setAltipoitemPK(new AltipoitemPK(dto.getAlmacen().getIdalmacen(), dto.getTipoitem().getIdtipoItem()));
         return entidad;
     }
-    
-    public void actualizarPedido(PedidoDTO dto){
+    // 0 - ELIMINAR  || 1 > ACTUALIZAR 
+    public void actualizarPedido(PedidoDTO dto,int condicion){
         Pedido entidad = convertDTOtoEntity(dto, 0);
-        pedidoFacade.edit(entidad);
+        if(condicion == 0){
+            pedidoFacade.remove(entidad);
+        } else if(condicion > 0){
+            pedidoFacade.edit(entidad);
+        }
     }
-    //CAE ACA
+    
     public List<Pealtipoitem> convertDTOtoEntityPealTipoItem(List<PealtipoitemDTO> listDTO){
         List<Pealtipoitem> listaEntidad = new ArrayList<Pealtipoitem>();
         for(PealtipoitemDTO dto : listDTO){

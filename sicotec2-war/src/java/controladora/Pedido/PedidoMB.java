@@ -371,6 +371,9 @@ public class PedidoMB{
         else if(getEmpresaAdd() == 0){
             sms = "Seleccione una empresa";
         }
+        if(getListaItemsSeleccionado().size() == 0){
+            sms = "Debe seleccionar al menos 1 item";
+        }
         return sms;
     }
 
@@ -392,7 +395,7 @@ public class PedidoMB{
         setCorrelativEdit(getObjPedidoEditar().getCorrelativo());
         setSerieEdit(getObjPedidoEditar().getSerie());
         setFechaEdit(getObjPedidoEditar().getFecha());
-        RequestContext context = RequestContext.getCurrentInstance(); 
+        RequestContext context = RequestContext.getCurrentInstance();
         context.update("formEditPedido");
         context.execute("PF('editPedidoModal').show();");
     }
@@ -412,13 +415,13 @@ public class PedidoMB{
                 entidadEmrpresa.setIdempresa(getEmpresasEdit());
             dto.setIdEmpresa(entidadEmrpresa);
             dto.setIdalmacen(getAlmacenEdit());
-            pedidoBO.actualizarPedido(dto);
             getSessionBeanPedido().setListPedido(pedidoBO.getAllPedido());
             setDisableEditar(true);
             pedidoBO.updateAltipoItems(this.getListaAltipoitemEdit(getListaPealtipoitemDelete()),0,dto.getIdpedido());
             pedidoBO.updateAltipoItems(this.getListaAltipoitemEdit(getListaItemsPedido()),1,dto.getIdpedido());
             pedidoBO.deletePedidosItems(getListaPealtipoitemDelete()); 
             pedidoBO.updatePedidosItems(getListaItemsPedido());
+            pedidoBO.actualizarPedido(dto,getListaItemsPedido().size());
             RequestContext context = RequestContext.getCurrentInstance(); 
             context.update("formBotones");
             context.update("tabPedidosFrom");
