@@ -3,24 +3,39 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../PrincipalJSF.xhtml"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="body">
         <p:panel id="panelA" header="Gestion de Almacenes" style="margin-bottom:20px">
             <h:form id="formA">
-                <h:panelGrid columns="6">
+                <h:panelGrid columns="4">
                     <p:outputLabel for="nomAlm" value="Nombre"/>
-                    <p:inputText id="nomAlm" value="#{almacenMB.nombre}" style="width:50%"/> 
+                    <p:inputText id="nomAlm" value="#{almacenMB.nombre}" style="width:60%"/> 
                     <p:outputLabel for="dirAlm" value="Direccion"/>
-                    <p:inputText id="dirAlm" value="#{almacenMB.direccion}" style="width:50%"/> 
-                   <!-- 
-                   <p:outputLabel for="dtoAlm" value="Cod. Dpto"/>
-                    <p:inputText id="dtoAlm" value="#{almacenMB.cod_dept}" style="width:50%"/> 
-                    <p:outputLabel for="provAlm" value="Cod. Provincia"/>
-                    <p:inputText id="provAlm" value="#{almacenMB.cod_prov}" style="width:50%"/> 
-                    <p:outputLabel for="disAlm" value="Cod. Distrito"/>
-                    <p:inputText id="disAlm" value="#{almacenMB.cod_dist}" style="width:50%"/> 
-                    -->
+                    <p:inputText id="dirAlm" value="#{almacenMB.direccion}" style="width:60%"/> 
+                    <p:outputLabel value="Cod. Departamento:" for="depAlmacen"/>
+                    <p:selectOneMenu id="depAlmacen" value="#{almacenMB.departamentoSelect}"
+                                         valueChangeListener="#{almacenMB.cargarProvincias}" >
+                        <p:ajax event="valueChange" update="formA:provAlmacen,formA:disAlmacen"/>
+                            <f:selectItem itemLabel="Seleccione Dpto..." itemValue="" />
+                            <f:selectItems value="#{almacenMB.listDepartamentos}" var="dpto" 
+                                           itemValue="#{dpto.codDept}" itemLabel="#{dpto.departamento}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Cod. Provincia:" for="provAlmacen"/>                            
+                    <p:selectOneMenu id="provAlmacen" value="#{almacenMB.provinciaSelect}"
+                                         valueChangeListener="#{almacenMB.cargarDistritos}" >
+                        <p:ajax event="valueChange" update="formA:disAlmacen"/>
+                    <f:selectItem itemLabel="Seleccione Prov..." itemValue="" />
+                    <f:selectItems value="#{almacenMB.listProvincia}" var="prov" 
+                                           itemValue="#{prov.codProv}" itemLabel="#{prov.provincia}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Cod. Distrito:" for="disAlmacen"/>                            
+                    <p:selectOneMenu id="disAlmacen" value="#{almacenMB.distritoSelect}">                        
+                    <f:selectItem itemLabel="Seleccione dist..." itemValue="" />
+                    <f:selectItems value="#{almacenMB.listDistritos}" var="dis" 
+                                           itemValue="#{dis.codDist}" itemLabel="#{dis.distrito}"/>
+                    </p:selectOneMenu>
                 </h:panelGrid>
                 <p:commandButton value="Buscar" actionListener="#{almacenMB.buscarAlmacen}" update="tablaAlmacenes"/>                
                 <p:commandButton value="Registrar"  actionListener="#{almacenMB.registrarAlmacen}"/>            
