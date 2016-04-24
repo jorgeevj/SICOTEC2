@@ -37,17 +37,17 @@ import javax.ejb.LocalBean;
 public class PedidoBO {
 
     @EJB
-    private PedidoFacade pedidoFacade = new PedidoFacade();
+    private PedidoFacade pedidoFacade;
     @EJB
-    private AlmacenFacade almacenFacade = new AlmacenFacade();
+    private AlmacenFacade almacenFacade;
     @EJB
-    private PealtipoitemFacade pealtipoitemFacade = new PealtipoitemFacade();
+    private PealtipoitemFacade pealtipoitemFacade;
     @EJB
-    private AltipoitemFacade altipoitemFacace = new AltipoitemFacade();
+    private AltipoitemFacade altipoitemFacace;
     @EJB
-    private DocalmacenFacade docalmacenFacade = new DocalmacenFacade();
+    private DocalmacenFacade docalmacenFacade;
     @EJB
-    private CotizacionBO cotizacionBO = new CotizacionBO();
+    private CotizacionBO cotizacionBO;
 
     public List<PedidoDTO> getAllPedido() {
         List<Pedido> listEntidad = pedidoFacade.findAll();

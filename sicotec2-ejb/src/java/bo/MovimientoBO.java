@@ -11,14 +11,10 @@ import dao.DocalmacenFacade;
 import dao.ItemFacade;
 import dao.MovimientoFacade;
 import dao.MovimientoitemFacade;
-import dao.TipomovimientoFacade;
-import dao.UsuarioFacade;
 import dao.VentaFacade;
 import dto.ItemDTO;
 import dto.MovimientoDTO;
-import dto.MovimientoitemDTO;
 import dto.TipoItemDTO;
-import dto.TipomovimientoDTO;
 import entidades.Almacen;
 import entidades.Altipoitem;
 import entidades.AltipoitemPK;
@@ -29,7 +25,6 @@ import entidades.LotePK;
 import entidades.Movimiento;
 import entidades.Movimientoitem;
 import entidades.MovimientoitemPK;
-import entidades.Movimientoitemvista;
 import entidades.Tipoitem;
 import entidades.Tipomovimiento;
 import java.util.ArrayList;
@@ -51,8 +46,6 @@ public class MovimientoBO {
     @EJB
     private MovimientoitemFacade movimentoItemFacade;
     @EJB
-    private ItemBO itemBO;
-    @EJB
     private ItemFacade itemFacade;
     @EJB
     private AltipoitemFacade alltipoitemFacede;
@@ -64,8 +57,6 @@ public class MovimientoBO {
     private DocalmacenFacade docalmacenFacade;
     @EJB
     private CotizacionBO cotizacionBO;
-    @EJB
-    private TipoItemBO tipoItemBO;
     
     public List<MovimientoDTO> getAllMovimiento(){
         List<MovimientoDTO> lista = new ArrayList<MovimientoDTO>();

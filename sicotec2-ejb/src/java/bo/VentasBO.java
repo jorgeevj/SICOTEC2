@@ -41,8 +41,6 @@ public class VentasBO {
     @EJB
     private ItemFacade itemFacade;
     @EJB
-    private AltipoitemFacade altipoitemFacade;
-    @EJB
     private VemediopagoFacade vemediopagoFacade;
     /*@EJB
     private VemediopagoFacade altipoitemFacade;*/

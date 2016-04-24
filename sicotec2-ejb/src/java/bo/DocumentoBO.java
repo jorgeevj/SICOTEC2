@@ -23,7 +23,7 @@ import javax.ejb.LocalBean;
 public class DocumentoBO {
     
     @EJB
-    DocumentoFacade documentoFacade = new DocumentoFacade();
+    DocumentoFacade documentoFacade;
     
     public List<DocumentoDTO> getAllDocumentos(){
         List<DocumentoDTO> lista = new ArrayList<DocumentoDTO>();

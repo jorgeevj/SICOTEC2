@@ -5,11 +5,8 @@
  */
 package bo;
 
-import dao.AbstractFacade;
 import dao.UsuarioFacade;
 import dto.UsuarioDTO;
-import entidades.Persona;
-import entidades.Rol;
 import entidades.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +25,7 @@ import javax.ejb.LocalBean;
 public class UsuarioBO {
     
     @EJB
-    private UsuarioFacade usuarioFacade = new UsuarioFacade();
+    private UsuarioFacade usuarioFacade;
     
     public UsuarioDTO validateLogin(UsuarioDTO usuario){
         UsuarioDTO u = new UsuarioDTO();

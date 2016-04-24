@@ -24,7 +24,7 @@ public class UnidadBO {
     
 
     @EJB
-    private UnidadesFacade unidadFacade = new UnidadesFacade();
+    private UnidadesFacade unidadFacade;
     
     
     public List<UnidadDTO> getAllUnidad() {

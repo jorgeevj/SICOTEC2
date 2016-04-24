@@ -23,7 +23,7 @@ import javax.ejb.Stateless;
 public class RolBO {
     
     @EJB
-    private RolFacade rolFacade = new RolFacade();
+    private RolFacade rolFacade;
     
     
     public List<RolDTO> getAllRoles() {

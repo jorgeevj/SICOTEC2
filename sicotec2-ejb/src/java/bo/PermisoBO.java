@@ -24,7 +24,7 @@ import javax.ejb.LocalBean;
 public class PermisoBO {
     
     @EJB
-    private PermisoFacade permisoFacade = new PermisoFacade();
+    private PermisoFacade permisoFacade;
     
     public List<PermisoDTO> getPermisosByRol(int idRol){
         List<PermisoDTO> permisos = new ArrayList<PermisoDTO>();

@@ -61,9 +61,9 @@ public class CompraBO {
     @EJB
     private CompraFacade compraFacade;
     @EJB
-    private AlmacenFacade almacenFacade = new AlmacenFacade();
+    private AlmacenFacade almacenFacade;
     @EJB
-    private PealtipoitemFacade pealtipoitemFacade = new PealtipoitemFacade();
+    private PealtipoitemFacade pealtipoitemFacade;
 
     public List<CompraDTO> getAllCompras() {
         List<Compra> listaCompras = compraFacade.findAll();
