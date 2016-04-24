@@ -14,7 +14,6 @@ import dto.PersonaDTO;
 import dto.TelefonoDTO;
 import dto.TipoDTO;
 import dto.UbicacionDTO;
-import entidades.Empresa;
 import entidades.Ubigeo;
 import java.util.ArrayList;
 import java.util.List;

@@ -34,11 +34,11 @@ import org.primefaces.event.SelectEvent;
 @SessionScoped
 public class UsuarioMB implements Serializable{
     @EJB
-    private UsuarioBO usuarioBO = new UsuarioBO();
+    private UsuarioBO usuarioBO;
     @EJB
-    private RolBO rolBO = new RolBO();
+    private RolBO rolBO;
     @EJB
-    private PersonaBO personaBO = new PersonaBO();
+    private PersonaBO personaBO;
     
     
     //LISTAS

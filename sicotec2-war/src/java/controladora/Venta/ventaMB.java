@@ -42,15 +42,15 @@ import org.primefaces.event.SelectEvent;
 @SessionScoped
 public class ventaMB {
     @EJB
-    private VentasBO ventasBO = new VentasBO();
+    private VentasBO ventasBO;
     @EJB
-    private AlmacenBO almacenBO = new AlmacenBO();
+    private AlmacenBO almacenBO;
     @EJB
-    private EmpresaBO empresaBO = new EmpresaBO();
+    private EmpresaBO empresaBO;
     @EJB
-    private MedioPagoBO medioPagoBO = new MedioPagoBO();
+    private MedioPagoBO medioPagoBO;
     @EJB
-    private ImpuestoBO impuestoBO = new ImpuestoBO();
+    private ImpuestoBO impuestoBO;
     
     //LISTAS
     private List<VentaDTO> listaVentas = new ArrayList<VentaDTO>();

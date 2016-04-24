@@ -48,21 +48,21 @@ import org.primefaces.event.SelectEvent;
 @SessionScoped
 public class MovimientoMB implements Serializable{
     @EJB
-    private MovimientoBO movimientoBO = new MovimientoBO();
+    private MovimientoBO movimientoBO;
     @EJB
-    private TipoMovimientoBO tipoMovimientoBO = new TipoMovimientoBO();
+    private TipoMovimientoBO tipoMovimientoBO;
     @EJB
-    private DocumentoBO documentoBO = new DocumentoBO();
+    private DocumentoBO documentoBO;
     @EJB
-    private ItemBO itemBO = new ItemBO();
+    private ItemBO itemBO;
     @EJB
-    private AlmacenBO almacenBO = new AlmacenBO();
+    private AlmacenBO almacenBO;
     @EJB
-    private CompraBO compraBO = new CompraBO();
+    private CompraBO compraBO;
     @EJB
-    private LoteBO loteBO = new LoteBO();
+    private LoteBO loteBO;
     @EJB
-    private VentasBO ventasBO = new VentasBO();
+    private VentasBO ventasBO;
     
     private Utils ut = new Utils();
     

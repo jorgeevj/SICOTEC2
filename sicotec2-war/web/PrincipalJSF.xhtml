@@ -37,7 +37,7 @@ jorgeevj 15.09.15 Creacion.
                         <c:forEach var="permiso" items="#{indexMB.permisos}">
                             <p:menuitem value="#{permiso.nombre}" url="#{permiso.url}" style="background-color: background"/>
                         </c:forEach>
-                        <p:menuitem value="Salir" url="faces/index.xhtml" actionListener="#{indexMB.salir}" style="background-color: background"/>
+                        <p:menuitem value="Salir" url="../index.xhtml" actionListener="#{indexMB.salir}" style="background-color: background"/>
                     </p:menu>
                 </p:layoutUnit>
 

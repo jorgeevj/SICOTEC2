@@ -9,7 +9,6 @@ import bo.PermisoBO;
 import bo.UsuarioBO;
 import dto.PermisoDTO;
 import dto.UsuarioDTO;
-import entidades.Permiso;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
