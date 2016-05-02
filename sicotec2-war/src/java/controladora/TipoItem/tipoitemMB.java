@@ -60,6 +60,7 @@ public class tipoitemMB {
     private boolean btnQuitarEstado;
     
     private List<TipoItemDTO> lista;
+    private Familia famSelect;
     private TipoItemDTO tipoItemSelect;
     private Caracteristica caracteristicasTablaSelect;//aqui se hizo el cambio de objeto
     private List<Caracteristica> listaCaracteristicas;
@@ -84,12 +85,15 @@ public class tipoitemMB {
         lista3= new ArrayList<>();
         setLista(tipoItemBO.getAllTipoItem());
         tipoItemSelect=new TipoItemDTO();
-        tipoItemSelect.setFamilia(new Familia());
+        famSelect=new Familia();
+        famSelect.setIdfamilia(Integer.MIN_VALUE);
+        tipoItemSelect.setFamilia(famSelect);
         tipoItemSelect.setCategoria(new Categoria());
         tipoItemSelect.setColor(new Color());
         tipoItemSelect.setMarca(new Marca());
         tipoItemSelect.setCaracteristica(new Caracteristica());
         //setLista2(listarTablaCaracteristicas());
+        limpiarItemSelecionado();
         listarCaracteristicas();
         listarCategoria();
         listarFamilia();
@@ -226,12 +230,14 @@ public class tipoitemMB {
     ///
     
     public void buscarItem(ActionEvent actionEvent){        
-        
+        limpiarItemSelecionado();
         TipoItemDTO lis=new TipoItemDTO();
         lis.setIdtipoItem(codigoItem);
         lis.setNombre(nombre);        
         lis.setIdMarca(Integer.parseInt(marcaSelect));
         lista=tipoItemBO.buscarTipoItem(lis);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.update("form1");
     }
     
     public boolean buscarPorIDItem(){
@@ -762,6 +768,17 @@ public class tipoitemMB {
 
     public void setBtnQuitarEstado(boolean btnQuitarEstado) {
         this.btnQuitarEstado = btnQuitarEstado;
+    }
+
+    private void limpiarItemSelecionado() {
+    tipoItemSelect=new TipoItemDTO();
+        famSelect=new Familia();
+        famSelect.setIdfamilia(Integer.MIN_VALUE);
+        tipoItemSelect.setFamilia(famSelect);
+        tipoItemSelect.setCategoria(new Categoria());
+        tipoItemSelect.setColor(new Color());
+        tipoItemSelect.setMarca(new Marca());
+        tipoItemSelect.setCaracteristica(new Caracteristica());    
     }
     
     
