@@ -26,10 +26,11 @@ jorgeevj 15.09.15 Creacion.
            
             <p:layout fullPage="true" >
 
-                <p:layoutUnit position="north" size="142" resizable="true" closable="true" collapsible="true">
-                    <img src="../imagenes/barralogotiposervacom.png" alt=""/>
-                    <p:outputLabel value="#{indexMB.usuario.idrol.nombre}" />:
-                    <p:outputLabel value="#{indexMB.usuario.nombre}" />
+                <p:layoutUnit position="north" resizable="true" closable="true" collapsible="true" size="145"> 
+                        <img src="../imagenes/barralogotiposervacom.png" height="100px"/>
+                        <BR/>
+                        <p:outputLabel value="#{indexMB.usuario.idrol.nombre}: #{indexMB.usuario.nombre}"/>
+                    
                 </p:layoutUnit>
 
                 <p:layoutUnit position="west" size="175" header="SICOTEC" collapsible="true" >
@@ -37,7 +38,7 @@ jorgeevj 15.09.15 Creacion.
                         <c:forEach var="permiso" items="#{indexMB.permisos}">
                             <p:menuitem value="#{permiso.nombre}" url="#{permiso.url}" style="background-color: background"/>
                         </c:forEach>
-                        <p:menuitem value="Salir" url="../../" actionListener="#{indexMB.salir}" style="background-color: background"/>
+                        <p:menuitem value="Salir" url="http://localhost:8080/sicotec2-war/faces/index.xhtml" actionListener="#{indexMB.salir}" style="background-color: background"/>
                     </p:menu>
                 </p:layoutUnit>
 
@@ -585,7 +586,7 @@ jorgeevj 15.09.15 Creacion.
             <!-- DIALOG DE COMPRAS-->
             <p:dialog header="Agregar Compras" widgetVar="addComprasModal" modal="true" height="500" width="800">
                 <h:form id="formAddCompra">
-                    <h:panelGrid columns="2">
+                    <p:panelGrid id="pgCompraAdd" columns="2" styleClass="hideborder">
                         <p:outputLabel value="Proveedor: "></p:outputLabel>
                         
                         <p:selectOneMenu id="empresasPedido" value="#{compraMB.camposAdd.idEmpresa}" >
@@ -603,7 +604,7 @@ jorgeevj 15.09.15 Creacion.
                             <f:selectItems value="#{compraMB.sessionBeanCompra.listaAlmacenesAdd}" var="alm" 
                                            itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                         </p:selectOneMenu>
-                    </h:panelGrid>
+                   </p:panelGrid>
                     <br/>
                     
                     <p:dataTable id="tbPedidosItemsDisp" var="tPealtipoitem" value="#{compraMB.listPealItem}"
@@ -628,7 +629,7 @@ jorgeevj 15.09.15 Creacion.
                     <p:messages id="msgRegCompra" showDetail="true" closable="true" />
                     <p:panelGrid columns="2" styleClass="hideborder">
                         <p:commandButton id="btnAgregarPedido"  value="Agregar Pedido" disabled="#{compraMB.estadoBtnAgregar}"
-                                     actionListener="#{compraMB.agregarTipoItems}" update="formAddCompra"/>
+                                         actionListener="#{compraMB.agregarTipoItems}" update="formAddCompra"/>
                         <p:commandButton id="btnQuitarPedido"  value="Quitar Pedido" disabled="#{compraMB.estadoBtnQuitar}"
                                       actionListener="#{compraMB.quitarPedido}" update="formAddCompra"/>
                 </p:panelGrid>

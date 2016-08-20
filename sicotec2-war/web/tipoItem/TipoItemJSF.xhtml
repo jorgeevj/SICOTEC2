@@ -10,40 +10,43 @@
 
         <p:panel id="p1" header="Mantenimiento de Tipo de Item" footer="Tipo Item Details" style="margin-bottom:20px">
             <h:form id="form1">
-                <h:panelGrid columns="2">
+                <div class="ui-fluid">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
                 
                     <p:outputLabel for="uno" value="Cod. Item:"/>
-                    <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" style="width:50%"/>                
+                    <p:inputText id="uno" value="#{tipoitemMB.codigoItem}" />                
                                  
                     <p:outputLabel for="dos" value="Nombre:"/>
-                    <p:inputText id="dos" value="#{tipoitemMB.nombre}" style="width:50%"/>
+                    <p:inputText id="dos" value="#{tipoitemMB.nombre}" />
                     
                     <p:outputLabel value="Marca:" for="marcaItem"/>                            
-                    <p:selectOneMenu id="marcaItem" styleClass="browser-default" value="#{tipoitemMB.marcaSelect}" >
+                    <p:selectOneMenu id="marcaItem"  value="#{tipoitemMB.marcaSelect}" >
                         <f:selectItem itemLabel="Seleccione marca..." itemValue="0" />
                         <f:selectItems value="#{tipoitemMB.listaMarca}" var="nomMarca" 
                                                itemValue="#{nomMarca.idmarca}" itemLabel="#{nomMarca.nombre}"/>
                     </p:selectOneMenu>
                                  
-                    
-                    
-                </h:panelGrid>
-                <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscarItem}" update="tabla" title="Consultar"/>                
+                </p:panelGrid>
+                <p:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                <p:commandButton value="Buscar" actionListener="#{tipoitemMB.buscarItem}" update="tabla" />                
                 <p:commandButton value="Registrar" actionListener="#{tipoitemMB.registrarItem}" update="formRegistrar"/>            
                 <p:commandButton value="Modificar" actionListener="#{tipoitemMB.modificarItem}" id="btnmodificar" disabled="#{tipoitemMB.btnEditarEstado}" update="formModificarTipoItem"/>
+                <p:commandButton value="Categorias" actionListener="#{tipoitemMB.categorias}"/>
+                <p:commandButton value="Familias" actionListener="#{tipoitemMB.familias}" />
+                <p:commandButton value="Marcas" actionListener="#{tipoitemMB.marcas}" />
+                </p:panelGrid>
                 <!-- <p:commandButton value="Eliminar" onclick="PF('mensajeEliminar').show();" />-->
             
+</div>
+            
 
-            <br/>
-            <br/>
-
-
- 
             <p:dataTable id="tabla" value="#{tipoitemMB.lista}" var="titem" emptyMessage="No se encontraron Items" selectionMode="single" 
                          rowKey="#{titem.idtipoItem}" 
                          scrollable="true" rows="20" selection="#{tipoitemMB.tipoItemSelect}">
                 <p:ajax event="rowSelect"  listener="#{tipoitemMB.onRowSelectTipoItem}" update="form1:btnmodificar"/>
-                
+                <f:facet name="header">
+                    Lista de Items
+                </f:facet>
                 <p:column headerText="Cod Item">
                     <h:outputText value="#{titem.idtipoItem}" />
                 </p:column>

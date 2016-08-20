@@ -129,7 +129,7 @@ public class EmpresaMB {
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlRegEmpresa').hide();");
         context.update("formEmpresa");
-
+        
     }
 
     public void btnAgreReprReg(ActionEvent actionEvent) {
@@ -392,7 +392,7 @@ public class EmpresaMB {
         EmpresaSelectDTO.setTipoArray(selectTipoEmp);
         EmpresaSelectDTO.setTelefonoList(listaTelEmp);
         empresaBO.guardarEditar(EmpresaSelectDTO);
-        //limpiarEmpresas();
+        limpiarEmpresas();
         mensajeValidacion("Se Edito Corectamente la Empresa "+EmpresaSelectDTO.getNombre());
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('dlEditEmpresa').hide();");

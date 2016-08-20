@@ -12,40 +12,45 @@
             <h:form id="formCotizacion">
                 <p:growl showDetail="true" id="msgBienvenida" sticky="true"/>
 <p:growl id="growlCot" showDetail="true"/>
-                <p:panelGrid columns="4" styleClass="hideborder">
+    <div class="ui-fluid">   
+        <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank">
                     <p:outputLabel value="N° Serie" for="it0" />
                     <p:inputText id="it0" value="#{cotizacionMB.campos.serie}" maxlength="3" 
-                                 onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;">
-                    
-                    </p:inputText>
+                                 onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;"/>
+                                        
                     <p:outputLabel value="N° Correlativo" for="it1" />
                     <p:inputText id="it1" value="#{cotizacionMB.campos.correlativo}" maxlength="6" 
                                  onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;"/>
+                    
                     <p:outputLabel value="Ruc:" for="it2" />
                     <p:inputText id="it2" value="#{cotizacionMB.campos.idempresa.ruc}" maxlength="11"
                                  onkeypress="if((event.which &gt; 57)^(event.which &lt; 48))return false;"/>
+                    
                     <p:outputLabel value="Empresa:" for="choiceEmpCot" />
                     <p:selectOneMenu id="choiceEmpCot" value="#{cotizacionMB.campos.idempresa.idempresa}">
                         <f:selectItem itemLabel="Seleccione" itemValue="" />
                         <f:selectItems value="#{cotizacionMB.listaEmpresas}" var="emp" 
                                        itemValue="#{emp.idempresa}" itemLabel="#{emp.nombre}"/>
                     </p:selectOneMenu>
+                    
                     <p:outputLabel for="almacenes" value="Almacen:" />
-                    <p:selectOneMenu id="almacenes" value="#{cotizacionMB.campos.idalm}" style="width:100%">
+                    <p:selectOneMenu id="almacenes" value="#{cotizacionMB.campos.idalm}" >
                         <f:selectItem itemLabel="Seleccione" itemValue="" />
                         <f:selectItems value="#{cotizacionMB.listaAlmacenes}" var="alm" 
                                        itemValue="#{alm.idalmacen}" itemLabel="#{alm.nombre}"/>
                     </p:selectOneMenu>
+                    
                     <p:outputLabel for="estadoCot" value="Estado:" />
-                    <p:selectOneMenu id="estadoCot" value="#{cotizacionMB.campos.estado}" style="width:100%">
+                    <p:selectOneMenu id="estadoCot" value="#{cotizacionMB.campos.estado}">
                         <f:selectItem itemLabel="Seleccione" itemValue="0" />
                         <f:selectItem itemLabel="Creada" itemValue="1" />
                         <f:selectItem itemLabel="Enviada" itemValue="2" />
                         <f:selectItem itemLabel="Aprobada" itemValue="3" />
                         <f:selectItem itemLabel="Caducado" itemValue="4" />
                     </p:selectOneMenu>
-                </p:panelGrid>
-                <p:panelGrid columns="5" styleClass="hideborder">
+    </p:panelGrid>
+    
+                <p:panelGrid columns="5" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
                     <p:commandButton value="Limpiar" id="btnLimpiar"  title="Limpiar" 
                                      actionListener="#{cotizacionMB.limpiar}" update="formCotizacion"/>
                     <p:commandButton value="Consultar" id="btnConsultar"  title="Consultar" 
@@ -56,12 +61,14 @@
                     <p:commandButton value="Ver" actionListener="#{cotizacionMB.ver}" id="btnVerCot" title="Ver" 
                                      disabled="#{cotizacionMB.btnVerEstado}" update="formVerCot"/> 
                 </p:panelGrid>
-
+</div>
                 
                     <p:dataTable id="tabCotizaciones" var="cot" value="#{cotizacionMB.listaCotizacion}" 
                                  selectionMode="single" rowKey="#{cot.idcotizacion}" selection="#{cotizacionMB.cotizacionSelec}">
                         <p:ajax event="rowSelect" listener="#{cotizacionMB.onRowSelectCot}" update="formCotizacion:btnEditarCot,formCotizacion:btnVerCot" />
-
+                <f:facet name="header">
+                   Lista de Cotizaciones
+                </f:facet>
                         <p:column headerText="N° Serie" width="40">
                             <h:outputText value="#{cot.serie}" />
                         </p:column>

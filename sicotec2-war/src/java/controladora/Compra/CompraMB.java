@@ -126,7 +126,7 @@ public class CompraMB {
     public void init() {
         estadoEdit = true;
         listaCompras = compraBO.getAllCompras();
-        listaEmpresasProveedoras = empresaBO.findByConsulta(new EmpresaDTO((Integer) 3));
+//        listaEmpresasProveedoras = empresaBO.findByConsulta(new EmpresaDTO((Integer) 3));
         camposAdd = new CompraDTO();
         listPealItem = new ArrayList<>();
         listaLoteDTO = new ArrayList<>();
@@ -171,11 +171,12 @@ public class CompraMB {
     }
 
     public void crear(ActionEvent actionEvent) {
-        
+        listaEmpresasProveedoras = empresaBO.findByConsulta(new EmpresaDTO((Integer) 3));
         limpiaCrearCompra();
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("PF('addComprasModal').show();");
         context.update("formCompra:tabCompra");
+        context.update("formAddCompra:pgCompraAdd");
     }
 
     private void limpiaCrearCompra() {
@@ -333,6 +334,7 @@ public class CompraMB {
         estadoEdit = true;
         estadoBtnAgregarEdit=true;
         estadoBtnQuitarEdit=true;
+        listaEmpresasProveedoras = empresaBO.findByConsulta(new EmpresaDTO((Integer) 3));
         listPealItem = compraBO.getPedidosbyAlmacen(compraSelect);
         listaLoteDTO = compraBO.getLoteByCompra(compraSelect);
         RequestContext context = RequestContext.getCurrentInstance();
