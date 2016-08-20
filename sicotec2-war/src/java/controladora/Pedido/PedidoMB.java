@@ -22,7 +22,6 @@ import entidades.Altipoitem;
 import entidades.AltipoitemPK;
 import entidades.Empresa;
 import entidades.Pedido;
-import entidades.Tipo;
 import entidades.Tipoitem;
 import java.util.*;
 import javax.annotation.PostConstruct;
